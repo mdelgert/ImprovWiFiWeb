@@ -1,0 +1,22 @@
+# Node.js dependencies
+node_modules/
+
+# Build output from Vite
+website/dist/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# PlatformIO project files
+platformio/.pio/
+platformio/.vscode/
+
+# Generated firmware binaries
+platformio/*.bin
+platformio/*.elf
+
+# OS-specific files
+.DS_Store
+Thumbs.db
