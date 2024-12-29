@@ -9,29 +9,37 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         working-directory: website
         run: npm install
 
+      # Step 4: Build the project
       - name: Build website
         working-directory: website
         run: npm run build
 
+      # Step 5: Disable Jekyll (ensures GitHub Pages serves files as-is)
+      # - name: Disable Jekyll
+      #   run: touch website/dist/.nojekyll
+
+      # Step 6: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        # uses: peaceiris/actions-gh-pages@v3
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: website/dist
       
-      # Debugging action
+      # Step 7: Debugging action can comment out this step
       - name: List build output
         run: ls -R website/dist
