@@ -8,7 +8,7 @@
     {
       "chipFamily": "ESP32-S3",
       "parts": [
-        { "path": "https://github.com/mdelgert/ImprovWiFiWeb/releases/download/v1.0.0/test.bin", "offset": 0 }
+        { "path": "test.bin", "offset": 0 }
       ]
     }
   ]
