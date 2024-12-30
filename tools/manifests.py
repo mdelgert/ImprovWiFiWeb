@@ -1,10 +1,8 @@
-# manifests.py
-# Description: This script generates firmware manifests for each release of a GitHub repository.
-
 import os
 import json
 import requests
 from pathlib import Path
+import shutil
 
 # Constants (You can adjust these for your project)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
@@ -26,19 +24,37 @@ def fetch_releases(api_url, auth_token=None):
     response.raise_for_status()  # Raise an exception for HTTP errors
     return response.json()
 
-# Function to generate a manifest for each release
-def generate_manifest(release, output_dir):
+# Function to download a binary file
+def download_binary(url, output_file):
+    response = requests.get(url, stream=True)
+    response.raise_for_status()  # Raise an exception for HTTP errors
+
+    with open(output_file, "wb") as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    print(f"Downloaded binary: {output_file}")
+
+# Function to generate a manifest and download binaries for each release
+def generate_manifest_and_download(release, output_dir):
     tag_name = release.get("tag_name")
     assets = release.get("assets", [])
 
     for asset in assets:
         if asset["name"].endswith(".bin"):
+            # Define the binary filename with tag name
+            binary_filename = f"{tag_name}.bin"
+            binary_filepath = os.path.join(output_dir, binary_filename)
+
+            # Download the binary file
+            download_binary(asset["browser_download_url"], binary_filepath)
+
+            # Create the manifest
             manifest = MANIFEST_TEMPLATE.copy()
             manifest["version"] = tag_name
             manifest["builds"] = [
                 {
                     "chipFamily": "ESP32-S3",
-                    "parts": [{"path": asset["name"], "offset": 0}],
+                    "parts": [{"path": binary_filename, "offset": 0}],
                 }
             ]
 
@@ -48,24 +64,31 @@ def generate_manifest(release, output_dir):
                 json.dump(manifest, f, indent=2)
             print(f"Generated manifest: {manifest_filename}")
 
+# Function to clean the output directory
+def clean_output_directory(output_dir):
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+        print(f"Deleted existing directory: {output_dir}")
+    os.makedirs(output_dir)
+    print(f"Created fresh directory: {output_dir}")
+
 # Main script
 def main():
     # Environment variable for GitHub token (optional for private repos)
     auth_token = os.getenv("GITHUB_TOKEN")
 
-    # Ensure output directory exists
-    output_path = Path(OUTPUT_DIR)
-    output_path.mkdir(parents=True, exist_ok=True)
+    # Clean the output directory
+    clean_output_directory(OUTPUT_DIR)
 
     try:
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
 
-        # Generate manifests for each release
+        # Generate manifests and download binaries for each release
         for release in releases:
-            generate_manifest(release, OUTPUT_DIR)
+            generate_manifest_and_download(release, OUTPUT_DIR)
 
-        print("All manifests generated successfully.")
+        print("All manifests and binaries processed successfully.")
     except requests.RequestException as e:
         print(f"Error fetching releases: {e}")
     except Exception as e:
