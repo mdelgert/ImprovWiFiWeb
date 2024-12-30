@@ -7,8 +7,16 @@ To add a new tag, run the following commands in your terminal:
 ```bash
 git tag -a v1.0.X -m "Description of the tag"
 git push origin v1.0.X
+git tag -d v1.0.X # Delete the tag locally
+git push origin --delete v1.0.X # Delete the tag from the remote
 ```
 
+Or during testing delete tags like this:
+
+```bash
+git tag -d v1.0.X # Delete the tag locally
+git push origin --delete v1.0.X # Delete the tag from the remote
+```
 ## Tags
 
 ### Tag: v1.0.0

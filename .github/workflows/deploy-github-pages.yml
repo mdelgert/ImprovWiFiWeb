@@ -2,8 +2,10 @@ name: Deploy Website
 
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
+    tags:
+      - "v*.*.*"
 
 jobs:
   build-deploy:
