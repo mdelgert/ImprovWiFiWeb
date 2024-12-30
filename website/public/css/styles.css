@@ -1,78 +1,68 @@
+/* Base styles */
 body {
-    font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, sans-serif;
-    padding: 0;
-    margin: 0;
-    line-height: 1.4;
-  }
-  
-  .content {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 12px;
-  }
-  
-  h2 {
-    margin-top: 2em;
-  }
-  
-  h3 {
-    margin-top: 1.5em;
-  }
-  
-  a {
-    color: #03a9f4;
-  }
-  
-  .invisible {
-    visibility: hidden;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  esp-web-install-button[install-unsupported] {
-    visibility: inherit;
-  }
-  
-  .content pre {
-    max-width: 100%;
-    overflow-y: scroll;
-  }
-  
-  .footer {
-    margin-top: 24px;
-    border-top: 1px solid #ccc;
-    padding-top: 24px;
-    text-align: center;
-  }
-  
-  .footer .initiative {
-    font-style: italic;
-    margin-top: 16px;
-  }
-  
-  table {
-    border-spacing: 0;
-  }
-  
-  td {
-    padding: 8px;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .radios li {
-    list-style: none;
-    line-height: 2em;
-  }
-  
-  @media (prefers-color-scheme: dark) {
-    body {
-      background-color: #333;
-      color: #fff;
-    }
-    a {
-      color: #58a6ff;
-    }
-  }
-  
+  font-family: Verdana, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #222; /* Dark background */
+  color: #fff; /* White text */
+  /* text-align: center; */
+  line-height: 1.6;
+}
+
+/* Content container */
+.content {
+  max-width: 600px;
+  margin: 10% auto;
+  text-align: center;
+}
+
+/* Headings */
+h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5em;
+  color: #fff;
+}
+
+/* Paragraph */
+p {
+  font-size: 1rem;
+  margin: 1em 0;
+  color: #ddd;
+}
+
+/* Link styles */
+a {
+  color: #9ab0c9; /* Muted blue */
+  text-decoration: none;
+}
+
+a:hover {
+  color: #b5c6e0; /* Brighter blue on hover */
+}
+
+/* ESP Web Install Button */
+esp-web-install-button {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff; /* White text */
+  background-color: #222; /* Gray button */
+  border: none;
+  border-radius: 25px; /* Rounded button edges */
+  cursor: pointer;
+  box-shadow: none; /* Remove any shadow */
+}
+
+esp-web-install-button:hover {
+  background-color: #222; /* Slightly lighter gray on hover */
+}
+
+/* Override shadow DOM styles using variables */
+:root {
+  --esp-tools-button-color: #555; /* Gray button background */
+  --esp-tools-button-text-color: #fff; /* White button text */
+  --esp-tools-button-border-radius: 25px; /* Rounded button */
+}
+
+
