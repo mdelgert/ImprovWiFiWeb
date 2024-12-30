@@ -40,7 +40,7 @@ jobs:
         run: NODE_ENV=production npm run build
 
       - name: Download firmware artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: firmware-artifact
 
