@@ -30,8 +30,16 @@ jobs:
       - name: Debug list firmware directory
         run: ls -R .pio/build/esp32-s3-devkitc-1
 
-      - name: Upload firmware artifact
-        uses: actions/upload-artifact@v4
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: firmware
-          path: .pio/build/esp32-s3-devkitc-1/test.bin
+          files: |
+            .pio/build/esp32-s3-devkitc-1/test.bin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Upload firmware artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: firmware
+      #     path: .pio/build/esp32-s3-devkitc-1/test.bin
