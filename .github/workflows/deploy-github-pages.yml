@@ -1,9 +1,9 @@
-name: GitHub Pages
+name: GitHub Pages Deployment
 
 on:
   workflow_run:
     workflows:
-      - PlatformIO Build
+      - PlatformIO Build and Release
     types:
       - completed
 
@@ -12,8 +12,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: firmware
+
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Move firmware to site
+        run: |
+          mkdir -p site/public/firmware
+          mv test.bin site/public/firmware/
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -39,7 +49,7 @@ jobs:
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      - name: Debug list firmware files
+      - name: Debug list firmware in site
         run: ls -R site/public/firmware
 
       - name: Debug list build output
