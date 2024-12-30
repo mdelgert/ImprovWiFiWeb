@@ -1,15 +1,16 @@
-name: Deploy Website
+name: GitHub Pages
 
 on:
-  push:
-    # branches:
-    #   - main
-    tags:
-      - "v*.*.*"
+  workflow_run:
+    workflows:
+      - PlatformIO Build
+    types:
+      - completed
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -38,12 +39,10 @@ jobs:
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      # Disable Jekyll (optional)
-      # - name: Disable Jekyll
-      #   run: touch site/dist/.nojekyll
+      - name: Debug: List firmware files
+        run: ls -R site/public/firmware
 
-      # Debugging action (optional)
-      - name: List build output
+      - name: Debug: List build output
         run: ls -R site/dist
 
       - name: Deploy to GitHub Pages
