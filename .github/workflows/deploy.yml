@@ -29,7 +29,7 @@ jobs:
         working-directory: website
         run: npm run build
 
-      # Step 5: Disable Jekyll (ensures GitHub Pages serves files as-is)
+      # # Step 5: Disable Jekyll (ensures GitHub Pages serves files as-is)
       # - name: Disable Jekyll
       #   run: touch website/dist/.nojekyll
 
@@ -38,8 +38,8 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: website/dist
+          publish_dir: website/_site
       
       # Step 7: Debugging action can comment out this step
       - name: List build output
-        run: ls -R website/dist
+        run: ls -R website/_site
