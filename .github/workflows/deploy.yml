@@ -41,12 +41,12 @@ jobs:
       - name: Build website
         working-directory: website
         run: NODE_ENV=production npm run build
-        env:
-          GITHUB_REPOSITORY: ${{ github.repository }}
+        # env:
+        #   GITHUB_REPOSITORY: ${{ github.repository }}
 
       # Step 7: Disable Jekyll (optional, uncomment if needed)
-      - name: Disable Jekyll
-        run: touch website/dist/.nojekyll
+      # - name: Disable Jekyll
+      #   run: touch website/dist/.nojekyll
 
       # Step 8: Debugging action (optional)
       - name: List build output
@@ -54,8 +54,8 @@ jobs:
 
       # Step 9: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
-        #uses: peaceiris/actions-gh-pages@v4
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
+        #uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: website/dist
