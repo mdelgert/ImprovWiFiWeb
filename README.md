@@ -1,8 +1,11 @@
-# Links
+# ImprovWiFiWeb Demo Site
 [ImprovWiFiWeb Demo](https://mdelgert.github.io/ImprovWiFiWeb)
 
-[Test File](https://mdelgert.github.io/ImprovWiFiWeb/firmware/device.bin)
+[Test](https://mdelgert.github.io/ImprovWiFiWeb/firmware/device.bin)
 
+[Releases](https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases)
+
+# Links
 [ESP32 Improv Demo](https://jnthas.github.io/improv-wifi-demo)
 
 [ESP Web Tools](https://esphome.github.io/esp-web-tools)
