@@ -41,10 +41,7 @@ jobs:
 
       - name: Download firmware from GitHub Release
         run: |
-          curl -L -o site/public/firmware/test.bin https://github.com/mdelgert/ImprovWiFiWeb/releases/latest/download/test.bin
-
-      - name: Debug list firmware in site
-        run: ls -R site/public/firmware
+          curl -L -o site/dist/firmware/test.bin https://github.com/mdelgert/ImprovWiFiWeb/releases/latest/download/test.bin
 
       - name: Debug list build output
         run: ls -R site/dist
