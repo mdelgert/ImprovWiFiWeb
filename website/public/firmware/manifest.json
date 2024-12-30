@@ -1,17 +1,14 @@
 {
-    "manifest": {
-      "name": "Test",
-      "version": "1.0.0",
-      "new_install_prompt_erase": true,
-      "new_install_improv_wait_time": 60,
-      "builds": [
-        {
-          "chipFamily": "ESP32-S3",
-          "parts": [
-            {"path": "firmware/test.bin","offset": 0}
-          ]
-        }
+  "name": "Test1",
+  "version": "2021.10.3",
+  "home_assistant_domain": "esphome",
+  "funding_url": "https://esphome.io/guides/supporters.html",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        { "path": "test.bin", "offset": 0 }
       ]
     }
-  }
-  
+  ]
+}
