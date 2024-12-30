@@ -5,7 +5,7 @@ body {
   padding: 0;
   background-color: #222; /* Dark background */
   color: #fff; /* White text */
-  text-align: center;
+  /* text-align: center; */
   line-height: 1.6;
 }
 
@@ -65,13 +65,4 @@ esp-web-install-button:hover {
   --esp-tools-button-border-radius: 25px; /* Rounded button */
 }
 
-/* Popup Dark Theme */
-@media (prefers-color-scheme: dark) {
-  ewt-install-dialog {
-    --mdc-theme-surface: #222; /* Dark popup background */
-    --mdc-dialog-heading-ink-color: #fff; /* White heading text */
-    --mdc-dialog-content-ink-color: #ddd; /* Light gray content text */
-    --mdc-text-field-fill-color: #333; /* Darker input fields */
-    --mdc-theme-primary: #555; /* Button background in popup */
-  }
-}
+
