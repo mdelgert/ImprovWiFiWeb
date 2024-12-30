@@ -1,4 +1,4 @@
-name: GitHub Pages
+name: GitHub Pages Deployment
 
 on:
   workflow_run:
@@ -39,7 +39,17 @@ jobs:
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      - name: Debug list firmware files
+      - name: Download firmware artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: firmware
+
+      - name: Move firmware to site
+        run: |
+          mkdir -p site/public/firmware
+          mv test.bin site/public/firmware/
+
+      - name: Debug list firmware in site
         run: ls -R site/public/firmware
 
       - name: Debug list build output

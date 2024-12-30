@@ -2,8 +2,6 @@ name: PlatformIO Build
 
 on:
   push:
-    # branches:
-    #   - main
     tags:
       - "v*.*.*"
 
@@ -37,10 +35,13 @@ jobs:
           mkdir -p site/public/firmware
           cp .pio/build/esp32-s3-devkitc-1/test.bin site/public/firmware/
 
-      - name: Debug list firmware in site
-        run: ls -R site/public/firmware
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: site/public/firmware/test.bin
 
-      - name: Create GitHub Release (Optional)
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
