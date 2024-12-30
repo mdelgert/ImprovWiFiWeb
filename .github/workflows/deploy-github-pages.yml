@@ -39,10 +39,10 @@ jobs:
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      - name: Debug: List firmware files
+      - name: Debug list firmware files
         run: ls -R site/public/firmware
 
-      - name: Debug: List build output
+      - name: Debug list build output
         run: ls -R site/dist
 
       - name: Deploy to GitHub Pages
