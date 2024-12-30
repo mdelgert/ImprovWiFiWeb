@@ -3,7 +3,7 @@ name: GitHub Pages Deployment
 on:
   workflow_run:
     workflows:
-      - PlatformIO Build and Release
+      - PlatformIO Build
     types:
       - completed
 
