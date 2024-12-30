@@ -11,13 +11,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # PlatformIO project files
-platformio/.pio/
-platformio/.vscode/
-
-# Generated firmware binaries
-platformio/*.bin
-platformio/*.elf
+.pio/
 
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# vscode
+.vscode/
