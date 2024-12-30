@@ -17,3 +17,7 @@ npm run dev
 cd
 ImprovWiFiWeb\website
 npm install
+
+# New fork
+npm uninstall esp-web-tools
+npm install mdelgert/esp-web-tools
