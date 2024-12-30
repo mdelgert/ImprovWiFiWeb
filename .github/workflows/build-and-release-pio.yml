@@ -1,4 +1,4 @@
-name: PlatformIO Build
+name: PlatformIO Build and Release
 
 on:
   push:
@@ -35,10 +35,13 @@ jobs:
           mkdir -p site/public/firmware
           cp .pio/build/esp32-s3-devkitc-1/test.bin site/public/firmware/
 
+      - name: Debug list firmware before upload
+        run: ls -R site/public/firmware
+
       - name: Upload firmware artifact
         uses: actions/upload-artifact@v4
         with:
-          name: firmware
+          name: firmware-artifact
           path: site/public/firmware/test.bin
 
       - name: Create GitHub Release
