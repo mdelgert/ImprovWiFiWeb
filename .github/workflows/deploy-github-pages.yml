@@ -1,9 +1,9 @@
-name: GitHub Pages Deployment
+name: GitHub Pages Build
 
 on:
   workflow_run:
     workflows:
-      - PlatformIO Build and Release
+      - PlatformIO Build
     types:
       - completed
 
