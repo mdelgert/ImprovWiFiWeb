@@ -3,7 +3,6 @@ node_modules/
 
 # Build output from Vite
 site/dist/
-site/_site/
 
 # Logs
 npm-debug.log*
