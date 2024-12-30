@@ -19,27 +19,40 @@ jobs:
         with:
           node-version: 18
 
-      # Step 3: Install dependencies
+      # Step 3: Cache Node modules
+      - name: Cache Node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Step 4: Install dependencies
       - name: Install dependencies
         working-directory: website
         run: npm install
 
-      # Step 4: Build the project
+      # Step 5: Clean dist folder
+      - name: Clean dist folder
+        run: rm -rf website/dist
+
+      # Step 6: Build the project
       - name: Build website
         working-directory: website
-        run: npm run build
+        run: NODE_ENV=production npm run build
 
-      # # Step 5: Disable Jekyll (ensures GitHub Pages serves files as-is)
-      # - name: Disable Jekyll
-      #   run: touch website/dist/.nojekyll
+      # Step 7: Disable Jekyll (optional, uncomment if needed)
+      - name: Disable Jekyll
+        run: touch website/dist/.nojekyll
 
-      # Step 6: Deploy to GitHub Pages
+      # Step 8: Debugging action (optional)
+      - name: List build output
+        run: ls -R website/dist
+
+      # Step 9: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: website/_site
-      
-      # Step 7: Debugging action can comment out this step
-      - name: List build output
-        run: ls -R website/_site
+          publish_dir: website/dist
