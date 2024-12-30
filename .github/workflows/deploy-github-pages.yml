@@ -3,7 +3,7 @@ name: Deploy Website
 on:
   push:
     branches:
-      - disabled
+      - main
 
 jobs:
   build-deploy:
@@ -43,7 +43,7 @@ jobs:
       # Debugging action (optional)
       - name: List build output
         run: ls -R site/dist
-        
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
