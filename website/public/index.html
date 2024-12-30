@@ -10,7 +10,6 @@
     <div class="content">
       <h1>ESP32 Web Installer</h1>
       <p>Install the latest firmware on your ESP device:</p>
-      
       <div>
         <label for="firmware-select">Select Firmware Version:</label>
         <select id="firmware-select" class="dropdown">
@@ -19,27 +18,22 @@
           <option value="firmware/manifest3.json">Improv 3</option>
         </select>
       </div>
-      
       <esp-web-install-button
         id="install-button"
         manifest="firmware/manifest1.json"
         class="firmware-installer"
       ></esp-web-install-button>
-      
       <!-- 
       <p>
         <a id="download-link" href="firmware/firmware1.bin" download>Download Firmware</a>
       </p> 
       -->
-
     </div>
-    
     <script type="module">
       import 'esp-web-tools';
-
       const firmwareSelect = document.getElementById('firmware-select');
       const installButton = document.getElementById('install-button');
-      const downloadLink = document.getElementById('download-link');
+      //const downloadLink = document.getElementById('download-link');
 
       firmwareSelect.addEventListener('change', (event) => {
         const selectedManifest = event.target.value;
