@@ -34,6 +34,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            .pio/build/esp32-s3-devkitc-1/firmware.bin
+            .pio/build/esp32-s3-devkitc-1/device.bin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
