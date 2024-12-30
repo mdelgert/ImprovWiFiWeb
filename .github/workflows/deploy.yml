@@ -30,32 +30,29 @@ jobs:
 
       # Step 4: Install dependencies
       - name: Install dependencies
-        working-directory: website
+        working-directory: site
         run: npm install
 
       # Step 5: Clean dist folder
       - name: Clean dist folder
-        run: rm -rf website/dist
+        run: rm -rf site/dist
 
       # Step 6: Build the project
       - name: Build website
-        working-directory: website
+        working-directory: site
         run: NODE_ENV=production npm run build
-        # env:
-        #   GITHUB_REPOSITORY: ${{ github.repository }}
 
       # Step 7: Disable Jekyll (optional, uncomment if needed)
       # - name: Disable Jekyll
-      #   run: touch website/dist/.nojekyll
+      #   run: touch site/dist/.nojekyll
 
       # Step 8: Debugging action (optional)
       - name: List build output
-        run: ls -R website/dist
+        run: ls -R site/dist
 
       # Step 9: Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
-        #uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: website/dist
+          publish_dir: site/dist

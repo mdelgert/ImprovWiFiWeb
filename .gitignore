@@ -2,8 +2,8 @@
 node_modules/
 
 # Build output from Vite
-website/dist/
-website/_site/
+site/dist/
+site/_site/
 
 # Logs
 npm-debug.log*
@@ -11,13 +11,11 @@ yarn-debug.log*
 yarn-error.log*
 
 # PlatformIO project files
-platformio/.pio/
-platformio/.vscode/
-
-# Generated firmware binaries
-platformio/*.bin
-platformio/*.elf
+.pio/
 
 # OS-specific files
 .DS_Store
 Thumbs.db
+
+# vscode
+.vscode/

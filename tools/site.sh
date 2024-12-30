@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Navigate to the website directory
-cd website
+cd ..
+cd site
 
 # Default action if no parameter is passed
 ACTION=${1:-dev}
