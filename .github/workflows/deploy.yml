@@ -41,6 +41,8 @@ jobs:
       - name: Build website
         working-directory: website
         run: NODE_ENV=production npm run build
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
 
       # Step 7: Disable Jekyll (optional, uncomment if needed)
       - name: Disable Jekyll
