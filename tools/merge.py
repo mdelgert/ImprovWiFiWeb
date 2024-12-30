@@ -9,7 +9,7 @@ def merge_bin(source, target, env):
     # The list contains all extra images (bootloader, partitions, eboot) and the final application binary
     flash_images = env.Flatten(env.get("FLASH_EXTRA_IMAGES", [])) + ["${ESP32_APP_OFFSET}", target[0].get_abspath()]
     board_config = env.BoardConfig()
-    merged_image = os.path.join("${BUILD_DIR}", "test.bin")
+    merged_image = os.path.join("${BUILD_DIR}", "firmware.bin")
 
     # Figure out flash frequency and mode
     flash_freq = board_config.get("build.f_flash", "40000000L")
