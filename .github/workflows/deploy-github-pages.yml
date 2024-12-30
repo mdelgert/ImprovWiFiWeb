@@ -3,23 +3,20 @@ name: Deploy Website
 on:
   push:
     branches:
-      - main
+      - disabled
 
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Step 3: Cache Node modules
       - name: Cache Node modules
         uses: actions/cache@v3
         with:
@@ -28,29 +25,25 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      # Step 4: Install dependencies
       - name: Install dependencies
         working-directory: site
         run: npm install
 
-      # Step 5: Clean dist folder
       - name: Clean dist folder
         run: rm -rf site/dist
 
-      # Step 6: Build the project
       - name: Build website
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      # Step 7: Disable Jekyll (optional, uncomment if needed)
+      # Disable Jekyll (optional)
       # - name: Disable Jekyll
       #   run: touch site/dist/.nojekyll
 
-      # Step 8: Debugging action (optional)
+      # Debugging action (optional)
       - name: List build output
         run: ls -R site/dist
-
-      # Step 9: Deploy to GitHub Pages
+        
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:

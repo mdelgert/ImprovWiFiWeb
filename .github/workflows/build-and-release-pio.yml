@@ -1,0 +1,48 @@
+name: Build and Release Firmware
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Set up PlatformIO
+        run: |
+          python3 -m pip install -U pip
+          pip install platformio
+
+      - name: Build firmware
+        run: |
+          pio run --environment esp32-s3-devkitc-1
+
+      - name: Debug list .pio directory
+        run: ls -R .pio
+
+      - name: Merge firmware parts
+        run: python tools/merge.py
+        env:
+          INPUT_FILE: ".pio/build/esp32-s3-devkitc-1/test.bin"
+          OUTPUT_FILE: "firmware/test.bin"
+
+      - name: Debug list firmware directory
+        run: ls -R firmware
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            firmware/test.bin
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
