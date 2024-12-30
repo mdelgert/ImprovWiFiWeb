@@ -1,4 +1,7 @@
 # ImprovWiFiWeb
 
-[ImprovWiFiWeb Demo](https://mdelgert.github.io/ImprovWiFiWeb/)
-[ESP32 Improv Demo](https://jnthas.github.io/improv-wifi-demo/)
+[ImprovWiFiWeb Demo](https://mdelgert.github.io/ImprovWiFiWeb)
+[ESP32 Improv Demo](https://jnthas.github.io/improv-wifi-demo)
+[ESP Web Tools](https://esphome.github.io/esp-web-tools)
+[ESP Web Tools NPM](https://www.npmjs.com/package/esp-web-tools)
+[ESP Web Tools Source](https://github.com/esphome/esp-web-tools)
