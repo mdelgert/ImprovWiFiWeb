@@ -39,15 +39,9 @@ jobs:
         working-directory: site
         run: NODE_ENV=production npm run build
 
-      - name: Download firmware artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: firmware-artifact
-
-      - name: Move firmware to site
+      - name: Download firmware from GitHub Release
         run: |
-          mkdir -p site/public/firmware
-          mv test.bin site/public/firmware/
+          curl -L -o site/public/firmware/test.bin https://github.com/mdelgert/ImprovWiFiWeb/releases/latest/download/test.bin
 
       - name: Debug list firmware in site
         run: ls -R site/public/firmware
