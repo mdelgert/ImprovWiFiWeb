@@ -1,3 +1,6 @@
+# merge.py
+# Description: This script merges the bootloader, partitions, eboot and application binary into a single binary file.
+
 import string, os
 
 Import("env")
