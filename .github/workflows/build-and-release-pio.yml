@@ -27,22 +27,13 @@ jobs:
         run: |
           pio run --environment esp32-s3-devkitc-1
 
-      - name: Debug list .pio directory
-        run: ls -R .pio
-
-      - name: Merge firmware parts
-        run: python tools/merge.py
-        env:
-          INPUT_FILE: ".pio/build/esp32-s3-devkitc-1/test.bin"
-          OUTPUT_FILE: "firmware/test.bin"
-
       - name: Debug list firmware directory
-        run: ls -R firmware
+        run: ls -R .pio/build/esp32-s3-devkitc-1
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            firmware/test.bin
+            .pio/build/esp32-s3-devkitc-1/test.bin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
