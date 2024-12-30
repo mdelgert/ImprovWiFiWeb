@@ -8,3 +8,5 @@ npx vite build #To build the site and see the ../dist folder
 npx vite serve #To testing the production build locally before deploying it
 npm run dev
 ```
+
+npm install esp-web-tools
