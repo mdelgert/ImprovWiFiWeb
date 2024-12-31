@@ -19,5 +19,5 @@ Thumbs.db
 # vscode
 .vscode/
 
-# test script
-tools/site
+# Local firmware test files
+site/public/firmware

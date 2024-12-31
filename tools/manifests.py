@@ -3,10 +3,10 @@ import json
 import requests
 from pathlib import Path
 import shutil
+import argparse
 
 # Constants (You can adjust these for your project)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
-OUTPUT_DIR = "site/dist/firmware"
 MANIFEST_TEMPLATE = {
     "home_assistant_domain": "esphome",
     "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
@@ -81,19 +81,30 @@ def clean_output_directory(output_dir):
 
 # Main script
 def main():
+    # Parse arguments
+    parser = argparse.ArgumentParser(description="Generate manifests and download binaries.")
+    parser.add_argument(
+        "--output-dir",
+        type=str,
+        default="site/dist/firmware",
+        help="The output directory for the manifests and binaries",
+    )
+    args = parser.parse_args()
+    output_dir = args.output_dir
+
     # Environment variable for GitHub token (optional for private repos)
     auth_token = os.getenv("GITHUB_TOKEN")
 
     try:
         # Ensure the output directory is cleaned and exists
-        #clean_output_directory(OUTPUT_DIR)
+        clean_output_directory(output_dir)
 
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
 
         # Generate manifests and download binaries for each release
         for release in releases:
-            generate_manifest_and_download(release, OUTPUT_DIR)
+            generate_manifest_and_download(release, output_dir)
 
         print("All manifests and binaries processed successfully.")
     except requests.RequestException as e:
@@ -102,6 +113,7 @@ def main():
         print(f"File operation error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+
 
 if __name__ == "__main__":
     main()
