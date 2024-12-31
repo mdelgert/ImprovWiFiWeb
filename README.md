@@ -1,8 +1,6 @@
 # ImprovWiFiWeb Demo Site
 [ImprovWiFiWeb Demo](https://mdelgert.github.io/ImprovWiFiWeb)
 
-[Test](https://mdelgert.github.io/ImprovWiFiWeb/firmware/device.bin)
-
 [Releases](https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases)
 
 # Links
