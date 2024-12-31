@@ -8,10 +8,9 @@ import shutil
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
 OUTPUT_DIR = "site/dist/firmware"
 MANIFEST_TEMPLATE = {
-    "name": "Test",
     "home_assistant_domain": "esphome",
     "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
-    "new_install_prompt_erase": False,
+    "new_install_prompt_erase": True,
 }
 
 # Function to fetch releases from GitHub API
@@ -57,6 +56,7 @@ def generate_manifest_and_download(release, output_dir):
 
             # Create the manifest
             manifest = MANIFEST_TEMPLATE.copy()
+            manifest["name"] = tag_name
             manifest["version"] = tag_name
             manifest["builds"] = [
                 {
