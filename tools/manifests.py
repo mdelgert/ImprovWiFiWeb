@@ -8,8 +8,8 @@ import argparse
 # Constants (You can adjust these for your project)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
 MANIFEST_TEMPLATE = {
-    "home_assistant_domain": "esphome",
-    "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
+    # "home_assistant_domain": "esphome",
+    # "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
     # "new_install_prompt_erase": True,
 }
 
