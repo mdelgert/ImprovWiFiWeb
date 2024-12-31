@@ -146,7 +146,7 @@ li {
 @media (prefers-color-scheme: dark) {
     ewt-install-dialog {
         /*--mdc-theme-primary: #ffa000; /*buttons*/
-        --mdc-theme-surface: #333;
+        --mdc-theme-surface: #333333;
         --mdc-dialog-heading-ink-color: #fff;
         --mdc-dialog-content-ink-color: #ddd;
         --mdc-text-field-fill-color: #ddd;
