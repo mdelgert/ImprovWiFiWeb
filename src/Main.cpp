@@ -26,6 +26,6 @@ void loop()
   ImprovHandler::loop();
   if (myTimer.isReady())
   {
-      debugI("ImprovWiFiWeb!");
+      debugI("Ver:" SOFTWARE_VERSION);
   }
 }
