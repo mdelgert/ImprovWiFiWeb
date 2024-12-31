@@ -30,21 +30,10 @@ jobs:
       - name: Debug list firmware directory
         run: ls -R .pio/build/esp32-s3-devkitc-1
 
-      - name: Copy firmware to site
-        run: |
-          mkdir -p site/public/firmware
-          cp .pio/build/esp32-s3-devkitc-1/test.bin site/public/firmware/
-
-      - name: Upload firmware artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware
-          path: site/public/firmware/test.bin
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            .pio/build/esp32-s3-devkitc-1/test.bin
+            .pio/build/esp32-s3-devkitc-1/device.bin
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
