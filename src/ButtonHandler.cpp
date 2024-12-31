@@ -45,9 +45,12 @@ void ButtonHandler::handleLongPressStart()
 {
     debugI("Long press detected.");
     GfxHandler::printMessage("Long press detected. Hold for 5 seconds to reboot.");
-    LEDHandler::setColor(CRGB::Yellow);
-    holdStartTime = millis(); // Start timing
-    countdownStarted = false; // Reset countdown flag
+    LEDHandler::setColor(CRGB::Red);
+    PreferencesHandler::clear(); // Clear all preferences
+    ESP.restart();
+
+    //holdStartTime = millis(); // Start timing
+    //countdownStarted = false; // Reset countdown flag
 }
 
 void ButtonHandler::handleDuringLongPress()
