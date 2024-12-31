@@ -90,7 +90,7 @@ var Tt=function(o,t){return Tt=Object.setPrototypeOf||{__proto__:[]}instanceof A
     --mdc-theme-primary: var(--improv-primary-color,rgb(255, 255, 255));
     --mdc-theme-on-primary: var(--improv-on-primary-color, #fff);
     --improv-danger-color: #db4437;
-    --improv-text-color: rgb(255, 255, 255);
+    --improv-text-color: rgba(0, 0, 0, 0.6);
     --mdc-theme-text-primary-on-background: var(--improv-text-color);
     --mdc-dialog-content-ink-color: var(--improv-text-color);
     text-align: left;
