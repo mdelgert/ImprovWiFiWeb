@@ -7,7 +7,7 @@
 extern RemoteDebug Debug;
 
 // Version information
-#define SOFTWARE_VERSION "1.0.0"
+#define SOFTWARE_VERSION "1.0.1"
 
 // Feature Flags
 #define ENABLE_TFT true

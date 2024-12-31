@@ -17,7 +17,7 @@ void setup()
   ImprovHandler::init();
   LEDHandler::init();
   GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
-  LEDHandler::setColor(CRGB::Blue);
+  LEDHandler::setColor(CRGB::Green);
 }
 
 void loop()
@@ -26,6 +26,6 @@ void loop()
   ImprovHandler::loop();
   if (myTimer.isReady())
   {
-      debugI("* ImprovWiFiWeb!");
+      debugI("ImprovWiFiWeb!");
   }
 }
