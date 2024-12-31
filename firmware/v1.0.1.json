@@ -1,6 +1,4 @@
 {
-  "home_assistant_domain": "esphome",
-  "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
   "name": "v1.0.1",
   "version": "v1.0.1",
   "builds": [
