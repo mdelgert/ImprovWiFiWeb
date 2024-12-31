@@ -4,9 +4,9 @@
 cd ..
 
 # Define the folders to search for
-#foldersToDelete=(".vs" ".idea" ".vscode" ".pio" "dist" "node_modules" )
+foldersToDelete=(".vs" ".idea" ".vscode" ".pio" "dist" "node_modules" )
 #foldersToDelete=(".vscode" ".pio")
-foldersToDelete=(".pio")
+#foldersToDelete=(".pio")
 
 # Function to delete folders
 delete_folders() {

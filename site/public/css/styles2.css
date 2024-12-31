@@ -1,8 +1,6 @@
 /* Base styles */
 body {
   font-family: Verdana, Helvetica, sans-serif;
-  /* font-size: 16px; */
-  font-size: large;
   margin: 0;
   padding: 0;
   background-color: #222; /* Dark background */
@@ -47,7 +45,6 @@ esp-web-install-button {
   display: inline-block;
   padding: 10px 24px;
   font-size: 1rem;
-  /* font-size: large; */
   font-weight: bold;
   color: #fff; /* White text */
   background-color: #222; /* Gray button */
@@ -67,29 +64,3 @@ esp-web-install-button:hover {
   --esp-tools-button-text-color: #fff; /* White button text */
   --esp-tools-button-border-radius: 25px; /* Rounded button */
 }
-
-
-/* Dropdown styling */
-
-.dropdown {
-  font-size: large;
-}
-
-/*
-.dropdown {
-  appearance: none;
-  background-color: #2a2a2a;
-  border: 1px solid #555;
-  border-radius: 10px;
-  color: #fff;
-  font-size: 1.2rem;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
-}
-
-.dropdown:hover {
-  background-color: #3a3a3a;
-  border-color: #777;
-}
-*/
