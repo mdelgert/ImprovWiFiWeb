@@ -1,0 +1,17 @@
+{
+  "home_assistant_domain": "esphome",
+  "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
+  "name": "v1.0.3",
+  "version": "v1.0.3",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "v1.0.3.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
