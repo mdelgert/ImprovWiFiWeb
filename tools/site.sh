@@ -5,7 +5,7 @@ cd ..
 cd site
 
 # Run the Python script in the tools directory to download firmnware manifests
-#python3 ../tools/manifests.py --output-dir public/firmware
+python3 ../tools/manifests.py --output-dir public/firmware
 
 # Default action if no parameter is passed
 ACTION=${1:-dev}
