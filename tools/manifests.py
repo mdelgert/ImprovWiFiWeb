@@ -78,7 +78,7 @@ def main():
     auth_token = os.getenv("GITHUB_TOKEN")
 
     # Clean the output directory
-    clean_output_directory(OUTPUT_DIR)
+    #clean_output_directory(OUTPUT_DIR)
 
     try:
         # Fetch releases from GitHub
