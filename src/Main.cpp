@@ -1,12 +1,31 @@
 #include <Arduino.h>
+#include "Globals.h"
+#include "RemoteDebugHandler.h"
+#include "ImprovHandler.h"
+#include "PreferencesHandler.h"
+#include "NonBlockingTimer.h"
+#include "GfxHandler.h"
+#include "LEDHandler.h"
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
+NonBlockingTimer myTimer(1000);
+
+void setup()
+{
+  RemoteDebugHandler::init();
+  PreferencesHandler::init("settings");
+  GfxHandler::init();
+  ImprovHandler::init();
+  LEDHandler::init();
+  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  LEDHandler::setColor(CRGB::Blue);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println("Hello Github Actions!");
-  delay(1000);
+void loop()
+{
+  RemoteDebugHandler::loop();
+  ImprovHandler::loop();
+  if (myTimer.isReady())
+  {
+      debugI("* ImprovWiFiWeb!");
+  }
 }
