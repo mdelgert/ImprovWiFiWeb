@@ -5,21 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web Installer</title>
     <link rel="stylesheet" href="css/styles4.css" />
-    <script type="module" src="webtools3/install-button.js?module"></script>
-    
-    <!-- Default Favicon -->
+    <script type="module" src="webtools1/install-button.js?module"></script>
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
-
-    <!-- Modern Browsers Support -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
-
-    <!-- High-Resolution Support -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-    <link rel="manifest" href="/images/site.webmanifest">
-    <link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
-    <meta name="theme-color" content="#ffffff">
-
   </head>
   <body>
     <div class="content">
@@ -40,13 +27,10 @@
     </esp-web-install-button>
     </div>
     <script type="module">
-      // GitHub API URL to fetch releases
       const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
-
       const firmwareSelect = document.getElementById('firmware-select');
       const installButton = document.getElementById('install-button');
 
-      // Fetch release data from GitHub
       async function fetchReleases() {
         try {
           const response = await fetch(GITHUB_API_URL);

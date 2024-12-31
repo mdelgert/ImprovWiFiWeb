@@ -73,7 +73,7 @@ var t=function(e,i){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
       }
     `],customElements.define("ewt-dialog",ve);const be=l`
   :host {
-    --mdc-theme-primary: var(--improv-primary-color,rgb(255, 255, 255));
+    --mdc-theme-primary: var(--improv-primary-color, #03a9f4);
     --mdc-theme-on-primary: var(--improv-on-primary-color, #fff);
     --improv-danger-color: #db4437;
     --improv-text-color: rgba(0, 0, 0, 0.6);
@@ -92,7 +92,7 @@ var t=function(e,i){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Arr
   }
 
   a {
-    color: var(--improv-primary-color,rgb(255, 255, 255));
+    color: var(--improv-primary-color, #03a9f4);
   }
 
   a.button {
