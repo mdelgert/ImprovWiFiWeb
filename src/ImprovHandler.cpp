@@ -9,7 +9,7 @@ NonBlockingTimer ImprovHandler::myTimer(1000);
 
 void ImprovHandler::init()
 {
-    //GfxHandler::printMessage("ImprovHandler::init()");
+    // GfxHandler::printMessage("ImprovHandler::init()");
 
     debugD("Initializing ImprovHandler");
 
@@ -26,7 +26,7 @@ void ImprovHandler::init()
     // Attempt to retrieve saved Wi-Fi credentials
     if (PreferencesHandler::getValue("wifi_ssid", ssid) && PreferencesHandler::getValue("wifi_password", password))
     {
-        GfxHandler::printMessage("Retrieved Wi-Fi credentials from preferences. SSID: " + ssid);
+        // GfxHandler::printMessage("Retrieved Wi-Fi credentials from preferences. SSID: " + ssid);
         // debugI("Retrieved Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
         debugI("Retrieved Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
 
@@ -94,8 +94,10 @@ bool ImprovHandler::connectWifi(const char *ssid, const char *password)
 
     while (!improvSerial.isConnected())
     {
-        // TODO
+        LEDHandler::setColor(CRGB::Red);
     }
+
+    LEDHandler::setColor(CRGB::Green);
 
     return true;
 }
