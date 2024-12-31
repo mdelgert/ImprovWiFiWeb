@@ -97,7 +97,7 @@ def main():
 
     try:
         # Ensure the output directory is cleaned and exists
-        clean_output_directory(output_dir)
+        #clean_output_directory(output_dir)
 
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
