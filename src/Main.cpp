@@ -17,7 +17,7 @@ void setup()
   GfxHandler::init();
   ImprovHandler::init();
   LEDHandler::init();
-  // GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
   LEDHandler::setColor(CRGB::Blue);
 }
 

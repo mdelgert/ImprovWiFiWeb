@@ -9,7 +9,7 @@ NonBlockingTimer ImprovHandler::myTimer(1000);
 
 void ImprovHandler::init()
 {
-    GfxHandler::printMessage("ImprovHandler::init()");
+    //GfxHandler::printMessage("ImprovHandler::init()");
 
     debugD("Initializing ImprovHandler");
 
