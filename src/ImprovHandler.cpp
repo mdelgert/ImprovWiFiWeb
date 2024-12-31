@@ -73,14 +73,14 @@ void ImprovHandler::loop()
     improvSerial.handleSerial();
     handleHttpRequest();
 
-    if (myTimer.isReady())
-    {
-        String ssid, password;
-        PreferencesHandler::getValue("wifi_ssid", ssid); 
-        PreferencesHandler::getValue("wifi_password", password);
-        debugI("Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
-        debugI("IP Address: %s", WiFi.localIP().toString().c_str());
-    }
+    // if (myTimer.isReady())
+    // {
+    //     String ssid, password;
+    //     PreferencesHandler::getValue("wifi_ssid", ssid); 
+    //     PreferencesHandler::getValue("wifi_password", password);
+    //     debugI("Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
+    //     debugI("IP Address: %s", WiFi.localIP().toString().c_str());
+    // }
 }
 
 void ImprovHandler::onImprovWiFiErrorCb(ImprovTypes::Error err)
