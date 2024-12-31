@@ -1,8 +1,8 @@
 {
-  "name": "Test",
   "home_assistant_domain": "esphome",
   "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
-  "new_install_prompt_erase": false,
+  "new_install_prompt_erase": true,
+  "name": "v1.0.0",
   "version": "v1.0.0",
   "builds": [
     {
