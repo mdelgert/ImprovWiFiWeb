@@ -26,13 +26,17 @@ def fetch_releases(api_url, auth_token=None):
 
 # Function to download a binary file
 def download_binary(url, output_file):
-    response = requests.get(url, stream=True)
-    response.raise_for_status()  # Raise an exception for HTTP errors
+    try:
+        response = requests.get(url, stream=True)
+        response.raise_for_status()  # Raise an exception for HTTP errors
 
-    with open(output_file, "wb") as f:
-        for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
-    print(f"Downloaded binary: {output_file}")
+        with open(output_file, "wb") as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"Downloaded binary: {output_file}")
+    except Exception as e:
+        print(f"Error downloading binary file from {url}: {e}")
+        raise
 
 # Function to generate a manifest and download binaries for each release
 def generate_manifest_and_download(release, output_dir):
@@ -41,6 +45,9 @@ def generate_manifest_and_download(release, output_dir):
 
     for asset in assets:
         if asset["name"].endswith(".bin"):
+            # Ensure the output directory exists
+            os.makedirs(output_dir, exist_ok=True)
+
             # Define the binary filename with tag name
             binary_filename = f"{tag_name}.bin"
             binary_filepath = os.path.join(output_dir, binary_filename)
@@ -77,10 +84,10 @@ def main():
     # Environment variable for GitHub token (optional for private repos)
     auth_token = os.getenv("GITHUB_TOKEN")
 
-    # Clean the output directory
-    #clean_output_directory(OUTPUT_DIR)
-
     try:
+        # Ensure the output directory is cleaned and exists
+        #clean_output_directory(OUTPUT_DIR)
+
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
 
@@ -91,6 +98,8 @@ def main():
         print("All manifests and binaries processed successfully.")
     except requests.RequestException as e:
         print(f"Error fetching releases: {e}")
+    except FileNotFoundError as e:
+        print(f"File operation error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
 

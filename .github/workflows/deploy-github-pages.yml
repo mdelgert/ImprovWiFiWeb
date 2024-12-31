@@ -15,6 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Clean dist folder
+        run: rm -rf site/dist
+
+      - name: Generate manifests and firmware
+        run: |
+          python3 tools/manifests.py
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -32,16 +44,9 @@ jobs:
         working-directory: site
         run: npm install
 
-      - name: Clean dist folder
-        run: rm -rf site/dist
-
       - name: Build website
         working-directory: site
         run: NODE_ENV=production npm run build
-
-      - name: Download firmware from GitHub Release
-        run: |
-          curl -L -o site/dist/firmware/device.bin https://github.com/mdelgert/ImprovWiFiWeb/releases/download/v1.0.0/device.bin
 
       - name: Debug list build output
         run: ls -R site/dist
