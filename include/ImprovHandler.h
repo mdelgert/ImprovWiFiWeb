@@ -15,11 +15,11 @@ public:
     static void loop();
 
 private:
+    static ImprovWiFi improvSerial;
     static WiFiServer server;
     static NonBlockingTimer myTimer;
     static void handleHttpRequest();
-    static ImprovWiFi improvSerial;
-
+    
     static void onImprovWiFiErrorCb(ImprovTypes::Error err);
     static void onImprovWiFiConnectedCb(const char *ssid, const char *password);
     static bool connectWifi(const char *ssid, const char *password);

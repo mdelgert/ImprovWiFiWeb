@@ -11,12 +11,13 @@ NonBlockingTimer myTimer(1000);
 
 void setup()
 {
+  //Serial.begin(115200);
   RemoteDebugHandler::init();
   PreferencesHandler::init("settings");
   GfxHandler::init();
   ImprovHandler::init();
   LEDHandler::init();
-  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  // GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
   LEDHandler::setColor(CRGB::Green);
 }
 
@@ -24,8 +25,10 @@ void loop()
 {
   RemoteDebugHandler::loop();
   ImprovHandler::loop();
-  if (myTimer.isReady())
-  {
-      debugI("Ver:" SOFTWARE_VERSION);
-  }
+
+  // THIS IS INTERFERING WITH IMPROVE IN SETUP MODE - NEED TO FIX !!!!!!!!!!!!!!!!!!
+  // if (myTimer.isReady())
+  // {
+  //   debugI("Ver:" SOFTWARE_VERSION);
+  // }
 }

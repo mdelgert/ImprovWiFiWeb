@@ -64,6 +64,7 @@ void ImprovHandler::init()
     improvSerial.setDeviceInfo(ImprovTypes::ChipFamily::CF_ESP32_S3, "ImprovWiFiLib", "1.0.5", "BasicWebServer", "http://{LOCAL_IPV4}?name=Guest");
     improvSerial.onImprovError(onImprovWiFiErrorCb);
     improvSerial.onImprovConnected(onImprovWiFiConnectedCb);
+    //improvSerial.setCustomConnectWiFi(connectWifi); // Optional
 
     debugD("ImprovWiFi setup initialized");
 }
@@ -71,16 +72,32 @@ void ImprovHandler::init()
 void ImprovHandler::loop()
 {
     improvSerial.handleSerial();
-    handleHttpRequest();
+
+    if (improvSerial.isConnected())
+    {
+        handleHttpRequest();
+    }
 
     // if (myTimer.isReady())
     // {
     //     String ssid, password;
-    //     PreferencesHandler::getValue("wifi_ssid", ssid); 
+    //     PreferencesHandler::getValue("wifi_ssid", ssid);
     //     PreferencesHandler::getValue("wifi_password", password);
     //     debugI("Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
     //     debugI("IP Address: %s", WiFi.localIP().toString().c_str());
     // }
+}
+
+bool ImprovHandler::connectWifi(const char *ssid, const char *password)
+{
+    WiFi.begin(ssid, password);
+
+    while (!improvSerial.isConnected())
+    {
+        // TODO
+    }
+
+    return true;
 }
 
 void ImprovHandler::onImprovWiFiErrorCb(ImprovTypes::Error err)
