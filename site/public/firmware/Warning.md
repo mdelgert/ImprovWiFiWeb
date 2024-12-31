@@ -1,0 +1,3 @@
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT OR USE
+// SEE tools/manifests.py

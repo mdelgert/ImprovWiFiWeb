@@ -19,16 +19,10 @@
       <p>Select your product</p>
       <ul class="radios">
         <li>
-          <label><input type="radio" name="type" value="i2s" /> I2S</label>
+          <label><input type="radio" name="type" value="v1.0.0" /> v1.0.0</label>
         </li>
         <li>
-          <label><input type="radio" name="type" value="muse" /> Muse</label>
-        </li>
-        <li>
-          <label><input type="radio" name="type" value="muse_proto" /> Muse Proto</label>
-        </li>
-        <li>
-          <label><input type="radio" name="type" value="squeezeamp" /> SqueezeAmp</label>
+          <label><input type="radio" name="type" value="v1.0.1" /> v1.0.1</label>
         </li>
       </ul>
       <p class="button-row" align="center">
@@ -45,7 +39,7 @@
       document.querySelectorAll('input[name="type"]').forEach(radio =>
         radio.addEventListener("change", () => {
           const button = document.querySelector('esp-web-install-button');
-          button.manifest = `./manifest_${radio.value}.json`;
+          button.manifest = `firmware/${radio.value}.json`;
           button.classList.remove('invisible');
         }
       ));
