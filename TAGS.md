@@ -20,4 +20,19 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 ### Tag: v1.0.0
 **Date:** 2024-12-30
 **Description:**  
-- Testing pio action
+- Testing action LED Blue
+
+### Tag: v1.0.1
+**Date:** 2024-12-30
+**Description:**  
+- Testing action LED Green
+
+### Tag: v1.0.2
+**Date:** 2024-12-30
+**Description:**  
+- Testing action LED Purple
+
+### Tag: v1.0.3
+**Date:** 2024-12-30
+**Description:**  
+- Testing action LED Maroon
