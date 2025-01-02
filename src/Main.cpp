@@ -19,7 +19,7 @@ void setup()
   LEDHandler::init();
   ButtonHandler::init();
   GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
-  LEDHandler::setColor(CRGB::White);
+  LEDHandler::setColor(CRGB::Purple);
 }
 
 void loop()
