@@ -1,3 +1,5 @@
+/* Vite default template begin */
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -93,4 +95,34 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+/* Vite default template end */
+
+/* ESP Web Install Button */
+/* esp-web-install-button {
+  display: inline-block;
+  padding: 10px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #fff;
+  background-color: #242424;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+esp-web-install-button:hover {
+  background-color: #242424;
+} */
+
+esp-web-install-button {
+  display: inline-block;
+  padding: 20px 20px;
+}
+
+:root {
+  --esp-tools-button-color: #1a1a1a;
+  --esp-tools-button-text-color: #fff;
+  --esp-tools-button-border-radius: 25px;
 }
