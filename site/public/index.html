@@ -4,34 +4,33 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web Installer</title>
-    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/styles4.css" />
+    <script type="module" src="webtools1/install-button.js?module"></script>
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
   </head>
   <body>
     <div class="content">
       <h1>Web Installer 1.0</h1>
       <div>
         <label for="firmware-select">Select Firmware:</label>
-        <select id="firmware-select" class="dropdown">
-          <!-- Options will be dynamically generated -->
+        <br />
+        <select id="firmware-select" class="btn">
         </select>
       </div>
       <br />
       <esp-web-install-button
         id="install-button"
         manifest=""
-        class="firmware-installer"
-      ></esp-web-install-button>
+        class="btn"
+      >
+      <button class="btn" slot="activate">Install</button>
+    </esp-web-install-button>
     </div>
     <script type="module">
-      import 'esp-web-tools';
-
-      // GitHub API URL to fetch releases
       const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
-
       const firmwareSelect = document.getElementById('firmware-select');
       const installButton = document.getElementById('install-button');
 
-      // Fetch release data from GitHub
       async function fetchReleases() {
         try {
           const response = await fetch(GITHUB_API_URL);

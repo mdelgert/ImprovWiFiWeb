@@ -8,9 +8,9 @@ import argparse
 # Constants (You can adjust these for your project)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
 MANIFEST_TEMPLATE = {
-    "home_assistant_domain": "esphome",
-    "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
-    "new_install_prompt_erase": True,
+    # "home_assistant_domain": "esphome",
+    # "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
+    # "new_install_prompt_erase": True,
 }
 
 # Function to fetch releases from GitHub API
@@ -97,7 +97,7 @@ def main():
 
     try:
         # Ensure the output directory is cleaned and exists
-        clean_output_directory(output_dir)
+        #clean_output_directory(output_dir)
 
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)

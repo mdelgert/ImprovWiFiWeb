@@ -1,12 +1,36 @@
 #include <Arduino.h>
+#include "Globals.h"
+#include "RemoteDebugHandler.h"
+#include "ImprovHandler.h"
+#include "PreferencesHandler.h"
+#include "NonBlockingTimer.h"
+#include "GfxHandler.h"
+#include "LEDHandler.h"
+#include "ButtonHandler.h"
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
+NonBlockingTimer myTimer(1000);
+
+void setup()
+{
+  RemoteDebugHandler::init();
+  PreferencesHandler::init("settings");
+  GfxHandler::init();
+  ImprovHandler::init();
+  LEDHandler::init();
+  ButtonHandler::init();
+  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  LEDHandler::setColor(CRGB::Purple);
 }
 
-void loop() {
-  // put your main code here, to run repeatedly:
-  Serial.println("Hello Github Actions!");
-  delay(1000);
+void loop()
+{
+  RemoteDebugHandler::loop();
+  ImprovHandler::loop();
+  ButtonHandler::loop();
+
+  // THIS IS INTERFERING WITH IMPROVE IN SETUP MODE - NEED TO FIX !!!!!!!!!!!!!!!!!!
+  // if (myTimer.isReady())
+  // {
+  //   debugI("Ver:" SOFTWARE_VERSION);
+  // }
 }
