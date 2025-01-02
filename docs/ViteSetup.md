@@ -7,7 +7,6 @@ npm install
 npm run dev
 npm run build
 
-
 Here's a complete setup for a **Vite project** that supports multiple HTML pages (e.g., `index.html`, `about.html`) and follows modern best practices. This setup ensures a clean and scalable project structure.
 
 ---
