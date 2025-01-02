@@ -1,0 +1,15 @@
+{
+  "name": "v1.0.1",
+  "version": "v1.0.1",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "v1.0.1.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
