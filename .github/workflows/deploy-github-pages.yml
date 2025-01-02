@@ -12,8 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Debug Workflow Variables
+        run: |
+          echo "Workflow head branch: ${{ github.event.workflow_run.head_branch }}"
+          echo "Workflow head SHA: ${{ github.event.workflow_run.head_sha }}"
+    
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_branch || github.event.workflow_run.head_sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
