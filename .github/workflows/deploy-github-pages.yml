@@ -1,11 +1,14 @@
 name: GitHub Pages
 
 on:
-  workflow_run:
-    workflows:
-      - PlatformIO Build
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  # workflow_run:
+  #   workflows:
+  #     - PlatformIO Build
+  #   types:
+  #     - completed
 
 jobs:
   build-deploy:
@@ -15,18 +18,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: 3.11
+      # - name: Set up Python
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: 3.11
 
-      - name: Install Python dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install requests
+      # - name: Install Python dependencies
+      #   run: |
+      #     python3 -m pip install --upgrade pip
+      #     pip install requests
 
-      - name: Clean dist folder
-        run: rm -rf site/dist
+      # - name: Clean dist folder
+      #   run: rm -rf site/dist
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -42,21 +45,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        working-directory: site
+        working-directory: site2
         run: npm install
 
       - name: Build website
-        working-directory: site
+        working-directory: site2
         run: NODE_ENV=production npm run build
 
-      - name: Generate manifests and firmware
-        run: python3 tools/manifests.py
+      # - name: Generate manifests and firmware
+      #   run: python3 tools/manifests.py
         
       - name: Debug list build output
-        run: ls -R site/dist
+        run: ls -R site2/dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: site/dist
+          publish_dir: site2/dist
