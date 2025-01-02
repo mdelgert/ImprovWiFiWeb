@@ -11,6 +11,9 @@ jobs:
   build-deploy:
     runs-on: ubuntu-latest
 
+    env:
+      SITE_PATH: site2  # Define the site path variable here
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,7 +29,7 @@ jobs:
           pip install requests
 
       - name: Clean dist folder
-        run: rm -rf site/dist
+        run: rm -rf $SITE_PATH/dist
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -42,21 +45,21 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Install dependencies
-        working-directory: site
+        working-directory: $SITE_PATH
         run: npm install
 
       - name: Build website
-        working-directory: site
+        working-directory: $SITE_PATH
         run: NODE_ENV=production npm run build
 
       - name: Generate manifests and firmware
         run: python3 tools/manifests.py
         
       - name: Debug list build output
-        run: ls -R site/dist
+        run: ls -R $SITE_PATH/dist
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: site/dist
+          publish_dir: $SITE_PATH/dist
