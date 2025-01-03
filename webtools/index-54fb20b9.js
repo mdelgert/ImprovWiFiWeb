@@ -1,4 +1,4 @@
-import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C3XZZdT-.js";const l=d`
+import{D as e,f as t,_ as o,s as l,x as i,k as n,C as s}from"./styles-fa761598.js";const a=s`
   <svg
     version="1.1"
     id="Capa_1"
@@ -17,7 +17,7 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
       />
     </g>
   </svg>
-`;let t=class extends r{render(){return e`
+`;let r=class extends l{render(){return i`
       <ewt-dialog
         open
         heading="No port selected"
@@ -69,7 +69,7 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
                   >Mac</a
                 >
                 <br />
-                (download via blue button with ${l} icon)
+                (download via blue button with ${a} icon)
               </li>
               <li>
                 CH340, CH341 drivers:
@@ -86,12 +86,12 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
                   >Mac</a
                 >
                 <br />
-                (download via blue button with ${l} icon)
+                (download via blue button with ${a} icon)
               </li>
             </ul>
           </li>
         </ol>
-        ${this.doTryAgain?e`
+        ${this.doTryAgain?i`
               <ewt-button
                 slot="primaryAction"
                 dialogAction="close"
@@ -105,7 +105,7 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
                 dialogAction="close"
                 label="Cancel"
               ></ewt-button>
-            `:e`
+            `:i`
               <ewt-button
                 slot="primaryAction"
                 dialogAction="close"
@@ -113,7 +113,7 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
               ></ewt-button>
             `}
       </ewt-dialog>
-    `}async _handleClose(){this.parentNode.removeChild(this)}};t.styles=[n,a`
+    `}async _handleClose(){this.parentNode.removeChild(this)}};r.styles=[e,t`
       li + li,
       li > ul {
         margin-top: 8px;
@@ -123,4 +123,4 @@ import{b as n,l as a,o as s,c as r,V as e,p as c,j as d}from"./styles-QAqj_a9t-C
         margin-bottom: 0;
         padding-left: 1.5em;
       }
-    `],t=s([c("ewt-no-port-picked-dialog")],t);const w=async i=>{const o=document.createElement("ewt-no-port-picked-dialog");return o.doTryAgain=i,document.body.append(o),!0};export{w as openNoPortPickedDialog};
+    `],r=o([n("ewt-no-port-picked-dialog")],r);const c=async e=>{const t=document.createElement("ewt-no-port-picked-dialog");return t.doTryAgain=e,document.body.append(t),!0};export{c as openNoPortPickedDialog};
