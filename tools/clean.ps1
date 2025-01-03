@@ -1,3 +1,6 @@
+# This script is used to clean the project by deleting the unnecessary folders
+cd ..
+
 # Set the paths to search for
 $foldersToDelete = @("logs", "bin", "obj", ".vs", ".idea", ".vscode", ".pio", "dist", "node_modules")
 
