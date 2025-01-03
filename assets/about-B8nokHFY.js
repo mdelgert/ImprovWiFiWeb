@@ -1,4 +1,4 @@
-import"./style-Cif0AnDf.js";document.querySelector("#app").innerHTML=`
+import"./style-qiVDcRWx.js";document.querySelector("#app").innerHTML=`
   <div>
     <h1>About</h1>
     <p>Web Installer</p>
