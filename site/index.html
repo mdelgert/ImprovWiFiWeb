@@ -9,15 +9,22 @@
   <script type="module" src="/webtools/install-button.js?module"></script>
   <title>Web Installer</title>
 </head>
+
 <body>
   <div id="app">
     <h1>Web Installer 1.0</h1>
     <p>Select firmware:</p>
     <select id="firmware-select" class="btn"></select>
     <br />
-    <esp-web-install-button manifest="" id="install-button">INSTALL</esp-web-install-button>
+    <esp-web-install-button manifest="" id="install-button">
+      <button slot="activate">Install</button>
+      <!-- 
+      <span slot="unsupported">Ah snap, your browser doesn't work!</span>
+      <span slot="not-allowed">Ah snap, you are not allowed to use this on HTTP!</span> 
+      -->
+    </esp-web-install-button>
     <br />
-    <a href="https://github.com/mdelgert/ImprovWiFiWeb">About</a>
+    <!-- <a href="https://github.com/mdelgert/ImprovWiFiWeb">About</a> -->
   </div>
   <script type="module">
     const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
@@ -61,6 +68,16 @@
       const selectedManifest = event.target.value;
       installButton.setAttribute('manifest', selectedManifest);
     });
+
+    // Override the default checkSameFirmware function
+    const button = document.querySelector('esp-web-install-button');
+    button.overrides = {
+      checkSameFirmware(manifest, improvInfo) {
+        const manifestFirmware = manifest.name.toLowerCase();
+        const deviceFirmware = improvInfo.firmware.toLowerCase();
+        return manifestFirmware.includes(deviceFirmware);
+      }
+    };
 
     // Initialize dropdown on page load
     fetchReleases();
