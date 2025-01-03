@@ -14,7 +14,7 @@
 <body>
   <div id="app">
     <h1>Web Installer</h1>
-    <p>Click the button below to install the web app.</p>
+    <p>Click the button below to install firmware.</p>
     <select id="firmware-select" class="btn"></select>
     <br />
     <!-- <button id="install">Install</button> -->
@@ -23,10 +23,8 @@
       manifest=""
       id="install-button">
     </esp-web-install-button>
-    <br />
-    <a href="firmware/v1.0.0.json">Download</a>
-    <br />
-    <a href="about.html">About</a>
+    <!--<br /><a href="firmware/v1.0.0.json">Download</a>-->
+    <!-- <br /><a href="about.html">About</a> -->
   </div>
   <script type="module">
     const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
