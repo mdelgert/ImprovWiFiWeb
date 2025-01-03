@@ -4,9 +4,9 @@
 [Releases](https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases)
 
 # Links
-[ESP32 Improv Demo](https://jnthas.github.io/improv-wifi-demo)
-
 [ESP Web Tools](https://esphome.github.io/esp-web-tools)
+
+[ESP32 Improv Demo](https://jnthas.github.io/improv-wifi-demo)
 
 [ESP Web Tools NPM](https://www.npmjs.com/package/esp-web-tools)
 
