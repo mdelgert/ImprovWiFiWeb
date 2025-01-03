@@ -4,6 +4,9 @@
 cd ..
 cd site
 
+# Clean previous firmware files
+rm -rf /site/public/firmware
+
 # Run the Python script in the tools directory to download firmnware manifests
 python3 ../tools/manifests.py --output-dir public/firmware
 

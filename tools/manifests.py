@@ -71,14 +71,6 @@ def generate_manifest_and_download(release, output_dir):
                 json.dump(manifest, f, indent=2)
             print(f"Generated manifest: {manifest_filename}")
 
-# Function to clean the output directory
-def clean_output_directory(output_dir):
-    if os.path.exists(output_dir):
-        shutil.rmtree(output_dir)
-        print(f"Deleted existing directory: {output_dir}")
-    os.makedirs(output_dir)
-    print(f"Created fresh directory: {output_dir}")
-
 # Main script
 def main():
     # Parse arguments
@@ -96,9 +88,6 @@ def main():
     auth_token = os.getenv("GITHUB_TOKEN")
 
     try:
-        # Ensure the output directory is cleaned and exists
-        #clean_output_directory(output_dir)
-
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
 
@@ -113,7 +102,6 @@ def main():
         print(f"File operation error: {e}")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
-
 
 if __name__ == "__main__":
     main()

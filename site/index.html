@@ -6,25 +6,16 @@
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="/src/style.css" />
-  <!-- <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script> -->
-  <script type="module" src="/webtools2/install-button.js?module"></script>
+  <script type="module" src="/webtools/install-button.js?module"></script>
   <title>Web Installer</title>
 </head>
-
 <body>
   <div id="app">
-    <h1>Web Installer</h1>
+    <h1>Web Installer 1.0</h1>
     <p>Click the button below to install firmware.</p>
     <select id="firmware-select" class="btn"></select>
     <br />
-    <!-- <button id="install">Install</button> -->
-    <!-- <esp-web-install-button manifest="https://firmware.esphome.io/esp-web-tools/manifest.json"></esp-web-install-button> -->
-    <esp-web-install-button manifest="" 
-    id="install-button"
-    > 
-    </esp-web-install-button>
-    <!--<br /><a href="firmware/v1.0.0.json">Download</a>-->
-    <!-- <br /><a href="about.html">About</a> -->
+    <esp-web-install-button manifest="" id="install-button"></esp-web-install-button>
   </div>
   <script type="module">
     const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
