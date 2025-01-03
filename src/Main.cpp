@@ -22,7 +22,7 @@ void setup()
   ButtonHandler::init();
   GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
   LEDHandler::setDefaultBrightness(100);
-  LEDHandler::setColor(CRGB::DarkBlue);
+  LEDHandler::setColor(CRGB::DarkSeaGreen);
 }
 
 void loop()
