@@ -9,8 +9,6 @@ NonBlockingTimer ImprovHandler::myTimer(1000);
 
 void ImprovHandler::init()
 {
-    // GfxHandler::printMessage("ImprovHandler::init()");
-
     debugD("Initializing ImprovHandler");
 
     WiFi.mode(WIFI_STA);
@@ -19,15 +17,11 @@ void ImprovHandler::init()
     WiFi.disconnect();
     debugI("WiFi disconnected");
 
-    // PreferencesHandler::init("wifi");
-
     String ssid, password;
 
     // Attempt to retrieve saved Wi-Fi credentials
     if (PreferencesHandler::getValue("wifi_ssid", ssid) && PreferencesHandler::getValue("wifi_password", password))
     {
-        // GfxHandler::printMessage("Retrieved Wi-Fi credentials from preferences. SSID: " + ssid);
-        // debugI("Retrieved Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
         debugI("Retrieved Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
 
         WiFi.begin(ssid.c_str(), password.c_str());
@@ -78,14 +72,10 @@ void ImprovHandler::loop()
         handleHttpRequest();
     }
 
-    // if (myTimer.isReady())
-    // {
-    //     String ssid, password;
-    //     PreferencesHandler::getValue("wifi_ssid", ssid);
-    //     PreferencesHandler::getValue("wifi_password", password);
-    //     debugI("Wi-Fi credentials from preferences. SSID: %s", ssid.c_str());
-    //     debugI("IP Address: %s", WiFi.localIP().toString().c_str());
-    // }
+    if (myTimer.isReady())
+    {
+        GfxHandler::printMessage("IP: " + WiFi.localIP().toString());
+    }
 }
 
 bool ImprovHandler::connectWifi(const char *ssid, const char *password)
