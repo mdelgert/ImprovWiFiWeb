@@ -61,7 +61,7 @@ void ImprovHandler::init()
     }
 
     // Initialize ImprovWiFi setup if no valid connection
-    improvSerial.setDeviceInfo(ImprovTypes::ChipFamily::CF_ESP32_S3, "ImprovWiFiLib", "1.0.5", "BasicWebServer", "http://{LOCAL_IPV4}?name=Guest");
+    improvSerial.setDeviceInfo(ImprovTypes::ChipFamily::CF_ESP32_S3, "ImprovWiFiLib", SOFTWARE_VERSION, "Demo", "http://{LOCAL_IPV4}?name=Guest");
     improvSerial.onImprovError(onImprovWiFiErrorCb);
     improvSerial.onImprovConnected(onImprovWiFiConnectedCb);
     //improvSerial.setCustomConnectWiFi(connectWifi); // Optional
