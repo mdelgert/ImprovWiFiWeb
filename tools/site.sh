@@ -26,6 +26,10 @@ elif [ "$ACTION" == "clean" ]; then
   echo "Cleaning the build directory..."
   # Clean the dist directory
   rm -rf dist
+elif [ "$ACTION" == "full" ]; then
+  echo "Cleaning the build directory..."
+  # Run full site build
+  npm run full
 else
   echo "Usage: ./build.sh [dev|build|clean]"
   exit 1

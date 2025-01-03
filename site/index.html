@@ -12,10 +12,12 @@
 <body>
   <div id="app">
     <h1>Web Installer 1.0</h1>
-    <p>Click the button below to install firmware.</p>
+    <p>Select firmware:</p>
     <select id="firmware-select" class="btn"></select>
     <br />
-    <esp-web-install-button manifest="" id="install-button"></esp-web-install-button>
+    <esp-web-install-button manifest="" id="install-button">INSTALL</esp-web-install-button>
+    <br />
+    <a href="https://esphome.github.io/esp-web-tools/">About</a>
   </div>
   <script type="module">
     const GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases";
