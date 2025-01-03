@@ -32,8 +32,8 @@ void loop()
   ButtonHandler::loop();
   TemplateHandler::loop();
 
-  if (myTimer.isReady())
-  {
-    debugI("Timer is ready");
-  }
+  // if (myTimer.isReady())
+  // {
+  //   debugI("Timer is ready");
+  // }
 }
