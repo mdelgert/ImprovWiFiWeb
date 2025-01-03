@@ -9,7 +9,7 @@
 #include "ButtonHandler.h"
 #include "TemplateHandler.h"
 
-NonBlockingTimer myTimer(5000);
+NonBlockingTimer myTimer(3000);
 
 void setup()
 {

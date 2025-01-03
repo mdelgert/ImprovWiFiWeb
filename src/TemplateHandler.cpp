@@ -7,7 +7,7 @@ void TemplateHandler::init()
 
 void TemplateHandler::loop()
 {
-    debugD("TemplateHandler loop");
+    //debugD("TemplateHandler loop");
 }
 
 void TemplateHandler::examplePublic()
