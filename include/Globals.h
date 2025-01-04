@@ -11,14 +11,7 @@ extern RemoteDebug Debug;
 #define SOFTWARE_VERSION "V1.0.4"
 
 // Feature Flags
-#define ENABLE_TFT true
-#define ENABLE_SERIAL true
-#define ENABLE_WIFI true
-#define ENABLE_MQTT true
-#define ENABLE_MQTT_LOGGER true
-#define ENABLE_BLUETOOTH_SERVER true
-#define ENABLE_WEBSOCKET true
-#define ENABLE_WEBSOCKET_CERT true
+//TODO: Implement feature flags
 
 // Pin Definitions
 #define BUTTON_PIN      0

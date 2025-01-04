@@ -46,7 +46,6 @@ LGFX_LiLyGo_TDongleS3::LGFX_LiLyGo_TDongleS3()
 // Implementation for GfxHandler methods
 void GfxHandler::init()
 {
-    if (!ENABLE_TFT) return;
     tft.init();                             // Initialize the display
     tft.setBrightness(128);                 // Set the backlight brightness
     tft.setRotation(1);                     // Adjust rotation (modify as needed)
@@ -57,7 +56,6 @@ void GfxHandler::init()
 
 void GfxHandler::printMessage(const String &message)
 {
-    if (!ENABLE_TFT) return;
     tft.fillScreen(TFT_BLACK); // Clear the screen
     tft.setCursor(5, 5);       // Position the cursor
     tft.println(message);      // Display the message
@@ -65,7 +63,6 @@ void GfxHandler::printMessage(const String &message)
 
 void GfxHandler::drawImage(int x, int y, int width, int height, const char *data)
 {
-    if (!ENABLE_TFT) return;
     uint8_t pixel[3]; // RGB values
     uint16_t color;
 

@@ -7,33 +7,26 @@
 #include "GfxHandler.h"
 #include "LEDHandler.h"
 #include "ButtonHandler.h"
-#include "TemplateHandler.h"
-
-NonBlockingTimer myTimer(3000);
+#include "WifiHandler.h"
 
 void setup()
 {
   RemoteDebugHandler::init();
   PreferencesHandler::init("settings");
-  TemplateHandler::init();
   GfxHandler::init();
+  WifiHandler::init();
   ImprovHandler::init();
   LEDHandler::init();
   ButtonHandler::init();
-  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  //GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
   LEDHandler::setDefaultBrightness(100);
-  LEDHandler::setColor(CRGB::DarkSeaGreen);
+  LEDHandler::setColor(CRGB::DarkGreen);
 }
 
 void loop()
 {
   RemoteDebugHandler::loop();
+  WifiHandler::loop();
   ImprovHandler::loop();
   ButtonHandler::loop();
-  TemplateHandler::loop();
-
-  // if (myTimer.isReady())
-  // {
-  //   debugI("Timer is ready");
-  // }
 }
