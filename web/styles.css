@@ -52,7 +52,7 @@ textarea {
   background-color: #333333;
   color: #ffffff;
   border: 1px solid #444444;
-  /* padding: 10px; */
+  padding: 10px;
   font-size: 16px;
   resize: none;
 }
@@ -73,7 +73,6 @@ button {
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
-
   display: inline-block;
   min-width: 9rem;
   padding: 0.5rem;
@@ -100,4 +99,31 @@ button:hover {
 
 .buttonlink:hover {
   background-color: #0056b3;
+}
+
+.message-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999; /* so it appears on top */
+}
+
+/* Hide the box by default. */
+.hidden {
+  display: none;
+}
+
+/* Different background colors for success vs. error */
+.success {
+  background-color: #28a745; /* green */
+}
+
+.error {
+  background-color: #dc3545; /* red */
 }

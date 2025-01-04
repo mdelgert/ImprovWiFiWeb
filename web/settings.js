@@ -21,6 +21,7 @@ function loadSettings() {
     })
     .catch((error) => {
       console.error("Failed to load data from /get-json:", error);
+      showMessage("", "error");
     });
 }
 
@@ -50,18 +51,22 @@ function saveSettings() {
       })
       .then((data) => {
         if (data.status === "success") {
-          alert("Settings saved successfully!");
+          console.log("Settings saved successfully!");
+          //alert("Settings saved successfully!");
+          showMessage("Settings saved successfully!", "success");
         } else {
           throw new Error(data.message);
         }
       })
       .catch((error) => {
         console.error("Failed to save settings:", error);
-        alert("Failed to save settings. Please try again.");
+        //alert("Failed to save settings. Please try again.");
+        showMessage("Failed to save settings:", "error");
       });
   } catch (error) {
     console.error("Invalid JSON format:", error);
-    alert("Invalid JSON. Please ensure your input is correctly formatted.");
+    //alert("Invalid JSON. Please ensure your input is correctly formatted.");
+    showMessage("Invalid JSON format:", "error");
   }
 }
 
@@ -72,3 +77,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const submitButton = document.getElementById("submit-button");
   submitButton.addEventListener("click", saveSettings);
 });
+
+// Show message in the custom box
+function showMessage(message, type) {
+  // Get the message box element
+  const msgBox = document.getElementById("message-box");
+
+  // Clear any existing classes (success / error), then add the appropriate one
+  msgBox.className = "message-box";
+  msgBox.classList.add(type);
+
+  // Set the text content
+  msgBox.textContent = message;
+
+  // Make sure it's visible
+  msgBox.classList.remove("hidden");
+
+  // Optional: Hide after a certain delay (e.g., 3 seconds)
+  setTimeout(() => {
+    msgBox.classList.add("hidden");
+  }, 3000);
+}
