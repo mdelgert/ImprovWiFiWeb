@@ -31,6 +31,13 @@ void WebHandler::init()
         response->addHeader("Content-Encoding", "identity");
         request->send(response); });
 
+    server.on("/nav.html", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+        size_t fileSize = nav_html_end - nav_html_start;
+        AsyncWebServerResponse *response = request->beginResponse_P(200, "text/html", nav_html_start, fileSize);
+        response->addHeader("Content-Encoding", "identity");
+        request->send(response); });
+
     // Serve embedded settings.html
     server.on("/settings.html", HTTP_GET, [](AsyncWebServerRequest *request)
               {

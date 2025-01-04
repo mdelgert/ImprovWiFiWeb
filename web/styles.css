@@ -26,6 +26,10 @@ nav {
   background-color: #2e2e2e;
 }
 
+nav a:hover {
+  background-color: #555555;
+}
+
 nav a {
   display: inline-block;
   min-width: 9rem;
@@ -52,13 +56,33 @@ textarea {
   font-size: 16px;
   resize: none;
 }
+
+/* 
 button {
   background-color: #444444;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.87);
   border: none;
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+} 
+*/
+
+button {
+  background-color: #444444;
+  color: rgba(255, 255, 255, 0.87);
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+
+  display: inline-block;
+  min-width: 9rem;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  border: solid 1px #aaa;
+  text-align: center;
+  text-decoration: none;
 }
 
 button:hover {
