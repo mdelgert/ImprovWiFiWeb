@@ -65,6 +65,7 @@ void WebHandler::handleRoot()
     serveEmbeddedFile("/actions.html", actions_html_start, actions_html_end, "text/html");
     serveEmbeddedFile("/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile("/device.html", device_html_start, device_html_end, "text/html");
+    serveEmbeddedFile("/device.js", device_js_start, device_js_end, "application/javascript");
     serveEmbeddedFile("/", index_html_start, index_html_end, "text/html");
     serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile("/settings.js", settings_js_start, settings_js_end, "application/javascript");
