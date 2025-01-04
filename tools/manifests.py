@@ -56,7 +56,7 @@ def generate_manifest_and_download(release, output_dir):
 
             # Create the manifest
             manifest = MANIFEST_TEMPLATE.copy()
-            manifest["name"] = tag_name
+            manifest["name"] = "Demo"
             manifest["version"] = tag_name
             manifest["builds"] = [
                 {
