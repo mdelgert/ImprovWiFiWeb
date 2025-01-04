@@ -1,6 +1,6 @@
 #include "WifiHandler.h"
 
-NonBlockingTimer WifiHandler::myTimer(5000);
+NonBlockingTimer WifiHandler::myTimer(1000);
 
 void WifiHandler::init()
 {
@@ -17,9 +17,8 @@ void WifiHandler::init()
         {
             if (myTimer.isReady())
             {
-                debugE("Failed WiFi!");
-                GfxHandler::printMessage("Failed WiFi!");
-                break;
+                debugI("Connecting to WiFi...");
+                GfxHandler::printMessage("Connecting to WiFi...");
             }
         }
     }

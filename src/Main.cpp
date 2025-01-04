@@ -8,6 +8,7 @@
 #include "LEDHandler.h"
 #include "ButtonHandler.h"
 #include "WifiHandler.h"
+#include "WebHandler.h"
 
 void setup()
 {
@@ -15,6 +16,7 @@ void setup()
   PreferencesHandler::init("settings");
   GfxHandler::init();
   WifiHandler::init();
+  WebHandler::init();
   ImprovHandler::init();
   LEDHandler::init();
   ButtonHandler::init();
@@ -27,6 +29,7 @@ void loop()
 {
   RemoteDebugHandler::loop();
   WifiHandler::loop();
+  WebHandler::loop();
   ImprovHandler::loop();
   ButtonHandler::loop();
 }
