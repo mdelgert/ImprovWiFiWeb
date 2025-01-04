@@ -40,13 +40,18 @@ void WebHandler::init()
     }
     debugI("LittleFS mounted successfully");
 
-    // Serve embedded files
-    serveEmbeddedFile("/", index_html_start, index_html_end, "text/html");
-    serveEmbeddedFile("/device.html", device_html_start, device_html_end, "text/html");
-    serveEmbeddedFile("/nav.html", nav_html_start, nav_html_end, "text/html");
-    serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
+        request->redirect("/index.html");
+    });
+
     serveEmbeddedFile("/styles.css", styles_css_start, styles_css_end, "text/css");
-    
+    serveEmbeddedFile("/device.html", device_html_start, device_html_end, "text/html");
+    serveEmbeddedFile("/settings.js", settings_js_start, settings_js_end, "application/javascript");
+    serveEmbeddedFile("/nav.js", nav_js_start, nav_js_end, "application/javascript");
+    serveEmbeddedFile("/index.html", index_html_start, index_html_end, "text/html");
+    serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
+    serveEmbeddedFile("/nav.html", nav_html_start, nav_html_end, "text/html");
+
     // Serve files from LittleFS
     server.on("/save-json", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
         debugI("Received JSON payload on /save-json");

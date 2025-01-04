@@ -1,60 +1,96 @@
 import os
 
-# Directory containing the embedded files
+# Directories and files
 embedded_dir = "web"
-
-# Output PlatformIO configuration file
+config_file = "embedded_files.txt"
 platformio_file = "platformio.ini"
+header_file = "include/EmbeddedFiles.h"
+snippet_file = "include/EmbeddedFileSnippet.h"
 
 # Files and folders to exclude
 excluded_files = ["package-lock.json", "package.json"]
 excluded_dirs = ["node_modules", "dist"]
 
-# Helper function to determine if a file should be excluded
-def should_exclude(filepath):
-    return (
-        os.path.basename(filepath) in excluded_files
-        or any(excluded_dir in filepath for excluded_dir in excluded_dirs)
+# MIME types for file extensions
+mime_types = {
+    ".html": "text/html",
+    ".css": "text/css",
+    ".js": "application/javascript",
+}
+
+# Helper to get MIME type
+def get_mime_type(filename):
+    ext = os.path.splitext(filename)[1]
+    return mime_types.get(ext, "application/octet-stream")
+
+# Step 1: Generate embedded files list
+embedded_files = []
+for root, dirs, files in os.walk(embedded_dir):
+    dirs[:] = [d for d in dirs if d not in excluded_dirs]  # Exclude directories
+    for file in files:
+        if file in excluded_files:
+            continue
+        embedded_files.append(os.path.join(embedded_dir, file).replace("\\", "/"))
+
+# Write embedded_files.txt
+with open(config_file, "w") as f:
+    f.write("\n".join(sorted(embedded_files)))
+
+# Step 2: Generate declarations and serveEmbeddedFile calls
+declarations = []
+serve_calls = []
+for file in embedded_files:
+    variable_name = file.split("/")[-1].replace(".", "_")  # Extract filename and replace dots with underscores
+    mime_type = get_mime_type(file)
+    declarations.append(
+        f"extern const uint8_t {variable_name}_start[] asm(\"_binary_{file.replace('.', '_')}_start\");"
+    )
+    declarations.append(
+        f"extern const uint8_t {variable_name}_end[] asm(\"_binary_{file.replace('.', '_')}_end\");"
+    )
+    serve_calls.append(
+        f"    serveEmbeddedFile(\"/{os.path.basename(file)}\", {variable_name}_start, {variable_name}_end, \"{mime_type}\");"
     )
 
-# Generate a list of all files in the embedded_dir, excluding unwanted files and directories
-embed_files = []
-for root, dirs, files in os.walk(embedded_dir):
-    # Exclude unwanted directories
-    dirs[:] = [d for d in dirs if d not in excluded_dirs]
+# Write EmbeddedFiles.h
+with open(header_file, "w") as f:
+    f.write("#ifndef EMBEDDED_FILES_H\n#define EMBEDDED_FILES_H\n\n#include <Arduino.h>\n\n")
+    f.write("// Declarations for embedded files\n")
+    f.write("\n".join(declarations))
+    f.write("\n\n#endif // EMBEDDED_FILES_H\n")
 
-    for file in files:
-        filepath = os.path.relpath(os.path.join(root, file), start=embedded_dir)
-        if not should_exclude(filepath):
-            embed_files.append(f"{embedded_dir}/{filepath}")
+# Write EmbeddedFileSnippet.h
+with open(snippet_file, "w") as f:
+    f.write("#ifndef EMBEDDED_FILE_SNIPPET_H\n#define EMBEDDED_FILE_SNIPPET_H\n\n")
+    f.write("// Automatically register embedded files\n")
+    f.write("inline void registerEmbeddedFiles() {\n")
+    f.write("\n".join(serve_calls))
+    f.write("\n}\n\n#endif // EMBEDDED_FILE_SNIPPET_H\n")
 
-# Read the existing platformio.ini
-with open(platformio_file, "r") as f:
-    lines = f.readlines()
+# Step 3: Update platformio.ini
+if os.path.exists(platformio_file):
+    with open(platformio_file, "r") as f:
+        lines = f.readlines()
 
-# Remove the existing board_build.embed_files section
-new_lines = []
-inside_embed_files_section = False
-for line in lines:
-    if line.strip().startswith("board_build.embed_files ="):
-        inside_embed_files_section = True
-        new_lines.append("board_build.embed_files =\n")
-        for file in embed_files:
-            new_lines.append(f"    {file}\n")
-    elif inside_embed_files_section and line.startswith("    "):
-        continue  # Skip existing entries in the embed_files section
-    else:
-        inside_embed_files_section = False
-        new_lines.append(line)
+    updated_lines = []
+    inside_embed_files = False
+    for line in lines:
+        if line.startswith("board_build.embed_files"):
+            inside_embed_files = True
+            updated_lines.append("board_build.embed_files =\n")
+            updated_lines.extend(f"    {file}\n" for file in sorted(embedded_files))
+        elif inside_embed_files and line.startswith("    "):
+            continue  # Skip existing embed file entries
+        else:
+            inside_embed_files = False
+            updated_lines.append(line)
 
-# If the section was not found, append it
-if not any(line.strip().startswith("board_build.embed_files =") for line in new_lines):
-    new_lines.append("\nboard_build.embed_files =\n")
-    for file in embed_files:
-        new_lines.append(f"    {file}\n")
+    with open(platformio_file, "w") as f:
+        f.writelines(updated_lines)
+else:
+    with open(platformio_file, "w") as f:
+        f.write("[env]\n")
+        f.write("board_build.embed_files =\n")
+        f.writelines(f"    {file}\n" for file in sorted(embedded_files))
 
-# Write back to platformio.ini
-with open(platformio_file, "w") as f:
-    f.writelines(new_lines)
-
-print(f"Updated {platformio_file} with embedded files.")
+print(f"Updated {platformio_file}, generated {header_file} and {snippet_file}, and wrote {config_file}")
