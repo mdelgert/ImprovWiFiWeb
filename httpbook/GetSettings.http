@@ -1,0 +1,3 @@
+# Retrieve JSON from ESP32
+GET http://192.168.50.145/get-json
+Accept: application/json

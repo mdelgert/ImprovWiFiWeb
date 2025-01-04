@@ -5,6 +5,8 @@
 #include "Globals.h"
 #include "NonBlockingTimer.h"
 #include "EmbeddedFiles.h"
+#include <ArduinoJson.h>
+#include <LittleFS.h>
 
 class WebHandler
 {

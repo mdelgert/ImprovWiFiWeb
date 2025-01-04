@@ -1,0 +1,9 @@
+### Send POST request to http://192.168.50.145/
+POST http://192.168.50.145/save-json
+Content-Type: application/json
+
+{
+  "name": "ESP32",
+  "version": "1.0",
+  "features": ["WiFi", "WebServer", "LittleFS"]
+}
