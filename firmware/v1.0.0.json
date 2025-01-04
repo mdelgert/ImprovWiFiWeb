@@ -1,7 +1,7 @@
 {
   "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
   "new_install_prompt_erase": true,
-  "name": "v1.0.0",
+  "name": "Demo",
   "version": "v1.0.0",
   "builds": [
     {
