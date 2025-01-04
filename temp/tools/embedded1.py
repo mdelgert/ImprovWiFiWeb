@@ -1,3 +1,5 @@
+# Not a good idea to modify platformio.ini, better to do it manually
+
 import os
 
 # Directories and files
