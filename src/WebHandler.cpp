@@ -4,6 +4,7 @@ NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
 
 void WebHandler::addCorsHeaders(AsyncWebServerResponse *response) {
+    if (ENABLE_SECURE_CORS) return; // Only enable this for testing not safe for production
     response->addHeader("Access-Control-Allow-Origin", "*");
     response->addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     response->addHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -14,7 +15,7 @@ void WebHandler::serveEmbeddedFile(const char* path, const uint8_t* start, const
         size_t fileSize = end - start;
         AsyncWebServerResponse* response = request->beginResponse_P(200, contentType, start, fileSize);
         response->addHeader("Content-Encoding", "identity");
-        //WebHandler::addCorsHeaders(response);
+        WebHandler::addCorsHeaders(response);
         request->send(response);
         debugI("Served: %s", path);
     });

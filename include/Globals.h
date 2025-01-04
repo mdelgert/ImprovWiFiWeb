@@ -10,8 +10,8 @@ extern RemoteDebug Debug;
 // Version information
 #define SOFTWARE_VERSION "V1.0.4"
 
-// Feature Flags
-//TODO: Implement feature flags
+// Set this should be true for production, only set to false for testing.
+#define ENABLE_SECURE_CORS false
 
 // Pin Definitions
 #define BUTTON_PIN      0
