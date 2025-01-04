@@ -46,8 +46,7 @@ void WebHandler::init()
     serveEmbeddedFile("/nav.html", nav_html_start, nav_html_end, "text/html");
     serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile("/styles.css", styles_css_start, styles_css_end, "text/css");
-    serveEmbeddedFile("/script.js", script_js_start, script_js_end, "application/javascript");
-
+    
     // Serve files from LittleFS
     server.on("/save-json", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
         debugI("Received JSON payload on /save-json");
