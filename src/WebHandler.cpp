@@ -48,6 +48,7 @@ void WebHandler::init()
 
     handleRoot();
     handleSettings();
+    handleDeviceInfo();
 
     // Start the web server
     server.begin();
@@ -78,7 +79,7 @@ void WebHandler::handleSettings()
               {
         debugI("Received JSON payload on /settings/save");
 
-        JsonDocument doc; // Use the simplified declaration
+        JsonDocument doc;
 
         // Parse the JSON data
         DeserializationError error = deserializeJson(doc, data, len);
@@ -152,4 +153,45 @@ void WebHandler::handleSettings()
         } });
 
     debugI("WebHandler handleSettings");
+}
+
+void WebHandler::handleDeviceInfo()
+{
+    server.on("/device/get", HTTP_GET, [](AsyncWebServerRequest *request) {
+        debugI("Serving /device/get (device info)");
+
+        // Create a JSON document for device info.
+        // You can size this based on how much data you're storing.
+        JsonDocument doc;
+
+        // Basic chip info
+        doc["chipModel"]   = "ESP32-S3";
+        doc["chipRevision"] = (int)ESP.getChipRevision(); // revision as integer
+        doc["cpuFreqMHz"]  = ESP.getCpuFreqMHz();
+        doc["sdkVersion"]  = ESP.getSdkVersion();
+
+        // Memory info
+        doc["heapSize"]    = ESP.getHeapSize();
+        doc["freeHeap"]    = ESP.getFreeHeap();
+#if CONFIG_SPIRAM_SUPPORT
+        doc["psramSize"]   = ESP.getPsramSize();
+        doc["freePsram"]   = ESP.getFreePsram();
+#endif
+
+        // WiFi / network info
+        doc["ssid"]        = WiFi.SSID();
+        doc["ip"]          = WiFi.localIP().toString();
+        doc["mac"]         = WiFi.macAddress();
+        doc["rssi"]        = WiFi.RSSI(); // WiFi signal strength
+
+        // Convert JSON doc to string for response
+        String responseString;
+        serializeJson(doc, responseString);
+
+        // Create and send the response with any CORS headers if needed
+        AsyncWebServerResponse *response = request->beginResponse(
+            200, "application/json", responseString);
+        WebHandler::addCorsHeaders(response);  // If you want your feature flag or logic, do it here
+        request->send(response);
+    });
 }
