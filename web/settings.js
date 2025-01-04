@@ -1,24 +1,6 @@
-//console.log('Hello!');
 
 // Define the base URL for API requests
 const BASE_URL = window.location.hostname === "localhost" ? "http://192.168.50.145" : "";
-
-// Function to load the navigation bar from nav.html
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('nav.html')
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById('nav-placeholder').innerHTML = data;
-      const links = document.querySelectorAll('nav a');
-      links.forEach(link => {
-        if (link.href === window.location.href) {
-          link.setAttribute('aria-current', 'page');
-        } else {
-          link.removeAttribute('aria-current');
-        }
-      });
-    });
-});
 
 // Function to load settings from /get-json
 function loadSettings() {
