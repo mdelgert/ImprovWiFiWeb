@@ -35,6 +35,7 @@ void WebHandler::init()
         if (myTimer.isReady())
         {
             debugI("WebHandler waiting for WiFi...");
+            break;
         }
     }
 
