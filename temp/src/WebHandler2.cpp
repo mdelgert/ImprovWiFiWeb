@@ -3,31 +3,26 @@
 NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
 
-void WebHandler::addCorsHeaders(AsyncWebServerResponse *response)
-{
-    if (ENABLE_SECURE_CORS)
-        return; // Only enable this for testing not safe for production
+void WebHandler::addCorsHeaders(AsyncWebServerResponse *response) {
+    if (ENABLE_SECURE_CORS) return; // Only enable this for testing not safe for production
     response->addHeader("Access-Control-Allow-Origin", "*");
     response->addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     response->addHeader("Access-Control-Allow-Headers", "Content-Type");
 }
 
-void WebHandler::serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType)
-{
-    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest *request)
-              {
+void WebHandler::serveEmbeddedFile(const char* path, const uint8_t* start, const uint8_t* end, const char* contentType) {
+    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest* request) {
         size_t fileSize = end - start;
         AsyncWebServerResponse* response = request->beginResponse_P(200, contentType, start, fileSize);
         response->addHeader("Content-Encoding", "identity");
         WebHandler::addCorsHeaders(response);
         request->send(response);
-        debugI("Served: %s", path); });
+        debugI("Served: %s", path);
+    });
 }
 
 void WebHandler::init()
 {
-    if(!ENABLE_WEBHANDLER) return;
-    
     debugI("WebHandler initialized");
 
     while (WiFi.status() != WL_CONNECTED)
@@ -46,36 +41,21 @@ void WebHandler::init()
     }
     debugI("LittleFS mounted successfully");
 
-    handleRoot();
-    handleSettings();
+    // server.on("/", HTTP_GET, [](AsyncWebServerRequest* request) {
+    //     request->redirect("/index.html");
+    // });
 
-    // Start the web server
-    server.begin();
-    debugI("Web server started!");
-}
-
-void WebHandler::loop()
-{
-    // debugI("WebHandler loop");
-}
-
-void WebHandler::handleRoot()
-{
     serveEmbeddedFile("/actions.html", actions_html_start, actions_html_end, "text/html");
     serveEmbeddedFile("/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile("/device.html", device_html_start, device_html_end, "text/html");
+    //serveEmbeddedFile("/index.html", index_html_start, index_html_end, "text/html");
     serveEmbeddedFile("/", index_html_start, index_html_end, "text/html");
     serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile("/settings.js", settings_js_start, settings_js_end, "application/javascript");
     serveEmbeddedFile("/styles.css", styles_css_start, styles_css_end, "text/css");
-    debugI("WebHandler handleRoot");
-}
-
-void WebHandler::handleSettings()
-{
+    
     // Serve files from LittleFS
-    server.on("/settings/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-              {
+    server.on("/settings/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
         debugI("Received JSON payload on /settings/save");
 
         JsonDocument doc; // Use the simplified declaration
@@ -105,11 +85,11 @@ void WebHandler::handleSettings()
         debugI("JSON saved to /data.json");
         AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "{\"status\":\"success\",\"message\":\"File saved successfully\"}");
         WebHandler::addCorsHeaders(response);
-        request->send(response); });
-
+        request->send(response);
+    });
+    
     // Serve JSON data
-    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request) {
         File file = LittleFS.open("/data.json", "r");
         if (!file) {
             debugE("Failed to open /data.json");
@@ -137,11 +117,11 @@ void WebHandler::handleSettings()
 
         AsyncWebServerResponse *response = request->beginResponse(200, "application/json", responseString);
         WebHandler::addCorsHeaders(response);
-        request->send(response); });
+        request->send(response);
+    });
 
     // Handle preflight CORS requests
-    server.onNotFound([](AsyncWebServerRequest *request)
-                      {
+    server.onNotFound([](AsyncWebServerRequest *request) {
         if (request->method() == HTTP_OPTIONS) {
             AsyncWebServerResponse *response = request->beginResponse(204); // No Content
             WebHandler::addCorsHeaders(response);
@@ -149,7 +129,16 @@ void WebHandler::handleSettings()
             debugI("Handled CORS preflight request");
         } else {
             request->send(404, "text/plain", "Not found");
-        } });
+        }
+    });
 
-    debugI("WebHandler handleSettings");
+    // Start the web server
+    server.begin();
+    debugI("Web server started!");
+}
+
+void WebHandler::loop()
+{
+    // No code needed for AsyncWebServer
+    // debugI("WebHandler loop");
 }

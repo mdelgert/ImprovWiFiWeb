@@ -13,6 +13,8 @@ class WebHandler
 private:
     static void addCorsHeaders(AsyncWebServerResponse *response);
     static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
+    static void handleRoot();
+    static void handleSettings();
 public:
     static NonBlockingTimer myTimer;
     static AsyncWebServer server;

@@ -12,6 +12,7 @@ extern RemoteDebug Debug;
 
 // Set this should be true for production, only set to false for testing.
 #define ENABLE_SECURE_CORS false
+#define ENABLE_WEBHANDLER true
 
 // Pin Definitions
 #define BUTTON_PIN      0
