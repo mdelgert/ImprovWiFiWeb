@@ -1,10 +1,11 @@
+console.log('Settings.js loaded');
 
 // Define the base URL for API requests
 const BASE_URL = window.location.hostname === "localhost" ? "http://192.168.50.145" : "";
 
 // Function to load settings from /get-json
 function loadSettings() {
-  const url = `${BASE_URL}/get-json`;
+  const url = `${BASE_URL}/settings/get`;
 
   fetch(url)
     .then((response) => {
@@ -32,7 +33,7 @@ function saveSettings() {
     // Ensure the textarea content is valid JSON
     const parsed = JSON.parse(settings);
 
-    const url = `${BASE_URL}/save-json`;
+    const url = `${BASE_URL}/settings/save`;
 
     fetch(url, {
       method: "POST",

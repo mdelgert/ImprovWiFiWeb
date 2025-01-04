@@ -41,12 +41,10 @@ nav a {
   color: rgba(255, 255, 255, 0.87);
 }
 
-
 nav a[aria-current='page'] {
   color: rgba(255, 255, 255, 0.87);
   background-color: #1a1a1a;
-} 
-
+}  
 
 textarea {
   width: 80%;
@@ -59,7 +57,6 @@ textarea {
   resize: none;
 }
 
-/* 
 button {
   background-color: #444444;
   color: rgba(255, 255, 255, 0.87);
@@ -68,7 +65,6 @@ button {
   font-size: 16px;
   cursor: pointer;
 } 
-*/
 
 button {
   background-color: #444444;
