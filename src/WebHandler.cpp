@@ -14,7 +14,7 @@ void WebHandler::serveEmbeddedFile(const char* path, const uint8_t* start, const
         size_t fileSize = end - start;
         AsyncWebServerResponse* response = request->beginResponse_P(200, contentType, start, fileSize);
         response->addHeader("Content-Encoding", "identity");
-        WebHandler::addCorsHeaders(response);
+        //WebHandler::addCorsHeaders(response);
         request->send(response);
         debugI("Served: %s", path);
     });
