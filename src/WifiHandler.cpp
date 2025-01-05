@@ -2,13 +2,38 @@
 
 NonBlockingTimer WifiHandler::myTimer(1000);
 
+// Define AP credentials
+#define AP_SSID "demo"
+//#define AP_PASSWORD ""
+
 void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
+    
     GfxHandler::printMessage("WifiHandler initialized");
 
     String ssid, password;
-    WiFi.mode(WIFI_STA);
+
+    // WiFi.mode(WIFI_STA);
+    WiFi.mode(WIFI_AP_STA); // Set WiFi mode to both Station and Access Point
+
+    // Configure Access Point
+    //bool apSuccess = WiFi.softAP(AP_SSID, AP_PASSWORD);
+    bool apSuccess = WiFi.softAP(AP_SSID);
+    
+    if (apSuccess)
+    {
+        IPAddress AP_IP = WiFi.softAPIP();
+        debugI("AP Started: %s", AP_SSID);
+        debugI("AP IP: %s", AP_IP.toString().c_str());
+        GfxHandler::printMessage("AP: " + String(AP_SSID));
+        GfxHandler::printMessage("AP IP: " + AP_IP.toString());
+    }
+    else
+    {
+        debugE("Failed to start AP!");
+        GfxHandler::printMessage("Failed to start AP!");
+    }
 
     if (PreferencesHandler::getValue("wifi_ssid", ssid) && PreferencesHandler::getValue("wifi_password", password))
     {
