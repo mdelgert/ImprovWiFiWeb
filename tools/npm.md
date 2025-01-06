@@ -1,9 +1,7 @@
-#!/bin/bash
-
 # Download and install nvm:
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
-# Download and install Node.js:
+# Download and install Node.js (need to close and open terminal for next command)
 nvm install 22
 
 # Verify the Node.js version:
