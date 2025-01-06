@@ -47,9 +47,10 @@ void WebHandler::init()
     }
     debugI("LittleFS mounted successfully");
 
-    handleRoot();
-    handleSettings();
-    handleDeviceInfo();
+    serveRoot();
+    serveSettings();
+    serveDeviceInfo();
+    serveWifiNetworks();
 
     // Start the web server
     server.begin();
@@ -61,7 +62,7 @@ void WebHandler::loop()
     // debugI("WebHandler loop");
 }
 
-void WebHandler::handleRoot()
+void WebHandler::serveRoot()
 {
     serveEmbeddedFile("/actions.html", actions_html_start, actions_html_end, "text/html");
     serveEmbeddedFile("/actions.js", actions_js_start, actions_js_end, "application/javascript");
@@ -74,7 +75,7 @@ void WebHandler::handleRoot()
     debugI("WebHandler handleRoot");
 }
 
-void WebHandler::handleSettings()
+void WebHandler::serveSettings()
 {
     // Serve files from LittleFS
     server.on("/settings/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
@@ -157,7 +158,7 @@ void WebHandler::handleSettings()
     debugI("WebHandler handleSettings");
 }
 
-void WebHandler::handleDeviceInfo()
+void WebHandler::serveDeviceInfo()
 {
     server.on("/device/get", HTTP_GET, [](AsyncWebServerRequest *request) {
         debugI("Serving /device/get (device info)");
@@ -167,14 +168,20 @@ void WebHandler::handleDeviceInfo()
         JsonDocument doc;
 
         // Basic chip info
-        doc["chipModel"]   = "ESP32-S3";
-        doc["chipRevision"] = (int)ESP.getChipRevision(); // revision as integer
+        doc["chipModel"]   = ESP.getChipModel();
+        doc["chipRevision"] = (int)ESP.getChipRevision();
+        doc["chipId"]      = ESP.getEfuseMac();
+        doc["chipCores"] = ESP.getChipCores();
+        doc["flashSize"]   = ESP.getFlashChipSize();
+        doc["flashSpeed"]  = ESP.getFlashChipSpeed();
+        doc["flashMode"]   = ESP.getFlashChipMode();
         doc["cpuFreqMHz"]  = ESP.getCpuFreqMHz();
         doc["sdkVersion"]  = ESP.getSdkVersion();
 
         // Memory info
         doc["heapSize"]    = ESP.getHeapSize();
         doc["freeHeap"]    = ESP.getFreeHeap();
+
 #if CONFIG_SPIRAM_SUPPORT
         doc["psramSize"]   = ESP.getPsramSize();
         doc["freePsram"]   = ESP.getFreePsram();
@@ -195,5 +202,49 @@ void WebHandler::handleDeviceInfo()
             200, "application/json", responseString);
         WebHandler::addCorsHeaders(response);  // If you want your feature flag or logic, do it here
         request->send(response);
+    });
+}
+
+void WebHandler::serveWifiNetworks()
+{
+    server.on("/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
+    {
+        debugI("Scanning for Wi-Fi networks...");
+
+        int networkCount = WiFi.scanNetworks();
+        if (networkCount == -1)
+        {
+            debugE("Wi-Fi scan failed");
+            AsyncWebServerResponse *response = request->beginResponse(
+                500, "application/json", "{\"status\":\"error\",\"message\":\"Wi-Fi scan failed\"}");
+            WebHandler::addCorsHeaders(response);
+            request->send(response);
+            return;
+        }
+
+        debugI("Found %d networks", networkCount);
+
+        // Create a JSON document to hold the network list
+        JsonDocument doc; // Use JsonDocument for dynamic sizing
+        JsonArray networks = doc["networks"].to<JsonArray>();
+
+        for (int i = 0; i < networkCount; i++)
+        {
+            JsonObject network = networks.add<JsonObject>();
+            network["ssid"] = WiFi.SSID(i);
+            network["rssi"] = WiFi.RSSI(i);
+            network["encryptionType"] = WiFi.encryptionType(i);
+            network["isHidden"] = WiFi.SSID(i).isEmpty(); // Example logic for hidden networks
+        }
+
+        String responseString;
+        serializeJson(doc, responseString);
+
+        AsyncWebServerResponse *response = request->beginResponse(
+            200, "application/json", responseString);
+        WebHandler::addCorsHeaders(response);
+        request->send(response);
+
+        debugI("Served /wifi/networks");
     });
 }
