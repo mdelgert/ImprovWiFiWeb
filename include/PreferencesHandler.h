@@ -22,7 +22,7 @@ public:
 
     // Other methods like getValue and setValue can also be static if required
     static void setValue(const String& key, const String& value);
-    static bool getValue(const String& key, String& outValue);
+    static bool getValue(const String& key, String& outValue, const String& fallback);
 };
 
 #endif // PREFERENCES_HANDLER_H

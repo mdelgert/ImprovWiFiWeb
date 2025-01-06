@@ -14,6 +14,12 @@ void WifiHandler::init()
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
+    GfxHandler::printMessage("SSID: " + ssid);
+    delay(3000);
+
+    GfxHandler::printMessage("Password: " + password);
+    delay(3000);
+
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
 
@@ -25,6 +31,23 @@ void WifiHandler::init()
             GfxHandler::printMessage("Connecting to WiFi...");
         }
     }
+
+    // if (hasSsid && hasPassword)
+    // {
+    //     while (WiFi.status() != WL_CONNECTED)
+    //     {
+    //         if (myTimer.isReady())
+    //         {
+    //             debugI("Connecting to WiFi...");
+    //             GfxHandler::printMessage("Connecting to WiFi...");
+    //         }
+    //     }
+    // }
+    // else
+    // {
+    //     debugE("No valid WiFi credentials! Using defaults.");
+    //     GfxHandler::printMessage("No valid WiFi credentials!");
+    // }
 
     if (WiFi.status() == WL_CONNECTED)
     {
