@@ -32,6 +32,21 @@ void WifiHandler::init()
         debugI("IP: %s", ipAddress.c_str());
         GfxHandler::printMessage("IP: " + ipAddress);
         Debug.begin(HOST_NAME);
+
+        // Initialize mDNS
+        if (!MDNS.begin(HOST_NAME)) // HOST_NAME should be a defined string, e.g., "mydevice"
+        {
+            debugE("Error setting up mDNS responder!");
+            //GfxHandler::printMessage("Error setting up mDNS responder!");
+        }
+        else
+        {
+            debugI("mDNS responder started. Hostname: %s.local", HOST_NAME);
+            //GfxHandler::printMessage("mDNS: " + String(HOST_NAME) + ".local");
+        }
+
+        // Optional: Add service to mDNS
+        MDNS.addService("http", "tcp", 80); // Example for an HTTP server
     }
     else
     {

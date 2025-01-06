@@ -4,7 +4,7 @@
 #include <RemoteDebug.h>
 
 // Remote debug instance
-#define HOST_NAME "remotedebug"
+#define HOST_NAME "demo"
 extern RemoteDebug Debug;
 
 // Version information

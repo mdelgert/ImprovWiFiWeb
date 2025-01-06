@@ -21,7 +21,7 @@ void setup()
   LEDHandler::init();
   ButtonHandler::init();
   //GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
-  LEDHandler::setDefaultBrightness(100);
+  LEDHandler::setDefaultBrightness(50);
   LEDHandler::setColor(CRGB::Purple);
 }
 

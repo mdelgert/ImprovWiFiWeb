@@ -2,6 +2,7 @@
 #define WIFI_HANDLER_H
 
 #include <WiFi.h>
+#include <ESPmDNS.h>
 #include "Globals.h"
 #include "Secure.h"
 #include "PreferencesHandler.h"
