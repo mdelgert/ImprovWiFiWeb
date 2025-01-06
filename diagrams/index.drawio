@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="26.0.4" pages="2">
   <diagram name="Home" id="SqIcQCGgZbZE0Xf6uX22">
-    <mxGraphModel dx="1434" dy="778" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="700" background="light-dark(#171717,#191919)" math="0" shadow="0">
+    <mxGraphModel dx="1434" dy="778" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="700" background="light-dark(#FFFFFF,#000000)" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -49,17 +49,8 @@
       <root>
         <mxCell id="uofNdQvniHCNH1T5NwLn-0" />
         <mxCell id="uofNdQvniHCNH1T5NwLn-1" parent="uofNdQvniHCNH1T5NwLn-0" />
-        <mxCell id="uofNdQvniHCNH1T5NwLn-2" value="" style="swimlane;shape=mxgraph.bootstrap.anchor;strokeColor=none;fillColor=none;fontColor=#0085FC;fontStyle=0;childLayout=stackLayout;horizontal=0;startSize=0;horizontalStack=1;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=0;marginBottom=0;whiteSpace=wrap;html=1;resizeWidth=0;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
-          <mxGeometry x="75" y="260" width="80" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="uofNdQvniHCNH1T5NwLn-3" value="Navbar" style="text;strokeColor=none;align=left;verticalAlign=middle;spacingLeft=15;spacingRight=10;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;fillColor=none;fontColor=#ffffff;fontSize=16;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-2">
-          <mxGeometry width="80" height="40" as="geometry" />
-        </mxCell>
         <mxCell id="uofNdQvniHCNH1T5NwLn-4" value="" style="html=1;shadow=0;dashed=0;fontSize=16;align=left;spacing=15;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
           <mxGeometry width="1000" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="uofNdQvniHCNH1T5NwLn-5" value="{&lt;br&gt;&amp;nbsp; &quot;name&quot;: &quot;ESP32&quot;,&lt;br&gt;&amp;nbsp; &quot;ssid&quot;: &quot;YOURSSID&quot;,&lt;br&gt;&amp;nbsp; &quot;password&quot;: &quot;YOURPASSWORD&quot;&lt;br&gt;}" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=light-dark(#000000,#2B2B2B);" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
-          <mxGeometry x="40" y="120" width="920" height="240" as="geometry" />
         </mxCell>
         <mxCell id="uofNdQvniHCNH1T5NwLn-6" value="Actions" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;strokeWidth=1;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=middle;spacingLeft=0;fontStyle=0;fontSize=16;spacing=5;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
           <mxGeometry x="440" y="10" width="120" height="40" as="geometry" />
@@ -72,9 +63,6 @@
         </mxCell>
         <mxCell id="uofNdQvniHCNH1T5NwLn-9" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;Settings&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
           <mxGeometry x="425" y="70" width="150" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="uofNdQvniHCNH1T5NwLn-10" value="Save" style="html=1;shadow=0;dashed=0;shape=mxgraph.bootstrap.rrect;rSize=5;strokeWidth=1;fillColor=none;whiteSpace=wrap;align=center;verticalAlign=middle;spacingLeft=0;fontStyle=0;fontSize=16;spacing=5;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
-          <mxGeometry x="40" y="380" width="920" height="40" as="geometry" />
         </mxCell>
         <mxCell id="uofNdQvniHCNH1T5NwLn-11" value="Version 1.0" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="uofNdQvniHCNH1T5NwLn-1">
           <mxGeometry x="458" y="629" width="84" height="30" as="geometry" />
