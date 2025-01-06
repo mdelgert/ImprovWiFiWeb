@@ -1,7 +1,7 @@
 #ifndef LED_HANDLER_H
 #define LED_HANDLER_H
 
-#define FASTLED_INTERNAL
+// #define FASTLED_INTERNAL
 #include <FastLED.h>
 #include "Globals.h"
 

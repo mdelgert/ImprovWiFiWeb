@@ -3,6 +3,7 @@
 
 #include <WiFi.h>
 #include "Globals.h"
+#include "Secure.h"
 #include "PreferencesHandler.h"
 #include "NonBlockingTimer.h"
 #include "GfxHandler.h"

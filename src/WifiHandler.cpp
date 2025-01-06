@@ -1,43 +1,25 @@
 #include "WifiHandler.h"
+#include "Secure.h"
 
 NonBlockingTimer WifiHandler::myTimer(1000);
-
-// Define AP credentials
-#define AP_SSID "demo"
-//#define AP_PASSWORD ""
 
 void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
-    
     GfxHandler::printMessage("WifiHandler initialized");
 
-    String ssid, password;
+    String ssid = SECURE_WIFI_SSID; // Default to Secure.h values
+    String password = SECURE_WIFI_PASSWORD;
 
-    // WiFi.mode(WIFI_STA);
-    WiFi.mode(WIFI_AP_STA); // Set WiFi mode to both Station and Access Point
+    // Attempt to retrieve WiFi credentials from Preferences
+    bool hasSsid = PreferencesHandler::getValue("wifi_ssid", ssid);
+    bool hasPassword = PreferencesHandler::getValue("wifi_password", password);
 
-    // Configure Access Point
-    //bool apSuccess = WiFi.softAP(AP_SSID, AP_PASSWORD);
-    bool apSuccess = WiFi.softAP(AP_SSID);
-    
-    if (apSuccess)
-    {
-        IPAddress AP_IP = WiFi.softAPIP();
-        debugI("AP Started: %s", AP_SSID);
-        debugI("AP IP: %s", AP_IP.toString().c_str());
-        GfxHandler::printMessage("AP: " + String(AP_SSID));
-        GfxHandler::printMessage("AP IP: " + AP_IP.toString());
-    }
-    else
-    {
-        debugE("Failed to start AP!");
-        GfxHandler::printMessage("Failed to start AP!");
-    }
+    WiFi.mode(WIFI_STA);
+    WiFi.begin(ssid.c_str(), password.c_str());
 
-    if (PreferencesHandler::getValue("wifi_ssid", ssid) && PreferencesHandler::getValue("wifi_password", password))
+    if (hasSsid && hasPassword)
     {
-        WiFi.begin(ssid.c_str(), password.c_str());
         while (WiFi.status() != WL_CONNECTED)
         {
             if (myTimer.isReady())
@@ -49,20 +31,21 @@ void WifiHandler::init()
     }
     else
     {
-        debugE("No wifi credentials!");
-        GfxHandler::printMessage("No wifi credentials!");
+        debugE("No valid WiFi credentials! Using defaults.");
+        GfxHandler::printMessage("No valid WiFi credentials!");
     }
 
     if (WiFi.status() == WL_CONNECTED)
     {
-        debugI("IP: %s", WiFi.localIP().toString().c_str());
-        GfxHandler::printMessage("IP: " + WiFi.localIP().toString());
+        String ipAddress = WiFi.localIP().toString();
+        debugI("IP: %s", ipAddress.c_str());
+        GfxHandler::printMessage("IP: " + ipAddress);
         Debug.begin(HOST_NAME);
     }
     else
     {
-        debugE("No WiFi!");
-        GfxHandler::printMessage("No WiFi!");
+        debugE("Failed to connect to WiFi!");
+        GfxHandler::printMessage("Failed to connect to WiFi!");
     }
 }
 
