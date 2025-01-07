@@ -1,8 +1,10 @@
 #include "WifiHandler.h"
 
+static String ssid, password;
 static NonBlockingTimer myTimer(15000);
 static DNSServer dnsServer;
-static String ssid, password;
+static IPAddress apIP(192, 168, 4, 1);
+static IPAddress netMsk(255, 255, 255, 0);
 
 void WifiHandler::init()
 {
@@ -17,6 +19,7 @@ void WifiHandler::init()
 
 void WifiHandler::connectToWifi()
 {
+    // Must be WIFI_STA or WIFI_AP_STA mode
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
@@ -48,8 +51,10 @@ void WifiHandler::connectToWifi()
 
 void WifiHandler::startAccessPoint()
 {
+    // Must be WIFI_AP or WIFI_AP_STA mode
     if (WiFi.softAP(HOST_NAME))
     {
+        WiFi.softAPConfig(apIP, apIP, netMsk);
         debugI("Access Point started. SSID: %s", HOST_NAME);
         GfxHandler::printMessage("Access Point started. SSID: " + String(HOST_NAME));
         IPAddress ip = WiFi.softAPIP();
