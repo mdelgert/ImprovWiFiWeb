@@ -1,4 +1,6 @@
 //device.js
+console.log('device.js loaded');
+
 import { BASE_URL } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {

@@ -1,1 +1,1 @@
-console.log('Actions.js loaded');
+console.log('actions.js loaded');

@@ -1,4 +1,6 @@
 //settings.js
+console.log('settings.js loaded');
+
 import { BASE_URL } from './config.js';
 
 // Function to load settings from /get-json

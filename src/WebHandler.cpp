@@ -70,6 +70,7 @@ void WebHandler::serveRoot()
     serveEmbeddedFile("/device.html", device_html_start, device_html_end, "text/html");
     serveEmbeddedFile("/device.js", device_js_start, device_js_end, "application/javascript");
     serveEmbeddedFile("/", index_html_start, index_html_end, "text/html");
+    serveEmbeddedFile("/index.js", index_js_start, index_js_end, "application/javascript");
     serveEmbeddedFile("/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile("/settings.js", settings_js_start, settings_js_end, "application/javascript");
     serveEmbeddedFile("/styles.css", styles_css_start, styles_css_end, "text/css");
@@ -208,7 +209,7 @@ void WebHandler::serveDeviceInfo()
 
 void WebHandler::serveWifiNetworks()
 {
-    server.on("/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/wifinetworks/get", HTTP_GET, [](AsyncWebServerRequest *request)
     {
         debugI("Scanning for Wi-Fi networks...");
 

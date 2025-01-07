@@ -1,0 +1,16 @@
+{
+    "networks": [
+        {
+            "ssid": "demo1",
+            "rssi": -31,
+            "encryptionType": 3,
+            "isHidden": false
+        },
+        {
+            "ssid": "demo2",
+            "rssi": -31,
+            "encryptionType": 3,
+            "isHidden": false
+        }
+    ]
+}
