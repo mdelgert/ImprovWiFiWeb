@@ -3,6 +3,7 @@
 
 #include <WiFi.h>
 #include <ESPmDNS.h>
+#include <DNSServer.h>
 #include "Globals.h"
 #include "Secure.h"
 #include "PreferencesHandler.h"
@@ -12,9 +13,10 @@
 class WifiHandler
 {
 private:
-
+    static void connectToWifi();
+    static void startAccessPoint();
+    static void initializeMDNS();
 public:
-    static NonBlockingTimer myTimer;
     static void init();
     static void loop();
 };
