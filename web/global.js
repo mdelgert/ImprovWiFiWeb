@@ -52,13 +52,13 @@ async function httpPost(endpoint, body) {
 function showMessage(message, type) {
   const msgBox = document.getElementById("message-box");
 
-  msgBox.className = "message-box"; // Clear previous classes
-  msgBox.classList.add(type); // Add success/error class
-  msgBox.textContent = message; // Set the message text
-  msgBox.classList.remove("hidden"); // Make it visible
+  msgBox.className = "message-box";
+  msgBox.classList.add(type);
+  msgBox.textContent = message;
+  msgBox.classList.remove("hidden");
 
   setTimeout(() => {
-    msgBox.classList.add("hidden"); // Hide it after 3 seconds
+    msgBox.classList.add("hidden");
   }, 3000);
 }
 

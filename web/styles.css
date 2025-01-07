@@ -101,33 +101,6 @@ button:hover {
   background-color: #0056b3;
 }
 
-.message-box {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  min-width: 250px;
-  padding: 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 9999; /* so it appears on top */
-}
-
-/* Hide the box by default. */
-.hidden {
-  display: none;
-}
-
-/* Different background colors for success vs. error */
-.success {
-  background-color: #28a745; /* green */
-}
-
-.error {
-  background-color: #dc3545; /* red */
-}
-
 table {
   margin: 1rem auto;
   border-collapse: collapse;
@@ -141,3 +114,45 @@ th, td {
 th {
   background: #1a1a1a;
 }
+
+/* 
+.message-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  min-width: 250px;
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+} 
+*/
+
+/* Sticky Footer Bar */
+.message-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 16px;
+  text-align: center;
+  font-weight: bold;
+  color: #fff;
+  background-color: #4caf50;
+  z-index: 9999;
+} 
+
+.hidden {
+  display: none;
+}
+
+.success {
+  background-color: #28a745;
+}
+
+.error {
+  background-color: #dc3545;
+}
+
