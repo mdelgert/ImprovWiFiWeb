@@ -7,6 +7,7 @@
 #include "EmbeddedFiles.h"
 #include <ArduinoJson.h>
 #include <LittleFS.h>
+#include "PreferencesHandler.h"
 
 class WebHandler
 {
@@ -16,7 +17,9 @@ private:
     static void serveRoot();
     static void serveSettings();
     static void serveDeviceInfo();
-    static void serveWifiNetworks();
+    static void serveWifiGet();
+    static void serveWifiSave();
+    static void serveReboot();
 public:
     static NonBlockingTimer myTimer;
     static AsyncWebServer server;

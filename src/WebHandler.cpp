@@ -50,7 +50,9 @@ void WebHandler::init()
     serveRoot();
     serveSettings();
     serveDeviceInfo();
-    serveWifiNetworks();
+    serveWifiGet();
+    serveWifiSave();
+    serveReboot();
 
     // Start the web server
     server.begin();
@@ -207,9 +209,9 @@ void WebHandler::serveDeviceInfo()
     });
 }
 
-void WebHandler::serveWifiNetworks()
+void WebHandler::serveWifiGet()
 {
-    server.on("/wifinetworks/get", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/wifi/get", HTTP_GET, [](AsyncWebServerRequest *request)
     {
         debugI("Scanning for Wi-Fi networks...");
 
@@ -247,6 +249,64 @@ void WebHandler::serveWifiNetworks()
         WebHandler::addCorsHeaders(response);
         request->send(response);
 
-        debugI("Served /wifi/networks");
+        debugI("Served /wifi/get");
     });
+}
+
+// Add this new endpoint in your WebHandler class
+void WebHandler::serveWifiSave()
+{
+    server.on("/wifi/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+              {
+        debugI("Received JSON payload on /wifi/save");
+
+        // Parse the JSON data
+        JsonDocument doc; // Use JsonDocument for dynamic sizing
+        DeserializationError error = deserializeJson(doc, data, len);
+        if (error) {
+            debugE("Failed to parse JSON: %s", error.c_str());
+            request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
+            return;
+        }
+
+        // Extract Wi-Fi credentials
+        const char *ssid = doc["wifi_ssid"] | "";
+        const char *password = doc["wifi_password"] | "";
+
+        if (strlen(ssid) == 0 || strlen(password) == 0) {
+            debugE("Wi-Fi credentials missing");
+            request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Missing Wi-Fi credentials\"}");
+            return;
+        }
+
+        // Save credentials to preferences
+        PreferencesHandler::setValue("wifi_ssid", String(ssid));
+        PreferencesHandler::setValue("wifi_password", String(password));
+
+        debugI("Wi-Fi credentials saved: SSID=%s", ssid);
+
+        AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "{\"status\":\"success\",\"message\":\"Wi-Fi credentials saved\"}");
+        WebHandler::addCorsHeaders(response);
+        request->send(response); });
+
+    debugI("WebHandler serveWifiSave");
+}
+
+// Add this new endpoint in your WebHandler class
+void WebHandler::serveReboot()
+{
+    server.on("/device/reboot", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+        debugI("Reboot endpoint triggered");
+
+        AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "{\"status\":\"success\",\"message\":\"Device rebooting\"}");
+        WebHandler::addCorsHeaders(response);
+        request->send(response);
+
+        debugI("Rebooting device...");
+        delay(1000); // Short delay to allow response to be sent
+        ESP.restart();
+    });
+
+    debugI("WebHandler handleReboot");
 }

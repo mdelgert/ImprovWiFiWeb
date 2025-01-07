@@ -1,7 +1,7 @@
 @baseUrl = http://demo.local
 
 ### GET wifi networks
-GET {{baseUrl}}/wifinetworks/get
+GET {{baseUrl}}/device/reboot
 User-Agent: VSCode-RESTClient
 
 ###

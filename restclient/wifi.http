@@ -1,0 +1,18 @@
+@baseUrl = http://demo.local
+
+### GET wifi networks
+GET {{baseUrl}}/wifi/get
+User-Agent: VSCode-RESTClient
+
+###
+
+### Set settings
+POST {{baseUrl}}/wifi/save
+Content-Type: application/json
+
+{
+  "wifi_ssid": "demo",
+  "wifi_password": "example"
+}
+
+###
