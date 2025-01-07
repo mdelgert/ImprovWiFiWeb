@@ -1,9 +1,10 @@
 #include "WebHandler.h"
 
+static String ssid, password;
+const char* apiToken = "test";
+
 NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
-
-const char* apiToken = "test";
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request) {
     if (request->hasHeader("Authorization")) {
@@ -62,6 +63,7 @@ void WebHandler::init()
     serveRoot();
     serveSettings();
     serveDeviceInfo();
+    serveWifiNetworks();
     serveWifiGet();
     serveWifiSave();
     serveReboot();
@@ -177,6 +179,7 @@ void WebHandler::serveSettings()
 
 void WebHandler::serveDeviceInfo()
 {
+
     server.on("/device/get", HTTP_GET, [](AsyncWebServerRequest *request) {
         debugI("Serving /device/get (device info)");
 
@@ -222,9 +225,9 @@ void WebHandler::serveDeviceInfo()
     });
 }
 
-void WebHandler::serveWifiGet()
+void WebHandler::serveWifiNetworks()
 {
-    server.on("/wifi/get", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/wifi/networks/get", HTTP_GET, [](AsyncWebServerRequest *request)
     {
         debugI("Scanning for Wi-Fi networks...");
 
@@ -266,7 +269,34 @@ void WebHandler::serveWifiGet()
     });
 }
 
-// Add this new endpoint in your WebHandler class
+void WebHandler::serveWifiGet()
+{
+    server.on("/wifi/get", HTTP_GET, [](AsyncWebServerRequest *request) {
+        debugI("Serving /wifi/get");
+
+        // Create a JSON document for device info.
+        // You can size this based on how much data you're storing.
+        JsonDocument doc;
+
+        PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
+        PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
+
+        // Basic chip info
+        doc["wifi_ssid"]   = ssid;
+        doc["wifi_password"] = password;
+
+        // Convert JSON doc to string for response
+        String responseString;
+        serializeJson(doc, responseString);
+
+        // Create and send the response with any CORS headers if needed
+        AsyncWebServerResponse *response = request->beginResponse(
+            200, "application/json", responseString);
+        WebHandler::addCorsHeaders(response);  // If you want your feature flag or logic, do it here
+        request->send(response);
+    });
+}
+
 void WebHandler::serveWifiSave()
 {
     server.on("/wifi/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)

@@ -3,6 +3,7 @@
 
 #include <ESPAsyncWebServer.h>
 #include "Globals.h"
+#include "Secure.h"
 #include "NonBlockingTimer.h"
 #include "EmbeddedFiles.h"
 #include <ArduinoJson.h>
@@ -18,6 +19,7 @@ private:
     static void serveRoot();
     static void serveSettings();
     static void serveDeviceInfo();
+    static void serveWifiNetworks();
     static void serveWifiGet();
     static void serveWifiSave();
     static void serveReboot();

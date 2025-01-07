@@ -2,7 +2,6 @@
 
 ### GET wifi networks
 GET {{baseUrl}}/wifi/get
-User-Agent: VSCode-RESTClient
 
 ###
 
