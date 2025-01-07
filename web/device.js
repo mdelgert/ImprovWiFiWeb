@@ -1,7 +1,5 @@
- // Dev logic: if host is "localhost", use the given IP as base, else use relative path
- const BASE_URL = window.location.hostname === "localhost"
- ? "http://192.168.50.206"    // <-- change to your device IP
- : "";                        // production environment uses relative
+//device.js
+import { BASE_URL } from './config.js';
 
 window.addEventListener('DOMContentLoaded', () => {
  fetch(`${BASE_URL}/device/get`)

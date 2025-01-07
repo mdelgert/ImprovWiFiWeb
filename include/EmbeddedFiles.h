@@ -10,6 +10,9 @@ extern const uint8_t actions_html_end[] asm("_binary_web_actions_html_end");
 extern const uint8_t actions_js_start[] asm("_binary_web_actions_js_start");
 extern const uint8_t actions_js_end[] asm("_binary_web_actions_js_end");
 
+extern const uint8_t config_js_start[] asm("_binary_web_config_js_start");
+extern const uint8_t config_js_end[] asm("_binary_web_config_js_end");
+
 extern const uint8_t device_html_start[] asm("_binary_web_device_html_start");
 extern const uint8_t device_html_end[] asm("_binary_web_device_html_end");
 extern const uint8_t device_js_start[] asm("_binary_web_device_js_start");

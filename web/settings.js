@@ -1,7 +1,5 @@
-console.log('Settings.js loaded');
-
-// Define the base URL for API requests
-const BASE_URL = window.location.hostname === "localhost" ? "http://192.168.50.145" : "";
+//settings.js
+import { BASE_URL } from './config.js';
 
 // Function to load settings from /get-json
 function loadSettings() {
