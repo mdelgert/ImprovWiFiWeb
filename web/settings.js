@@ -1,7 +1,7 @@
 //settings.js
 console.log('settings.js loaded');
 
-import { BASE_URL } from './config.js';
+import { BASE_URL } from './global.js';
 
 // Function to load settings from /get-json
 function loadSettings() {

@@ -1,7 +1,7 @@
 //device.js
 console.log('device.js loaded');
 
-import { BASE_URL } from './config.js';
+import { BASE_URL } from './global.js';
 
 window.addEventListener('DOMContentLoaded', () => {
  fetch(`${BASE_URL}/device/get`)
