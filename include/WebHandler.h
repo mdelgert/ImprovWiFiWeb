@@ -12,6 +12,7 @@
 class WebHandler
 {
 private:
+    static bool isTokenValid(AsyncWebServerRequest *request);
     static void addCorsHeaders(AsyncWebServerResponse *response);
     static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void serveRoot();
@@ -20,6 +21,7 @@ private:
     static void serveWifiGet();
     static void serveWifiSave();
     static void serveReboot();
+    static void serveSecure();
 public:
     static NonBlockingTimer myTimer;
     static AsyncWebServer server;

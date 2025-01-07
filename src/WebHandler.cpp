@@ -3,6 +3,18 @@
 NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
 
+const char* apiToken = "test";
+
+bool WebHandler::isTokenValid(AsyncWebServerRequest *request) {
+    if (request->hasHeader("Authorization")) {
+        AsyncWebHeader* header = request->getHeader("Authorization");
+        if (String(header->value()) == String("Bearer ") + apiToken) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void WebHandler::addCorsHeaders(AsyncWebServerResponse *response)
 {
     if (ENABLE_SECURE_CORS)
@@ -53,6 +65,7 @@ void WebHandler::init()
     serveWifiGet();
     serveWifiSave();
     serveReboot();
+    serveSecure();
 
     // Start the web server
     server.begin();
@@ -309,4 +322,15 @@ void WebHandler::serveReboot()
     });
 
     debugI("WebHandler handleReboot");
+}
+
+void WebHandler::serveSecure()
+{
+    server.on("/secure", HTTP_GET, [](AsyncWebServerRequest *request){
+            if (!isTokenValid(request)) {
+                request->send(403, "text/plain", "Forbidden: Invalid token.");
+                return;
+            }
+            request->send(200, "text/plain", "Authorized: Token is valid.");
+        });
 }
