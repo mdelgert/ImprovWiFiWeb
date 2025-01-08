@@ -1,7 +1,7 @@
 #include "WifiHandler.h"
 
 static String ssid, password;
-static NonBlockingTimer myTimer(15000);
+static NonBlockingTimer myTimer(5000);
 static DNSServer dnsServer;
 static IPAddress apIP(192, 168, 4, 1);
 static IPAddress netMsk(255, 255, 255, 0);
@@ -14,7 +14,7 @@ void WifiHandler::init()
     //WiFi.mode(WIFI_AP);
     WiFi.mode(WIFI_AP_STA);
     connectToWifi();
-    startAccessPoint();
+    //startAccessPoint();
 }
 
 void WifiHandler::connectToWifi()
@@ -23,9 +23,6 @@ void WifiHandler::connectToWifi()
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
-    GfxHandler::printMessage("SSID: " + ssid);
-    delay(3000);
-
     WiFi.begin(ssid.c_str(), password.c_str());
     
     while (WiFi.status() != WL_CONNECTED)
@@ -33,7 +30,7 @@ void WifiHandler::connectToWifi()
         if (myTimer.isReady())
         {
             debugE("Failed to connect to WiFi. Starting Access Point...");
-            GfxHandler::printMessage("Failed to connect to WiFi!");
+            GfxHandler::printMessage("Failed to connect to WiFi 1!");
         }
     }
 
@@ -48,21 +45,21 @@ void WifiHandler::connectToWifi()
     else
     {
         debugE("Failed to connect to WiFi!");
-        GfxHandler::printMessage("Failed to connect to WiFi!");
+        GfxHandler::printMessage("Failed to connect to WiFi 2!");
     }
 }
 
 void WifiHandler::startAccessPoint()
 {
     // Must be WIFI_AP or WIFI_AP_STA mode
+
     if (WiFi.softAP(HOST_NAME))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
         debugI("Access Point started. SSID: %s", HOST_NAME);
         GfxHandler::printMessage("Access Point started. SSID: " + String(HOST_NAME));
-        IPAddress ip = WiFi.softAPIP();
-        debugI("AP IP address: %s", ip.toString().c_str());
-        GfxHandler::printMessage("AP IP: " + ip.toString());
+        debugI("AP IP: %s", apIP.toString().c_str());
+        GfxHandler::printMessage("AP IP: " + apIP.toString());
     }
     else
     {
@@ -89,14 +86,17 @@ void WifiHandler::initializeMDNS()
 
 void WifiHandler::loop()
 {
-    dnsServer.processNextRequest();
+    // if (WiFi.status() == WL_CONNECTED)
+    // {
+    //     dnsServer.processNextRequest();
+    // }
     
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        if (myTimer.isReady())
-        {
-            debugW("Lost WiFi connection!");
-            GfxHandler::printMessage("WiFi disconnected!");
-        }
-    }
+    // if (WiFi.status() != WL_CONNECTED)
+    // {
+    //     if (myTimer.isReady())
+    //     {
+    //         debugW("Lost WiFi connection!");
+    //         GfxHandler::printMessage("WiFi disconnected!");
+    //     }
+    // }
 }
