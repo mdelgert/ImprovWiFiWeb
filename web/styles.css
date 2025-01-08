@@ -41,46 +41,6 @@ h1 {
   /* 24px */
 }
 
-/*
-#navbar-container {
-  width: 100%;
-}
-
-.navbar {
-  display: flex;
-  justify-content: center;
-  background-color: var(--nav-bg);
-  padding: 0.625rem;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.nav-link {
-  display: inline-block;
-  background-color: var(--button-bg);
-  color: var(--text-color);
-  text-decoration: none;
-  padding: 0.625rem 3.75rem;
-  border: 1px solid var(--button-border);
-  border-radius: 0.3125rem;
-  margin: 0 0.1875rem;
-  text-align: center;
-  font-family: inherit;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.nav-link:hover {
-  background-color: var(--button-hover-bg);
-}
-
-.nav-link[aria-current="page"] {
-  background-color: var(--button-hover-bg);
-  color: #fff;
-  cursor: default;
-}
-*/
-
 #navbar-container {
   width: 100%;
 }
@@ -114,7 +74,7 @@ h1 {
 }
 
 /* Responsive Navbar for Smaller Screens */
-@media (max-width: 600px) {
+@media (max-width: 300px) {
   .navbar {
     flex-direction: column; /* Stack links vertically */
     align-items: center; /* Center-align the links */
@@ -127,6 +87,23 @@ h1 {
   }
 }
 
+/*
+nav a {
+  display: inline-block;
+  min-width: 9rem;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+  border: solid 1px #aaa;
+  text-align: center;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.87);
+}
+*/
+
+nav a[aria-current='page'] {
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #1a1a1a;
+}
 
 .actionButton {
   width: 100%;
@@ -205,7 +182,7 @@ textarea {
   resize: none;
   border-radius: 0.3125rem;
   box-sizing: border-box;
-  margin-bottom: 0.625rem;
+  /* margin-bottom: 0.625rem; */
   /* Space between textarea and button */
 }
 
@@ -218,7 +195,6 @@ textarea {
 .footer {
   bottom: 0;
   width: 100%;
-  /* background-color: var(--nav-bg); */
   color: var(--text-color);
   text-align: center;
   padding: 1rem;
@@ -247,15 +223,16 @@ textarea {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Increased spacing for better readability */
-  width: 100%; /* Form group takes full width */
-  max-width: 500px; /* Optional: Limit the maximum width of the form */
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
 }
 
 label {
-  font-size: 1.2rem; /* Slightly larger labels for better readability */
+  font-size: 1.2rem;
   text-align: left;
   width: 100%;
+  padding: 0.25rem;
 }
 
 input {
@@ -263,10 +240,10 @@ input {
   color: #fff;
   border: 1px solid #444;
   border-radius: 5px;
-  padding: 15px; /* Increased padding for a larger appearance */
-  font-size: 1.1rem; /* Slightly larger font size */
-  width: 100%; /* Input spans the full width of the form group */
-  box-sizing: border-box; /* Ensure padding does not overflow */
+  padding: 15px;
+  font-size: 1.1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 input:focus {

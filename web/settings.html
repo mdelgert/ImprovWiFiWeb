@@ -1,23 +1,26 @@
-<!-- settings.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Settings</title>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Settings page for managing application configurations." />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
   <script type="module" src="settings.js" defer></script>
 </head>
 <body>
   <div id="navbar-container"></div>
   <main>
-    <div class="textarea-container">
-      <textarea id="settings-textarea" placeholder="Enter your settings here..."></textarea>
-      <button class="nav-link actionButton" id="submit-button" type="button">Submit</button>
-    </div>
-    <div id="message-box" class="message-box hidden" aria-live="polite" role="alert"></div>
+    <form class="settings-form">
+      <div class="form-group">
+        <label for="wifi-network">Wifi Network</label>
+        <input type="text" id="wifi-network" value="NETWORK1">
+      </div>
+      <div class="form-group">
+        <label for="wifi-password">Wifi Password</label>
+        <input type="password" id="wifi-password" value="********">
+        <button type="button" class="nav-link actionButton">Save</button>
+      </div>
+    </form>
   </main>
-  <div id="footer-container"></div>
 </body>
 </html>
