@@ -18,6 +18,8 @@ private:
     static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void serveRoot();
     static void serveSettings();
+    static void serveActions();
+    static void serveNotFound();
     static void serveDeviceInfo();
     static void serveWifiNetworks();
     static void serveWifiGet();

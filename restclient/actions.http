@@ -1,12 +1,12 @@
 @baseUrl = http://demo.local
 
-### Get settings
-GET {{baseUrl}}/settings/get
+### Get actions
+GET {{baseUrl}}/actions/get
 
 ###
 
-### Set settings
-POST {{baseUrl}}/settings/save
+### Set actions
+POST {{baseUrl}}/actions/save
 Content-Type: application/json
 
 {

@@ -1,6 +1,9 @@
 #ifndef SECURE_H
 #define SECURE_H
 
+// API Token
+#define API_TOKEN "test"
+
 // Default Wi-Fi credentials (fallback values)
 #define SECURE_WIFI_SSID "YourDefaultSSID"
 #define SECURE_WIFI_PASSWORD "YourDefaultPassword"
