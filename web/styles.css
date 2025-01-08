@@ -1,4 +1,4 @@
-/* styles.css */
+/* Root Variables for Consistent Theme */
 :root {
   --background-color: #121212;
   --nav-bg: #222;
@@ -12,39 +12,31 @@
   --message-box-bg: #4caf50;
   --base-font-size: 1rem;
   --max-width: 75rem;
+  --border-radius: 5px;
+  --padding-small: 0.625rem; /* 10px */
+  --padding-large: 1rem; /* 16px */
+}
+
+/* Global Resets and Layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 html, body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  font-size: var(--base-font-size);
   font-family: Arial, sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
-}
-
-* {
-  box-sizing: border-box; /* Include padding and border in width calculations */
+  width: 100%;
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 main {
   text-align: center;
   width: 100%;
-  padding: 0.625rem; /* Add some spacing inside main */
-}
-
-textarea, table, .message-box {
-  max-width: 100%; /* Prevent overflow */
-  box-sizing: border-box;
-}
-
-.message-box {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw; /* Ensure it doesn't overflow horizontally */
-  box-sizing: border-box;
+  padding: var(--padding-small);
 }
 
 h1 {
@@ -52,19 +44,14 @@ h1 {
   font-size: 1.5rem;
 }
 
-#navbar-container {
-  width: 100%;
-}
-
-/* General Navbar Styling */
+/* Navbar */
 .navbar {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   background-color: var(--nav-bg);
-  padding: 0.625rem;
+  padding: var(--padding-small);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .nav-link {
@@ -72,11 +59,12 @@ h1 {
   background-color: var(--button-bg);
   color: var(--text-color);
   text-decoration: none;
-  padding: 0.625rem 1.5rem;
+  padding: var(--padding-small) var(--padding-large);
   margin: 5px;
   border: 1px solid var(--button-border);
-  border-radius: 0.3125rem;
+  border-radius: var(--border-radius);
   font-size: 1rem;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -84,115 +72,91 @@ h1 {
   background-color: var(--button-hover-bg);
 }
 
-/* Responsive Navbar for Smaller Screens */
-@media (max-width: 300px) {
-  .navbar {
-    flex-direction: column; /* Stack links vertically */
-    align-items: center; /* Center-align the links */
-  }
-
-  .nav-link {
-    width: 100%; /* Make links stretch to fit the container */
-    text-align: center; /* Center-align the text inside the link */
-    padding: 0.75rem; /* Slightly larger padding for readability */
-  }
-}
-
-nav a[aria-current='page'] {
-  color: rgba(255, 255, 255, 0.87);
+.nav-link[aria-current="page"] {
   background-color: #1a1a1a;
 }
 
-.actionButton {
-  width: 100%;
-  padding: 0.725rem 3.75rem;
-  max-width: var(--max-width);
-  text-align: center;
+@media (max-width: 300px) {
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nav-link {
+    width: 100%;
+    padding: var(--padding-large);
+    text-align: center;
+  }
 }
 
+/* Form */
+.settings-form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-small);
+}
+
+label {
+  font-size: 1.2rem;
+  text-align: left;
+  margin-bottom: var(--padding-small);
+}
+
+input, textarea, button {
+  width: 100%;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--button-border);
+  border-radius: var(--border-radius);
+  padding: var(--padding-large);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus, button:hover {
+  outline: none;
+  border-color: var(--button-hover-bg);
+}
+
+/* Override for Buttons */
+button {
+  width: auto;
+}
+
+textarea {
+  max-width: 80%;
+  height: 70vh;
+  max-height: 80vh;
+  resize: none;
+}
+
+/* Table */
 table {
-  margin: 0.625rem auto;
+  margin: var(--padding-small) auto;
   border-collapse: collapse;
   width: 100%;
   max-width: var(--max-width);
 }
 
-th,
-td {
+th, td {
   border: 1px solid var(--table-border);
-  padding: 0.625rem;
+  padding: var(--padding-small);
   text-align: left;
 }
 
 th {
-  background: var(--button-bg);
-}
-
-.message-box {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  box-sizing: border-box;
-  padding: 1.25rem;
-  text-align: center;
-  font-weight: bold;
-  color: var(--text-color);
-  background-color: #4caf50;
-}
-
-.hidden {
-  display: none;
-}
-
-.message-box.show {
-  display: block;
-}
-
-.message-box.success {
-  background-color: var(--success-bg);
-}
-
-.message-box.error {
-  background-color: var(--error-bg);
-}
-
-.textarea-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.625rem;
-}
-
-textarea {
-  width: 100%;
-  max-width: var(--max-width);
-  height: 70vh;
-  max-height: 80vh;
   background-color: var(--button-bg);
-  color: var(--text-color);
-  border: 1px solid var(--button-border);
-  padding: 1rem;
-  font-size: 1rem;
-  resize: none;
-  border-radius: 0.3125rem;
-  box-sizing: border-box;
 }
 
-/* Footer Styles */
-#footer-container {
-  width: 100%;
-}
-
-/* Footer styling */
+/* Footer */
 .footer {
-  bottom: 0;
-  width: 100%;
-  color: var(--text-color);
   text-align: center;
-  padding: 1rem;
-  box-sizing: border-box;
+  padding: var(--padding-large);
+  background-color: var(--nav-bg);
+  color: var(--text-color);
 }
 
 .footer-link {
@@ -205,43 +169,27 @@ textarea {
   text-decoration: underline;
 }
 
-/* Form Styling */
-.settings-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0.625rem;
+/* Utility Classes */
+.hidden {
+  display: none;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  max-width: 500px;
+.message-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  padding: var(--padding-large);
+  text-align: center;
+  font-weight: bold;
+  color: var(--text-color);
+  background-color: var(--message-box-bg);
 }
 
-label {
-  font-size: 1.2rem;
-  text-align: left;
-  width: 100%;
-  padding: 0.25rem;
+.message-box.success {
+  background-color: var(--success-bg);
 }
 
-input {
-  background-color: #333;
-  color: #fff;
-  border: 1px solid #444;
-  border-radius: 5px;
-  padding: 15px;
-  font-size: 1.1rem;
-  width: 100%;
-  box-sizing: border-box;
+.message-box.error {
+  background-color: var(--error-bg);
 }
-
-input:focus {
-  outline: none;
-  border-color: #555;
-}
-
