@@ -23,6 +23,9 @@ void WifiHandler::connectToWifi()
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
+    GfxHandler::printMessage("SSID: " + ssid);
+    delay(3000);
+
     WiFi.begin(ssid.c_str(), password.c_str());
     
     while (WiFi.status() != WL_CONNECTED)

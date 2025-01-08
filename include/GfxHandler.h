@@ -1,8 +1,8 @@
 #ifndef GFX_HANDLER_H
 #define GFX_HANDLER_H
 
-#include <LovyanGFX.hpp>
 #include "Globals.h"
+#include <LovyanGFX.hpp>
 #include "GfxLockImage.h" // Include the generated header file
 
 // Define the display configuration for LILYGO T-Dongle-S3

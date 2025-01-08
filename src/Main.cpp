@@ -1,5 +1,5 @@
-#include <Arduino.h>
 #include "Globals.h"
+#include <Arduino.h>
 #include "NonBlockingTimer.h"
 #include "RemoteDebugHandler.h"
 #include "ImprovHandler.h"

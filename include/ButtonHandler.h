@@ -1,8 +1,8 @@
 #ifndef BUTTON_HANDLER_H
 #define BUTTON_HANDLER_H
 
-#include <OneButton.h>
 #include "Globals.h"
+#include <OneButton.h>
 #include "LEDHandler.h"
 #include "GfxHandler.h"
 #include "PreferencesHandler.h"

@@ -1,10 +1,9 @@
 #include "WebHandler.h"
 
-static String ssid, password;
-//const char* apiToken = "test";
-
 NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
+static String ssid, password;
+//const char* apiToken = "test";
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request) {
     if (request->hasHeader("Authorization")) {
@@ -406,7 +405,6 @@ void WebHandler::serveWifiSave()
     debugI("WebHandler serveWifiSave");
 }
 
-// Add this new endpoint in your WebHandler class
 void WebHandler::serveReboot()
 {
     server.on("/device/reboot", HTTP_GET, [](AsyncWebServerRequest *request)

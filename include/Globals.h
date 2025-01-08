@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+// #include "Secure.h"
+#include "SecureExample.h"
 #include <RemoteDebug.h>
 
 // Remote debug instance
@@ -8,7 +10,7 @@
 extern RemoteDebug Debug;
 
 // Version information
-#define SOFTWARE_VERSION "V1.0.4"
+#define SOFTWARE_VERSION "V1.0.5"
 
 // Set this should be true for production, only set to false for testing.
 #define ENABLE_SECURE_CORS false

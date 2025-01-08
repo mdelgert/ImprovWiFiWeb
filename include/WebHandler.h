@@ -1,9 +1,8 @@
 #ifndef WEB_HANDLER_H
 #define WEB_HANDLER_H
 
-#include <ESPAsyncWebServer.h>
 #include "Globals.h"
-#include "Secure.h"
+#include <ESPAsyncWebServer.h>
 #include "NonBlockingTimer.h"
 #include "EmbeddedFiles.h"
 #include <ArduinoJson.h>
