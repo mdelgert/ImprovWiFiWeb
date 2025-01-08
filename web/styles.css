@@ -97,22 +97,6 @@ th {
   background: var(--button-bg);
 }
 
-
-/* 
-.message-box {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  padding: 1rem;
-  text-align: center;
-  font-weight: bold;
-  color: var(--text-color);
-  background-color: #4caf50;
-}  
-*/
-
 .message-box {
   position: fixed;
   bottom: 0;
@@ -141,17 +125,24 @@ th {
   background-color: var(--error-bg);
 }
 
+.textarea-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0.625rem;
+}
+
 textarea {
-  width: 90%; /* Takes 90% of the viewport width */
-  max-width: 1200px; /* Optional: Limit the max width */
-  height: 70vh; /* Takes 70% of the viewport height */
-  max-height: 80vh; /* Optional: Limit max height */
+  width: 90%;
+  max-width: 1200px;
+  height: 70vh;
+  max-height: 80vh;
   background-color: var(--button-bg);
   color: var(--text-color);
   border: 1px solid var(--button-border);
-  padding: 1rem; /* Add padding inside the textarea */
-  font-size: 1rem; /* Adjust font size for readability */
-  resize: none; /* Prevent manual resizing to keep the layout clean */
-  border-radius: 0.3125rem; /* Rounded corners for aesthetics */
-  box-sizing: border-box; /* Ensure padding doesn't affect total width */
+  padding: 1rem;
+  font-size: 1rem;
+  resize: none;
+  border-radius: 0.3125rem;
+  box-sizing: border-box;
 }
