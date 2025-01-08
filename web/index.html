@@ -4,19 +4,21 @@
 <head>
   <title>Home</title>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Device Info Page displaying ESP32 hardware and system information." />
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="index.js" defer></script>
 </head>
 <body>
-  <div class="navbar">
-    <a href="/" aria-current="page"><button>Home</button></a>
-    <a href="/settings.html"><button>Settings</button></a>
-    <a href="/actions.html"><button>Actions</button></a>
-  </div>
+  <nav class="navbar">
+    <a href="/" class="nav-link" aria-current="page">Device</a>
+    <a href="/settings.html" class="nav-link">Settings</a>
+    <a href="/actions.html" class="nav-link">Actions</a>
+  </nav>
   <main>
-    <h1>Device Info</h1>
+    <h1>Device</h1>
     <table>
+      <!-- <caption>Device Information Table</caption> -->
       <thead>
         <tr>
           <th>Property</th>
@@ -25,8 +27,8 @@
       </thead>
       <tbody id="device-info"></tbody>
     </table>
-    <button id="rebootButton" class="rebootButton">Reboot</button>
-    <div id="message-box" class="message-box hidden"></div>
+    <button class="nav-link rebootButton" id="rebootButton" type="button">Reboot</button>
+    <div id="message-box" class="message-box hidden" aria-live="polite" role="alert"></div>
   </main>
 </body>
 </html>

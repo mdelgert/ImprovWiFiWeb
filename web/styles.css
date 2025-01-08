@@ -1,3 +1,4 @@
+/* styles.css */
 :root {
   --background-color: #121212;
   --nav-bg: #222;
@@ -49,18 +50,29 @@ h1 {
   box-sizing: border-box;
 }
 
-button {
+.nav-link {
+  display: inline-block;
   background-color: var(--button-bg);
   color: var(--text-color);
-  border: 1px solid var(--button-border);
+  text-decoration: none;
   padding: 0.625rem 3.75rem; /* 10px 60px */
-  cursor: pointer;
+  border: 1px solid var(--button-border);
   border-radius: 0.3125rem; /* 5px */
   margin: 0 0.1875rem; /* 3px */
+  text-align: center;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
 }
 
-button:hover {
+.nav-link:hover {
   background-color: var(--button-hover-bg);
+}
+
+.nav-link[aria-current="page"] {
+  background-color: var(--button-hover-bg); /* Highlight the current page */
+  color: #fff; /* Ensure contrast with the background */
+  cursor: default; /* No pointer cursor for the active link */
 }
 
 .rebootButton {
@@ -74,7 +86,8 @@ table {
   max-width: var(--max-width); /* Replacing 600px */
 }
 
-th, td {
+th,
+td {
   border: 1px solid var(--table-border);
   padding: 0.625rem; /* 10px */
   text-align: left;
@@ -84,16 +97,36 @@ th {
   background: var(--button-bg);
 }
 
+
+/* 
 .message-box {
   display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  padding: 1rem; /* 16px */
+  padding: 1rem;
   text-align: center;
   font-weight: bold;
   color: var(--text-color);
+  background-color: #4caf50;
+}  
+*/
+
+.message-box {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  color: var(--text-color);
+  background-color: #4caf50;
+} 
+
+.hidden {
+  display: none;
 }
 
 .message-box.show {
@@ -106,4 +139,19 @@ th {
 
 .message-box.error {
   background-color: var(--error-bg);
+}
+
+textarea {
+  width: 90%; /* Takes 90% of the viewport width */
+  max-width: 1200px; /* Optional: Limit the max width */
+  height: 70vh; /* Takes 70% of the viewport height */
+  max-height: 80vh; /* Optional: Limit max height */
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--button-border);
+  padding: 1rem; /* Add padding inside the textarea */
+  font-size: 1rem; /* Adjust font size for readability */
+  resize: none; /* Prevent manual resizing to keep the layout clean */
+  border-radius: 0.3125rem; /* Rounded corners for aesthetics */
+  box-sizing: border-box; /* Ensure padding doesn't affect total width */
 }
