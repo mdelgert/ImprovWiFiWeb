@@ -10,10 +10,10 @@ extern const uint8_t actions_html_end[] asm("_binary_web_actions_html_end");
 extern const uint8_t actions_js_start[] asm("_binary_web_actions_js_start");
 extern const uint8_t actions_js_end[] asm("_binary_web_actions_js_end");
 
-extern const uint8_t device_html_start[] asm("_binary_web_device_html_start");
-extern const uint8_t device_html_end[] asm("_binary_web_device_html_end");
-extern const uint8_t device_js_start[] asm("_binary_web_device_js_start");
-extern const uint8_t device_js_end[] asm("_binary_web_device_js_end");
+extern const uint8_t advanced_html_start[] asm("_binary_web_advanced_html_start");
+extern const uint8_t advanced_html_end[] asm("_binary_web_advanced_html_end");
+extern const uint8_t advanced_js_start[] asm("_binary_web_advanced_js_start");
+extern const uint8_t advanced_js_end[] asm("_binary_web_advanced_js_end");
 
 extern const uint8_t global_js_start[] asm("_binary_web_global_js_start");
 extern const uint8_t global_js_end[] asm("_binary_web_global_js_end");
