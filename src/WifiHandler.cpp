@@ -1,7 +1,7 @@
 #include "WifiHandler.h"
 
 static String ssid, password;
-static NonBlockingTimer myTimer(5000);
+static NonBlockingTimer myTimer(15000);
 static DNSServer dnsServer;
 static IPAddress apIP(192, 168, 4, 1);
 static IPAddress netMsk(255, 255, 255, 0);
