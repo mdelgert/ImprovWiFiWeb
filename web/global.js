@@ -1,3 +1,4 @@
+// global.js
 console.log('global.js loaded');
 
 // Dev logic: if host is "localhost", use the given IP as base, else use relative path

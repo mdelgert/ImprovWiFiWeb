@@ -1,3 +1,4 @@
+// actions.js
 console.log('actions.js loaded');
 
 import { httpGet, httpPost, showMessage } from './global.js';

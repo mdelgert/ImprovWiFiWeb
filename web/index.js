@@ -1,3 +1,4 @@
+// index.js
 console.log('index.js loaded');
 
 import { BASE_URL, httpGet, showMessage } from './global.js';
