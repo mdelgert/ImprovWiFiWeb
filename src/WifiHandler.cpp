@@ -14,7 +14,6 @@ void WifiHandler::init()
     //WiFi.mode(WIFI_AP);
     WiFi.mode(WIFI_AP_STA);
     connectToWifi();
-    //startAccessPoint();
 }
 
 void WifiHandler::connectToWifi()
@@ -31,6 +30,7 @@ void WifiHandler::connectToWifi()
         {
             debugE("Failed to connect to WiFi. Starting Access Point...");
             GfxHandler::printMessage("Failed to connect to WiFi 1!");
+            break;
         }
     }
 
@@ -46,6 +46,7 @@ void WifiHandler::connectToWifi()
     {
         debugE("Failed to connect to WiFi!");
         GfxHandler::printMessage("Failed to connect to WiFi 2!");
+        startAccessPoint();
     }
 }
 
