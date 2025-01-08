@@ -10,10 +10,8 @@
   --success-bg: #28a745;
   --error-bg: #dc3545;
   --message-box-bg: #4caf50;
-
-  /* Define a base font size for rem calculations */
-  --base-font-size: 16px; /* Default browser font size */
-  --max-width: 37.5rem; /* 600px equivalent (600 ÷ 16) */
+  --base-font-size: 16px;
+  --max-width: 75rem;
 }
 
 html {
@@ -75,15 +73,11 @@ h1 {
   cursor: default; /* No pointer cursor for the active link */
 }
 
-.rebootButton {
-  padding: 0.625rem 7.5rem; /* 10px 120px */
-}
-
 table {
   margin: 0.625rem auto; /* 10px */
   border-collapse: collapse;
   width: 100%;
-  max-width: var(--max-width); /* Replacing 600px */
+  max-width: var(--max-width);
 }
 
 th,
@@ -125,6 +119,13 @@ th {
   background-color: var(--error-bg);
 }
 
+/*
+.actionButton {
+  padding: 0.625rem 7.5rem;
+  width: 100%;
+  max-width: var(--max-width);
+}
+
 .textarea-container {
   width: 100%;
   display: flex;
@@ -133,8 +134,8 @@ th {
 }
 
 textarea {
-  width: 90%;
-  max-width: 1200px;
+  width: 100%;
+  max-width: var(--max-width);
   height: 70vh;
   max-height: 80vh;
   background-color: var(--button-bg);
@@ -145,4 +146,36 @@ textarea {
   resize: none;
   border-radius: 0.3125rem;
   box-sizing: border-box;
+}
+*/
+
+.textarea-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column; /* Stack textarea and button vertically */
+  align-items: center;   /* Horizontally align them */
+  padding: 0.625rem;
+}
+
+textarea {
+  width: 100%;
+  max-width: var(--max-width);
+  height: 70vh;
+  max-height: 80vh;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--button-border);
+  padding: 1rem;
+  font-size: 1rem;
+  resize: none;
+  border-radius: 0.3125rem;
+  box-sizing: border-box;
+  margin-bottom: 0.625rem; /* Space between textarea and button */
+}
+
+.actionButton {
+  width: 100%;
+  padding: 0.625rem 3.75rem; /* Adjust as needed */
+  max-width: var(--max-width);
+  text-align: center;
 }
