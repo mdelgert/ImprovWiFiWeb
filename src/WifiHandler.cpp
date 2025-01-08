@@ -1,7 +1,7 @@
 #include "WifiHandler.h"
 
 static String ssid, password;
-static NonBlockingTimer myTimer(15000);
+static NonBlockingTimer myTimer(5000);
 static DNSServer dnsServer;
 static IPAddress apIP(192, 168, 4, 1);
 static IPAddress netMsk(255, 255, 255, 0);
@@ -12,7 +12,7 @@ void WifiHandler::init()
     GfxHandler::printMessage("WifiHandler initialized");
     //WiFi.mode(WIFI_STA);
     //WiFi.mode(WIFI_AP);
-    WiFi.mode(WIFI_AP_STA);
+    //WiFi.mode(WIFI_AP_STA);
     connectToWifi();
 }
 
@@ -22,6 +22,7 @@ void WifiHandler::connectToWifi()
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
+    WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
     
     while (WiFi.status() != WL_CONNECTED)
@@ -54,6 +55,7 @@ void WifiHandler::startAccessPoint()
 {
     // Must be WIFI_AP or WIFI_AP_STA mode
 
+    WiFi.mode(WIFI_AP);
     if (WiFi.softAP(HOST_NAME))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
