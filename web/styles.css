@@ -127,7 +127,6 @@ button {
 }
 
 textarea {
-  max-width: 95%;
   height: 70vh;
   max-height: 80vh;
   resize: none;
