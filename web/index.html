@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,17 +9,23 @@
   <script type="module" src="index.js" defer></script>
 </head>
 <body>
-  <nav>
-    <a href="/" aria-current="page">Home</a>
-    <a href="/actions.html">Actions</a>
-    <a href="/settings.html">Settings</a>
-    <a href="/device.html">Device</a>
-    <a href="/wifi.html">Wifi</a>
-    <a href="/test1.html">Test1</a>
-  </nav>
-  <main> 
-    <h1>Home</h1>
-    <button id="rebootButton">Reboot Device</button>
+  <div class="navbar">
+    <a href="/" aria-current="page"><button>Home</button></a>
+    <a href="/settings.html"><button>Settings</button></a>
+    <a href="/actions.html"><button>Actions</button></a>
+  </div>
+  <main>
+    <h1>Device Info</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Property</th>
+          <th>Value</th>
+        </tr>
+      </thead>
+      <tbody id="device-info"></tbody>
+    </table>
+    <button id="rebootButton" class="rebootButton">Reboot</button>
     <div id="message-box" class="message-box hidden"></div>
   </main>
 </body>

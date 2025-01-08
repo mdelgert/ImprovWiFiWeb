@@ -8,15 +8,14 @@
     <script type="module" src="actions.js"></script>
 </head>
 <body>
-    <nav>
-        <a href="/">Home</a>
-        <a href="/actions.html" aria-current="page">Actions</a>
-        <a href="/settings.html">Settings</a>
-        <a href="/device.html">Device</a>
-    </nav>
+    <div class="navbar">
+        <a href="/" aria-current="page"><button>Home</button></a>
+        <a href="/settings.html"><button>Settings</button></a>
+        <a href="/actions.html"><button>Actions</button></a>
+      </div>
     <main>
         <h1>Actions</h1>
-        <textarea id="settings-textarea" placeholder="Enter your action here..."></textarea>
+        <textarea id="settings-textarea" placeholder=""></textarea>
         <br />
         <button id="submit-button" type="button">Submit</button>
         <div id="message-box" class="message-box hidden"></div>
