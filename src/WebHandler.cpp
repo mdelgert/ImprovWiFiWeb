@@ -88,6 +88,7 @@ void WebHandler::serveRoot()
     serveEmbeddedFile("/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile("/advanced.html", advanced_html_start, advanced_html_end, "text/html");
     serveEmbeddedFile("/advanced.js", advanced_js_start, advanced_js_end, "application/javascript");
+    serveEmbeddedFile("/footer.html", footer_html_start, footer_html_end, "text/html");
     serveEmbeddedFile("/global.js", global_js_start, global_js_end, "application/javascript");
     serveEmbeddedFile("/", index_html_start, index_html_end, "text/html");
     serveEmbeddedFile("/index.js", index_js_start, index_js_end, "application/javascript");

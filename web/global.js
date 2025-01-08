@@ -62,5 +62,67 @@ function showMessage(message, type) {
   }, 3000);
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const navbarContainer = document.getElementById("navbar-container");
+
+  if (navbarContainer) {
+    fetch('/navbar.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(data => {
+        navbarContainer.innerHTML = data;
+
+        // Highlight the active link
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Load Navbar
+  const navbarContainer = document.getElementById("navbar-container");
+  if (navbarContainer) {
+    fetch('/navbar.html')
+      .then(response => response.text())
+      .then(data => {
+        navbarContainer.innerHTML = data;
+
+        // Highlight the active page
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  }
+
+  // Load Footer
+  const footerContainer = document.getElementById("footer-container");
+  if (footerContainer) {
+    fetch('/footer.html')
+      .then(response => response.text())
+      .then(data => {
+        footerContainer.innerHTML = data;
+      })
+      .catch(error => console.error('Error loading footer:', error));
+  }
+});
+
 // Export variables and functions for use in other scripts
 export { BASE_URL, httpGet, httpPost, showMessage };

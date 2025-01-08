@@ -15,6 +15,9 @@ extern const uint8_t advanced_html_end[] asm("_binary_web_advanced_html_end");
 extern const uint8_t advanced_js_start[] asm("_binary_web_advanced_js_start");
 extern const uint8_t advanced_js_end[] asm("_binary_web_advanced_js_end");
 
+extern const uint8_t footer_html_start[] asm("_binary_web_footer_html_start");
+extern const uint8_t footer_html_end[] asm("_binary_web_footer_html_end");
+
 extern const uint8_t global_js_start[] asm("_binary_web_global_js_start");
 extern const uint8_t global_js_end[] asm("_binary_web_global_js_end");
 
