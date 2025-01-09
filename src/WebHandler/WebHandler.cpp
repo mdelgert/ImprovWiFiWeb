@@ -61,7 +61,6 @@ void WebHandler::init()
     debugI("LittleFS mounted successfully");
 
     serveRoot();
-    serveSettings();
     serveActions();
     serveNotFound();
     serveDeviceInfo();
@@ -70,7 +69,10 @@ void WebHandler::init()
     serveWifiSave();
     serveReboot();
     serveSecure();
+    serveSettings();
 
+    ServeTemplate::registerEndpoints(server);
+    
     // Start the web server
     server.begin();
     debugI("Web server started!");

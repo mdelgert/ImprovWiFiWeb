@@ -8,6 +8,7 @@
 #include <ArduinoJson.h>
 #include <LittleFS.h>
 #include "PreferencesHandler.h"
+#include "ServeTemplate.h"
 
 class WebHandler
 {

@@ -1,0 +1,16 @@
+@baseUrl = http://demo.local
+
+### Get
+GET {{baseUrl}}/template/get
+
+###
+
+### Set
+POST {{baseUrl}}/template/set
+Content-Type: application/json
+
+{
+  "message": "hello"
+}
+
+###
