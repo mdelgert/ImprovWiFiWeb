@@ -49,13 +49,27 @@ void WifiHandler::connectToWifi()
         GfxHandler::printMessage("Failed to connect to WiFi 2!");
         startAccessPoint();
     }
+
+    /*
+    // Perform a synchronous scan
+    int networkCount = WiFi.scanNetworks();
+    debugI("Scanning for networks...");
+    if (networkCount > 0) {
+        debugI("Found %d networks:", networkCount);
+        for (int i = 0; i < networkCount; i++) {
+            debugI("SSID: %s, RSSI: %d", WiFi.SSID(i).c_str(), WiFi.RSSI(i));
+        }
+    } else {
+        debugI("No networks found!");
+    }
+    */
 }
 
 void WifiHandler::startAccessPoint()
 {
     // Must be WIFI_AP or WIFI_AP_STA mode
 
-    WiFi.mode(WIFI_AP);
+    //WiFi.mode(WIFI_AP);
     if (WiFi.softAP(HOST_NAME))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);

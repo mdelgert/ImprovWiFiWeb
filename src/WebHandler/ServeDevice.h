@@ -2,6 +2,7 @@
 #define SERVE_DEVICE_H
 
 #include "Globals.h"
+#include <WiFi.h>
 #include "WebHandler.h"
 #include "NonBlockingTimer.h"
 #include <ESPAsyncWebServer.h>
@@ -12,6 +13,7 @@ public:
     static void registerEndpoints(AsyncWebServer& server);
 
 private:
+    static void handleDeviceWifiNetworks(AsyncWebServer& server);
     static void handleDeviceInfo(AsyncWebServer& server);
     static void handleDeviceReboot(AsyncWebServer& server);
 };

@@ -112,11 +112,10 @@ void WebHandler::init()
     serveRoot();
     serveActions();
     serveNotFound();
-    serveWifiNetworks();
     serveWifiGet();
     serveWifiSave();
-
-    ServeTemplate::registerEndpoints(server);
+    
+    ServeSettings::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);
     
     // Start the web server
@@ -230,50 +229,6 @@ void WebHandler::serveNotFound()
         } else {
             request->send(404, "text/plain", "Not found");
         } });
-}
-
-void WebHandler::serveWifiNetworks()
-{
-    server.on("/wifi/networks/get", HTTP_GET, [](AsyncWebServerRequest *request)
-    {
-        debugI("Scanning for Wi-Fi networks...");
-
-        int networkCount = WiFi.scanNetworks();
-        if (networkCount == -1)
-        {
-            debugE("Wi-Fi scan failed");
-            AsyncWebServerResponse *response = request->beginResponse(
-                500, "application/json", "{\"status\":\"error\",\"message\":\"Wi-Fi scan failed\"}");
-            WebHandler::addCorsHeaders(response);
-            request->send(response);
-            return;
-        }
-
-        debugI("Found %d networks", networkCount);
-
-        // Create a JSON document to hold the network list
-        JsonDocument doc; // Use JsonDocument for dynamic sizing
-        JsonArray networks = doc["networks"].to<JsonArray>();
-
-        for (int i = 0; i < networkCount; i++)
-        {
-            JsonObject network = networks.add<JsonObject>();
-            network["ssid"] = WiFi.SSID(i);
-            network["rssi"] = WiFi.RSSI(i);
-            network["encryptionType"] = WiFi.encryptionType(i);
-            network["isHidden"] = WiFi.SSID(i).isEmpty(); // Example logic for hidden networks
-        }
-
-        String responseString;
-        serializeJson(doc, responseString);
-
-        AsyncWebServerResponse *response = request->beginResponse(
-            200, "application/json", responseString);
-        WebHandler::addCorsHeaders(response);
-        request->send(response);
-
-        debugI("Served /wifi/get");
-    });
 }
 
 void WebHandler::serveWifiGet()

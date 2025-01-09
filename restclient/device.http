@@ -8,6 +8,12 @@ Authorization: Bearer {{token}}
 ###
 
 ### Get
+GET {{baseUrl}}/device/wifi/networks
+Authorization: Bearer {{token}}
+
+###
+
+### Get
 GET {{baseUrl}}/device/reboot
 Authorization: Bearer {{token}}
 
