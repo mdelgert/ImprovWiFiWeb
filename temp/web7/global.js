@@ -63,7 +63,35 @@ function showMessage(message, type) {
   }, 500);
 }
 
-// Load Navbar and Footer
+/*
+document.addEventListener("DOMContentLoaded", () => {
+  const navbarContainer = document.getElementById("navbar-container");
+
+  if (navbarContainer) {
+    fetch('/navbar.html')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.text();
+      })
+      .then(data => {
+        navbarContainer.innerHTML = data;
+
+        // Highlight the active link
+        const currentPath = window.location.pathname;
+        document.querySelectorAll('.nav-link').forEach(link => {
+          if (link.getAttribute('href') === currentPath) {
+            link.setAttribute('aria-current', 'page');
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+      })
+      .catch(error => console.error('Error loading navbar:', error));
+  }
+});
+*/
 document.addEventListener("DOMContentLoaded", () => {
   // Load Navbar
   const navbarContainer = document.getElementById("navbar-container");
