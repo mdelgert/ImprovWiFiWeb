@@ -2,6 +2,7 @@
 #define SERVE_TEMPLATE_H
 
 #include "Globals.h"
+#include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 
@@ -12,7 +13,6 @@ public:
 private:
     static void handleGetRequest(AsyncWebServer& server);
     static void handleSetRequest(AsyncWebServer& server);
-    static void printRequestBody(AsyncWebServerRequest* request, uint8_t* data, size_t len);
 };
 
 #endif

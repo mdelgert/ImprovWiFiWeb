@@ -9,12 +9,14 @@
 #define HOST_NAME "demo"
 extern RemoteDebug Debug;
 
-// Version information
-#define SOFTWARE_VERSION "V1.0.5"
-
-// Set this should be true for production, only set to false for testing.
+// Web server settings
+#define API_TOKEN "test"
+#define ENABLE_API_TOKEN true
 #define ENABLE_SECURE_CORS false
 #define ENABLE_WEBHANDLER true
+
+// Version information
+#define SOFTWARE_VERSION "V1.0.5"
 
 // Pin Definitions
 #define BUTTON_PIN      0

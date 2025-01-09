@@ -12,9 +12,18 @@
 
 class WebHandler
 {
+public:
+    static void printRequestBody(AsyncWebServerRequest* request, uint8_t* data, size_t len);
+    static void sendErrorResponse(AsyncWebServerRequest* request, int statusCode, const char* message, bool checkToken = true);
+    static void sendSuccessResponse(AsyncWebServerRequest* request, const char* message, JsonDocument* data = nullptr, bool checkToken = true);
+    static void init();
+    static void loop();
+
 private:
-    static bool isTokenValid(AsyncWebServerRequest *request);
-    static void addCorsHeaders(AsyncWebServerResponse *response);
+    static NonBlockingTimer myTimer;
+    static AsyncWebServer server;
+    static bool isTokenValid(AsyncWebServerRequest* request);
+    static void addCorsHeaders(AsyncWebServerResponse* response);
     static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void serveRoot();
     static void serveSettings();
@@ -26,11 +35,6 @@ private:
     static void serveWifiSave();
     static void serveReboot();
     static void serveSecure();
-public:
-    static NonBlockingTimer myTimer;
-    static AsyncWebServer server;
-    static void init();
-    static void loop();
 };
 
 #endif
