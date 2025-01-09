@@ -1,9 +1,9 @@
+//SecureExample.h
 #ifndef SECURE_H
 #define SECURE_H
 
-// Fallback values for development when nothing found in preferences
-#define SECURE_DEVICE_NAME "demo1"
-#define SECURE_WIFI_SSID "YourSSID"
+#define SECURE_DEVICE_NAME "demo"
+#define SECURE_WIFI_SSID "YourWifiSSID"
 #define SECURE_WIFI_PASSWORD "YourWifiPassword"
 #define SECURE_MQTT_SERVER "YourMqttServer"
 #define SECURE_MQTT_PORT "YourMqttPort"
