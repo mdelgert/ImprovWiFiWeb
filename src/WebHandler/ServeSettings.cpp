@@ -1,15 +1,5 @@
 #include "ServeSettings.h"
 
-// Static variables to store settings
-static String device_name = SECURE_DEVICE_NAME;
-static String wifi_ssid = SECURE_WIFI_SSID;
-static String wifi_password = SECURE_WIFI_PASSWORD;
-static String mqtt_server = SECURE_MQTT_SERVER;
-static String mqtt_port = SECURE_MQTT_PORT;
-static String mqtt_username = SECURE_MQTT_USERNAME;
-static String mqtt_password = SECURE_MQTT_PASSWORD;
-static String api_key = SECURE_API_KEY;
-
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
     handleGetSettings(server);
@@ -18,83 +8,63 @@ void ServeSettings::registerEndpoints(AsyncWebServer &server)
 
 void ServeSettings::handleGetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request) {
         debugI("Received GET request on /settings/get");
 
-        // Fetch settings from preferences with fallback to defaults
-        PreferencesHandler::getValue("device_name", device_name, SECURE_DEVICE_NAME);
-        PreferencesHandler::getValue("wifi_ssid", wifi_ssid, SECURE_WIFI_SSID);
-        PreferencesHandler::getValue("wifi_password", wifi_password, SECURE_WIFI_PASSWORD);
-        PreferencesHandler::getValue("mqtt_server", mqtt_server, SECURE_MQTT_SERVER);
-        PreferencesHandler::getValue("mqtt_port", mqtt_port, SECURE_MQTT_PORT);
-        PreferencesHandler::getValue("mqtt_username", mqtt_username, SECURE_MQTT_USERNAME);
-        PreferencesHandler::getValue("mqtt_password", mqtt_password, SECURE_MQTT_PASSWORD);
-        PreferencesHandler::getValue("api_key", api_key, SECURE_API_KEY);
-
-        // Prepare JSON response
+        // Prepare JSON response with global configuration values
         JsonDocument data;
-        data["device_name"] = device_name;
-        data["wifi_ssid"] = wifi_ssid;
-        data["wifi_password"] = wifi_password;
-        data["mqtt_server"] = mqtt_server;
-        data["mqtt_port"] = mqtt_port;
-        data["mqtt_username"] = mqtt_username;
-        data["mqtt_password"] = mqtt_password;
-        data["api_key"] = api_key;
+        data["device_name"] = PreferencesHandler::getDeviceName();
+        data["wifi_ssid"] = PreferencesHandler::getWiFiSSID();
+        data["wifi_password"] = PreferencesHandler::getWiFiPassword();
+        data["mqtt_server"] = PreferencesHandler::getMQTTServer();
+        data["mqtt_port"] = PreferencesHandler::getMQTTPort();
+        data["mqtt_username"] = PreferencesHandler::getMQTTUsername();
+        data["mqtt_password"] = PreferencesHandler::getMQTTPassword();
+        data["api_key"] = PreferencesHandler::getAPIKey();
 
-        WebHandler::sendSuccessResponse(request, "GET response template", &data); });
+        WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &data);
+    });
 }
 
 void ServeSettings::handleSetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-              {
-                  debugI("Received POST request on /settings/set");
+    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+        debugI("Received POST request on /settings/set");
 
-                  // Print the request body for debugging
-                  WebHandler::printRequestBody(request, data, len);
+        // Print the request body for debugging
+        WebHandler::printRequestBody(request, data, len);
 
-                  // Parse JSON payload
-                  JsonDocument doc;
-                  DeserializationError error = deserializeJson(doc, data, len);
+        // Parse JSON payload
+        JsonDocument doc;
+        DeserializationError error = deserializeJson(doc, data, len);
 
-                  if (error)
-                  {
-                      debugE("JSON deserialization failed: %s", error.c_str());
-                      WebHandler::sendErrorResponse(request, 400, "Invalid JSON payload");
-                      return;
-                  }
+        if (error) {
+            debugE("JSON deserialization failed: %s", error.c_str());
+            WebHandler::sendErrorResponse(request, 400, "Invalid JSON payload");
+            return;
+        }
 
-                  // Update settings from JSON
-                  device_name = doc["device_name"] | device_name;
-                  wifi_ssid = doc["wifi_ssid"] | wifi_ssid;
-                  wifi_password = doc["wifi_password"] | wifi_password;
-                  mqtt_server = doc["mqtt_server"] | mqtt_server;
-                  mqtt_port = doc["mqtt_port"] | mqtt_port;
-                  mqtt_username = doc["mqtt_username"] | mqtt_username;
-                  mqtt_password = doc["mqtt_password"] | mqtt_password;
-                  api_key = doc["api_key"] | api_key;
+        // Update settings in memory using JSON data or keep existing values
+        PreferencesHandler::setValue("device_name", doc["device_name"] | PreferencesHandler::getDeviceName());
+        PreferencesHandler::setValue("wifi_ssid", doc["wifi_ssid"] | PreferencesHandler::getWiFiSSID());
+        PreferencesHandler::setValue("wifi_password", doc["wifi_password"] | PreferencesHandler::getWiFiPassword());
+        PreferencesHandler::setValue("mqtt_server", doc["mqtt_server"] | PreferencesHandler::getMQTTServer());
+        PreferencesHandler::setValue("mqtt_port", doc["mqtt_port"] | PreferencesHandler::getMQTTPort());
+        PreferencesHandler::setValue("mqtt_username", doc["mqtt_username"] | PreferencesHandler::getMQTTUsername());
+        PreferencesHandler::setValue("mqtt_password", doc["mqtt_password"] | PreferencesHandler::getMQTTPassword());
+        PreferencesHandler::setValue("api_key", doc["api_key"] | PreferencesHandler::getAPIKey());
 
-                  // Validate mandatory fields (example for Wi-Fi credentials)
-                  if (wifi_ssid.isEmpty() || wifi_password.isEmpty())
-                  {
-                      debugE("Wi-Fi credentials missing");
-                      WebHandler::sendErrorResponse(request, 400, "Missing Wi-Fi credentials");
-                      return;
-                  }
+        // Validate mandatory fields (example: Wi-Fi credentials)
+        if (PreferencesHandler::getWiFiSSID().isEmpty() || PreferencesHandler::getWiFiPassword().isEmpty()) {
+            debugE("Wi-Fi credentials missing");
+            WebHandler::sendErrorResponse(request, 400, "Missing Wi-Fi credentials");
+            return;
+        }
 
-                  // Save updated settings to preferences
-                  PreferencesHandler::setValue("device_name", device_name);
-                  PreferencesHandler::setValue("wifi_ssid", wifi_ssid);
-                  PreferencesHandler::setValue("wifi_password", wifi_password);
-                  PreferencesHandler::setValue("mqtt_server", mqtt_server);
-                  PreferencesHandler::setValue("mqtt_port", mqtt_port);
-                  PreferencesHandler::setValue("mqtt_username", mqtt_username);
-                  PreferencesHandler::setValue("mqtt_password", mqtt_password);
-                  PreferencesHandler::setValue("api_key", api_key);
+        // Reload global settings to reflect updates
+        PreferencesHandler::loadGlobalConfig();
 
-                  // Send success response
-                  WebHandler::sendSuccessResponse(request, "Settings updated successfully");
-              });
+        // Send success response
+        WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+    });
 }
