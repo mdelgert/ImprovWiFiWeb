@@ -37,6 +37,7 @@ main {
   text-align: center;
   width: 100%;
   padding: var(--padding-small);
+  padding-bottom: 60px; /* Footer height */
 }
 
 h1 {
@@ -152,6 +153,10 @@ th {
 
 /* Footer */
 .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   text-align: center;
   padding: var(--padding-large);
   background-color: var(--nav-bg);
@@ -183,6 +188,7 @@ th {
   font-weight: bold;
   color: var(--text-color);
   background-color: var(--message-box-bg);
+  z-index: 9999;
 }
 
 .message-box.success {

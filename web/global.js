@@ -60,7 +60,7 @@ function showMessage(message, type) {
 
   setTimeout(() => {
     msgBox.classList.add("hidden");
-  }, 3000);
+  }, 1000);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
