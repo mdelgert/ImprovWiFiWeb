@@ -1,5 +1,7 @@
 #include "ServeSettings.h"
 
+static NonBlockingTimer delayTimer(500);
+
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
     handleGetSettings(server);
@@ -66,5 +68,10 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
 
         // Send success response
         WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+
+        if (delayTimer.isReady())
+        {
+            ESP.restart();
+        }
     });
 }

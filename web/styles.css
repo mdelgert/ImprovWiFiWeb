@@ -203,3 +203,30 @@ th {
 .message-box.error {
   background-color: var(--error-bg);
 }
+
+/* Wi-Fi Network Group Styling */
+.form-group select {
+  margin-bottom: var(--padding-small);
+}
+
+select {
+  width: 100%;
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: 1px solid var(--button-border);
+  border-radius: var(--border-radius);
+  padding: var(--padding-large);
+  font-size: 1rem;
+  box-sizing: border-box;
+  appearance: none; /* Removes default arrow styling */
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--button-hover-bg);
+}
+
+select option {
+  background-color: var(--button-bg);
+  color: var(--text-color);
+}

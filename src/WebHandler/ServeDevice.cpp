@@ -50,7 +50,8 @@ void ServeDevice::handleDeviceReboot(AsyncWebServer &server)
         if (delayTimer.isReady())
         {
             ESP.restart();
-        } });
+        } 
+    });
 }
 
 void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)

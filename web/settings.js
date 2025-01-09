@@ -68,11 +68,78 @@ async function saveSettings() {
   }
 }
 
+/*
 // Attach event listeners
 document.addEventListener("DOMContentLoaded", () => {
   // Load existing settings on page load
   console.log("Page loaded. Initializing settings load...");
   loadSettings();
+
+  // Attach save button event
+  const saveButton = document.querySelector(".settings-form button");
+  if (saveButton) {
+    saveButton.addEventListener("click", saveSettings);
+    console.log("Save button event listener attached.");
+  } else {
+    console.error("Save button not found.");
+  }
+});
+*/
+
+// Fetch available Wi-Fi networks
+async function loadWifiNetworks() {
+  try {
+    console.log("Fetching available Wi-Fi networks from /device/wifi/networks...");
+    const response = await httpGet("/device/wifi/networks");
+    const networks = response.data.networks || [];
+
+    const dropdown = document.getElementById("wifi_network_dropdown");
+
+    // Clear existing options
+    dropdown.innerHTML = '<option value="" selected>-- Select Wi-Fi Network --</option>';
+
+    // Populate dropdown with available networks
+    networks.forEach((network) => {
+      const option = document.createElement("option");
+      option.value = network.ssid;
+      option.textContent = `${network.ssid} (RSSI: ${network.rssi}, ${
+        network.encryptionType !== 0 ? "Secured" : "Open"
+      })`;
+      dropdown.appendChild(option);
+    });
+
+    console.log("Wi-Fi networks loaded successfully:", networks);
+  } catch (error) {
+    console.error("Error loading Wi-Fi networks:", error);
+    showMessage("Failed to load Wi-Fi networks.", "error");
+  }
+}
+
+// Sync dropdown selection with the input field
+function syncWifiSelection() {
+  const dropdown = document.getElementById("wifi_network_dropdown");
+  const manualInput = document.getElementById("wifi_network");
+
+  dropdown.addEventListener("change", () => {
+    manualInput.value = dropdown.value;
+  });
+
+  manualInput.addEventListener("input", () => {
+    if (manualInput.value) {
+      dropdown.value = "";
+    }
+  });
+}
+
+// Attach event listeners
+document.addEventListener("DOMContentLoaded", () => {
+  // Load existing settings on page load
+  console.log("Page loaded. Initializing settings load...");
+  loadSettings();
+
+  // Load Wi-Fi networks and attach event listener
+  loadWifiNetworks();
+  syncWifiSelection();
 
   // Attach save button event
   const saveButton = document.querySelector(".settings-form button");
