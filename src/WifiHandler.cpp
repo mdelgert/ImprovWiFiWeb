@@ -12,7 +12,7 @@ void WifiHandler::init()
     GfxHandler::printMessage("WifiHandler initialized");
     
     //TODO make this a feature flag disabling for development but network dropdown will be empty
-    //scanAndSaveNetworks(filePath);
+    scanAndSaveNetworks(filePath);
     
     // WiFi.mode(WIFI_STA);
     // WiFi.mode(WIFI_AP);
