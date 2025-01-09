@@ -7,13 +7,25 @@ Authorization: Bearer {{token}}
 
 ###
 
-### Set actions
+### Set action1 (reboot)
 POST {{baseUrl}}/actions/set
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "action1": "demo"
+  "action": "reboot"
+}
+
+###
+
+### Set action2 tft
+POST {{baseUrl}}/actions/set
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "action": "tft",
+  "message": "Hello World!"
 }
 
 ###

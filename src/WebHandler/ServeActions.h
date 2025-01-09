@@ -2,6 +2,7 @@
 #define SERVE_ACTIONS_H
 
 #include "Globals.h"
+#include "ActionHandler.h"
 #include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>

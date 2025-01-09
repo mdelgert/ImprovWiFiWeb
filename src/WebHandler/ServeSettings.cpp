@@ -14,17 +14,17 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
         debugI("Received GET request on /settings/get");
 
         // Prepare JSON response with global configuration values
-        JsonDocument data;
-        data["device_name"] = PreferencesHandler::getDeviceName();
-        data["wifi_ssid"] = PreferencesHandler::getWiFiSSID();
-        data["wifi_password"] = PreferencesHandler::getWiFiPassword();
-        data["mqtt_server"] = PreferencesHandler::getMQTTServer();
-        data["mqtt_port"] = PreferencesHandler::getMQTTPort();
-        data["mqtt_username"] = PreferencesHandler::getMQTTUsername();
-        data["mqtt_password"] = PreferencesHandler::getMQTTPassword();
-        data["api_key"] = PreferencesHandler::getAPIKey();
+        JsonDocument doc;
+        doc["device_name"] = PreferencesHandler::getDeviceName();
+        doc["wifi_ssid"] = PreferencesHandler::getWiFiSSID();
+        doc["wifi_password"] = PreferencesHandler::getWiFiPassword();
+        doc["mqtt_server"] = PreferencesHandler::getMQTTServer();
+        doc["mqtt_port"] = PreferencesHandler::getMQTTPort();
+        doc["mqtt_username"] = PreferencesHandler::getMQTTUsername();
+        doc["mqtt_password"] = PreferencesHandler::getMQTTPassword();
+        doc["api_key"] = PreferencesHandler::getAPIKey();
 
-        WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &data);
+        WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &doc);
     });
 }
 

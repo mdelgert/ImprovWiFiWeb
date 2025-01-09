@@ -22,7 +22,7 @@ void ServeActions::handleGet(AsyncWebServer &server)
         file.close();
         debugI("Serving /actions.json");
 
-        JsonDocument doc; // Use the simplified declaration
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, json);
 
         if (error) {
@@ -39,10 +39,8 @@ void ServeActions::handleSet(AsyncWebServer &server)
     server.on("/actions/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
             debugI("Received POST request on /actions/set");
 
-            // Print the request body
             WebHandler::printRequestBody(request, data, len);
 
-            // Parse JSON
             JsonDocument doc;
             DeserializationError error = deserializeJson(doc, data, len);
 
@@ -52,11 +50,9 @@ void ServeActions::handleSet(AsyncWebServer &server)
                 return;
             }
 
-            // Convert JSON to a string
             String jsonString;
             serializeJson(doc, jsonString);
 
-            // Save JSON to LittleFS
             File file = LittleFS.open("/actions.json", "w");
             if (!file) {
                 debugE("Failed to open file for writing");
@@ -68,6 +64,8 @@ void ServeActions::handleSet(AsyncWebServer &server)
 
             debugI("JSON saved to /actions.json");
 
-            // Respond with success
-            WebHandler::sendSuccessResponse(request, "Data received successfully"); });
+            ActionHandler::processMessage(doc);
+
+            WebHandler::sendSuccessResponse(request, "Data received successfully"); 
+        });
 }
