@@ -3,8 +3,10 @@
 
 NonBlockingTimer WebHandler::myTimer(1000);
 AsyncWebServer WebHandler::server(80);
-static String ssid, password;
 
+/*
+
+static String ssid, password;
 void WebHandler::serveRoot()
 {
     serveEmbeddedFile("/actions.html", actions_html_start, actions_html_end, "text/html");
@@ -32,6 +34,7 @@ void WebHandler::serveEmbeddedFile(const char *path, const uint8_t *start, const
         request->send(response);
         debugI("Served: %s", path); });
 }
+*/
 
 void WebHandler::serveNotFound()
 {
@@ -146,18 +149,21 @@ void WebHandler::init()
         }
     }
 
+    /*
     if (!LittleFS.begin(true))
     {
         debugE("Failed to mount LittleFS");
         return;
     }
     debugI("LittleFS mounted successfully");
+    */
 
-    serveNotFound();
-    serveRoot();
+    ServeEmbedded::registerEndpoints(server);
     ServeActions::registerEndpoints(server);
     ServeSettings::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);
+    serveNotFound();
+    //serveRoot();
     server.begin();
     debugI("Web server started!");
 }
