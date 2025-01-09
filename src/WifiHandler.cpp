@@ -11,7 +11,7 @@ void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
     GfxHandler::printMessage("WifiHandler initialized");
-    //scanAndSaveNetworks(filePath);
+    scanAndSaveNetworks(filePath);
     // WiFi.mode(WIFI_STA);
     // WiFi.mode(WIFI_AP);
     // WiFi.mode(WIFI_AP_STA);
@@ -20,19 +20,21 @@ void WifiHandler::init()
 
 void WifiHandler::loop()
 {
-    // if (WiFi.status() == WL_CONNECTED)
-    // {
-    //     dnsServer.processNextRequest();
-    // }
+    if (WiFi.status() == WL_CONNECTED)
+    {   //writes lots of messages to serial when not in AP mode
+        //if implementing should check if it interferes with Improv
+        //also should do if statement to check if in AP mode
+        //dnsServer.processNextRequest();
+    }
 
-    // if (WiFi.status() != WL_CONNECTED)
-    // {
-    //     if (myTimer.isReady())
-    //     {
-    //         debugW("Lost WiFi connection!");
-    //         GfxHandler::printMessage("WiFi disconnected!");
-    //     }
-    // }
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        if (myTimer.isReady())
+        {   //This might be interfering with Improv because its sending serial messages at the same time
+            //debugW("Lost WiFi connection!");
+            GfxHandler::printMessage("WiFi disconnected!");
+        }
+    }
 }
 
 void WifiHandler::connectToWifi()
@@ -68,27 +70,11 @@ void WifiHandler::connectToWifi()
         GfxHandler::printMessage("Failed to connect to WiFi 2!");
         startAccessPoint();
     }
-
-    /*
-    // Perform a synchronous scan
-    int networkCount = WiFi.scanNetworks();
-    debugI("Scanning for networks...");
-    if (networkCount > 0) {
-        debugI("Found %d networks:", networkCount);
-        for (int i = 0; i < networkCount; i++) {
-            debugI("SSID: %s, RSSI: %d", WiFi.SSID(i).c_str(), WiFi.RSSI(i));
-        }
-    } else {
-        debugI("No networks found!");
-    }
-    */
 }
 
 void WifiHandler::startAccessPoint()
 {
-    // Must be WIFI_AP or WIFI_AP_STA mode
-
-    // WiFi.mode(WIFI_AP);
+    WiFi.mode(WIFI_AP);
     if (WiFi.softAP(HOST_NAME))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
@@ -130,7 +116,6 @@ void WifiHandler::scanAndSaveNetworks(const char *filePath)
     }
     debugI("LittleFS mounted successfully");
 
-    // Start a synchronous Wi-Fi scan
     int networkCount = WiFi.scanNetworks(false); // Blocking call
     debugI("Scanning for Wi-Fi networks...");
 
