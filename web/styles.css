@@ -136,7 +136,7 @@ textarea {
 table {
   margin: var(--padding-small) auto;
   border-collapse: collapse;
-  width: 100%;
+  width: 25%;
   max-width: var(--max-width);
 }
 
