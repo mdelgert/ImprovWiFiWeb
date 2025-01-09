@@ -4,48 +4,9 @@ static NonBlockingTimer delayTimer(1000);
 
 void ServeDevice::registerEndpoints(AsyncWebServer &server)
 {
-    handleDeviceWifiNetworks(server);
     handleDeviceInfo(server);
     handleDeviceReboot(server);
-}
-
-void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
-{
-    server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
-                  debugI("Serving /device/wifi/networks");
-
-                  int networkCount = WiFi.scanNetworks(false); // Blocking call
-                  //int networkCount = WiFi.scanNetworks(true);
-
-                  debugI("Scanning for Wi-Fi networks...");
-
-                  if (networkCount == 0)
-                  {
-                      WebHandler::sendErrorResponse(request, 500, "No networks found");
-                      return;
-                  }
-
-                  debugI("Found %d networks", networkCount);
-
-                  // Create a JSON document to hold the network list
-                  JsonDocument doc; // Use JsonDocument for dynamic sizing
-                  JsonArray networks = doc["networks"].to<JsonArray>();
-
-                  //This will crash the application should look into saving the networks to a file at boot
-                  for (int i = 0; i < networkCount; i++)
-                  {
-                      JsonObject network = networks.add<JsonObject>();
-                      network["ssid"] = WiFi.SSID(i);
-                      network["rssi"] = WiFi.RSSI(i);
-                      //network["encryptionType"] = WiFi.encryptionType(i);
-                      //network["isHidden"] = WiFi.SSID(i).isEmpty(); // Example logic for hidden networks
-                  }
-
-                  WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
-                  // Clean up after scan
-                  WiFi.scanDelete(); // Free memory used by the scan
-              });
+    handleDeviceWifiNetworks(server);
 }
 
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
@@ -92,4 +53,43 @@ void ServeDevice::handleDeviceReboot(AsyncWebServer &server)
         {
             ESP.restart();
         } });
+}
+
+void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
+{
+    server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                  debugI("Serving /device/wifi/networks");
+
+                  int networkCount = WiFi.scanNetworks(false); // Blocking call
+                  //int networkCount = WiFi.scanNetworks(true);
+
+                  debugI("Scanning for Wi-Fi networks...");
+
+                  if (networkCount == 0)
+                  {
+                      WebHandler::sendErrorResponse(request, 500, "No networks found");
+                      return;
+                  }
+
+                  debugI("Found %d networks", networkCount);
+
+                  // Create a JSON document to hold the network list
+                  JsonDocument doc; // Use JsonDocument for dynamic sizing
+                  JsonArray networks = doc["networks"].to<JsonArray>();
+
+                  //This will crash the application should look into saving the networks to a file at boot
+                  for (int i = 0; i < networkCount; i++)
+                  {
+                      JsonObject network = networks.add<JsonObject>();
+                      network["ssid"] = WiFi.SSID(i);
+                      network["rssi"] = WiFi.RSSI(i);
+                      //network["encryptionType"] = WiFi.encryptionType(i);
+                      //network["isHidden"] = WiFi.SSID(i).isEmpty(); // Example logic for hidden networks
+                  }
+
+                  WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
+                  // Clean up after scan
+                  WiFi.scanDelete(); // Free memory used by the scan
+              });
 }
