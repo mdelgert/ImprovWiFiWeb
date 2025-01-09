@@ -11,8 +11,7 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
 
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 {
-    server.on("/device/info", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+    server.on("/device/info", HTTP_GET, [](AsyncWebServerRequest *request){
         debugI("Serving /device/get (device info)");
 
         JsonDocument doc;
@@ -39,8 +38,7 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 
 void ServeDevice::handleDeviceReboot(AsyncWebServer &server)
 {
-    server.on("/device/reboot", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+    server.on("/device/reboot", HTTP_GET, [](AsyncWebServerRequest *request){
         debugI("Received GET request on /device/reboot");
 
         JsonDocument data;

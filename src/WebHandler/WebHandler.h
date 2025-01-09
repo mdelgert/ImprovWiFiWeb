@@ -10,6 +10,7 @@
 #include "PreferencesHandler.h"
 #include "ServeDevice.h"
 #include "ServeSettings.h"
+#include "ServeActions.h"
 
 class WebHandler
 {
@@ -19,20 +20,15 @@ public:
     static void sendSuccessResponse(AsyncWebServerRequest* request, const char* message, JsonDocument* data = nullptr, bool checkToken = true);
     static void init();
     static void loop();
-    static void addCorsHeaders(AsyncWebServerResponse* response);
-
+    
 private:
     static NonBlockingTimer myTimer;
     static AsyncWebServer server;
     static bool isTokenValid(AsyncWebServerRequest* request);
-    
+    static void addCorsHeaders(AsyncWebServerResponse* response);
     static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
-    static void serveRoot();
-    static void serveActions();
     static void serveNotFound();
-    static void serveWifiNetworks();
-    static void serveWifiGet();
-    static void serveWifiSave();
+    static void serveRoot();
 };
 
 #endif

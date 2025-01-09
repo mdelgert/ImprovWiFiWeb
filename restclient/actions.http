@@ -6,7 +6,7 @@ GET {{baseUrl}}/actions/get
 ###
 
 ### Set actions
-POST {{baseUrl}}/actions/save
+POST {{baseUrl}}/actions/set
 Content-Type: application/json
 
 {

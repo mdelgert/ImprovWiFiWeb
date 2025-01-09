@@ -6,7 +6,13 @@ import { httpGet, httpPost, showMessage } from './global.js';
 // Function to load actions from /actions/get
 async function loadActions() {
   try {
-    const data = await httpGet('/actions/get');
+    const response = await httpGet('/actions/get'); // Fetch the actions data
+    const { data } = response; // Extract the 'data' field from the response
+
+    if (!data || typeof data !== "object") {
+      throw new Error("Invalid data format in response");
+    }
+
     // Populate the textarea with the JSON data
     const textarea = document.getElementById("actions-textarea");
     textarea.value = JSON.stringify(data, null, 2); // Format JSON nicely
@@ -26,7 +32,7 @@ async function saveActions() {
     // Ensure the textarea content is valid JSON
     const parsed = JSON.parse(actions);
 
-    const data = await httpPost('/actions/save', parsed);
+    const data = await httpPost('/actions/set', parsed);
     if (data.status === "success") {
       console.log("Actions saved successfully!");
       showMessage("Actions saved successfully!", "success");
