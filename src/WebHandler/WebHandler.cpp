@@ -112,9 +112,6 @@ void WebHandler::init()
     serveNotFound();
     serveRoot();
     serveActions();
-    serveWifiGet();
-    serveWifiSave();
-    
     ServeSettings::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);
     
@@ -216,23 +213,6 @@ void WebHandler::serveActions()
     debugI("WebHandler serveActions");
 }
 
-/*
-void WebHandler::serveNotFound()
-{
-    // Handle preflight CORS requests
-    server.onNotFound([](AsyncWebServerRequest *request)
-                      {
-        if (request->method() == HTTP_OPTIONS) {
-            AsyncWebServerResponse *response = request->beginResponse(204); // No Content
-            WebHandler::addCorsHeaders(response);
-            request->send(response);
-            debugI("Handled CORS preflight request");
-        } else {
-            request->send(404, "text/plain", "Not found");
-        } });
-}
-*/
-
 void WebHandler::serveNotFound()
 {
     server.onNotFound([](AsyncWebServerRequest *request)
@@ -249,70 +229,4 @@ void WebHandler::serveNotFound()
             debugI("Route not found: %s", request->url().c_str());
         }
     });
-}
-
-void WebHandler::serveWifiGet()
-{
-    server.on("/wifi/get", HTTP_GET, [](AsyncWebServerRequest *request) {
-        debugI("Serving /wifi/get");
-
-        // Create a JSON document for device info.
-        // You can size this based on how much data you're storing.
-        JsonDocument doc;
-
-        PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
-        PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
-
-        // Basic chip info
-        doc["wifi_ssid"]   = ssid;
-        doc["wifi_password"] = password;
-
-        // Convert JSON doc to string for response
-        String responseString;
-        serializeJson(doc, responseString);
-
-        // Create and send the response with any CORS headers if needed
-        AsyncWebServerResponse *response = request->beginResponse(
-            200, "application/json", responseString);
-        WebHandler::addCorsHeaders(response);  // If you want your feature flag or logic, do it here
-        request->send(response);
-    });
-}
-
-void WebHandler::serveWifiSave()
-{
-    server.on("/wifi/save", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-              {
-        debugI("Received JSON payload on /wifi/save");
-
-        // Parse the JSON data
-        JsonDocument doc; // Use JsonDocument for dynamic sizing
-        DeserializationError error = deserializeJson(doc, data, len);
-        if (error) {
-            debugE("Failed to parse JSON: %s", error.c_str());
-            request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Invalid JSON\"}");
-            return;
-        }
-
-        // Extract Wi-Fi credentials
-        const char *ssid = doc["wifi_ssid"] | "";
-        const char *password = doc["wifi_password"] | "";
-
-        if (strlen(ssid) == 0 || strlen(password) == 0) {
-            debugE("Wi-Fi credentials missing");
-            request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"Missing Wi-Fi credentials\"}");
-            return;
-        }
-
-        // Save credentials to preferences
-        PreferencesHandler::setValue("wifi_ssid", String(ssid));
-        PreferencesHandler::setValue("wifi_password", String(password));
-
-        debugI("Wi-Fi credentials saved: SSID=%s", ssid);
-
-        AsyncWebServerResponse *response = request->beginResponse(200, "application/json", "{\"status\":\"success\",\"message\":\"Wi-Fi credentials saved\"}");
-        WebHandler::addCorsHeaders(response);
-        request->send(response); });
-
-        debugI("WebHandler serveWifiSave");
 }
