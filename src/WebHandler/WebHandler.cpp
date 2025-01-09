@@ -109,10 +109,9 @@ void WebHandler::init()
     }
     debugI("LittleFS mounted successfully");
 
+    serveNotFound();
     serveRoot();
     serveActions();
-    serveNotFound();
-    
     serveWifiGet();
     serveWifiSave();
     
@@ -217,6 +216,7 @@ void WebHandler::serveActions()
     debugI("WebHandler serveActions");
 }
 
+/*
 void WebHandler::serveNotFound()
 {
     // Handle preflight CORS requests
@@ -230,6 +230,25 @@ void WebHandler::serveNotFound()
         } else {
             request->send(404, "text/plain", "Not found");
         } });
+}
+*/
+
+void WebHandler::serveNotFound()
+{
+    server.onNotFound([](AsyncWebServerRequest *request)
+    {
+        if (request->method() == HTTP_OPTIONS) {
+            // Handle preflight CORS request
+            AsyncWebServerResponse *response = request->beginResponse(204); // No Content
+            WebHandler::addCorsHeaders(response); // Add generic CORS headers
+            request->send(response);
+            debugI("Handled CORS preflight request");
+        } else {
+            // Handle other unmatched routes
+            request->send(404, "text/plain", "Not found");
+            debugI("Route not found: %s", request->url().c_str());
+        }
+    });
 }
 
 void WebHandler::serveWifiGet()

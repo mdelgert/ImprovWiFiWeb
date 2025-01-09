@@ -3,39 +3,40 @@ console.log("settings.js loaded");
 
 import { httpGet, httpPost, showMessage } from "./global.js";
 
-// Load Wi-Fi settings from the server
-async function loadWifiSettings() {
+// Load settings from the server
+async function loadSettings() {
   try {
-    console.log("Fetching Wi-Fi settings from /wifi/get...");
-    const settings = await httpGet("/wifi/get");
-    console.log("Received settings:", settings); // Debugging: log received settings
+    console.log("Fetching settings from /settings/get...");
+    const response = await httpGet("/settings/get");
+    const { data } = response; // Extract the data object from the response
+    console.log("Received settings:", data); // Debugging: log received settings
 
     const networkInput = document.getElementById("wifi-network");
     const passwordInput = document.getElementById("wifi-password");
 
-    if (settings.wifi_ssid !== undefined) {
-      networkInput.value = settings.wifi_ssid;
-      console.log("Populated Wifi Network:", settings.wifi_ssid); // Debugging
+    if (data.wifi_ssid !== undefined) {
+      networkInput.value = data.wifi_ssid;
+      console.log("Populated Wi-Fi Network:", data.wifi_ssid); // Debugging
     } else {
-      console.warn("Wifi SSID is undefined in the response.");
+      console.warn("Wi-Fi SSID is undefined in the response.");
     }
 
-    if (settings.wifi_password !== undefined) {
-      passwordInput.value = settings.wifi_password;
-      console.log("Populated Wifi Password:", settings.wifi_password); // Debugging
+    if (data.wifi_password !== undefined) {
+      passwordInput.value = data.wifi_password;
+      console.log("Populated Wi-Fi Password:", data.wifi_password); // Debugging
     } else {
-      console.warn("Wifi Password is undefined in the response.");
+      console.warn("Wi-Fi Password is undefined in the response.");
     }
 
-    //showMessage("Wi-Fi settings loaded successfully!", "success");
+    showMessage("Settings loaded successfully!", "success");
   } catch (error) {
-    showMessage("Failed to load Wi-Fi settings.", "error");
-    console.error("Error loading Wi-Fi settings:", error);
+    showMessage("Failed to load settings.", "error");
+    console.error("Error loading settings:", error);
   }
 }
 
-// Save Wi-Fi settings to the server
-async function saveWifiSettings() {
+// Save settings to the server
+async function saveSettings() {
   const wifiSsid = document.getElementById("wifi-network").value.trim();
   const wifiPassword = document.getElementById("wifi-password").value.trim();
 
@@ -46,28 +47,28 @@ async function saveWifiSettings() {
   }
 
   try {
-    console.log("Saving Wi-Fi settings to /wifi/save...");
+    console.log("Saving settings to /settings/save...");
     const body = { wifi_ssid: wifiSsid, wifi_password: wifiPassword };
     console.log("Payload being sent:", body); // Debugging
 
-    await httpPost("/wifi/save", body);
-    showMessage("Wi-Fi settings saved successfully!", "success");
+    await httpPost("/settings/set", body);
+    showMessage("Settings saved successfully!", "success");
   } catch (error) {
-    showMessage("Failed to save Wi-Fi settings.", "error");
-    console.error("Error saving Wi-Fi settings:", error);
+    showMessage("Failed to save settings.", "error");
+    console.error("Error saving settings:", error);
   }
 }
 
 // Attach event listeners
 document.addEventListener("DOMContentLoaded", () => {
-  // Load existing Wi-Fi settings on page load
-  console.log("Page loaded. Initializing Wi-Fi settings load...");
-  loadWifiSettings();
+  // Load existing settings on page load
+  console.log("Page loaded. Initializing settings load...");
+  loadSettings();
 
   // Attach save button event
   const saveButton = document.querySelector(".settings-form button");
   if (saveButton) {
-    saveButton.addEventListener("click", saveWifiSettings);
+    saveButton.addEventListener("click", saveSettings);
     console.log("Save button event listener attached.");
   } else {
     console.error("Save button not found.");
