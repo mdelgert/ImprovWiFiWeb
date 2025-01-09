@@ -9,30 +9,31 @@ static IPAddress netMsk(255, 255, 255, 0);
 
 void WifiHandler::init()
 {
-    debugI("WifiHandler initialized");
-    GfxHandler::printMessage("WifiHandler initialized");
-    scanAndSaveNetworks(filePath);
     // WiFi.mode(WIFI_STA);
     // WiFi.mode(WIFI_AP);
     // WiFi.mode(WIFI_AP_STA);
+    debugI("WifiHandler initialized");
+    GfxHandler::printMessage("WifiHandler initialized");
+    scanAndSaveNetworks(filePath);
     connectToWifi();
 }
 
 void WifiHandler::loop()
 {
-    // if (WiFi.status() == WL_CONNECTED)
-    // {
-    //     dnsServer.processNextRequest();
-    // }
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        dnsServer.processNextRequest();
+    }
 
-    // if (WiFi.status() != WL_CONNECTED)
-    // {
-    //     if (myTimer.isReady())
-    //     {
-    //         debugW("Lost WiFi connection!");
-    //         GfxHandler::printMessage("WiFi disconnected!");
-    //     }
-    // }
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        if (myTimer.isReady())
+        {
+            // Suspect this could be interfering with webserial if debugger is sending messages to serial
+            // debugW("Lost WiFi connection!");
+            // GfxHandler::printMessage("WiFi disconnected!");
+        }
+    }
 }
 
 void WifiHandler::connectToWifi()
@@ -40,7 +41,6 @@ void WifiHandler::connectToWifi()
     PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
     PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
 
-    // Must be WIFI_STA or WIFI_AP_STA mode
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
 
@@ -68,27 +68,11 @@ void WifiHandler::connectToWifi()
         GfxHandler::printMessage("Failed to connect to WiFi 2!");
         startAccessPoint();
     }
-
-    /*
-    // Perform a synchronous scan
-    int networkCount = WiFi.scanNetworks();
-    debugI("Scanning for networks...");
-    if (networkCount > 0) {
-        debugI("Found %d networks:", networkCount);
-        for (int i = 0; i < networkCount; i++) {
-            debugI("SSID: %s, RSSI: %d", WiFi.SSID(i).c_str(), WiFi.RSSI(i));
-        }
-    } else {
-        debugI("No networks found!");
-    }
-    */
 }
 
 void WifiHandler::startAccessPoint()
 {
-    // Must be WIFI_AP or WIFI_AP_STA mode
-
-    // WiFi.mode(WIFI_AP);
+    WiFi.mode(WIFI_AP);
     if (WiFi.softAP(HOST_NAME))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
