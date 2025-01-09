@@ -55,6 +55,7 @@ void ServeDevice::handleDeviceReboot(AsyncWebServer &server)
         } });
 }
 
+/*
 void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
 {
     server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -92,4 +93,40 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
                   // Clean up after scan
                   WiFi.scanDelete(); // Free memory used by the scan
               });
+}
+*/
+
+void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
+{
+    server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
+        const char *filePath = "/wifi_networks.json";
+
+        if (!LittleFS.begin(true)) {
+            debugE("Failed to mount LittleFS");
+            WebHandler::sendErrorResponse(request, 500, "Failed to mount filesystem");
+            return;
+        }
+
+        // Open the file for reading
+        File file = LittleFS.open(filePath, "r");
+        if (!file) {
+            debugE("Failed to open file %s for reading", filePath);
+            WebHandler::sendErrorResponse(request, 500, "Failed to open network scan results");
+            return;
+        }
+
+        // Read the JSON file
+        JsonDocument doc; // Adjust size based on file contents
+        DeserializationError error = deserializeJson(doc, file);
+        file.close();
+
+        if (error) {
+            debugE("Failed to parse JSON from file %s", filePath);
+            WebHandler::sendErrorResponse(request, 500, "Failed to parse network scan results");
+            return;
+        }
+
+        // Send the JSON response
+        WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
+    });
 }

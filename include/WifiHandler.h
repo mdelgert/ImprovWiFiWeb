@@ -8,6 +8,8 @@
 #include "PreferencesHandler.h"
 #include "NonBlockingTimer.h"
 #include "GfxHandler.h"
+#include <LittleFS.h>
+#include <ArduinoJson.h>
 
 class WifiHandler
 {
@@ -15,6 +17,7 @@ private:
     static void connectToWifi();
     static void startAccessPoint();
     static void initializeMDNS();
+    static void scanAndSaveNetworks(const char *filePath);
 public:
     static void init();
     static void loop();
