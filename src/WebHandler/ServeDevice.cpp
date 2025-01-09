@@ -12,7 +12,7 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 {
     server.on("/device/info", HTTP_GET, [](AsyncWebServerRequest *request){
-        debugI("Serving /device/get (device info)");
+        debugI("Serving /device/get");
 
         JsonDocument doc;
         doc["chipModel"]   = ESP.getChipModel();
@@ -64,7 +64,6 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
             return;
         }
 
-        // Open the file for reading
         File file = LittleFS.open(filePath, "r");
         if (!file) {
             debugE("Failed to open file %s for reading", filePath);
@@ -72,8 +71,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
             return;
         }
 
-        // Read the JSON file
-        JsonDocument doc; // Adjust size based on file contents
+        JsonDocument doc;
         DeserializationError error = deserializeJson(doc, file);
         file.close();
 
@@ -83,7 +81,6 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
             return;
         }
 
-        // Send the JSON response
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
     });
 }

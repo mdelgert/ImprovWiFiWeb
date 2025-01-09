@@ -30,5 +30,5 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile(server, "/settings.js", settings_js_start, settings_js_end, "application/javascript");
     serveEmbeddedFile(server, "/styles.css", styles_css_start, styles_css_end, "text/css");
-    debugI("WebHandler serveRoot");
+    debugI("ServeEmbedded handleGetRequest registered");
 }

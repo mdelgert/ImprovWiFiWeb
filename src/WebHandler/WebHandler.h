@@ -27,8 +27,6 @@ public:
 private:
     static NonBlockingTimer myTimer;
     static AsyncWebServer server;
-    //static void serveRoot();
-    //static void serveEmbeddedFile(const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void serveNotFound();
 };
 
