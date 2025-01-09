@@ -10,7 +10,7 @@ void setup()
   ImprovHandler::init();
   LEDHandler::init();
   ButtonHandler::init();
-  GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
+  //GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
   LEDHandler::setDefaultBrightness(50);
   LEDHandler::setColor(CRGB::DarkOrchid);
 }

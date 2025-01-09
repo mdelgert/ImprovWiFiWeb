@@ -1,18 +1,26 @@
 @baseUrl = http://demo.local
-#@baseUrl = http://192.168.4.1
+@token = test
 
 ### Get settings
 GET {{baseUrl}}/settings/get
+Authorization: Bearer {{token}}
 
 ###
 
 ### Set settings
 POST {{baseUrl}}/settings/set
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
+  "device_name": "demo1",
   "wifi_ssid": "ssid",
-  "wifi_password": "password"
+  "wifi_password": "password",
+  "mqtt_server": "mqtt.server",
+  "mqtt_port": 1883,
+  "mqtt_user": "user",
+  "mqtt_password": "password",
+  "api_key": "password"
 }
 
 ###

@@ -1,13 +1,14 @@
 #ifndef SECURE_H
 #define SECURE_H
 
-// Default Wi-Fi credentials (fallback values)
-#define SECURE_WIFI_SSID "YourDefaultSSID"
-#define SECURE_WIFI_PASSWORD "YourDefaultPassword"
-
-// Additional secure settings can be added here
-#define SECURE_MQTT_USERNAME "YourMQTTUsername"
-#define SECURE_MQTT_PASSWORD "YourMQTTPassword"
-#define SECURE_API_KEY "YourSecureAPIKey"
+// Fallback values for development when nothing found in preferences
+#define SECURE_DEVICE_NAME "demo1"
+#define SECURE_WIFI_SSID "YourSSID"
+#define SECURE_WIFI_PASSWORD "YourWifiPassword"
+#define SECURE_MQTT_SERVER "YourMqttServer"
+#define SECURE_MQTT_PORT "YourMqttPort"
+#define SECURE_MQTT_USERNAME "YourMqttUsername"
+#define SECURE_MQTT_PASSWORD "YourMqttPassword"
+#define SECURE_API_KEY "YourAPIKey"
 
 #endif // SECURE_H

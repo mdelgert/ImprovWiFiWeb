@@ -1,12 +1,15 @@
 @baseUrl = http://demo.local
+@token = test
 
 ### Get actions
 GET {{baseUrl}}/actions/get
+Authorization: Bearer {{token}}
 
 ###
 
 ### Set actions
 POST {{baseUrl}}/actions/set
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
