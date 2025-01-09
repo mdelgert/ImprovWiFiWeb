@@ -17,6 +17,7 @@ async function loadActions() {
     const textarea = document.getElementById("actions-textarea");
     textarea.value = JSON.stringify(data, null, 2); // Format JSON nicely
     console.log("Actions loaded successfully!");
+    //showMessage("Actions loaded successfully!", "success");
   } catch (error) {
     console.error("Failed to load actions:", error);
     showMessage("Failed to load actions.", "error");

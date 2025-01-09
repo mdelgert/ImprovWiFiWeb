@@ -127,8 +127,13 @@ button {
   width: auto;
 }
 
+.buttonLarge {
+  width: 25%;
+  /* max-width: var(--max-width); */
+}
+
 textarea {
-  height: 70vh;
+  height: 65vh;
   max-height: 80vh;
   resize: none;
 }

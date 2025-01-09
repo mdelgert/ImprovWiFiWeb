@@ -1,4 +1,3 @@
-// settings.js
 console.log("settings.js loaded");
 
 import { httpGet, httpPost, showMessage } from "./global.js";
@@ -9,26 +8,19 @@ async function loadSettings() {
     console.log("Fetching settings from /settings/get...");
     const response = await httpGet("/settings/get");
     const { data } = response; // Extract the data object from the response
-    console.log("Received settings:", data); // Debugging: log received settings
+    console.log("Received settings:", data);
 
-    const networkInput = document.getElementById("wifi-network");
-    const passwordInput = document.getElementById("wifi-password");
+    // Populate form fields
+    document.getElementById("device_name").value = data.device_name || "";
+    document.getElementById("wifi_network").value = data.wifi_ssid || "";
+    document.getElementById("wifi_password").value = data.wifi_password || "";
+    document.getElementById("mqtt_server").value = data.mqtt_server || "";
+    document.getElementById("mqtt_port").value = data.mqtt_port || "";
+    document.getElementById("mqtt_username").value = data.mqtt_username || "";
+    document.getElementById("mqtt_password").value = data.mqtt_password || "";
+    //document.getElementById("api_key").value = data.api_key || "";
 
-    if (data.wifi_ssid !== undefined) {
-      networkInput.value = data.wifi_ssid;
-      console.log("Populated Wi-Fi Network:", data.wifi_ssid); // Debugging
-    } else {
-      console.warn("Wi-Fi SSID is undefined in the response.");
-    }
-
-    if (data.wifi_password !== undefined) {
-      passwordInput.value = data.wifi_password;
-      console.log("Populated Wi-Fi Password:", data.wifi_password); // Debugging
-    } else {
-      console.warn("Wi-Fi Password is undefined in the response.");
-    }
-
-    showMessage("Settings loaded successfully!", "success");
+    //showMessage("Settings loaded successfully!", "success");
   } catch (error) {
     showMessage("Failed to load settings.", "error");
     console.error("Error loading settings:", error);
@@ -37,19 +29,35 @@ async function loadSettings() {
 
 // Save settings to the server
 async function saveSettings() {
-  const wifiSsid = document.getElementById("wifi-network").value.trim();
-  const wifiPassword = document.getElementById("wifi-password").value.trim();
+  const deviceName = document.getElementById("device_name").value.trim();
+  const wifiSsid = document.getElementById("wifi_network").value.trim();
+  const wifiPassword = document.getElementById("wifi_password").value.trim();
+  const mqttServer = document.getElementById("mqtt_server").value.trim();
+  const mqttPort = document.getElementById("mqtt_port").value.trim();
+  const mqttUsername = document.getElementById("mqtt_username").value.trim();
+  const mqttPassword = document.getElementById("mqtt_password").value.trim();
+  //const apiKey = document.getElementById("api_key").value.trim();
 
-  if (!wifiSsid || !wifiPassword) {
-    showMessage("Please fill in both fields.", "error");
-    console.error("Validation failed: Both fields are required.");
+  // Validate mandatory fields (example: Wi-Fi credentials)
+  if (!deviceName || !wifiSsid || !wifiPassword) {
+    showMessage("Please fill in all mandatory fields.", "error");
+    console.error("Validation failed: Missing required fields.");
     return;
   }
 
   try {
-    console.log("Saving settings to /settings/save...");
-    const body = { wifi_ssid: wifiSsid, wifi_password: wifiPassword };
-    console.log("Payload being sent:", body); // Debugging
+    console.log("Saving settings to /settings/set...");
+    const body = {
+      device_name: deviceName,
+      wifi_ssid: wifiSsid,
+      wifi_password: wifiPassword,
+      mqtt_server: mqttServer,
+      mqtt_port: mqttPort,
+      mqtt_username: mqttUsername,
+      mqtt_password: mqttPassword,
+      //api_key: apiKey,
+    };
+    console.log("Payload being sent:", body);
 
     await httpPost("/settings/set", body);
     showMessage("Settings saved successfully!", "success");

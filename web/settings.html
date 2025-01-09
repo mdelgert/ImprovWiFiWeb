@@ -1,4 +1,3 @@
-<!-- settings.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,14 +12,40 @@
   <main>
     <form class="settings-form">
       <div class="form-group">
-        <label for="wifi-network">Wifi Network</label>
-        <input type="text" id="wifi-network" value="">
+        <label for="device_name">Device Name</label>
+        <input type="text" id="device_name" value="">
       </div>
       <div class="form-group">
-        <label for="wifi-password">Wifi Password</label>
-        <input type="password" id="wifi-password" value="">
-        <button type="button" class="nav-link">Save</button>
+        <label for="wifi_network">Wi-Fi Network</label>
+        <input type="text" id="wifi_network" value="">
       </div>
+      <div class="form-group">
+        <label for="wifi_password">Wi-Fi Password</label>
+        <input type="password" id="wifi_password" value="">
+      </div>
+      <div class="form-group">
+        <label for="mqtt_server">MQTT Server</label>
+        <input type="text" id="mqtt_server" value="">
+      </div>
+      <div class="form-group">
+        <label for="mqtt_port">MQTT Port</label>
+        <input type="text" id="mqtt_port" value="">
+      </div>
+      <div class="form-group">
+        <label for="mqtt_username">MQTT Username</label>
+        <input type="text" id="mqtt_username" value="">
+      </div>
+      <div class="form-group">
+        <label for="mqtt_password">MQTT Password</label>
+        <input type="password" id="mqtt_password" value="">
+      </div>
+      <!-- 
+      <div class="form-group">
+        <label for="api_key">API Key</label>
+        <input type="text" id="api_key" value="">
+      </div> 
+      -->
+      <button type="button" class="nav-link">Save</button>
     </form>
     <div id="message-box" class="message-box hidden" aria-live="polite" role="alert"></div>
     <div id="footer-container"></div>

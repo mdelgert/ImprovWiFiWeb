@@ -13,8 +13,8 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "device_name": "demo1",
-  "wifi_ssid": "ssid",
+  "device_name": "demo",
+  "wifi_ssid": "ssid1",
   "wifi_password": "password",
   "mqtt_server": "mqtt.server",
   "mqtt_port": 1883,
