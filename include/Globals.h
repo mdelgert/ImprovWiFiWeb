@@ -6,11 +6,9 @@
 #include <RemoteDebug.h>
 
 // Remote debug instance
-#define HOST_NAME "demo"
 extern RemoteDebug Debug;
 
 // Web server settings
-#define API_TOKEN "test"
 #define ENABLE_API_TOKEN false
 #define ENABLE_SECURE_CORS false
 #define ENABLE_WEBHANDLER true

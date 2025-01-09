@@ -35,7 +35,7 @@ bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
     if (request->hasHeader("Authorization"))
     {
         AsyncWebHeader *header = request->getHeader("Authorization");
-        if (String(header->value()) == String("Bearer ") + API_TOKEN)
+        if (String(header->value()) == String("Bearer ") + PreferencesHandler::getAPIKey())
         {
             return true;
         }

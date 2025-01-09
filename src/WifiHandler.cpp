@@ -3,7 +3,6 @@
 static NonBlockingTimer myTimer(5000);
 static DNSServer dnsServer;
 const char *filePath = "/wifi_networks.json";
-static String ssid, password;
 static IPAddress apIP(192, 168, 4, 1);
 static IPAddress netMsk(255, 255, 255, 0);
 
@@ -11,7 +10,10 @@ void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
     GfxHandler::printMessage("WifiHandler initialized");
-    scanAndSaveNetworks(filePath);
+    
+    //TODO make this a feature flag disabling for development but network dropdown will be empty
+    //scanAndSaveNetworks(filePath);
+    
     // WiFi.mode(WIFI_STA);
     // WiFi.mode(WIFI_AP);
     // WiFi.mode(WIFI_AP_STA);
@@ -39,12 +41,9 @@ void WifiHandler::loop()
 
 void WifiHandler::connectToWifi()
 {
-    PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
-    PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
-
     // Must be WIFI_STA or WIFI_AP_STA mode
     WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid.c_str(), password.c_str());
+    WiFi.begin(PreferencesHandler::getWiFiSSID(), PreferencesHandler::getWiFiPassword());
 
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -61,7 +60,7 @@ void WifiHandler::connectToWifi()
         String ipAddress = WiFi.localIP().toString();
         debugI("IP: %s", ipAddress.c_str());
         GfxHandler::printMessage("IP: " + ipAddress);
-        Debug.begin(HOST_NAME);
+        Debug.begin(PreferencesHandler::getDeviceName());
         initializeMDNS();
     }
     else
@@ -75,11 +74,11 @@ void WifiHandler::connectToWifi()
 void WifiHandler::startAccessPoint()
 {
     WiFi.mode(WIFI_AP);
-    if (WiFi.softAP(HOST_NAME))
+    if (WiFi.softAP(PreferencesHandler::getDeviceName()))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
-        debugI("Access Point started. SSID: %s", HOST_NAME);
-        GfxHandler::printMessage("Access Point started. SSID: " + String(HOST_NAME));
+        debugI("Access Point started. SSID: %s", PreferencesHandler::getDeviceName());
+        GfxHandler::printMessage("Access Point started. SSID: " + String(PreferencesHandler::getDeviceName()));
         debugI("AP IP: %s", apIP.toString().c_str());
         GfxHandler::printMessage("AP IP: " + apIP.toString());
     }
@@ -96,13 +95,13 @@ void WifiHandler::startAccessPoint()
 
 void WifiHandler::initializeMDNS()
 {
-    if (!MDNS.begin(HOST_NAME))
+    if (!MDNS.begin(PreferencesHandler::getDeviceName()))
     {
         debugE("Error setting up mDNS responder!");
     }
     else
     {
-        debugI("mDNS responder started. Hostname: %s.local", HOST_NAME);
+        debugI("mDNS responder started. Hostname: %s.local", PreferencesHandler::getDeviceName());
         MDNS.addService("http", "tcp", 80);
     }
 }
