@@ -1,5 +1,5 @@
-#ifndef EMBEDDED_FILES_H
-#define EMBEDDED_FILES_H
+#ifndef SERVE_EMBEDDED_FILES_H
+#define SERVE_EMBEDDED_FILES_H
 
 #include <Arduino.h>
 
@@ -14,6 +14,9 @@ extern const uint8_t advanced_html_start[] asm("_binary_web_advanced_html_start"
 extern const uint8_t advanced_html_end[] asm("_binary_web_advanced_html_end");
 extern const uint8_t advanced_js_start[] asm("_binary_web_advanced_js_start");
 extern const uint8_t advanced_js_end[] asm("_binary_web_advanced_js_end");
+
+extern const uint8_t error_html_start[] asm("_binary_web_error_html_start");
+extern const uint8_t error_html_end[] asm("_binary_web_error_html_end");
 
 extern const uint8_t footer_html_start[] asm("_binary_web_footer_html_start");
 extern const uint8_t footer_html_end[] asm("_binary_web_footer_html_end");

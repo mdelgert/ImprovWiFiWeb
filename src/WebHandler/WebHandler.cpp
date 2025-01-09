@@ -13,7 +13,8 @@ void WebHandler::serveNotFound()
             request->send(response);
             debugI("Handled CORS preflight request");
         } else { // Handle other unmatched routes
-            request->send(404, "text/plain", "Not found");
+            //request->send(404, "text/plain", "Not found");
+            request->redirect("/error.html");
             debugI("Route not found: %s", request->url().c_str());
         } });
 }

@@ -22,6 +22,7 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile(server, "/advanced.html", advanced_html_start, advanced_html_end, "text/html");
     serveEmbeddedFile(server, "/advanced.js", advanced_js_start, advanced_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/error.html", error_html_start, error_html_end, "text/html");
     serveEmbeddedFile(server, "/footer.html", footer_html_start, footer_html_end, "text/html");
     serveEmbeddedFile(server, "/global.js", global_js_start, global_js_end, "application/javascript");
     serveEmbeddedFile(server, "/", index_html_start, index_html_end, "text/html");

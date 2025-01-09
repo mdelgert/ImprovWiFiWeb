@@ -2,6 +2,7 @@
 #define SERVE_EMBEDDED_H
 
 #include "Globals.h"
+#include "ServeEmbeddedFiles.h"
 #include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
