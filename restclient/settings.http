@@ -1,13 +1,13 @@
 @baseUrl = http://demo.local
 #@baseUrl = http://192.168.4.1
 
-### GET wifi networks
-GET {{baseUrl}}/wifi/get
+### Get settings
+GET {{baseUrl}}/settings/get
 
 ###
 
 ### Set settings
-POST {{baseUrl}}/wifi/save
+POST {{baseUrl}}/settings/set
 Content-Type: application/json
 
 {

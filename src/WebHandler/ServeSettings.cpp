@@ -1,28 +1,32 @@
 #include "ServeSettings.h"
 
+static String ssid, password;
+
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
-    handleGetRequest(server);
-    handleSetRequest(server);
+    handleGetSettings(server);
+    handleSetSettings(server);
 }
 
-void ServeSettings::handleGetRequest(AsyncWebServer &server)
+void ServeSettings::handleGetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request)
-              {
+    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request){
         debugI("Received GET request on /settings/get");
 
-        // Create a JSON response
+        PreferencesHandler::getValue("wifi_ssid", ssid, SECURE_WIFI_SSID);
+        PreferencesHandler::getValue("wifi_password", password, SECURE_WIFI_PASSWORD);
+
         JsonDocument data;
-        data["data"] = "This is a JSON response";
+        data["wifi_ssid"]   = ssid;
+        data["wifi_password"] = password;
 
         WebHandler::sendSuccessResponse(request, "GET response template", &data); });
 }
 
-void ServeSettings::handleSetRequest(AsyncWebServer &server)
+void ServeSettings::handleSetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-              {
+    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, 
+                                          [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
             debugI("Received POST request on /settings/set");
 
             // Print the request body
@@ -38,10 +42,21 @@ void ServeSettings::handleSetRequest(AsyncWebServer &server)
                 return;
             }
 
-            // Extract a field for debugging
-            const char* exampleValue = doc["example"] | "undefined";
-            debugI("Extracted JSON value: example=%s", exampleValue);
+            // Extract Wi-Fi credentials
+            const char *ssid = doc["wifi_ssid"] | "";
+            const char *password = doc["wifi_password"] | "";
+
+            if (strlen(ssid) == 0 || strlen(password) == 0) {
+                debugE("Wi-Fi credentials missing");
+                WebHandler::sendErrorResponse(request, 400, "Missing Wi-Fi credentials");
+                return;
+            }
+
+            // Save credentials to preferences
+            PreferencesHandler::setValue("wifi_ssid", String(ssid));
+            PreferencesHandler::setValue("wifi_password", String(password));
 
             // Respond with success
-            WebHandler::sendSuccessResponse(request, "Data received successfully"); });
+            WebHandler::sendSuccessResponse(request, "POST handleSetSettings saved successfully"); 
+            });
 }

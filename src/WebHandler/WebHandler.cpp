@@ -26,7 +26,7 @@ bool WebHandler::isTokenValid(AsyncWebServerRequest* request) {
 }
 
 void WebHandler::addCorsHeaders(AsyncWebServerResponse* response) {
-    if (ENABLE_SECURE_CORS) return; // Only enable this for testing not safe for production
+    if (ENABLE_SECURE_CORS) return;
     response->addHeader("Access-Control-Allow-Origin", "*");
     response->addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     response->addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -112,6 +112,7 @@ void WebHandler::init()
     serveRoot();
     serveActions();
     serveNotFound();
+    
     serveWifiGet();
     serveWifiSave();
     

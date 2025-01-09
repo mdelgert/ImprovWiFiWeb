@@ -11,7 +11,7 @@ void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
     GfxHandler::printMessage("WifiHandler initialized");
-    scanAndSaveNetworks(filePath);
+    //scanAndSaveNetworks(filePath);
     // WiFi.mode(WIFI_STA);
     // WiFi.mode(WIFI_AP);
     // WiFi.mode(WIFI_AP_STA);
