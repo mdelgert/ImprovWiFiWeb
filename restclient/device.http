@@ -1,0 +1,14 @@
+@baseUrl = http://demo.local
+@token = test
+
+### Get
+GET {{baseUrl}}/device/info
+Authorization: Bearer {{token}}
+
+###
+
+### Get
+GET {{baseUrl}}/device/reboot
+Authorization: Bearer {{token}}
+
+###

@@ -20,15 +20,19 @@ document.addEventListener("DOMContentLoaded", () => {
   const rebootButton = document.getElementById("rebootButton");
   rebootButton.addEventListener("click", rebootDevice);
 });
-
-
 window.addEventListener('DOMContentLoaded', async () => {
   try {
-    const data = await httpGet('/device/get');
+    const response = await httpGet('/device/info');
+    const { data } = response; // Extract the 'data' object
+
+    if (!data) {
+      throw new Error('Data not found in response.');
+    }
+
     const tableBody = document.getElementById('device-info');
     tableBody.innerHTML = ''; // Clear existing rows
 
-    // Loop over each key-value pair in the JSON
+    // Loop over each key-value pair in the 'data' object
     for (const [key, value] of Object.entries(data)) {
       const row = document.createElement('tr');
 
