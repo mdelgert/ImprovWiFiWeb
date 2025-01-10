@@ -1,7 +1,4 @@
 #include "RemoteDebugHandler.h"
-#include "GfxHandler.h" // Include the GfxHandler header
-#include "LedHandler.h" // Include the LedHandler header
-#include <FastLED.h>    // For CRGB color definitions
 
 RemoteDebug Debug;
 
@@ -55,31 +52,7 @@ void RemoteDebugHandler::handleCustomCommands() {
     } else if (command.startsWith("led ")) { // Check if the command starts with "led "
         String color = command.substring(4); // Extract the color after "led "
         if (color.length() > 0) {
-            CRGB selectedColor;
-
-            // Convert the color string to a CRGB value
-            if (color.equalsIgnoreCase("Red")) {
-                selectedColor = CRGB::Red;
-            } else if (color.equalsIgnoreCase("Green")) {
-                selectedColor = CRGB::Green;
-            } else if (color.equalsIgnoreCase("Blue")) {
-                selectedColor = CRGB::Blue;
-            } else if (color.equalsIgnoreCase("Yellow")) {
-                selectedColor = CRGB::Yellow;
-            } else if (color.equalsIgnoreCase("Cyan")) {
-                selectedColor = CRGB::Cyan;
-            } else if (color.equalsIgnoreCase("Magenta")) {
-                selectedColor = CRGB::Magenta;
-            } else if (color.equalsIgnoreCase("White")) {
-                selectedColor = CRGB::White;
-            } else if (color.equalsIgnoreCase("Black")) {
-                selectedColor = CRGB::Black;
-            } else {
-                Debug.println("Error: Invalid color. Supported colors are Red, Green, Blue, Yellow, Cyan, Magenta, White, and Black.");
-                return;
-            }
-
-            LedHandler::setColor(selectedColor); // Set the LED color
+            LedHandler::handleAction(color.c_str());
             Debug.println("LED color set to: " + color);
         } else {
             Debug.println("Error: No color provided. Usage: led YourColor");
