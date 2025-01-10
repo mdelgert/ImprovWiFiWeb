@@ -1,6 +1,4 @@
 #include "Globals.h"
-#include <Arduino.h>
-#include "NonBlockingTimer.h"
 #include "RemoteDebugHandler.h"
 #include "ImprovHandler.h"
 #include "GfxHandler.h"
@@ -8,7 +6,6 @@
 #include "ButtonHandler.h"
 #include "WifiHandler.h"
 #include "WebHandler.h"
-#include "ConfigManager.h"
 
 void setup()
 {
