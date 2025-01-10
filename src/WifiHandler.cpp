@@ -95,15 +95,18 @@ void WifiHandler::startAccessPoint()
 
 void WifiHandler::initializeMDNS()
 {
-    if (!MDNS.begin(PreferencesHandler::getDeviceName()))
-    {
-        debugE("Error setting up mDNS responder!");
-    }
-    else
-    {
-        debugI("mDNS responder started. Hostname: %s.local", PreferencesHandler::getDeviceName());
-        MDNS.addService("http", "tcp", 80);
-    }
+    // if (!MDNS.begin(PreferencesHandler::getDeviceName()))
+    // {
+    //     debugE("Error setting up mDNS responder!");
+    // }
+    // else
+    // {
+    //     debugI("mDNS responder started. Hostname: %s.local", PreferencesHandler::getDeviceName());
+    //     MDNS.addService("http", "tcp", 80);
+    // }
+
+    MDNS.begin(PreferencesHandler::getDeviceName());  // Hostname: esp32-device.local
+    MDNS.addService("_http", "_tcp", 80);  // Advertise HTTP service on port 80
 }
 
 void WifiHandler::scanAndSaveNetworks(const char *filePath)
