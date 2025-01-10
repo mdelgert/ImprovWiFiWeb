@@ -1,14 +1,5 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
-
-//#include "Secure.h"
-#include "SecureExample.h"
-#include "ConfigManager.h"
-#include "NonBlockingTimer.h"
-#include "RemoteDebugHandler.h"
-
-// Version information
-#define SOFTWARE_VERSION "V1.0.10"
+#ifndef PINS_H
+#define PINS_H
 
 // Pin Definitions
 #define BUTTON_PIN      0
@@ -27,4 +18,4 @@
 #define SD_MMC_CLK_PIN  12
 #define SD_MMC_CMD_PIN  16
 
-#endif // GLOBALS_H
+#endif // PINS_H

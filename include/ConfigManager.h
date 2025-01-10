@@ -22,6 +22,7 @@ struct Settings {
     bool enableSecureCors = SECURE_ENABLE_SECURE_CORS;
     bool enableWebHandler = SECURE_ENABLE_WEBHANDLER;
     bool enableWifiScan = SECURE_ENABLE_WIFI_SCAN;
+    bool enableRemoteDebug = SECURE_ENABLE_REMOTE_DEBUGGER;
 };
 
 // Global settings object

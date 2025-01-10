@@ -10,13 +10,7 @@ void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
     GfxHandler::printMessage("WifiHandler initialized");
-    
-    //TODO make this a feature flag disabling for development but network dropdown will be empty
     scanAndSaveNetworks(filePath);
-    
-    // WiFi.mode(WIFI_STA);
-    // WiFi.mode(WIFI_AP);
-    // WiFi.mode(WIFI_AP_STA);
     connectToWifi();
 }
 
@@ -60,7 +54,7 @@ void WifiHandler::connectToWifi()
         String ipAddress = WiFi.localIP().toString();
         debugI("IP: %s", ipAddress.c_str());
         GfxHandler::printMessage("IP: " + ipAddress);
-        Debug.begin(settings.deviceName);
+        RemoteDebugHandler::startNetwork();
         initializeMDNS();
     }
     else

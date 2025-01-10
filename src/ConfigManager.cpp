@@ -36,6 +36,7 @@ void ConfigManager::load() {
     settings.enableSecureCors = preferences.getBool("enableSecureCors", settings.enableSecureCors);
     settings.enableWebHandler = preferences.getBool("enableWebHandler", settings.enableWebHandler);
     settings.enableWifiScan = preferences.getBool("enableWifiScan", settings.enableWifiScan);
+    settings.enableRemoteDebug = preferences.getBool("enableRemoteDebug", settings.enableRemoteDebug);
 
     preferences.end();
 
@@ -64,6 +65,7 @@ void ConfigManager::save() {
     preferences.putBool("enableSecureCors", settings.enableSecureCors);
     preferences.putBool("enableWebHandler", settings.enableWebHandler);
     preferences.putBool("enableWifiScan", settings.enableWifiScan);
+    preferences.putBool("enableRemoteDebug", settings.enableRemoteDebug);
 
     preferences.end();
 

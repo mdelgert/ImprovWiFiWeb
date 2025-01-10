@@ -2,11 +2,11 @@
 #define WIFI_HANDLER_H
 
 #include "Globals.h"
+#include "GfxHandler.h"
+#include "RemoteDebugHandler.h"
 #include <WiFi.h>
 #include <ESPmDNS.h>
 #include <DNSServer.h>
-#include "ConfigManager.h"
-#include "GfxHandler.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 
