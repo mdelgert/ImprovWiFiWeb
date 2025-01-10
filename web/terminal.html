@@ -12,12 +12,17 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+            overflow-y: hidden; /* Prevent vertical scrolling */
         }
         #terminal {
             flex: 1;
             padding: 10px;
             overflow-y: auto;
             background-color: #1e1e1e;
+            font-family: monospace;
+            font-size: 18px;
+            /* line-height: 1.5; */
         }
         #input-area {
             display: flex;
@@ -58,6 +63,11 @@
                 terminal.scrollTop = terminal.scrollHeight; // Auto-scroll to bottom
             }
 
+            // Function to clear the terminal content
+            function clearTerminal() {
+                terminal.innerHTML = ''; // Remove all child elements from the terminal
+            }
+
             // Initialize WebSocket connection
             function initWebSocket() {
                 socket = new WebSocket(wsUri);
@@ -86,13 +96,16 @@
                 if (event.key === 'Enter') {
                     const message = input.value.trim();
                     if (message !== "") {
-                        if (socket.readyState === WebSocket.OPEN) {
+                        if (message.toLowerCase() === "clear") {
+                            // If the user types "clear", clear the terminal
+                            clearTerminal();
+                        } else if (socket.readyState === WebSocket.OPEN) {
                             socket.send(message);
                             appendMessage(message, true);
                         } else {
                             appendMessage("Cannot send message. WebSocket is not open.", false);
                         }
-                        input.value = '';
+                        input.value = ''; // Clear the input field
                     }
                 }
             });

@@ -7,6 +7,8 @@
 
 #include "Globals.h"
 #include <RemoteDebug.h>
+#include "GfxHandler.h"
+#include "LedHandler.h"
 
 // Remote debug instance
 extern RemoteDebug Debug;
@@ -14,9 +16,11 @@ extern RemoteDebug Debug;
 class RemoteDebugHandler
 {
 public:
-    static void init();
     static void loop();
     static void startNetwork();
+    static void init();
+private:
+    static void handleCustomCommands();
 };
 
 #endif
