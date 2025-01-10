@@ -9,7 +9,7 @@
 extern RemoteDebug Debug;
 
 // Version information
-#define SOFTWARE_VERSION "V1.0.9"
+#define SOFTWARE_VERSION "V1.0.10"
 
 // Pin Definitions
 #define BUTTON_PIN      0
