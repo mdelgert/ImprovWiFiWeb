@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 #include "ImprovWiFiLibrary.h"
-#include "PreferencesHandler.h"
+#include "ConfigManager.h"
 #include "GfxHandler.h"
 
 class ImprovHandler

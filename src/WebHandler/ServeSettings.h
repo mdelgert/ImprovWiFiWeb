@@ -5,8 +5,8 @@
 #include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
-#include "PreferencesHandler.h"
 #include "NonBlockingTimer.h"
+#include "ConfigManager.h"
 
 class ServeSettings {
 public:

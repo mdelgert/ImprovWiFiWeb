@@ -4,15 +4,22 @@
 #include "Globals.h"
 #include <Preferences.h>
 #include <Arduino.h>
+#include "Secure.h"
+//#include "SecureExample.h"
 
 // Struct for all settings
 struct Settings {
-    String wifiSSID = "defaultSSID";
-    String wifiPassword = "defaultPassword";
-    String deviceName = "ESP32_Device";
-    bool setupMode = true;
-    int timeout = 30;
-    bool ledEnabled = false;
+    String deviceName = SECURE_DEVICE_NAME;
+    String wifiSSID = SECURE_WIFI_SSID;
+    String wifiPassword = SECURE_WIFI_PASSWORD;
+    String mqttServer = SECURE_MQTT_SERVER;
+    int mqttPort = SECURE_MQTT_PORT;
+    String mqttUsername = SECURE_MQTT_USERNAME;
+    String mqttPassword = SECURE_MQTT_PASSWORD;
+    String apiKey = SECURE_API_KEY;
+    bool setupMode = SECURE_SETUP_MODE;
+    int timeout = SECURE_TIMEOUT;
+    bool ledEnabled = SECURE_LED_ENABLED;
 };
 
 // Global settings object

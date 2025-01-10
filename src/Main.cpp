@@ -4,7 +4,6 @@ void setup()
 {
   RemoteDebugHandler::init();
   ConfigManager::init();
-  PreferencesHandler::init("settings");
   GfxHandler::init();
   WifiHandler::init();
   WebHandler::init();

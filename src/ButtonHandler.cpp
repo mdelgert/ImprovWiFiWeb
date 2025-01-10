@@ -46,7 +46,7 @@ void ButtonHandler::handleLongPressStart()
     debugI("Long press detected.");
     GfxHandler::printMessage("Long press detected. Hold for 5 seconds to reboot.");
     LedHandler::setColor(CRGB::Red);
-    PreferencesHandler::clear(); // Clear all preferences
+    ConfigManager::clear();
     delay(3000);                 // Adding delay appear like it reboots before clearing preferences
     ESP.restart();
     //holdStartTime = millis(); // Start timing

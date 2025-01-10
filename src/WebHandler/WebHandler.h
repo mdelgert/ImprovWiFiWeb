@@ -8,6 +8,7 @@
 #include "ServeSettings.h"
 #include "ServeActions.h"
 #include "ServeEmbedded.h"
+#include "ConfigManager.h"
 
 class WebHandler
 {

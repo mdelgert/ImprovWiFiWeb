@@ -10,27 +10,28 @@ void ServeSettings::registerEndpoints(AsyncWebServer &server)
 
 void ServeSettings::handleGetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request) {
+    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request){
         debugI("Received GET request on /settings/get");
 
         // Prepare JSON response with global configuration values
         JsonDocument doc;
-        doc["device_name"] = PreferencesHandler::getDeviceName();
-        doc["wifi_ssid"] = PreferencesHandler::getWiFiSSID();
-        doc["wifi_password"] = PreferencesHandler::getWiFiPassword();
-        doc["mqtt_server"] = PreferencesHandler::getMQTTServer();
-        doc["mqtt_port"] = PreferencesHandler::getMQTTPort();
-        doc["mqtt_username"] = PreferencesHandler::getMQTTUsername();
-        doc["mqtt_password"] = PreferencesHandler::getMQTTPassword();
-        doc["api_key"] = PreferencesHandler::getAPIKey();
 
-        WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &doc);
-    });
+        // Get settings from memory
+        doc["device_name"] = settings.deviceName;
+        doc["wifi_ssid"] = settings.wifiSSID;
+        doc["wifi_password"] = settings.wifiPassword;
+        doc["mqtt_server"] = settings.mqttServer;
+        doc["mqtt_port"] = settings.mqttPort;
+        doc["mqtt_username"] = settings.mqttUsername;
+        doc["mqtt_password"] = settings.mqttPassword;
+        doc["api_key"] = settings.apiKey;
+
+        WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &doc); });
 }
 
 void ServeSettings::handleSetSettings(AsyncWebServer &server)
 {
-    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
         debugI("Received POST request on /settings/set");
 
         // Print the request body for debugging
@@ -47,24 +48,17 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         }
 
         // Update settings in memory using JSON data or keep existing values
-        PreferencesHandler::setValue("device_name", doc["device_name"] | PreferencesHandler::getDeviceName());
-        PreferencesHandler::setValue("wifi_ssid", doc["wifi_ssid"] | PreferencesHandler::getWiFiSSID());
-        PreferencesHandler::setValue("wifi_password", doc["wifi_password"] | PreferencesHandler::getWiFiPassword());
-        PreferencesHandler::setValue("mqtt_server", doc["mqtt_server"] | PreferencesHandler::getMQTTServer());
-        PreferencesHandler::setValue("mqtt_port", doc["mqtt_port"] | PreferencesHandler::getMQTTPort());
-        PreferencesHandler::setValue("mqtt_username", doc["mqtt_username"] | PreferencesHandler::getMQTTUsername());
-        PreferencesHandler::setValue("mqtt_password", doc["mqtt_password"] | PreferencesHandler::getMQTTPassword());
-        PreferencesHandler::setValue("api_key", doc["api_key"] | PreferencesHandler::getAPIKey());
+        settings.deviceName = doc["device_name"] | settings.deviceName;
+        settings.wifiSSID = doc["wifi_ssid"] | settings.wifiSSID;
+        settings.wifiPassword = doc["wifi_password"] | settings.wifiPassword;
+        settings.mqttServer = doc["mqtt_server"] | settings.mqttServer;
+        settings.mqttPort = doc["mqtt_port"] | settings.mqttPort;
+        settings.mqttUsername = doc["mqtt_username"] | settings.mqttUsername;
+        settings.mqttPassword = doc["mqtt_password"] | settings.mqttPassword;
+        settings.apiKey = doc["api_key"] | settings.apiKey;
 
-        // Reload global settings to reflect updates
-        PreferencesHandler::loadGlobalConfig();
-
-        // Validate mandatory fields (example: Wi-Fi credentials)
-        if (PreferencesHandler::getWiFiSSID().isEmpty() || PreferencesHandler::getWiFiPassword().isEmpty()) {
-            debugE("Wi-Fi credentials missing");
-            WebHandler::sendErrorResponse(request, 400, "Missing Wi-Fi credentials");
-            return;
-        }
+        // Save updated settings
+        ConfigManager::save();
 
         // Send success response
         WebHandler::sendSuccessResponse(request, "Settings updated successfully");
@@ -72,6 +66,6 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         if (delayTimer.isReady())
         {
             ESP.restart();
-        }
+        } 
     });
 }

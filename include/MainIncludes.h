@@ -6,7 +6,6 @@
 #include "NonBlockingTimer.h"
 #include "RemoteDebugHandler.h"
 #include "ImprovHandler.h"
-#include "PreferencesHandler.h"
 #include "GfxHandler.h"
 #include "LedHandler.h"
 #include "ButtonHandler.h"

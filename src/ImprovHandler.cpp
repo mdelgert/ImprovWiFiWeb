@@ -26,8 +26,9 @@ void ImprovHandler::onImprovWiFiErrorCb(ImprovTypes::Error err)
 
 void ImprovHandler::onImprovWiFiConnectedCb(const char *ssid, const char *password)
 {
-    PreferencesHandler::setValue("wifi_ssid", String(ssid));
-    PreferencesHandler::setValue("wifi_password", String(password));
+    settings.wifiSSID = String(ssid);
+    settings.wifiPassword = String(password);
+    ConfigManager::save();
     debugD("WiFi credentials saved to preferences. SSID: %s", ssid);
     GfxHandler::printMessage("Rebooting...");
     debugI("Rebooting...");

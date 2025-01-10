@@ -21,14 +21,21 @@ void ConfigManager::load() {
         return;
     }
 
+    settings.deviceName = preferences.getString("deviceName", settings.deviceName);
     settings.wifiSSID = preferences.getString("wifiSSID", settings.wifiSSID);
     settings.wifiPassword = preferences.getString("wifiPassword", settings.wifiPassword);
-    settings.deviceName = preferences.getString("deviceName", settings.deviceName);
+    settings.mqttServer = preferences.getString("mqttServer", settings.mqttServer);
+    settings.mqttPort = preferences.getInt("mqttPort", settings.mqttPort);
+    settings.mqttUsername = preferences.getString("mqttUsername", settings.mqttUsername);
+    settings.mqttPassword = preferences.getString("mqttPassword", settings.mqttPassword);
+    settings.apiKey = preferences.getString("apiKey", settings.apiKey);
     settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
     settings.timeout = preferences.getInt("timeout", settings.timeout);
     settings.ledEnabled = preferences.getBool("ledEnabled", settings.ledEnabled);
 
     preferences.end();
+
+    debugI("ConfigManager load() namespace: %s", ns);
 }
 
 // Save settings to preferences
@@ -38,14 +45,21 @@ void ConfigManager::save() {
         return;
     }
 
+    preferences.putString("deviceName", settings.deviceName);
     preferences.putString("wifiSSID", settings.wifiSSID);
     preferences.putString("wifiPassword", settings.wifiPassword);
-    preferences.putString("deviceName", settings.deviceName);
+    preferences.putString("mqttServer", settings.mqttServer);
+    preferences.putInt("mqttPort", settings.mqttPort);
+    preferences.putString("mqttUsername", settings.mqttUsername);
+    preferences.putString("mqttPassword", settings.mqttPassword);
+    preferences.putString("apiKey", settings.apiKey);
     preferences.putBool("setupMode", settings.setupMode);
     preferences.putInt("timeout", settings.timeout);
     preferences.putBool("ledEnabled", settings.ledEnabled);
 
     preferences.end();
+
+    debugI("ConfigManager save() namespace: %s", ns);
 }
 
 // Clear all preferences
@@ -60,4 +74,6 @@ void ConfigManager::clear() {
 
     // Reset settings to defaults
     settings = Settings();
+
+    debugI("ConfigManager clear() namespace: %s", ns);
 }

@@ -5,7 +5,7 @@
 #include <OneButton.h>
 #include "LedHandler.h"
 #include "GfxHandler.h"
-#include "PreferencesHandler.h"
+#include "ConfigManager.h"
 
 class ButtonHandler {
 public:

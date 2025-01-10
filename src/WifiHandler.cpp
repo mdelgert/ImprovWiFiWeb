@@ -43,7 +43,7 @@ void WifiHandler::connectToWifi()
 {
     // Must be WIFI_STA or WIFI_AP_STA mode
     WiFi.mode(WIFI_STA);
-    WiFi.begin(PreferencesHandler::getWiFiSSID(), PreferencesHandler::getWiFiPassword());
+    WiFi.begin(settings.wifiSSID, settings.wifiPassword);
 
     while (WiFi.status() != WL_CONNECTED)
     {
@@ -60,7 +60,7 @@ void WifiHandler::connectToWifi()
         String ipAddress = WiFi.localIP().toString();
         debugI("IP: %s", ipAddress.c_str());
         GfxHandler::printMessage("IP: " + ipAddress);
-        Debug.begin(PreferencesHandler::getDeviceName());
+        Debug.begin(settings.deviceName);
         initializeMDNS();
     }
     else
@@ -74,11 +74,11 @@ void WifiHandler::connectToWifi()
 void WifiHandler::startAccessPoint()
 {
     WiFi.mode(WIFI_AP);
-    if (WiFi.softAP(PreferencesHandler::getDeviceName()))
+    if (WiFi.softAP(settings.deviceName))
     {
         WiFi.softAPConfig(apIP, apIP, netMsk);
-        debugI("Access Point started. SSID: %s", PreferencesHandler::getDeviceName());
-        GfxHandler::printMessage("Access Point started. SSID: " + String(PreferencesHandler::getDeviceName()));
+        debugI("Access Point started. SSID: %s", settings.deviceName.c_str());
+        GfxHandler::printMessage("Access Point started. SSID: " + settings.deviceName);
         debugI("AP IP: %s", apIP.toString().c_str());
         GfxHandler::printMessage("AP IP: " + apIP.toString());
     }
@@ -95,17 +95,17 @@ void WifiHandler::startAccessPoint()
 
 void WifiHandler::initializeMDNS()
 {
-    // if (!MDNS.begin(PreferencesHandler::getDeviceName()))
+    // if (!MDNS.begin(settings.deviceName))
     // {
     //     debugE("Error setting up mDNS responder!");
     // }
     // else
     // {
-    //     debugI("mDNS responder started. Hostname: %s.local", PreferencesHandler::getDeviceName());
+    //     debugI("mDNS responder started. Hostname: %s.local", settings.deviceName.c_str());
     //     MDNS.addService("http", "tcp", 80);
     // }
 
-    MDNS.begin(PreferencesHandler::getDeviceName());  // Hostname: esp32-device.local
+    MDNS.begin(settings.deviceName);  // Hostname: demo.local
     MDNS.addService("_http", "_tcp", 80);  // Advertise HTTP service on port 80
 }
 
