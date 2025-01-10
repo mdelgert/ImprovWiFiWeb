@@ -20,6 +20,9 @@ struct Settings {
     bool setupMode = SECURE_SETUP_MODE;
     int timeout = SECURE_TIMEOUT;
     bool ledEnabled = SECURE_LED_ENABLED;
+    bool enableApiToken = SECURE_ENABLE_API_TOKEN;
+    bool enableSecureCors = SECURE_ENABLE_SECURE_CORS;
+    bool enableWebHandler = SECURE_ENABLE_WEBHANDLER;
 };
 
 // Global settings object

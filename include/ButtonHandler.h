@@ -5,8 +5,6 @@
 #include <OneButton.h>
 #include "LedHandler.h"
 #include "GfxHandler.h"
-#include "ConfigManager.h"
-#include "NonBlockingTimer.h"
 
 class ButtonHandler {
 public:

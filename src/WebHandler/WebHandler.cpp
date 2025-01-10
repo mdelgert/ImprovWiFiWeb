@@ -30,7 +30,7 @@ void WebHandler::printRequestBody(AsyncWebServerRequest *request, uint8_t *data,
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
 {
-    if (!ENABLE_API_TOKEN) return true;
+    if (!settings.enableApiToken) return true;
     if (request->hasHeader("Authorization"))
     {
         AsyncWebHeader *header = request->getHeader("Authorization");
@@ -45,7 +45,7 @@ bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
 
 void WebHandler::addCorsHeaders(AsyncWebServerResponse *response)
 {
-    if (ENABLE_SECURE_CORS) return;
+    if (settings.enableSecureCors) return;
     response->addHeader("Access-Control-Allow-Origin", "*");
     response->addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
     response->addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
@@ -100,7 +100,7 @@ void WebHandler::sendSuccessResponse(AsyncWebServerRequest *request, const char 
 
 void WebHandler::init()
 {
-    if (!ENABLE_WEBHANDLER) return;
+    if (!settings.enableWebHandler) return;
 
     while (WiFi.status() != WL_CONNECTED)
     {

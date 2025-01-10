@@ -2,14 +2,11 @@
 #define GLOBALS_H
 
 #include <RemoteDebug.h>
+#include "ConfigManager.h"
+#include "NonBlockingTimer.h"
 
 // Remote debug instance
 extern RemoteDebug Debug;
-
-// Web server settings
-#define ENABLE_API_TOKEN false
-#define ENABLE_SECURE_CORS false
-#define ENABLE_WEBHANDLER true
 
 // Version information
 #define SOFTWARE_VERSION "V1.0.9"

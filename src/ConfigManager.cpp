@@ -32,6 +32,9 @@ void ConfigManager::load() {
     settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
     settings.timeout = preferences.getInt("timeout", settings.timeout);
     settings.ledEnabled = preferences.getBool("ledEnabled", settings.ledEnabled);
+    settings.enableApiToken = preferences.getBool("enableApiToken", settings.enableApiToken);
+    settings.enableSecureCors = preferences.getBool("enableSecureCors", settings.enableSecureCors);
+    settings.enableWebHandler = preferences.getBool("enableWebHandler", settings.enableWebHandler);
 
     preferences.end();
 
@@ -56,6 +59,9 @@ void ConfigManager::save() {
     preferences.putBool("setupMode", settings.setupMode);
     preferences.putInt("timeout", settings.timeout);
     preferences.putBool("ledEnabled", settings.ledEnabled);
+    preferences.putBool("enableApiToken", settings.enableApiToken);
+    preferences.putBool("enableSecureCors", settings.enableSecureCors);
+    preferences.putBool("enableWebHandler", settings.enableWebHandler);
 
     preferences.end();
 

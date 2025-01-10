@@ -1,9 +1,8 @@
 #ifndef ACTION_HANDLER_H
 #define ACTION_HANDLER_H
 
-#include <ArduinoJson.h>
 #include "Globals.h"
-#include "NonBlockingTimer.h"
+#include <ArduinoJson.h>
 #include "GfxHandler.h"
 #include "LedHandler.h"
 
