@@ -16,5 +16,6 @@
 #define SECURE_ENABLE_API_TOKEN false
 #define SECURE_ENABLE_SECURE_CORS false
 #define SECURE_ENABLE_WEBHANDLER true
+#define SECURE_ENABLE_WIFI_SCAN false
 
 #endif // SECURE_H

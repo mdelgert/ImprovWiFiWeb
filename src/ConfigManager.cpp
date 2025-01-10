@@ -35,6 +35,7 @@ void ConfigManager::load() {
     settings.enableApiToken = preferences.getBool("enableApiToken", settings.enableApiToken);
     settings.enableSecureCors = preferences.getBool("enableSecureCors", settings.enableSecureCors);
     settings.enableWebHandler = preferences.getBool("enableWebHandler", settings.enableWebHandler);
+    settings.enableWifiScan = preferences.getBool("enableWifiScan", settings.enableWifiScan);
 
     preferences.end();
 
@@ -62,6 +63,7 @@ void ConfigManager::save() {
     preferences.putBool("enableApiToken", settings.enableApiToken);
     preferences.putBool("enableSecureCors", settings.enableSecureCors);
     preferences.putBool("enableWebHandler", settings.enableWebHandler);
+    preferences.putBool("enableWifiScan", settings.enableWifiScan);
 
     preferences.end();
 

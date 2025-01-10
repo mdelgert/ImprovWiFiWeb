@@ -21,6 +21,7 @@ struct Settings {
     bool enableApiToken = SECURE_ENABLE_API_TOKEN;
     bool enableSecureCors = SECURE_ENABLE_SECURE_CORS;
     bool enableWebHandler = SECURE_ENABLE_WEBHANDLER;
+    bool enableWifiScan = SECURE_ENABLE_WIFI_SCAN;
 };
 
 // Global settings object

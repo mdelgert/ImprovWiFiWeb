@@ -95,18 +95,22 @@ void WifiHandler::startAccessPoint()
 
 void WifiHandler::initializeMDNS()
 {
+    // if (!MDNS.begin(settings.deviceName))
+    // {
+    //     debugE("Error setting up mDNS responder!");
+    // }
+    // else
+    // {
+    //     debugI("mDNS responder started. Hostname: %s.local", settings.deviceName.c_str());
+    //     MDNS.addService("http", "tcp", 80);
+    // }
+
     MDNS.begin(settings.deviceName);  // Hostname: demo.local
     MDNS.addService("_http", "_tcp", 80);  // Advertise HTTP service on port 80
 }
 
 void WifiHandler::scanAndSaveNetworks(const char *filePath)
 {
-    if (settings.enableWifiScan == false)
-    {
-        debugI("Wi-Fi scan disabled");
-        return;
-    }
-    
     if (!LittleFS.begin(true))
     {
         debugE("Failed to mount LittleFS");
