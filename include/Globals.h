@@ -14,7 +14,7 @@ extern RemoteDebug Debug;
 #define ENABLE_WEBHANDLER true
 
 // Version information
-#define SOFTWARE_VERSION "V1.0.8"
+#define SOFTWARE_VERSION "V1.0.9"
 
 // Pin Definitions
 #define BUTTON_PIN      0
