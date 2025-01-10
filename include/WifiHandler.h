@@ -6,7 +6,6 @@
 #include <ESPmDNS.h>
 #include <DNSServer.h>
 #include "ConfigManager.h"
-#include "NonBlockingTimer.h"
 #include "GfxHandler.h"
 #include <LittleFS.h>
 #include <ArduinoJson.h>

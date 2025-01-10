@@ -13,5 +13,8 @@
 #define SECURE_SETUP_MODE false
 #define SECURE_TIMEOUT 300
 #define SECURE_LED_ENABLED true
+#define SECURE_ENABLE_API_TOKEN false
+#define SECURE_ENABLE_SECURE_CORS false
+#define SECURE_ENABLE_WEBHANDLER true
 
 #endif // SECURE_H

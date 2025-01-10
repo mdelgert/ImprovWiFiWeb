@@ -4,8 +4,8 @@
 #include "Globals.h"
 #include <Preferences.h>
 #include <Arduino.h>
-#include "Secure.h"
-//#include "SecureExample.h"
+//#include "Secure.h"
+#include "SecureExample.h"
 
 // Struct for all settings
 struct Settings {
