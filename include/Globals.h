@@ -1,6 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+//#include "Secure.h"
+#include "SecureExample.h"
 #include <RemoteDebug.h>
 #include "ConfigManager.h"
 #include "NonBlockingTimer.h"
