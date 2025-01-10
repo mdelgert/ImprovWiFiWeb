@@ -1,49 +1,69 @@
 #include "ActionHandler.h"
 
-// Method to handle incoming actions from a JSON string
-void ActionHandler::processMessage(const String& input) {
-  // Allocate a StaticJsonDocument with sufficient capacity
-  JsonDocument doc; // Adjust size as needed based on your JSON structure
+static NonBlockingTimer delayTimer(500);
 
-  // Parse the JSON input
+void ActionHandler::processMessage(const String &input)
+{
+  JsonDocument doc;
   DeserializationError error = deserializeJson(doc, input);
 
-  if (error) {
+  if (error)
+  {
     debugE("JSON deserialization failed: %s", error.c_str());
     return;
   }
 
-  // Delegate to the JsonDocument handler
   processMessage(doc);
 }
 
-// Method to handle incoming actions from a JsonDocument
-void ActionHandler::processMessage(const JsonDocument& doc) {
-  // Check if "action" exists and is a String
-  if (!doc["action"].is<String>()) {
+void ActionHandler::processMessage(const JsonDocument &doc)
+{
+  if (!doc["action"].is<String>())
+  {
     debugE("JSON does not contain a valid 'action' field.");
     return;
   }
 
   String action = doc["action"].as<String>();
 
-  // Handle actions using if-else statements
-  if (action == "reboot") {
+  if (action == "reboot")
+  {
     debugI("Action received: Rebooting system.");
-    // Add your reboot logic here
+    GfxHandler::printMessage("Rebooting...");
+
+    if (delayTimer.isReady())
+    {
+      ESP.restart();
+    }
   }
-  else if (action == "tft") {
-    // Check if "message" exists and is a String
-    if (doc["message"].is<String>()) {
+  else if (action == "tft")
+  {
+    if (doc["message"].is<String>())
+    {
       String message = doc["message"].as<String>();
       debugI("Action received: TFT with message - %s", message.c_str());
-      // Add your TFT handling logic here
+      GfxHandler::printMessage(message);
     }
-    else {
+    else
+    {
       debugE("TFT action requires a valid 'message' field.");
     }
   }
-  else {
+  else if (action == "led")
+  {
+    if (doc["message"].is<String>())
+    {
+      String message = doc["message"].as<String>();
+      debugI("Action received: LED with message - %s", message.c_str());
+      LEDHandler::handleAction(message.c_str());
+    }
+    else
+    {
+      debugE("TFT action requires a valid 'message' field.");
+    }
+  }
+  else
+  {
     debugE("Unknown action: %s", action.c_str());
   }
 }
