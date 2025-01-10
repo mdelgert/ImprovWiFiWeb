@@ -1,4 +1,3 @@
-// WebHandler.cpp
 #include "WebHandler.h"
 
 NonBlockingTimer WebHandler::myTimer(1000);

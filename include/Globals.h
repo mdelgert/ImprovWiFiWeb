@@ -1,8 +1,8 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "Secure.h"
-//#include "SecureExample.h"
+//#include "Secure.h"
+#include "SecureExample.h"
 #include <RemoteDebug.h>
 
 // Remote debug instance
@@ -14,7 +14,7 @@ extern RemoteDebug Debug;
 #define ENABLE_WEBHANDLER true
 
 // Version information
-#define SOFTWARE_VERSION "V1.0.7"
+#define SOFTWARE_VERSION "V1.0.8"
 
 // Pin Definitions
 #define BUTTON_PIN      0

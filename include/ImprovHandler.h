@@ -1,4 +1,3 @@
-// ImprovHandler.h
 #ifndef IMPROV_HANDLER_H
 #define IMPROV_HANDLER_H
 
