@@ -56,15 +56,15 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         PreferencesHandler::setValue("mqtt_password", doc["mqtt_password"] | PreferencesHandler::getMQTTPassword());
         PreferencesHandler::setValue("api_key", doc["api_key"] | PreferencesHandler::getAPIKey());
 
+        // Reload global settings to reflect updates
+        PreferencesHandler::loadGlobalConfig();
+
         // Validate mandatory fields (example: Wi-Fi credentials)
         if (PreferencesHandler::getWiFiSSID().isEmpty() || PreferencesHandler::getWiFiPassword().isEmpty()) {
             debugE("Wi-Fi credentials missing");
             WebHandler::sendErrorResponse(request, 400, "Missing Wi-Fi credentials");
             return;
         }
-
-        // Reload global settings to reflect updates
-        PreferencesHandler::loadGlobalConfig();
 
         // Send success response
         WebHandler::sendSuccessResponse(request, "Settings updated successfully");

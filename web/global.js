@@ -3,6 +3,7 @@ console.log('global.js loaded');
 
 // Dev logic: if host is "localhost", use the given IP as base, else use relative path
 const BASE_URL = window.location.hostname === "localhost" ? "http://demo.local" : "";
+//const BASE_URL = "http://192.168.4.1"
 
 // Centralized function for HTTP GET requests
 async function httpGet(endpoint) {
