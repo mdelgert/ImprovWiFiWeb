@@ -12,5 +12,6 @@
 #include "ButtonHandler.h"
 #include "WifiHandler.h"
 #include "WebHandler.h"
+#include "ConfigManager.h"
 
 #endif // MAIN_INCLUDES_H
