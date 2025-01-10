@@ -1,29 +1,29 @@
-#include "LEDHandler.h"
+#include "LedHandler.h"
 
 // Define static members
-CRGB LEDHandler::leds[NUM_LEDS];
-uint8_t LEDHandler::defaultBrightness = 100; // Default brightness
+CRGB LedHandler::leds[NUM_LEDS];
+uint8_t LedHandler::defaultBrightness = 100; // Default brightness
 
-void LEDHandler::init() {
+void LedHandler::init() {
     FastLED.addLeds<LED_TYPE, LED_DI_PIN, LED_CI_PIN, COLOR_ORDER>(leds, NUM_LEDS);
     clear(); // Turn off all LEDs initially
     debugI("LEDHandler initialized with %d LED(s)", NUM_LEDS);
 }
 
-void LEDHandler::setColor(const CRGB &color, uint8_t brightness) {
+void LedHandler::setColor(const CRGB &color, uint8_t brightness) {
     FastLED.setBrightness(brightness);
     leds[0] = color;
     FastLED.show();
     debugD("LED color set to R:%d G:%d B:%d with brightness %d", color.r, color.g, color.b, brightness);
 }
 
-void LEDHandler::clear() {
+void LedHandler::clear() {
     FastLED.clear();
     FastLED.show();
     debugI("LEDs cleared");
 }
 
-void LEDHandler::handleAction(const char *actionMessage) {
+void LedHandler::handleAction(const char *actionMessage) {
     if (strcmp(actionMessage, "Red") == 0) {
         setColor(CRGB::Red);
     } else if (strcmp(actionMessage, "Green") == 0) {
@@ -41,7 +41,7 @@ void LEDHandler::handleAction(const char *actionMessage) {
     }
 }
 
-void LEDHandler::setDefaultBrightness(uint8_t brightness) {
+void LedHandler::setDefaultBrightness(uint8_t brightness) {
     defaultBrightness = brightness;
     FastLED.setBrightness(defaultBrightness);
     FastLED.show();

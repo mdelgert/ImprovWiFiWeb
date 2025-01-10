@@ -8,7 +8,7 @@
 #include "ImprovHandler.h"
 #include "PreferencesHandler.h"
 #include "GfxHandler.h"
-#include "LEDHandler.h"
+#include "LedHandler.h"
 #include "ButtonHandler.h"
 #include "WifiHandler.h"
 #include "WebHandler.h"

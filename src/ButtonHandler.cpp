@@ -31,21 +31,21 @@ void ButtonHandler::handleSingleClick()
 {
     debugI("Single click detected.");
     GfxHandler::printMessage("Single click detected.");
-    LEDHandler::setColor(CRGB::Blue);
+    LedHandler::setColor(CRGB::Blue);
 }
 
 void ButtonHandler::handleDoubleClick()
 {
     debugI("Double click detected.");
     GfxHandler::printMessage("Double click detected.");
-    LEDHandler::setColor(CRGB::Green);
+    LedHandler::setColor(CRGB::Green);
 }
 
 void ButtonHandler::handleLongPressStart()
 {
     debugI("Long press detected.");
     GfxHandler::printMessage("Long press detected. Hold for 5 seconds to reboot.");
-    LEDHandler::setColor(CRGB::Red);
+    LedHandler::setColor(CRGB::Red);
     PreferencesHandler::clear(); // Clear all preferences
     delay(3000);                 // Adding delay appear like it reboots before clearing preferences
     ESP.restart();
@@ -62,7 +62,7 @@ void ButtonHandler::handleDuringLongPress()
         countdownStarted = true; // Start countdown
         for (int i = 5; i > 0; --i)
         {
-            LEDHandler::setColor(CRGB::Orange);
+            LedHandler::setColor(CRGB::Orange);
             GfxHandler::printMessage("Rebooting in " + String(i) + " seconds...");
             delay(1000); // Display countdown (1-second intervals)
         }
@@ -70,7 +70,7 @@ void ButtonHandler::handleDuringLongPress()
 
     if (elapsed >= 50000)
     { 
-        LEDHandler::setColor(CRGB::Red);
+        LedHandler::setColor(CRGB::Red);
         GfxHandler::printMessage("Rebooting device...");
         debugI("Rebooting device...");
         delay(1000);   // Optional delay before reboot

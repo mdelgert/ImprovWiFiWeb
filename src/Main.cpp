@@ -8,11 +8,11 @@ void setup()
   WifiHandler::init();
   WebHandler::init();
   ImprovHandler::init();
-  LEDHandler::init();
+  LedHandler::init();
   ButtonHandler::init();
   GfxHandler::printMessage("Ver:" SOFTWARE_VERSION);
-  LEDHandler::setDefaultBrightness(50);
-  LEDHandler::setColor(CRGB::DarkOrchid);
+  LedHandler::setDefaultBrightness(50);
+  LedHandler::setColor(CRGB::DarkOrchid);
 }
 
 void loop()

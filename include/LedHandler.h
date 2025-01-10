@@ -10,7 +10,7 @@
 #define LED_TYPE APA102
 #define COLOR_ORDER BGR
 
-class LEDHandler
+class LedHandler
 {
 private:
     static CRGB leds[NUM_LEDS];       // Static array for LED data
