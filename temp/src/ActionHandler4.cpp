@@ -47,7 +47,6 @@ void ActionHandler::processMessage(const JsonDocument &doc)
     }
 
     String actionStr = doc["action"].as<String>();
-    actionStr.toLowerCase();
     ActionType action = getActionType(actionStr);
 
     switch (action)

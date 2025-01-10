@@ -13,6 +13,9 @@ public:
     static void processMessage(const String& input);
     static void processMessage(const JsonDocument& doc);
 private:
+    static void handleReboot();
+    static void handleTft(const JsonDocument& doc);
+    static void handleLed(const JsonDocument& doc);
 };
 
 #endif
