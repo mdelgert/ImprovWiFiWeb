@@ -2,8 +2,8 @@
 #define LED_HANDLER_H
 
 // #define FASTLED_INTERNAL
-#include <FastLED.h>
 #include "Globals.h"
+#include <FastLED.h>
 
 // LED configuration
 #define NUM_LEDS 1
