@@ -1,0 +1,67 @@
+I'm using the following pattern for my code. Can you provide the example using this format?
+
+#ifndef TEMPLATE_HANDLER_H
+#define TEMPLATE_HANDLER_H
+
+#ifdef ENABLE_TEMPLATE_HANDLER
+
+#include "Globals.h"
+
+class TemplateHandler
+{
+private:
+    static void examplePrivate();
+
+public:
+    static void init();
+    static void loop();
+    static void examplePublic();
+};
+
+#else
+
+class TemplateHandler { 
+public: // No-op implementation of TemplateHandler
+    static void init() {} // No-op
+    static void loop() {} // No-op
+    static void examplePublic() {} // No-op;
+};
+
+#endif // ENABLE_TEMPLATE_HANDLER
+#endif // TEMPLATE_HANDLER_H
+
+#ifdef ENABLE_TEMPLATE_HANDLER
+
+#include "TemplateHandler.h"
+
+static NonBlockingTimer myTimer(1000);
+
+void TemplateHandler::init()
+{
+    debugI("TemplateHandler initialized");
+}
+
+void TemplateHandler::loop()
+{
+    if (myTimer.isReady())
+    {
+        debugI("TemplateHandler loop");
+    }
+}
+
+void TemplateHandler::examplePublic()
+{
+    // Example of debug levels
+    debugV("* This is a message of debug level VERBOSE");
+    debugD("* This is a message of debug level DEBUG");
+    debugI("* This is a message of debug level INFO");
+    debugW("* This is a message of debug level WARNING");
+    debugE("* This is a message of debug level ERROR");
+}
+
+void TemplateHandler::examplePrivate()
+{
+    debugI("TemplateHandler examplePrivate");
+}
+
+#endif // ENABLE_TEMPLATE_HANDLER
