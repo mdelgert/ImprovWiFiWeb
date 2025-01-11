@@ -4,20 +4,17 @@ RemoteDebug Debug;
 
 void RemoteDebugHandler::loop()
 {
-    if(!settings.RemoteDebugger) return;
     Debug.handle(); // Handles RemoteDebug commands
     yield();        // Give a time for ESP
 }
 
 void RemoteDebugHandler::startNetwork()
 {
-    if(!settings.RemoteDebugger) return;
     Debug.begin(settings.deviceName);
 }
 
 void RemoteDebugHandler::init()
 {
-    if(!settings.RemoteDebugger) return;
     Serial.begin(115200);           // This might interfere with ImprovWifi because sending serial messages at the same time
     Debug.setSerialEnabled(true);   // Enable sending to serial debug as well (may want to disable it for release)
     Debug.setResetCmdEnabled(true); // Enable the reset command

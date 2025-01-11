@@ -35,8 +35,6 @@ void ConfigManager::load() {
     settings.cors = preferences.getBool("cors", settings.cors);
     settings.WebHandler = preferences.getBool("webHandler", settings.WebHandler);
     settings.WifiScan = preferences.getBool("wifiScan", settings.WifiScan);
-    settings.RemoteDebugger = preferences.getBool("remoteDebugger", settings.RemoteDebugger);
-
     preferences.end();
 
     debugI("ConfigManager load() namespace: %s", ns);
@@ -63,8 +61,6 @@ void ConfigManager::save() {
     preferences.putBool("cors", settings.cors);
     preferences.putBool("webHandler", settings.WebHandler);
     preferences.putBool("wifiScan", settings.WifiScan);
-    preferences.putBool("remoteDebugger", settings.RemoteDebugger);
-
     preferences.end();
 
     debugI("ConfigManager save() namespace: %s", ns);
