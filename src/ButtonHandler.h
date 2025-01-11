@@ -1,11 +1,13 @@
 #ifndef BUTTON_HANDLER_H
 #define BUTTON_HANDLER_H
 
+#ifdef ENABLE_BUTTON_HANDLER
 #include "Globals.h"
 #include <OneButton.h>
 #include "LedHandler.h"
 #include "GfxHandler.h"
 
+// Full implementation of ButtonHandler
 class ButtonHandler {
 public:
     static void init();
@@ -17,5 +19,15 @@ private:
     static void handleDoubleClick();
     static void handleLongPress();
 };
+
+#else
+// No-op implementation of ButtonHandler
+class ButtonHandler {
+public:
+    static void init() {} // No-op
+    static void loop() {} // No-op
+};
+
+#endif // ENABLE_BUTTON_HANDLER
 
 #endif // BUTTON_HANDLER_H

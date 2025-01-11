@@ -1,3 +1,5 @@
+#ifdef ENABLE_BUTTON_HANDLER
+
 #include "ButtonHandler.h"
 
 // Define static members
@@ -46,3 +48,5 @@ void ButtonHandler::handleLongPress()
         ESP.restart();
     }
 }
+
+#endif // ENABLE_BUTTON_HANDLER
