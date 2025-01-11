@@ -7,12 +7,14 @@
 #include "ButtonHandler.h"
 #include "WifiHandler.h"
 #include "WebHandler.h"
+#include "BluetoothHandler.h"
 
 void setup()
 {
   RemoteDebugHandler::init();
   ConfigManager::init();
   TemplateHandler::init();
+  BluetoothHandler::init();
   GfxHandler::init();
   WifiHandler::init();
   WebHandler::init();
@@ -27,6 +29,7 @@ void setup()
 void loop()
 {
   RemoteDebugHandler::loop();
+  BluetoothHandler::loop();
   TemplateHandler::loop();
   WifiHandler::loop();
   WebHandler::loop();

@@ -1,7 +1,7 @@
 console.log("global.js loaded");
 
 // Centralized device configuration
-const DEV_DEVICE = "demo.local"; // Change this to the desired development device, e.g., "192.168.4.1"
+const DEV_DEVICE = "demo1.local"; // Change this to the desired development device, e.g., "192.168.4.1"
 
 // Determine Base URL and WebSocket URL based on environment
 const BASE_URL = window.location.hostname === "localhost" 
