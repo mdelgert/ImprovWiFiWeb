@@ -95,7 +95,7 @@ void WifiHandler::initializeMDNS()
 
 void WifiHandler::scanAndSaveNetworks(const char *filePath)
 {
-    if (settings.enableWifiScan == false)
+    if (settings.WifiScan == false)
     {
         debugI("Wi-Fi scan disabled");
         return;

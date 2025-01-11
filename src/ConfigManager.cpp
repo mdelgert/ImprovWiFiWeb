@@ -30,13 +30,12 @@ void ConfigManager::load() {
     settings.mqttPassword = preferences.getString("mqttPassword", settings.mqttPassword);
     settings.apiKey = preferences.getString("apiKey", settings.apiKey);
     settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
-    settings.timeout = preferences.getInt("timeout", settings.timeout);
-    settings.ledEnabled = preferences.getBool("ledEnabled", settings.ledEnabled);
-    settings.enableApiToken = preferences.getBool("enableApiToken", settings.enableApiToken);
-    settings.enableSecureCors = preferences.getBool("enableSecureCors", settings.enableSecureCors);
-    settings.enableWebHandler = preferences.getBool("enableWebHandler", settings.enableWebHandler);
-    settings.enableWifiScan = preferences.getBool("enableWifiScan", settings.enableWifiScan);
-    settings.enableRemoteDebug = preferences.getBool("enableRemoteDebug", settings.enableRemoteDebug);
+    settings.defaulTimeout = preferences.getInt("defaulTimeout", settings.defaulTimeout);
+    settings.apiToken = preferences.getBool("apiToken", settings.apiToken);
+    settings.cors = preferences.getBool("cors", settings.cors);
+    settings.WebHandler = preferences.getBool("webHandler", settings.WebHandler);
+    settings.WifiScan = preferences.getBool("wifiScan", settings.WifiScan);
+    settings.RemoteDebugger = preferences.getBool("remoteDebugger", settings.RemoteDebugger);
 
     preferences.end();
 
@@ -59,13 +58,12 @@ void ConfigManager::save() {
     preferences.putString("mqttPassword", settings.mqttPassword);
     preferences.putString("apiKey", settings.apiKey);
     preferences.putBool("setupMode", settings.setupMode);
-    preferences.putInt("timeout", settings.timeout);
-    preferences.putBool("ledEnabled", settings.ledEnabled);
-    preferences.putBool("enableApiToken", settings.enableApiToken);
-    preferences.putBool("enableSecureCors", settings.enableSecureCors);
-    preferences.putBool("enableWebHandler", settings.enableWebHandler);
-    preferences.putBool("enableWifiScan", settings.enableWifiScan);
-    preferences.putBool("enableRemoteDebug", settings.enableRemoteDebug);
+    preferences.putInt("defaulTimeout", settings.defaulTimeout);
+    preferences.putBool("apiToken", settings.apiToken);
+    preferences.putBool("cors", settings.cors);
+    preferences.putBool("webHandler", settings.WebHandler);
+    preferences.putBool("wifiScan", settings.WifiScan);
+    preferences.putBool("remoteDebugger", settings.RemoteDebugger);
 
     preferences.end();
 

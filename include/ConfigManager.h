@@ -15,14 +15,13 @@ struct Settings {
     String mqttUsername = SECURE_MQTT_USERNAME;
     String mqttPassword = SECURE_MQTT_PASSWORD;
     String apiKey = SECURE_API_KEY;
-    bool setupMode = SECURE_SETUP_MODE;
-    int timeout = SECURE_TIMEOUT;
-    bool ledEnabled = SECURE_LED_ENABLED;
-    bool enableApiToken = SECURE_ENABLE_API_TOKEN;
-    bool enableSecureCors = SECURE_ENABLE_SECURE_CORS;
-    bool enableWebHandler = SECURE_ENABLE_WEBHANDLER;
-    bool enableWifiScan = SECURE_ENABLE_WIFI_SCAN;
-    bool enableRemoteDebug = ENABLE_REMOTE_DEBUGGER;
+    bool setupMode = SETUP_MODE;
+    int defaulTimeout = DEFAULT_TIMEOUT;
+    bool apiToken = API_TOKEN;
+    bool cors = CORS;
+    bool WebHandler = WEBHANDLER;
+    bool WifiScan = WIFI_SCAN;
+    bool RemoteDebugger = REMOTE_DEBUGGER;
 };
 
 // Global settings object
