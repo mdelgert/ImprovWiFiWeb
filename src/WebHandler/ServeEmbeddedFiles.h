@@ -15,6 +15,11 @@ extern const uint8_t advanced_html_end[] asm("_binary_web_advanced_html_end");
 extern const uint8_t advanced_js_start[] asm("_binary_web_advanced_js_start");
 extern const uint8_t advanced_js_end[] asm("_binary_web_advanced_js_end");
 
+extern const uint8_t blueserial_html_start[] asm("_binary_web_blueserial_html_start");
+extern const uint8_t blueserial_html_end[] asm("_binary_web_blueserial_html_end");
+extern const uint8_t blueserial_js_start[] asm("_binary_web_blueserial_js_start");
+extern const uint8_t blueserial_js_end[] asm("_binary_web_blueserial_js_end");
+
 extern const uint8_t error_html_start[] asm("_binary_web_error_html_start");
 extern const uint8_t error_html_end[] asm("_binary_web_error_html_end");
 
