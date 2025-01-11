@@ -1,3 +1,5 @@
+#ifdef ENABLE_GFX_HANDLER // Compile this file only if the feature flag is enabled
+
 #include "GfxHandler.h"
 
 // Initialize the static member
@@ -76,3 +78,5 @@ void GfxHandler::drawImage(int x, int y, int width, int height, const char *data
         }
     }
 }
+
+#endif // USE_GFX_HANDLER

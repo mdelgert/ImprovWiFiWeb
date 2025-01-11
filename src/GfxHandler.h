@@ -1,9 +1,10 @@
 #ifndef GFX_HANDLER_H
 #define GFX_HANDLER_H
 
+#ifdef ENABLE_GFX_HANDLER // Use a clear and descriptive feature flag
 #include "Globals.h"
 #include <LovyanGFX.hpp>
-#include "GfxLockImage.h" // Include the generated header file
+#include "GfxLockImage.h"
 
 // Define the display configuration for LILYGO T-Dongle-S3
 class LGFX_LiLyGo_TDongleS3 : public lgfx::LGFX_Device {
@@ -18,14 +19,21 @@ public:
 // Define the handler for LovyanGFX
 class GfxHandler {
 private:
-    static LGFX_LiLyGo_TDongleS3 tft; // Instance of the display class
+    static LGFX_LiLyGo_TDongleS3 tft;
 
 public:
-    GfxHandler() {}
-
     static void init();
     static void printMessage(const String &message);
     static void drawImage(int x, int y, int width, int height, const char *data);
 };
+
+#else
+class GfxHandler {
+public:
+    static void init() {}
+    static void printMessage(const String &message) {} // Consistent parameter type
+    static void drawImage(int, int, int, int, const char *) {}
+};
+#endif // ENABLE_GFX_HANDLER
 
 #endif // GFX_HANDLER_H
