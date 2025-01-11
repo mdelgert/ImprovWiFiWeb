@@ -11,6 +11,16 @@ void BluetoothHandler::WriteCallback::onWrite(NimBLECharacteristic* pCharacteris
     std::string receivedValue = pCharacteristic->getValue();
     if (receivedValue.length() > 0) {
         debugI("Received message: %s", receivedValue.c_str());
+
+        // Check the command and respond
+        if (receivedValue == "hello") {
+            std::string response = "hello world";
+            pCharacteristic->setValue(response);       // Update the characteristic value
+            pCharacteristic->notify();                // Send the notification to the client
+            debugI("Sent response: %s", response.c_str());
+        } else {
+            debugW("Unknown command: %s", receivedValue.c_str());
+        }
     } else {
         debugW("Received an empty write.");
     }
@@ -21,14 +31,14 @@ void BluetoothHandler::init() {
     debugI("Initializing BluetoothHandler...");
 
     // Initialize BLE
-    NimBLEDevice::init("ESP32-BLE");
+    NimBLEDevice::init(settings.deviceName.c_str());
     pServer = NimBLEDevice::createServer();
 
     // Create service and characteristic
     NimBLEService* pService = pServer->createService("0000181C-0000-1000-8000-00805F9B34FB");
     pCharacteristic = pService->createCharacteristic(
         "00002A57-0000-1000-8000-00805F9B34FB",
-        NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE
+        NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::NOTIFY
     );
 
     // Set the write callback
@@ -48,8 +58,7 @@ void BluetoothHandler::init() {
 // BLE loop to handle periodic tasks
 void BluetoothHandler::loop() {
     if (bleTimer.isReady()) {
-        //debugD("BluetoothHandler loop running...");
-        // Additional periodic tasks can be placed here
+        // Optional: Periodic tasks can be added here
     }
 }
 
