@@ -1,3 +1,5 @@
+#ifdef ENABLE_LED_HANDLER
+
 #include "LedHandler.h"
 
 // Define static members
@@ -70,3 +72,4 @@ void LedHandler::setDefaultBrightness(uint8_t brightness) {
     FastLED.show();
     debugI("Default brightness set to %d", brightness);
 }
+#endif // ENABLE_LED_HANDLER

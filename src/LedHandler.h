@@ -1,6 +1,8 @@
 #ifndef LED_HANDLER_H
 #define LED_HANDLER_H
 
+#ifdef ENABLE_LED_HANDLER
+
 #include "Globals.h"
 #include <FastLED.h>
 #include <unordered_map>
@@ -35,5 +37,20 @@ private:
     // Set LED color directly (internal use only)
     static void setColor(const CRGB &color, uint8_t brightness);
 };
+
+#else
+
+#include <string>
+
+// No-op implementation of LedHandler
+class LedHandler {
+public:
+    static void init() {}                                // No-op
+    static void setColorByName(const std::string &, uint8_t = 0) {} // No-op
+    static void clear() {}                               // No-op
+    static void setDefaultBrightness(uint8_t) {}         // No-op
+};
+
+#endif // ENABLE_LED_HANDLER
 
 #endif // LED_HANDLER_H
