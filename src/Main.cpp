@@ -1,4 +1,5 @@
 #include "Globals.h"
+#include "TemplateHandler.h"
 #include "RemoteDebugHandler.h"
 #include "ImprovHandler.h"
 #include "GfxHandler.h"
@@ -11,13 +12,13 @@ void setup()
 {
   RemoteDebugHandler::init();
   ConfigManager::init();
+  TemplateHandler::init();
   GfxHandler::init();
   WifiHandler::init();
   WebHandler::init();
   ImprovHandler::init();
   LedHandler::init();
   ButtonHandler::init();
-  //GfxHandler::printMessage("Firmware:" SOFTWARE_VERSION);
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(0);
   LedHandler::setColorByName("Black");
@@ -26,6 +27,7 @@ void setup()
 void loop()
 {
   RemoteDebugHandler::loop();
+  TemplateHandler::loop();
   WifiHandler::loop();
   WebHandler::loop();
   ImprovHandler::loop();
