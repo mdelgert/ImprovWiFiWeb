@@ -51,7 +51,7 @@ void RemoteDebugHandler::handleCustomCommands() {
     } else if (command.startsWith("led ")) { // Check if the command starts with "led "
         String color = command.substring(4); // Extract the color after "led "
         if (color.length() > 0) {
-            LedHandler::handleAction(color.c_str());
+            LedHandler::setColorByName(color.c_str());
             Debug.println("LED color set to: " + color);
         } else {
             Debug.println("Error: No color provided. Usage: led YourColor");

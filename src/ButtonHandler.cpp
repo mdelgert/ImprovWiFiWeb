@@ -26,21 +26,21 @@ void ButtonHandler::handleSingleClick()
 {
     debugI("Single click detected.");
     GfxHandler::printMessage("Single click detected.");
-    LedHandler::setColor(CRGB::Blue);
+    LedHandler::setColorByName("Blue");
 }
 
 void ButtonHandler::handleDoubleClick()
 {
     debugI("Double click detected.");
     GfxHandler::printMessage("Double click detected.");
-    LedHandler::setColor(CRGB::Green);
+    LedHandler::setColorByName("Green");
 }
 
 void ButtonHandler::handleLongPress()
 {
     debugI("Long press detected.");
     GfxHandler::printMessage("Long press detected.");
-    LedHandler::setColor(CRGB::Red);
+    LedHandler::setColorByName("Red");
     ConfigManager::clear();
     
     if (myTimer.isReady()) // Adding delay was rebooting before clearing preferences

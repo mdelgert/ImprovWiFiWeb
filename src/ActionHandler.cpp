@@ -103,7 +103,7 @@ void ActionHandler::handleLed(const JsonDocument &doc)
     {
         String message = doc["message"].as<String>();
         debugI("Action received: LED with message - %s", message.c_str());
-        LedHandler::handleAction(message.c_str());
+        LedHandler::setColorByName(message.c_str());
     }
     else
     {

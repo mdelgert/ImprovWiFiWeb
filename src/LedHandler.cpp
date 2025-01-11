@@ -4,6 +4,38 @@
 CRGB LedHandler::leds[NUM_LEDS];
 uint8_t LedHandler::defaultBrightness = 100; // Default brightness
 
+// Define the color map
+const std::unordered_map<std::string, CRGB> LedHandler::colorMap = {
+    {"Red", CRGB::Red},
+    {"Green", CRGB::Green},
+    {"Blue", CRGB::Blue},
+    {"Yellow", CRGB::Yellow},
+    {"White", CRGB::White},
+    {"Black", CRGB::Black},
+    {"Orange", CRGB::Orange},
+    {"Purple", CRGB::Purple},
+    {"Pink", CRGB::Pink},
+    {"Cyan", CRGB::Cyan},
+    {"Magenta", CRGB::Magenta},
+    {"Brown", CRGB::Brown},
+    {"Lime", CRGB::Lime},
+    {"Turquoise", CRGB::Turquoise},
+    {"Violet", CRGB::Violet},
+    {"Gold", CRGB::Gold},
+    {"Silver", CRGB::Silver},
+    {"Teal", CRGB::Teal},
+    {"Navy", CRGB::Navy},
+    {"Maroon", CRGB::Maroon},
+    {"Olive", CRGB::Olive},
+    {"SkyBlue", CRGB::SkyBlue},
+    {"HotPink", CRGB::HotPink},
+    {"Chartreuse", CRGB::Chartreuse},
+    {"Aquamarine", CRGB::Aquamarine},
+    {"Khaki", CRGB::Khaki},
+    {"Lavender", CRGB::Lavender},
+    {"Beige", CRGB::Beige}
+};
+
 void LedHandler::init() {
     FastLED.addLeds<LED_TYPE, LED_DI_PIN, LED_CI_PIN, COLOR_ORDER>(leds, NUM_LEDS);
     clear(); // Turn off all LEDs initially
@@ -17,28 +49,19 @@ void LedHandler::setColor(const CRGB &color, uint8_t brightness) {
     debugD("LED color set to R:%d G:%d B:%d with brightness %d", color.r, color.g, color.b, brightness);
 }
 
+void LedHandler::setColorByName(const std::string &colorName, uint8_t brightness) {
+    auto it = colorMap.find(colorName);
+    if (it != colorMap.end()) {
+        setColor(it->second, brightness);
+    } else {
+        debugW("Unknown color: %s", colorName.c_str());
+    }
+}
+
 void LedHandler::clear() {
     FastLED.clear();
     FastLED.show();
     debugI("LEDs cleared");
-}
-
-void LedHandler::handleAction(const char *actionMessage) {
-    if (strcmp(actionMessage, "Red") == 0) {
-        setColor(CRGB::Red);
-    } else if (strcmp(actionMessage, "Green") == 0) {
-        setColor(CRGB::Green);
-    } else if (strcmp(actionMessage, "Blue") == 0) {
-        setColor(CRGB::Blue);
-    } else if (strcmp(actionMessage, "Yellow") == 0) {
-        setColor(CRGB::Yellow);
-    } else if (strcmp(actionMessage, "White") == 0) {
-        setColor(CRGB::White);
-    } else if (strcmp(actionMessage, "Black") == 0) {
-        setColor(CRGB::Black);
-    } else {
-        debugW("Unknown LED action: %s", actionMessage);
-    }
 }
 
 void LedHandler::setDefaultBrightness(uint8_t brightness) {
