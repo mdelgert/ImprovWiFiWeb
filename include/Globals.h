@@ -9,6 +9,6 @@
 #include "BoardPins.h"
 
 // Version information
-#define SOFTWARE_VERSION "V1.0.10"
+#define SOFTWARE_VERSION "V1.0.11"
 
 #endif // GLOBALS_H
