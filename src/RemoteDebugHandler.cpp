@@ -1,3 +1,5 @@
+#ifdef ENABLE_REMOTE_DEBUG_HANDLER
+
 #include "RemoteDebugHandler.h"
 
 RemoteDebug Debug;
@@ -58,3 +60,4 @@ void RemoteDebugHandler::handleCustomCommands() {
         Debug.println("Unknown command");
     }
 }
+#endif // ENABLE_REMOTE_DEBUG_HANDLER
