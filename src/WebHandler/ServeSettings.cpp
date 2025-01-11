@@ -63,9 +63,9 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         // Send success response
         WebHandler::sendSuccessResponse(request, "Settings updated successfully");
 
-        if (delayTimer.isReady())
-        {
-            ESP.restart();
-        } 
+        // if (delayTimer.isReady())
+        // {
+        //     ESP.restart();
+        // } 
     });
 }

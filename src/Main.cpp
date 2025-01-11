@@ -18,7 +18,7 @@ void setup()
   LedHandler::init();
   ButtonHandler::init();
   //GfxHandler::printMessage("Firmware:" SOFTWARE_VERSION);
-  GfxHandler::printMessage("Firmware:" SOFTWARE_VERSION);
+  GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColor(CRGB::DarkOrchid);
 }
