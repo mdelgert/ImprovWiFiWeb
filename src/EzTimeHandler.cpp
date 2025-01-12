@@ -3,12 +3,13 @@
 #include "EzTimeHandler.h"
 
 static Timezone myTZ;
-static bool     isTimeSynced = false;
-static char     timeString[64];
+static bool isTimeSynced = false;
+static char timeString[64];
 
 // Example: re-sync every 60 seconds (adjust as needed).
 static NonBlockingTimer syncTimer(60000);
 static NonBlockingTimer msgTimer(1000);
+static NonBlockingTimer syncDelay(1000);
 
 void EzTimeHandler::init()
 {
@@ -21,6 +22,15 @@ void EzTimeHandler::init()
 
     // 2) Attempt an immediate time sync
     syncTime();
+
+    if (syncDelay.isReady())
+    {
+        // 3) Optionally, set the system time to the local epoch time
+        time_t epoch = myTZ.now(); // local epoch
+        settings.systemTime = epoch;
+        settings.systemBoots++;
+        ConfigManager::save();
+    }
 }
 
 void EzTimeHandler::loop()
@@ -29,20 +39,24 @@ void EzTimeHandler::loop()
     events();
 
     // If time has never been synced, keep trying until success
-    if (!isTimeSynced) {
+    if (!isTimeSynced)
+    {
         syncTime();
     }
 
     // Periodically re-sync using your NonBlockingTimer
-    if (syncTimer.isReady()) {
+    if (syncTimer.isReady())
+    {
         debugI("EzTimeHandler: Performing periodic re-sync");
         syncTime();
     }
 
-    if(msgTimer.isReady()) {
-        //debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
-        //printExampleTimeFormats();
+    if (msgTimer.isReady())
+    {
+        // debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
+        // printExampleTimeFormats();
         GfxHandler::printMessage(myTZ.dateTime(F("h:i")).c_str());
+        settings.currentTime = myTZ.dateTime(F("h:i")).c_str();
     }
 }
 
@@ -56,13 +70,16 @@ void EzTimeHandler::syncTime()
     // You can then check timeStatus() to see if it's timeSet, timeNeedsSync, or timeNotSet.
     updateNTP();
 
-    if (timeStatus() == timeSet) {
+    if (timeStatus() == timeSet)
+    {
         // We have valid time now.
         isTimeSynced = true;
         debugI("EzTimeHandler: NTP sync successful. Local time is now: %s", getFormattedTime());
         debugI("EzTimeHandler: DST active? %s", myTZ.isDST() ? "Yes" : "No");
         debugI("EzTimeHandler: UTC offset (seconds): %d", myTZ.getOffset());
-    } else {
+    }
+    else
+    {
         debugW("EzTimeHandler: NTP sync attempt failed or pending (timeStatus != timeSet).");
     }
 }
@@ -70,9 +87,10 @@ void EzTimeHandler::syncTime()
 /**
  * Returns a string representing the current local time in the format "YYYY-MM-DD HH:MM:SS".
  */
-const char* EzTimeHandler::getFormattedTime()
+const char *EzTimeHandler::getFormattedTime()
 {
-    if (!isTimeSynced) {
+    if (!isTimeSynced)
+    {
         strcpy(timeString, "Time not synced");
         return timeString;
     }
@@ -92,7 +110,8 @@ const char* EzTimeHandler::getFormattedTime()
  */
 void EzTimeHandler::printExampleTimeFormats()
 {
-    if (!isTimeSynced) {
+    if (!isTimeSynced)
+    {
         debugI("Time not synced, cannot display multiple formats.");
         return;
     }
@@ -113,14 +132,14 @@ void EzTimeHandler::printExampleTimeFormats()
     debugI("DD/MM/YYYY: %s", myTZ.dateTime(F("d/m/Y")).c_str());
     // Example output: "11/01/2025"
 
-    // Another style: "Month day, year" 
+    // Another style: "Month day, year"
     debugI("Month day, year: %s", myTZ.dateTime(F("F j, Y")).c_str());
     // Example output: "January 11, 2025"
 
     // Print the Unix Epoch time (a.k.a. "Linux time")
-    // myTZ.now() returns a time_t for local time, 
+    // myTZ.now() returns a time_t for local time,
     // but you can interpret it as "seconds since 1970" in UTC if you want raw epoch.
-    time_t localEpoch = myTZ.now();   
+    time_t localEpoch = myTZ.now();
     // If you truly want UTC epoch, use `UTC.now()` or simply `::now()`
     // which is ezTime's global default if not set to a different Timezone.
     time_t utcEpoch = UTC.now();

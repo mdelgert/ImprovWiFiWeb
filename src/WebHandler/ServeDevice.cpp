@@ -17,6 +17,29 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         debugI("Serving /device/get");
 
         JsonDocument doc;
+
+        doc["deviceName"]   = settings.deviceName;
+        doc["lastBoot"]    = settings.systemTime;
+        doc["currentTime"] = settings.currentTime;
+        doc["systemBoot"]    = settings.systemBoots;
+        doc["ssid"]        = WiFi.SSID();
+        doc["ip"]          = WiFi.localIP().toString();
+        doc["mac"]         = WiFi.macAddress();
+        doc["rssi"]        = WiFi.RSSI();
+        doc["wifiMode"]    = WiFi.getMode();
+        doc["wifiChannel"] = WiFi.channel();
+
+        // doc["enableWifiHandler"] = ENABLE_WIFI_HANDLER;
+        // doc["enableWebHandler"] = ENABLE_WEB_HANDLER;
+        // doc["enableImprovHandler"] = ENABLE_IMPROV_HANDLER;
+        // doc["enableBluetoothHandler"] = ENABLE_BLUETOOTH_HANDLER;
+        // doc["enableGfxHandler"] = ENABLE_GFX_HANDLER;
+        // doc["enableButtonHandler"] = ENABLE_BUTTON_HANDLER;
+        // doc["enableLedHandler"] = ENABLE_LED_HANDLER;
+        // doc["enableRemoteDebugHandler"] = ENABLE_REMOTE_DEBUG_HANDLER;
+        // doc["enableMqttHandler"] = ENABLE_MQTT_HANDLER;
+        // doc["enableEzTimeHandler"] = ENABLE_EZTIME_HANDLER;
+
         doc["chipModel"]   = ESP.getChipModel();
         doc["chipRevision"] = (int)ESP.getChipRevision();
         doc["chipId"]      = ESP.getEfuseMac();
@@ -30,10 +53,6 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["freeHeap"]    = ESP.getFreeHeap();
         doc["psramSize"]   = ESP.getPsramSize();
         doc["freePsram"]   = ESP.getFreePsram();
-        doc["ssid"]        = WiFi.SSID();
-        doc["ip"]          = WiFi.localIP().toString();
-        doc["mac"]         = WiFi.macAddress();
-        doc["rssi"]        = WiFi.RSSI();
 
         WebHandler::sendSuccessResponse(request, "GET /device/get", &doc); });
 }
@@ -52,13 +71,13 @@ void ServeDevice::handleDeviceReboot(AsyncWebServer &server)
         if (delayTimer.isReady())
         {
             ESP.restart();
-        } 
-    });
+        } });
 }
 
 void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
 {
-    server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request) {
+    server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
         const char *filePath = "/wifi_networks.json";
 
         if (!LittleFS.begin(true)) {
@@ -84,8 +103,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
             return;
         }
 
-        WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
-    });
+        WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
 }
 
 #endif // ENABLE_WEB_HANDLER

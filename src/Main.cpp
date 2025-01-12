@@ -26,8 +26,8 @@ void setup()
   MqttHandler::init();
   EzTimeHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
-  LedHandler::setDefaultBrightness(0);
-  LedHandler::setColorByName("Black");
+  LedHandler::setDefaultBrightness(100);
+  LedHandler::setColorByName("Purple");
 }
 
 void loop()

@@ -22,6 +22,9 @@ struct Settings {
     bool cors = CORS;
     bool WebHandler = WEBHANDLER;
     bool WifiScan = WIFI_SCAN;
+    uint64_t systemTime = 0;
+    uint64_t systemBoots = 0;
+    String currentTime = "";
 };
 
 // Global settings object
