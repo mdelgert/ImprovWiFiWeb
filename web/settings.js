@@ -91,9 +91,8 @@ async function loadWifiNetworks() {
     networks.forEach((network) => {
       const option = document.createElement("option");
       option.value = network.ssid;
-      option.textContent = `${network.ssid} (RSSI: ${network.rssi}, ${
-        network.encryptionType !== 0 ? "Secured" : "Open"
-      })`;
+      option.textContent = `${network.ssid} (RSSI: ${network.rssi}, ${network.encryptionType !== 0 ? "Secured" : "Open"
+        })`;
       dropdown.appendChild(option);
     });
 
@@ -120,6 +119,7 @@ function syncWifiSelection() {
   });
 }
 
+/*
 // Attach event listeners
 document.addEventListener("DOMContentLoaded", () => {
   // Load existing settings on page load
@@ -138,4 +138,32 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     console.error("Save button not found.");
   }
+});
+*/
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load existing settings on page load
+  console.log("Page loaded. Initializing settings load...");
+  loadSettings();
+  loadWifiNetworks();
+  syncWifiSelection();
+
+  const form = document.querySelector(".settings-form");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();  // Stop default form submission
+    });
+  }
+
+  // Then attach your button click
+  const saveButton = document.querySelector(".settings-form button");
+  if (saveButton) {
+    saveButton.addEventListener("click", saveSettings);
+    console.log("Save button event listener attached.");
+  } else {
+    console.error("Save button not found.");
+  }
+
+  // ... rest of your setup ...
 });
