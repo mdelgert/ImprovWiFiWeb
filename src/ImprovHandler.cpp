@@ -1,3 +1,5 @@
+#ifdef ENABLE_IMPROV_HANDLER
+
 #include "ImprovHandler.h"
 
 ImprovWiFi ImprovHandler::improvSerial(&Serial);
@@ -35,3 +37,5 @@ void ImprovHandler::onImprovWiFiConnectedCb(const char *ssid, const char *passwo
     delay(1000);
     ESP.restart();
 }
+
+#endif // ENABLE_IMPROV_HANDLER
