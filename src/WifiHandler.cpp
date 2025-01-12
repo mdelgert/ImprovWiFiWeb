@@ -1,3 +1,5 @@
+#ifdef ENABLE_WIFI_HANDLER
+
 #include "WifiHandler.h"
 
 static NonBlockingTimer myTimer(5000);
@@ -152,3 +154,5 @@ void WifiHandler::scanAndSaveNetworks(const char *filePath)
     // Free memory used by the scan
     WiFi.scanDelete();
 }
+
+#endif // ENABLE_WIFI_HANDLER

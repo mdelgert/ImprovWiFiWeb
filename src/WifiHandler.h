@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ENABLE_WIFI_HANDLER
+
 #include "Globals.h"
 #include "GfxHandler.h"
 #include "RemoteDebugHandler.h"
@@ -20,3 +22,14 @@ public:
     static void init();
     static void loop();
 };
+
+#else  // If ENABLE_WIFI_HANDLER is NOT defined, use a no-op class
+
+class WifiHandler
+{
+public:
+    static void init() {}  // No-op
+    static void loop() {}  // No-op
+};
+
+#endif // ENABLE_WIFI_HANDLER
