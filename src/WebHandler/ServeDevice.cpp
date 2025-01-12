@@ -20,6 +20,7 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 
         doc["deviceName"]   = settings.deviceName;
         
+        doc["timezone"]    = settings.timezone;
         doc["bootCount"]    = settings.bootCount;
         doc["bootTime"] = settings.bootTime;
         doc["upTime"]    = settings.upTime;

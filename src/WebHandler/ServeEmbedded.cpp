@@ -9,7 +9,8 @@ void ServeEmbedded::registerEndpoints(AsyncWebServer &server)
 
 void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, const uint8_t *start, const uint8_t *end, const char *contentType)
 {
-    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest *request){
+    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest *request)
+              {
         size_t fileSize = end - start;
         AsyncWebServerResponse* response = request->beginResponse_P(200, contentType, start, fileSize);
         response->addHeader("Content-Encoding", "identity");
@@ -39,6 +40,8 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/terminal.css", terminal_css_start, terminal_css_end, "text/css");
     serveEmbeddedFile(server, "/terminal.html", terminal_html_start, terminal_html_end, "text/html");
     serveEmbeddedFile(server, "/terminal.js", terminal_js_start, terminal_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/timezones.json", timezones_json_start, timezones_json_end, "application/json");
+
     debugI("ServeEmbedded handleGetRequest registered");
 }
 

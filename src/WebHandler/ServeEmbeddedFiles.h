@@ -56,4 +56,7 @@ extern const uint8_t terminal_html_end[] asm("_binary_web_terminal_html_end");
 extern const uint8_t terminal_js_start[] asm("_binary_web_terminal_js_start");
 extern const uint8_t terminal_js_end[] asm("_binary_web_terminal_js_end");
 
+extern const uint8_t timezones_json_start[] asm("_binary_web_timezones_json_start");
+extern const uint8_t timezones_json_end[] asm("_binary_web_timezones_json_end");
+
 #endif // ENABLE_WEB_HANDLER

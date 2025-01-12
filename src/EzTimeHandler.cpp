@@ -8,7 +8,6 @@ static char timeString[64];
 
 // Example: re-sync every 60 seconds (adjust as needed).
 static NonBlockingTimer syncTimer(60000);
-static NonBlockingTimer msgTimer(1000);
 static NonBlockingTimer syncDelay(1000);
 
 void EzTimeHandler::init()
@@ -18,14 +17,15 @@ void EzTimeHandler::init()
     // 1) Set your time zone location (handles DST automatically if region supports it).
     //    Check https://github.com/ropg/ezTime/blob/master/examples/Example13-Timezones/zoneList.txt
     //    for valid strings (e.g., "America/New_York", "Europe/Berlin", etc.).
-    myTZ.setLocation(F("America/New_York"));
+    //myTZ.setLocation(F("America/New_York"));
+    myTZ.setLocation(settings.timezone.c_str());
 
     // 2) Attempt an immediate time sync
     syncTime();
 
+    // 3) Optionally, set the system time to the local epoch time
     if (syncDelay.isReady())
-    {
-        // 3) Optionally, set the system time to the local epoch time
+    {    
         time_t epoch = myTZ.now(); // local epoch
         settings.bootCount++;
         settings.bootTime = epoch;
@@ -52,13 +52,13 @@ void EzTimeHandler::loop()
         syncTime();
     }
 
-    if (msgTimer.isReady())
+    if (syncDelay.isReady())
     {
         // debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
         // printExampleTimeFormats();
-        GfxHandler::printMessage(myTZ.dateTime(F("h:i")).c_str());
+        GfxHandler::printMessage(myTZ.dateTime(F("H:i:s")).c_str());
         settings.upTime++;
-        settings.currentTime = myTZ.dateTime(F("h:i")).c_str();
+        settings.currentTime = myTZ.dateTime(F("H:i:s")).c_str();
     }
 }
 
