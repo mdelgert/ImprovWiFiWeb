@@ -1,8 +1,6 @@
 #ifdef ENABLE_EZTIME_HANDLER
 
 #include "EzTimeHandler.h"
-#include <ezTime.h>           // Make sure to install ropg/ezTime
-#include "NonBlockingTimer.h" // Your timer utility (if you need periodic sync)
 
 static Timezone myTZ;
 static bool     isTimeSynced = false;
@@ -42,7 +40,9 @@ void EzTimeHandler::loop()
     }
 
     if(msgTimer.isReady()) {
-        debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
+        //debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
+        //printExampleTimeFormats();
+        GfxHandler::printMessage(myTZ.dateTime(F("h:i")).c_str());
     }
 }
 
@@ -85,6 +85,51 @@ const char* EzTimeHandler::getFormattedTime()
     timeString[sizeof(timeString) - 1] = '\0'; // Ensure null termination
 
     return timeString;
+}
+
+/**
+ * Optional helper function to print the time in multiple popular formats.
+ */
+void EzTimeHandler::printExampleTimeFormats()
+{
+    if (!isTimeSynced) {
+        debugI("Time not synced, cannot display multiple formats.");
+        return;
+    }
+
+    // 24-hour time (HH:MM:SS)
+    debugI("24-hour time: %s", myTZ.dateTime(F("H:i:s")).c_str());
+    // Example output: "14:05:09"
+
+    // 12-hour format with AM/PM
+    debugI("12-hour time: %s", myTZ.dateTime(F("h:i:s A")).c_str());
+    // Example output: "02:05:09 PM"
+
+    // Full date/time with weekday and time zone
+    debugI("Full date/time: %s", myTZ.dateTime(F("l, F j Y H:i:s T")).c_str());
+    // Example output: "Saturday, January 11 2025 14:05:09 EST"
+
+    // Day/Month/Year in numeric form
+    debugI("DD/MM/YYYY: %s", myTZ.dateTime(F("d/m/Y")).c_str());
+    // Example output: "11/01/2025"
+
+    // Another style: "Month day, year" 
+    debugI("Month day, year: %s", myTZ.dateTime(F("F j, Y")).c_str());
+    // Example output: "January 11, 2025"
+
+    // Print the Unix Epoch time (a.k.a. "Linux time")
+    // myTZ.now() returns a time_t for local time, 
+    // but you can interpret it as "seconds since 1970" in UTC if you want raw epoch.
+    time_t localEpoch = myTZ.now();   
+    // If you truly want UTC epoch, use `UTC.now()` or simply `::now()`
+    // which is ezTime's global default if not set to a different Timezone.
+    time_t utcEpoch = UTC.now();
+
+    debugI("Local epoch time (seconds since 1970): %ld", (long)localEpoch);
+    debugI("UTC epoch time: %ld", (long)utcEpoch);
+
+    // For reference, the library also supports named constants like `ATOM`, `RFC822`, etc.
+    // e.g., myTZ.dateTime(RFC822) => "Sat, 11 Jan 25 14:05:09 -0500"
 }
 
 #endif // ENABLE_EZTIME_HANDLER

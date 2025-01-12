@@ -4,6 +4,9 @@
 #ifdef ENABLE_EZTIME_HANDLER
 
 #include "Globals.h"
+#include <ezTime.h>
+#include "NonBlockingTimer.h"
+#include "GfxHandler.h"
 
 /**
  * EzTimeHandler uses the ezTime library to automatically handle
@@ -24,6 +27,9 @@ public:
 
     // Return a string with the current local time.
     static const char* getFormattedTime();
+
+    // Optional: Print the time in multiple popular formats.
+    static void printExampleTimeFormats();
 };
 
 #else
@@ -38,6 +44,7 @@ public:
     static void init() {}
     static void loop() {}
     static const char* getFormattedTime() { return ""; }
+    static void printExampleTimeFormats() {}
 };
 
 #endif // ENABLE_EZTIME_HANDLER
