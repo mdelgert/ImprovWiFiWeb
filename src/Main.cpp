@@ -9,6 +9,8 @@
 #include "WebHandler.h"
 #include "BluetoothHandler.h"
 #include "MqttHandler.h"
+#include "TimeHandler.h"
+#include "EzTimeHandler.h"
 
 void setup()
 {
@@ -23,6 +25,8 @@ void setup()
   LedHandler::init();
   ButtonHandler::init();
   MqttHandler::init();
+  TimeHandler::init();
+  EzTimeHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(0);
   LedHandler::setColorByName("Black");
@@ -38,4 +42,6 @@ void loop()
   ImprovHandler::loop();
   ButtonHandler::loop();
   MqttHandler::loop();
+  TimeHandler::loop();
+  EzTimeHandler::loop();
 }
