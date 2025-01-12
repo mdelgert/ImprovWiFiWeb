@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef ENABLE_BUTTON_HANDLER
+
 #include "Globals.h"
 #include <OneButton.h>
 #include "LedHandler.h"

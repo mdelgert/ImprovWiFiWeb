@@ -1,6 +1,7 @@
 #pragma once
 
-#ifdef ENABLE_GFX_HANDLER // Use a clear and descriptive feature flag
+#ifdef ENABLE_GFX_HANDLER
+
 #include "Globals.h"
 #include <LovyanGFX.hpp>
 #include "GfxLockImage.h"

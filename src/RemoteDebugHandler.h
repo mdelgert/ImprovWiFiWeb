@@ -1,6 +1,7 @@
 #pragma once
 
 #ifdef ENABLE_REMOTE_DEBUG_HANDLER
+
 #include "Globals.h"
 #include <RemoteDebug.h>
 #include "GfxHandler.h"
