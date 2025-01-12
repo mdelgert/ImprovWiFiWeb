@@ -50,11 +50,16 @@
 
     <script>
         (() => {
+            const device = "demo1.local"; // Change this to the desired development device, e.g., "192.168.4.1"
+            //const wsUri = "ws://demo1.local:8232";
+            //const wsUri = `ws://${window.location.hostname}:8232`;
+            const wsUri = `ws://${window.location.hostname === "localhost" 
+                ? device 
+                : window.location.hostname}:8232`;
+
             const terminal = document.getElementById('terminal');
             const input = document.getElementById('input');
-            //const wsUri = "ws://demo1.local:8232";
-            const wsUri = `ws://${window.location.hostname}:8232`;
-            
+                        
             let socket;
 
             // Function to append messages to the terminal
