@@ -44,7 +44,7 @@ void MqttHandler::loop()
     }
 }
 
-void MqttHandler::publish(const char* topic, const char* message)
+void MqttHandler::publish(const char *topic, const char *message)
 {
     // If not connected, attempt to reconnect
     if (!mqttClient.connected())
@@ -74,8 +74,7 @@ void MqttHandler::connectToMqtt()
         isConnected = mqttClient.connect(
             settings.deviceName.c_str(),
             settings.mqttUsername.c_str(),
-            settings.mqttPassword.c_str()
-        );
+            settings.mqttPassword.c_str());
     }
     else
     {
@@ -101,7 +100,7 @@ void MqttHandler::connectToMqtt()
     }
 }
 
-void MqttHandler::mqttCallback(char* topic, byte* payload, unsigned int length)
+void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
 {
     String message;
     for (unsigned int i = 0; i < length; i++)
