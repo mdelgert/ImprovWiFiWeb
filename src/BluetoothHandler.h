@@ -10,10 +10,10 @@ class BluetoothHandler
 {
 private:
     static NimBLEServer* pServer;
-    static NimBLECharacteristic* pCharacteristic;
+    static NimBLECharacteristic* pTxCharacteristic;
+    static NimBLECharacteristic* pRxCharacteristic;
 
-    // Custom callback class for handling writes
-    class WriteCallback : public NimBLECharacteristicCallbacks {
+    class RxCallback : public NimBLECharacteristicCallbacks {
         void onWrite(NimBLECharacteristic* pCharacteristic) override;
     };
 

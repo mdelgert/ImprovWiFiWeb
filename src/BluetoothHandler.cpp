@@ -3,63 +3,73 @@
 #include "BluetoothHandler.h"
 
 NimBLEServer* BluetoothHandler::pServer = nullptr;
-NimBLECharacteristic* BluetoothHandler::pCharacteristic = nullptr;
-static NonBlockingTimer bleTimer(5000); // Example timer for periodic BLE tasks
+NimBLECharacteristic* BluetoothHandler::pTxCharacteristic = nullptr;
+NimBLECharacteristic* BluetoothHandler::pRxCharacteristic = nullptr;
 
-// Custom onWrite callback implementation
-void BluetoothHandler::WriteCallback::onWrite(NimBLECharacteristic* pCharacteristic) {
+// RX characteristic callback implementation
+void BluetoothHandler::RxCallback::onWrite(NimBLECharacteristic* pCharacteristic) {
     std::string receivedValue = pCharacteristic->getValue();
     if (receivedValue.length() > 0) {
-        debugI("Received message: %s", receivedValue.c_str());
+        debugI("Received: %s", receivedValue.c_str());
 
-        // Check the command and respond
-        if (receivedValue == "hello") {
-            std::string response = "hello world";
-            pCharacteristic->setValue(response);       // Update the characteristic value
-            pCharacteristic->notify();                // Send the notification to the client
+        // Process a command
+        std::string response;
+        
+        // if (receivedValue == "hello") {
+        //     response = "hello world"; // Respond to 'hello'
+        // } else {
+        //     response = "Unknown command: " + receivedValue; // Default response
+        // }
+
+        // Send the response back using the TX characteristic
+        if (pTxCharacteristic) {
+            pTxCharacteristic->setValue(response);
+            pTxCharacteristic->notify();
             debugI("Sent response: %s", response.c_str());
-        } else {
-            debugW("Unknown command: %s", receivedValue.c_str());
         }
     } else {
-        debugW("Received an empty write.");
+        debugW("Received an empty message.");
     }
 }
 
-// Initialize BLE
+// Initialize the Nordic UART Service
 void BluetoothHandler::init() {
     debugI("Initializing BluetoothHandler...");
 
     // Initialize BLE
-    NimBLEDevice::init(settings.deviceName.c_str());
+    NimBLEDevice::init("ESP32-NUS");
     pServer = NimBLEDevice::createServer();
 
-    // Create service and characteristic
-    NimBLEService* pService = pServer->createService("0000181C-0000-1000-8000-00805F9B34FB");
-    pCharacteristic = pService->createCharacteristic(
-        "00002A57-0000-1000-8000-00805F9B34FB",
-        NIMBLE_PROPERTY::READ | NIMBLE_PROPERTY::WRITE | NIMBLE_PROPERTY::NOTIFY
+    // Create the Nordic UART Service
+    NimBLEService* pService = pServer->createService("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
+
+    // Create TX characteristic (Notify)
+    pTxCharacteristic = pService->createCharacteristic(
+        "6E400003-B5A3-F393-E0A9-E50E24DCCA9E",
+        NIMBLE_PROPERTY::NOTIFY
     );
 
-    // Set the write callback
-    pCharacteristic->setCallbacks(new WriteCallback());
+    // Create RX characteristic (Write)
+    pRxCharacteristic = pService->createCharacteristic(
+        "6E400002-B5A3-F393-E0A9-E50E24DCCA9E",
+        NIMBLE_PROPERTY::WRITE
+    );
 
-    // Start the service
+    // Attach the RX callback
+    pRxCharacteristic->setCallbacks(new RxCallback());
+
+    // Start the service and advertising
     pService->start();
-
-    // Start advertising
     NimBLEAdvertising* pAdvertising = NimBLEDevice::getAdvertising();
-    pAdvertising->addServiceUUID("0000181C-0000-1000-8000-00805F9B34FB");
+    pAdvertising->addServiceUUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E");
     pAdvertising->start();
 
-    debugI("BluetoothHandler initialized and advertising started.");
+    debugI("BluetoothHandler initialized and advertising.");
 }
 
-// BLE loop to handle periodic tasks
+// BLE loop
 void BluetoothHandler::loop() {
-    if (bleTimer.isReady()) {
-        // Optional: Periodic tasks can be added here
-    }
+    // BLE is event-driven, so this loop can remain empty
 }
 
 #endif // ENABLE_BLUETOOTH_HANDLER
