@@ -1,5 +1,4 @@
-#ifndef SERVE_ACTIONS_H
-#define SERVE_ACTIONS_H
+#pragma once
 
 #include "Globals.h"
 #include "ActionHandler.h"
@@ -16,5 +15,3 @@ private:
     static void handleGet(AsyncWebServer& server);
     static void handleSet(AsyncWebServer& server);
 };
-
-#endif

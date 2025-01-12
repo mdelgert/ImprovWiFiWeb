@@ -1,5 +1,4 @@
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#pragma once
 
 //#include "Secure.h"
 #include "SecureExample.h"
@@ -10,5 +9,3 @@
 
 // Version information
 #define SOFTWARE_VERSION "V1.0.13"
-
-#endif // GLOBALS_H

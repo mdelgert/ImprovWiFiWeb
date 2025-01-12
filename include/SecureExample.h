@@ -1,6 +1,5 @@
 // SecureExample.h
-#ifndef SECURE_H
-#define SECURE_H
+#pragma once
 
 #define SECURE_DEVICE_NAME "demo"
 #define SECURE_WIFI_SSID "defaultWifiSSID"
@@ -12,5 +11,3 @@
 #define SECURE_MQTT_USERNAME "emqx"
 #define SECURE_MQTT_PASSWORD "public"
 #define SECURE_API_KEY "test123"
-
-#endif // SECURE_H

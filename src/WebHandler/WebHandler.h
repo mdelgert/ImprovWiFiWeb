@@ -1,5 +1,4 @@
-#ifndef WEB_HANDLER_H
-#define WEB_HANDLER_H
+#pragma once
 
 #include "Globals.h"
 #include <ESPAsyncWebServer.h>
@@ -24,5 +23,3 @@ private:
     static AsyncWebServer server;
     static void serveNotFound();
 };
-
-#endif

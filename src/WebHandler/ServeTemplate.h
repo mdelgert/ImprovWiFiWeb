@@ -1,5 +1,4 @@
-#ifndef SERVE_TEMPLATE_H
-#define SERVE_TEMPLATE_H
+#pragma once
 
 #include "Globals.h"
 #include "WebHandler.h"
@@ -14,5 +13,3 @@ private:
     static void handleGetRequest(AsyncWebServer& server);
     static void handleSetRequest(AsyncWebServer& server);
 };
-
-#endif

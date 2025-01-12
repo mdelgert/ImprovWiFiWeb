@@ -1,5 +1,4 @@
-#ifndef SERVE_SETTINGS_H
-#define SERVE_SETTINGS_H
+#pragma once
 
 #include "Globals.h"
 #include "WebHandler.h"
@@ -15,5 +14,3 @@ private:
     static void handleGetSettings(AsyncWebServer& server);
     static void handleSetSettings(AsyncWebServer& server);
 };
-
-#endif

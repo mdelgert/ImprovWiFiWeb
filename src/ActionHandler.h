@@ -1,5 +1,4 @@
-#ifndef ACTION_HANDLER_H
-#define ACTION_HANDLER_H
+#pragma once
 
 #include "Globals.h"
 #include <ArduinoJson.h>
@@ -16,8 +15,6 @@ private:
     static void handleTft(const JsonDocument& doc);
     static void handleLed(const JsonDocument& doc);
 };
-
-#endif
 
 /* Example usage:
 

@@ -1,5 +1,4 @@
-#ifndef SERVE_DEVICE_H
-#define SERVE_DEVICE_H
+#pragma once
 
 #include "Globals.h"
 #include <WiFi.h>
@@ -16,5 +15,3 @@ private:
     static void handleDeviceReboot(AsyncWebServer& server);
     static void handleDeviceWifiNetworks(AsyncWebServer& server);
 };
-
-#endif

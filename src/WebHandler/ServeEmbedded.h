@@ -1,5 +1,4 @@
-#ifndef SERVE_EMBEDDED_H
-#define SERVE_EMBEDDED_H
+#pragma once
 
 #include "Globals.h"
 #include "ServeEmbeddedFiles.h"
@@ -15,5 +14,3 @@ private:
     static void serveEmbeddedFile(AsyncWebServer &server, const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void handleGetRequest(AsyncWebServer& server);
 };
-
-#endif

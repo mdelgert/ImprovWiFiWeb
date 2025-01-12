@@ -1,5 +1,4 @@
-#ifndef NON_BLOCKING_TIMER_H
-#define NON_BLOCKING_TIMER_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -33,9 +32,6 @@ public:
         previousMillis = millis();
     }
 };
-
-#endif // NON_BLOCKING_TIMER_H
-
 
 // Usage:
 // #include "NonBlockingTimer.h"

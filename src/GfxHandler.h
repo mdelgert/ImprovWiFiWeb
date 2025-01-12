@@ -1,5 +1,4 @@
-#ifndef GFX_HANDLER_H
-#define GFX_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_GFX_HANDLER // Use a clear and descriptive feature flag
 #include "Globals.h"
@@ -35,5 +34,3 @@ public:
     static void drawImage(int, int, int, int, const char *) {}
 };
 #endif // ENABLE_GFX_HANDLER
-
-#endif // GFX_HANDLER_H

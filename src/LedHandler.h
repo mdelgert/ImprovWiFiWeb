@@ -1,5 +1,4 @@
-#ifndef LED_HANDLER_H
-#define LED_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_LED_HANDLER
 
@@ -52,5 +51,3 @@ public:
 };
 
 #endif // ENABLE_LED_HANDLER
-
-#endif // LED_HANDLER_H

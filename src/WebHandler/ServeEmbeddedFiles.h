@@ -1,5 +1,4 @@
-#ifndef SERVE_EMBEDDED_FILES_H
-#define SERVE_EMBEDDED_FILES_H
+#pragma once
 
 #include <Arduino.h>
 
@@ -54,5 +53,3 @@ extern const uint8_t terminal_html_start[] asm("_binary_web_terminal_html_start"
 extern const uint8_t terminal_html_end[] asm("_binary_web_terminal_html_end");
 extern const uint8_t terminal_js_start[] asm("_binary_web_terminal_js_start");
 extern const uint8_t terminal_js_end[] asm("_binary_web_terminal_js_end");
-
-#endif // EMBEDDED_FILES_H

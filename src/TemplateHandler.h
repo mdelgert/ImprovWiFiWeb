@@ -1,5 +1,4 @@
-#ifndef TEMPLATE_HANDLER_H
-#define TEMPLATE_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_TEMPLATE_HANDLER
 
@@ -26,4 +25,3 @@ public: // No-op implementation of TemplateHandler
 };
 
 #endif // ENABLE_TEMPLATE_HANDLER
-#endif // TEMPLATE_HANDLER_H

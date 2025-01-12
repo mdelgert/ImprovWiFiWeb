@@ -1,5 +1,4 @@
-#ifndef TIME_HANDLER_H
-#define TIME_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_TIME_HANDLER
 
@@ -46,4 +45,3 @@ public:
 };
 
 #endif // ENABLE_TIME_HANDLER
-#endif // TIME_HANDLER_H

@@ -1,5 +1,4 @@
-#ifndef MQTT_HANDLER_H
-#define MQTT_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_MQTT_HANDLER
 
@@ -31,4 +30,3 @@ public:
 };
 
 #endif // ENABLE_MQTT_HANDLER
-#endif // MQTT_HANDLER_H

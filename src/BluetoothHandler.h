@@ -1,5 +1,4 @@
-#ifndef BLUETOOTH_HANDLER_H
-#define BLUETOOTH_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_BLUETOOTH_HANDLER
 
@@ -31,4 +30,3 @@ public: // No-op implementation of BluetoothHandler
 };
 
 #endif // ENABLE_BLUETOOTH_HANDLER
-#endif // BLUETOOTH_HANDLER_H

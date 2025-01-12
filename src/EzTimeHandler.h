@@ -1,5 +1,4 @@
-#ifndef EZTIME_HANDLER_H
-#define EZTIME_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_EZTIME_HANDLER
 
@@ -48,4 +47,3 @@ public:
 };
 
 #endif // ENABLE_EZTIME_HANDLER
-#endif // EZTIME_HANDLER_H

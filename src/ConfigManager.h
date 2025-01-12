@@ -1,5 +1,4 @@
-#ifndef CONFIGMANAGER_H
-#define CONFIGMANAGER_H
+#pragma once
 
 #include "Globals.h"
 #include <Preferences.h>
@@ -39,5 +38,3 @@ private:
     static void load();
     static Preferences preferences;
 };
-
-#endif // CONFIGMANAGER_H

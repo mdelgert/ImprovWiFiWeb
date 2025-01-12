@@ -1,5 +1,4 @@
-#ifndef IMPROV_HANDLER_H
-#define IMPROV_HANDLER_H
+#pragma once
 
 #include "Globals.h"
 #include "ImprovWiFiLibrary.h"
@@ -17,5 +16,3 @@ private:
     static void onImprovWiFiErrorCb(ImprovTypes::Error err);
     static void onImprovWiFiConnectedCb(const char *ssid, const char *password);
 };
-
-#endif

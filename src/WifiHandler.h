@@ -1,5 +1,4 @@
-#ifndef WIFI_HANDLER_H
-#define WIFI_HANDLER_H
+#pragma once
 
 #include "Globals.h"
 #include "GfxHandler.h"
@@ -21,5 +20,3 @@ public:
     static void init();
     static void loop();
 };
-
-#endif

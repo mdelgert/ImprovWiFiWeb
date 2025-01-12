@@ -1,5 +1,4 @@
-#ifndef REMOTE_DEBUG_HANDLER_H
-#define REMOTE_DEBUG_HANDLER_H
+#pragma once
 
 #ifdef ENABLE_REMOTE_DEBUG_HANDLER
 #include "Globals.h"
@@ -38,5 +37,3 @@ public:
 };
 
 #endif // ENABLE_REMOTE_DEBUG_HANDLER
-
-#endif // REMOTE_DEBUG_HANDLER_H

@@ -1,5 +1,4 @@
-#ifndef BOARD_PINS_H
-#define BOARD_PINS_H
+#pragma once
 
 // Pin Definitions
 #define BUTTON_PIN      0
@@ -17,5 +16,3 @@
 #define SD_MMC_D3_PIN   18
 #define SD_MMC_CLK_PIN  12
 #define SD_MMC_CMD_PIN  16
-
-#endif // BOARD_PINS_H
