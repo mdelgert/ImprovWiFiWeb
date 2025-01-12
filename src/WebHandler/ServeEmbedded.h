@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ENABLE_WEB_HANDLER
+
 #include "Globals.h"
 #include "ServeEmbeddedFiles.h"
 #include "WebHandler.h"
@@ -14,3 +16,5 @@ private:
     static void serveEmbeddedFile(AsyncWebServer &server, const char *path, const uint8_t *start, const uint8_t *end, const char *contentType);
     static void handleGetRequest(AsyncWebServer& server);
 };
+
+#endif // ENABLE_WEB_HANDLER

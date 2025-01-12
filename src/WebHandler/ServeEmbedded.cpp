@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeEmbedded.h"
 
 void ServeEmbedded::registerEndpoints(AsyncWebServer &server)
@@ -39,3 +41,5 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/terminal.js", terminal_js_start, terminal_js_end, "application/javascript");
     debugI("ServeEmbedded handleGetRequest registered");
 }
+
+#endif // ENABLE_WEB_HANDLER

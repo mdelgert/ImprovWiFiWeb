@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ENABLE_WEB_HANDLER
+
 #include "Globals.h"
 #include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
@@ -14,3 +16,5 @@ private:
     static void handleGetSettings(AsyncWebServer& server);
     static void handleSetSettings(AsyncWebServer& server);
 };
+
+#endif // ENABLE_WEB_HANDLER

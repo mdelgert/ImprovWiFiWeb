@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ENABLE_WEB_HANDLER
+
 #include <Arduino.h>
 
 // Declarations for embedded files
@@ -53,3 +55,5 @@ extern const uint8_t terminal_html_start[] asm("_binary_web_terminal_html_start"
 extern const uint8_t terminal_html_end[] asm("_binary_web_terminal_html_end");
 extern const uint8_t terminal_js_start[] asm("_binary_web_terminal_js_start");
 extern const uint8_t terminal_js_end[] asm("_binary_web_terminal_js_end");
+
+#endif // ENABLE_WEB_HANDLER

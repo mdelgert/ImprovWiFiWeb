@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeTemplate.h"
 
 void ServeTemplate::registerEndpoints(AsyncWebServer &server)
@@ -45,3 +47,5 @@ void ServeTemplate::handleSetRequest(AsyncWebServer &server)
             // Respond with success
             WebHandler::sendSuccessResponse(request, "Data received successfully"); });
 }
+
+#endif // ENABLE_WEB_HANDLER

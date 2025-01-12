@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "WebHandler.h"
 
 NonBlockingTimer WebHandler::myTimer(1000);
@@ -126,3 +128,5 @@ void WebHandler::loop()
 {
     // debugI("WebHandler loop");
 }
+
+#endif // ENABLE_WIFI_HANDLER

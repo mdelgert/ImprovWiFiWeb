@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeSettings.h"
 
 static NonBlockingTimer delayTimer(500);
@@ -73,3 +75,5 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         // } 
     });
 }
+
+#endif // ENABLE_WEB_HANDLER

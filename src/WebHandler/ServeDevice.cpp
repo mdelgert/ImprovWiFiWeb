@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeDevice.h"
 
 static NonBlockingTimer delayTimer(1000);
@@ -85,3 +87,5 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc);
     });
 }
+
+#endif // ENABLE_WEB_HANDLER

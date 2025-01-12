@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef ENABLE_WEB_HANDLER
+
 #include "Globals.h"
 #include <WiFi.h>
 #include "WebHandler.h"
@@ -15,3 +17,5 @@ private:
     static void handleDeviceReboot(AsyncWebServer& server);
     static void handleDeviceWifiNetworks(AsyncWebServer& server);
 };
+
+#endif // ENABLE_WEB_HANDLER
