@@ -37,7 +37,8 @@ void BluetoothHandler::init() {
     debugI("Initializing BluetoothHandler...");
 
     // Initialize BLE
-    NimBLEDevice::init("ESP32-NUS");
+    //NimBLEDevice::init("ESP32-NUS");
+    NimBLEDevice::init(settings.deviceName.c_str());
     pServer = NimBLEDevice::createServer();
 
     // Create the Nordic UART Service

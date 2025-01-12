@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>Bluetooth Web Serial Terminal</title>
@@ -13,8 +12,11 @@
             flex-direction: column;
             height: 100vh;
             margin: 0;
+            /* 
+            overflow-x: hidden;
+            overflow-y: hidden; 
+            */
         }
-
         #terminal {
             flex: 1;
             padding: 10px;
@@ -23,12 +25,10 @@
             font-family: monospace;
             font-size: 16px;
         }
-
         #input-area {
             display: flex;
             border-top: 1px solid #333;
         }
-
         #input {
             flex: 1;
             padding: 10px;
@@ -38,11 +38,9 @@
             font-family: monospace;
             font-size: 16px;
         }
-
         #input:focus {
             outline: none;
         }
-
         #connect {
             background-color: #333;
             color: #d4d4d4;
@@ -51,13 +49,11 @@
             font-family: monospace;
             cursor: pointer;
         }
-
         #connect:hover {
             background-color: #555;
         }
     </style>
 </head>
-
 <body>
     <div id="terminal"></div>
     <div id="input-area">
@@ -67,8 +63,7 @@
 
     <script>
         let bleDevice = null;
-        let txCharacteristic = null;
-        let rxCharacteristic = null;
+        let bleCharacteristic = null;
 
         const terminal = document.getElementById('terminal');
         const input = document.getElementById('input');
@@ -86,31 +81,30 @@
         function clearTerminal() {
             terminal.innerHTML = ''; // Remove all child elements
         }
+
+        // Connect to BLE device
         connectButton.addEventListener('click', async () => {
             try {
                 appendMessage('Requesting Bluetooth device...');
                 bleDevice = await navigator.bluetooth.requestDevice({
                     acceptAllDevices: true,
-                    optionalServices: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e'] // Corrected NUS Service UUID
+                    optionalServices: ['0000181c-0000-1000-8000-00805f9b34fb'] // Service UUID
                 });
 
                 appendMessage('Connecting to GATT server...');
                 const server = await bleDevice.gatt.connect();
 
-                appendMessage('Getting NUS service...');
-                const service = await server.getPrimaryService('6e400001-b5a3-f393-e0a9-e50e24dcca9e');
+                appendMessage('Getting service...');
+                const service = await server.getPrimaryService('0000181c-0000-1000-8000-00805f9b34fb');
 
-                appendMessage('Getting RX characteristic...');
-                rxCharacteristic = await service.getCharacteristic('6e400002-b5a3-f393-e0a9-e50e24dcca9e');
-
-                appendMessage('Getting TX characteristic...');
-                txCharacteristic = await service.getCharacteristic('6e400003-b5a3-f393-e0a9-e50e24dcca9e');
+                appendMessage('Getting characteristic...');
+                bleCharacteristic = await service.getCharacteristic('00002a57-0000-1000-8000-00805f9b34fb');
 
                 appendMessage('Connected to device!');
 
-                // Start listening for notifications from TX characteristic
-                await txCharacteristic.startNotifications();
-                txCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
+                // Start listening for notifications (optional)
+                await bleCharacteristic.startNotifications();
+                bleCharacteristic.addEventListener('characteristicvaluechanged', (event) => {
                     const value = new TextDecoder().decode(event.target.value);
                     appendMessage(value, false);
                 });
@@ -119,7 +113,6 @@
             }
         });
 
-
         // Handle input messages
         input.addEventListener('keydown', async (event) => {
             if (event.key === 'Enter') {
@@ -127,9 +120,9 @@
                 if (message) {
                     if (message.toLowerCase() === 'clear') {
                         clearTerminal();
-                    } else if (rxCharacteristic) {
+                    } else if (bleCharacteristic) {
                         const encoder = new TextEncoder();
-                        await rxCharacteristic.writeValue(encoder.encode(message));
+                        await bleCharacteristic.writeValue(encoder.encode(message));
                         appendMessage(message, true);
                     } else {
                         appendMessage('Not connected to a device.', false);
@@ -140,5 +133,4 @@
         });
     </script>
 </body>
-
 </html>
