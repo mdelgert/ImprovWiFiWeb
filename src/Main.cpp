@@ -9,14 +9,13 @@
 #include "WebHandler.h"
 #include "BluetoothHandler.h"
 #include "MqttHandler.h"
-#include "TimeHandler.h"
 #include "EzTimeHandler.h"
 
 void setup()
 {
+  TemplateHandler::init();
   RemoteDebugHandler::init();
   ConfigManager::init();
-  TemplateHandler::init();
   BluetoothHandler::init();
   GfxHandler::init();
   WifiHandler::init();
@@ -25,7 +24,6 @@ void setup()
   LedHandler::init();
   ButtonHandler::init();
   MqttHandler::init();
-  TimeHandler::init();
   EzTimeHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(0);
@@ -34,14 +32,13 @@ void setup()
 
 void loop()
 {
+  TemplateHandler::loop();
   RemoteDebugHandler::loop();
   BluetoothHandler::loop();
-  TemplateHandler::loop();
   WifiHandler::loop();
   WebHandler::loop();
   ImprovHandler::loop();
   ButtonHandler::loop();
   MqttHandler::loop();
-  TimeHandler::loop();
   EzTimeHandler::loop();
 }
