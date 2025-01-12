@@ -19,9 +19,12 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         JsonDocument doc;
 
         doc["deviceName"]   = settings.deviceName;
-        doc["lastBoot"]    = settings.systemTime;
-        doc["currentTime"] = settings.currentTime;
-        doc["systemBoot"]    = settings.systemBoots;
+        
+        doc["bootCount"]    = settings.bootCount;
+        doc["bootTime"] = settings.bootTime;
+        doc["upTime"]    = settings.upTime;
+        doc["currentTime"]  = settings.currentTime;
+
         doc["ssid"]        = WiFi.SSID();
         doc["ip"]          = WiFi.localIP().toString();
         doc["mac"]         = WiFi.macAddress();

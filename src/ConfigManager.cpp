@@ -37,8 +37,8 @@ void ConfigManager::load() {
     settings.cors = preferences.getBool("cors", settings.cors);
     settings.WebHandler = preferences.getBool("webHandler", settings.WebHandler);
     settings.WifiScan = preferences.getBool("wifiScan", settings.WifiScan);
-    settings.systemTime = preferences.getUInt("systemTime", settings.systemTime);
-    settings.systemBoots = preferences.getUInt("systemBoots", settings.systemBoots);
+    settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
+    settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
     preferences.end();
 
     debugI("ConfigManager load() namespace: %s", ns);
@@ -67,8 +67,9 @@ void ConfigManager::save() {
     preferences.putBool("cors", settings.cors);
     preferences.putBool("webHandler", settings.WebHandler);
     preferences.putBool("wifiScan", settings.WifiScan);
-    preferences.putUInt("systemTime", settings.systemTime);
-    preferences.putUInt("systemBoots", settings.systemBoots);
+    preferences.putUInt("bootCount", settings.bootCount);
+    preferences.putULong("bootTime", settings.bootTime);
+    
     preferences.end();
 
     debugI("ConfigManager save() namespace: %s", ns);

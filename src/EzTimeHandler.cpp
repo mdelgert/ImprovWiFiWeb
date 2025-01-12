@@ -27,8 +27,9 @@ void EzTimeHandler::init()
     {
         // 3) Optionally, set the system time to the local epoch time
         time_t epoch = myTZ.now(); // local epoch
-        settings.systemTime = epoch;
-        settings.systemBoots++;
+        settings.bootCount++;
+        settings.bootTime = epoch;
+        settings.upTime++;
         ConfigManager::save();
     }
 }
@@ -56,6 +57,7 @@ void EzTimeHandler::loop()
         // debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
         // printExampleTimeFormats();
         GfxHandler::printMessage(myTZ.dateTime(F("h:i")).c_str());
+        settings.upTime++;
         settings.currentTime = myTZ.dateTime(F("h:i")).c_str();
     }
 }
