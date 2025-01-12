@@ -33,6 +33,7 @@ void BluetoothHandler::RxCallback::onWrite(NimBLECharacteristic *pCharacteristic
         //     debugI("Sent response: %s", response.c_str());
         // }
 
+        // Send the response back using the TX characteristic
         if (pTxCharacteristic)
         {
             pTxCharacteristic->setValue(receivedValue);
