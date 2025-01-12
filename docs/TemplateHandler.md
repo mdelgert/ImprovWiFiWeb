@@ -1,4 +1,6 @@
-I'm using the following pattern for my code. Can you provide the example using this format?
+Hello I would like to implement .... in my esp32-s3 micro controller.
+
+All of my code uses the following pattern. Can you provide example following same pattern as below?
 
 #ifndef TEMPLATE_HANDLER_H
 #define TEMPLATE_HANDLER_H

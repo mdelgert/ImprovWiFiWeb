@@ -19,7 +19,9 @@ async function loadSettings() {
     document.getElementById("mqtt_port").value = data.mqtt_port || "";
     document.getElementById("mqtt_username").value = data.mqtt_username || "";
     document.getElementById("mqtt_password").value = data.mqtt_password || "";
-    //document.getElementById("api_key").value = data.api_key || "";
+    document.getElementById("mqtt_topic_sub").value = data.mqtt_topic_sub || "";
+    document.getElementById("mqtt_topic_pub").value = data.mqtt_topic_pub || "";
+    document.getElementById("api_key").value = data.api_key || "";
 
     //showMessage("Settings loaded successfully!", "success");
   } catch (error) {
@@ -34,10 +36,13 @@ async function saveSettings() {
   const wifiSsid = document.getElementById("wifi_network").value.trim();
   const wifiPassword = document.getElementById("wifi_password").value.trim();
   const mqttServer = document.getElementById("mqtt_server").value.trim();
-  const mqttPort = document.getElementById("mqtt_port").value.trim();
+  //const mqttPort = document.getElementById("mqtt_port");
+  const mqttPort = parseInt(document.getElementById("mqtt_port").value.trim(), 10);
   const mqttUsername = document.getElementById("mqtt_username").value.trim();
   const mqttPassword = document.getElementById("mqtt_password").value.trim();
-  //const apiKey = document.getElementById("api_key").value.trim();
+  const mqttTopicSub = document.getElementById("mqtt_topic_sub").value.trim();
+  const mqttTopicPub = document.getElementById("mqtt_topic_pub").value.trim();
+  const apiKey = document.getElementById("api_key").value.trim();
 
   // Validate mandatory fields (example: Wi-Fi credentials)
   if (!deviceName || !wifiSsid || !wifiPassword) {
@@ -56,7 +61,9 @@ async function saveSettings() {
       mqtt_port: mqttPort,
       mqtt_username: mqttUsername,
       mqtt_password: mqttPassword,
-      //api_key: apiKey,
+      mqtt_topic_sub: mqttTopicSub,
+      mqtt_topic_pub: mqttTopicPub,
+      api_key: apiKey,
     };
     console.log("Payload being sent:", body);
 
@@ -67,24 +74,6 @@ async function saveSettings() {
     console.error("Error saving settings:", error);
   }
 }
-
-/*
-// Attach event listeners
-document.addEventListener("DOMContentLoaded", () => {
-  // Load existing settings on page load
-  console.log("Page loaded. Initializing settings load...");
-  loadSettings();
-
-  // Attach save button event
-  const saveButton = document.querySelector(".settings-form button");
-  if (saveButton) {
-    saveButton.addEventListener("click", saveSettings);
-    console.log("Save button event listener attached.");
-  } else {
-    console.error("Save button not found.");
-  }
-});
-*/
 
 // Fetch available Wi-Fi networks
 async function loadWifiNetworks() {

@@ -24,6 +24,8 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
         doc["mqtt_port"] = settings.mqttPort;
         doc["mqtt_username"] = settings.mqttUsername;
         doc["mqtt_password"] = settings.mqttPassword;
+        doc["mqtt_topic_sub"] = settings.mqttSubTopic;
+        doc["mqtt_topic_pub"] = settings.mqttPubTopic;
         doc["api_key"] = settings.apiKey;
 
         WebHandler::sendSuccessResponse(request, "Settings retrieved successfully", &doc); });
@@ -55,6 +57,8 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         settings.mqttPort = doc["mqtt_port"] | settings.mqttPort;
         settings.mqttUsername = doc["mqtt_username"] | settings.mqttUsername;
         settings.mqttPassword = doc["mqtt_password"] | settings.mqttPassword;
+        settings.mqttSubTopic = doc["mqtt_topic_sub"] | settings.mqttSubTopic;
+        settings.mqttPubTopic = doc["mqtt_topic_pub"] | settings.mqttPubTopic;
         settings.apiKey = doc["api_key"] | settings.apiKey;
 
         // Save updated settings

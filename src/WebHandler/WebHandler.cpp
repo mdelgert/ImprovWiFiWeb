@@ -20,12 +20,14 @@ void WebHandler::serveNotFound()
 
 void WebHandler::printRequestBody(AsyncWebServerRequest *request, uint8_t *data, size_t len)
 {
+    //debugI("Request Body: %.*s", len, (const char *)data);
+
+    // Print as string (existing code)
     String requestBody = "";
-    for (size_t i = 0; i < len; i++)
-    {
+    for (size_t i = 0; i < len; i++) {
         requestBody += (char)data[i];
     }
-    debugI("Request Body: %s", requestBody.c_str());
+    debugI("Request Body (string): %s", requestBody.c_str());
 }
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request)

@@ -28,6 +28,8 @@ void ConfigManager::load() {
     settings.mqttPort = preferences.getInt("mqttPort", settings.mqttPort);
     settings.mqttUsername = preferences.getString("mqttUsername", settings.mqttUsername);
     settings.mqttPassword = preferences.getString("mqttPassword", settings.mqttPassword);
+    settings.mqttSubTopic = preferences.getString("mqttSubTopic", settings.mqttSubTopic);
+    settings.mqttPubTopic = preferences.getString("mqttPubTopic", settings.mqttPubTopic);
     settings.apiKey = preferences.getString("apiKey", settings.apiKey);
     settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
     settings.defaulTimeout = preferences.getInt("defaulTimeout", settings.defaulTimeout);
@@ -54,6 +56,8 @@ void ConfigManager::save() {
     preferences.putInt("mqttPort", settings.mqttPort);
     preferences.putString("mqttUsername", settings.mqttUsername);
     preferences.putString("mqttPassword", settings.mqttPassword);
+    preferences.putString("mqttSubTopic", settings.mqttSubTopic);
+    preferences.putString("mqttPubTopic", settings.mqttPubTopic);
     preferences.putString("apiKey", settings.apiKey);
     preferences.putBool("setupMode", settings.setupMode);
     preferences.putInt("defaulTimeout", settings.defaulTimeout);

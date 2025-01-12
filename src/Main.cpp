@@ -8,6 +8,7 @@
 #include "WifiHandler.h"
 #include "WebHandler.h"
 #include "BluetoothHandler.h"
+#include "MqttHandler.h"
 
 void setup()
 {
@@ -21,6 +22,7 @@ void setup()
   ImprovHandler::init();
   LedHandler::init();
   ButtonHandler::init();
+  MqttHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(0);
   LedHandler::setColorByName("Black");
@@ -35,4 +37,5 @@ void loop()
   WebHandler::loop();
   ImprovHandler::loop();
   ButtonHandler::loop();
+  MqttHandler::loop();
 }
