@@ -2,8 +2,15 @@
 
 #include "OTAHandler.h"
 
+static NonBlockingTimer setupDelay(1000);
+
 void OTAHandler::setupOTA()
 {
+    ArduinoOTA.setPassword("password");
+
+    //Without this dns resolution will fail
+    ArduinoOTA.setHostname(settings.deviceName.c_str());
+
     ArduinoOTA.onStart([]() {
         String type = ArduinoOTA.getCommand() == U_FLASH ? "sketch" : "filesystem";
         debugI("OTA Start: Updating %s", type.c_str());
@@ -27,18 +34,32 @@ void OTAHandler::setupOTA()
     });
 
     ArduinoOTA.begin();
+
     debugI("OTA setup complete");
 }
 
 void OTAHandler::init()
 {
+    while (WiFi.status() != WL_CONNECTED)
+    {
+        if(setupDelay.isReady())
+        {
+            debugE("Failed to connect to WiFi skipping OTA setup");
+            return;
+        }
+    }
+
     debugI("Initializing OTAHandler");
+
     setupOTA();
 }
 
 void OTAHandler::loop()
 {
-    ArduinoOTA.handle();
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        ArduinoOTA.handle();
+    }
 }
 
 void OTAHandler::triggerUpdate()
