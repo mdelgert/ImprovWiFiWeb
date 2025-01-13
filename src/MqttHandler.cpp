@@ -34,7 +34,10 @@ void MqttHandler::loop()
     {
         if (mqttTimer.isReady())
         {
-            connectToMqtt();
+            debugI("MqttHandler: Not connected, attempting reconnect...");
+            //Suspect this is blocking remote debugger terminal windows stops working 
+            //when it fails disabling as a test................
+            //connectToMqtt();
         }
     }
     else
