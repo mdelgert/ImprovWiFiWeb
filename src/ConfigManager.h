@@ -22,7 +22,7 @@ struct Settings {
     bool cors = CORS;
     bool WebHandler = WEBHANDLER;
     bool WifiScan = WIFI_SCAN;
-    String timezone = TIMEZONE;
+    String timezone = DEFAULT_TIMEZONE;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;
     uint64_t upTime = 0;
