@@ -6,6 +6,7 @@ import shutil
 import argparse
 
 # Constants (You can adjust these for your project)
+LIMIT_RELEASES = 3  # Set to 0 for no limit (process all releases)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
 MANIFEST_TEMPLATE = {
     # "home_assistant_domain": "esphome",
@@ -90,6 +91,10 @@ def main():
     try:
         # Fetch releases from GitHub
         releases = fetch_releases(GITHUB_API_URL, auth_token)
+
+        # Apply the limit if it is greater than 0
+        if LIMIT_RELEASES > 0:
+            releases = releases[:LIMIT_RELEASES]
 
         # Generate manifests and download binaries for each release
         for release in releases:
