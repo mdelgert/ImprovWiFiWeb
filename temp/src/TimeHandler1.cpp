@@ -1,8 +1,7 @@
 #ifdef ENABLE_TIME_HANDLER
 
 #include "TimeHandler.h"
-#include "Timezones.h"       // Include the timezone database
-#include <time.h>            // For time(), struct tm, getLocalTime(), etc.
+#include <time.h>           // for time(), struct tm, getLocalTime(), etc.
 #include "NonBlockingTimer.h"
 
 // Example: re-sync every 60 seconds (adjust as needed)
@@ -10,8 +9,10 @@ static NonBlockingTimer timeSyncTimer(60000);
 static NonBlockingTimer timeTimer(1000);
 static bool isTimeSynced = false;
 
-// Hardcoded region for time zone
-static const char* defaultRegion = "America/New_York";
+// Adjust as needed for your timezone or keep 0 if you want UTC
+// Example: UTC offset = 0, Daylight offset = 0
+static const long  gmtOffset_sec      = 0; 
+static const int   daylightOffset_sec = 0;
 
 // Primary NTP server and fallback(s)
 static const char* ntpServer1 = "pool.ntp.org";
@@ -21,21 +22,11 @@ void TimeHandler::init()
 {
     debugI("TimeHandler initialized");
 
-    // Fetch POSIX string for the hardcoded region
-    const char* posixTimeZone = tz_db_get_posix_str(defaultRegion);
-    if (!posixTimeZone) {
-        debugE("TimeHandler: Failed to find timezone for '%s'.", defaultRegion);
-        return;
-    }
+    // Configure time with NTP
+    configTime(gmtOffset_sec, daylightOffset_sec, ntpServer1, ntpServer2);
 
-    // Apply the POSIX string as the current time zone
-    setenv("TZ", posixTimeZone, 1);
-    tzset();
-    debugI("TimeHandler: Timezone set to %s", posixTimeZone);
-
-    // Configure time with NTP servers
-    configTime(0, 0, ntpServer1, ntpServer2);
-    syncTime(); // Optional immediate sync
+    // Optionally, you can do an immediate time sync check here if you like:
+    syncTime();
 }
 
 void TimeHandler::loop()
