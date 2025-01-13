@@ -16,6 +16,7 @@ struct Settings {
     String mqttSubTopic = SECURE_MQTT_SUB_TOPIC;
     String mqttPubTopic = SECURE_MQTT_PUB_TOPIC;
     String apiKey = SECURE_API_KEY;
+    String otaPassword = SECURE_OTA_PASSWORD;
     bool setupMode = SETUP_MODE;
     int defaulTimeout = DEFAULT_TIMEOUT;
     bool apiToken = API_TOKEN;
@@ -25,6 +26,7 @@ struct Settings {
     String timezone = DEFAULT_TIMEZONE;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;
+    // Settings not saved in preferences
     uint64_t upTime = 0;
     String currentTime = "";
     String currentDate = "";

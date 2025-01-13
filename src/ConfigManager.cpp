@@ -31,6 +31,7 @@ void ConfigManager::load() {
     settings.mqttSubTopic = preferences.getString("mqttSubTopic", settings.mqttSubTopic);
     settings.mqttPubTopic = preferences.getString("mqttPubTopic", settings.mqttPubTopic);
     settings.apiKey = preferences.getString("apiKey", settings.apiKey);
+    settings.otaPassword = preferences.getString("otaPassword", settings.otaPassword);
     settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
     settings.defaulTimeout = preferences.getInt("defaulTimeout", settings.defaulTimeout);
     settings.apiToken = preferences.getBool("apiToken", settings.apiToken);
@@ -40,6 +41,7 @@ void ConfigManager::load() {
     settings.timezone = preferences.getString("timezone", settings.timezone);
     settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
     settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
+    
     preferences.end();
 
     debugI("ConfigManager load() namespace: %s", ns);
@@ -62,6 +64,7 @@ void ConfigManager::save() {
     preferences.putString("mqttSubTopic", settings.mqttSubTopic);
     preferences.putString("mqttPubTopic", settings.mqttPubTopic);
     preferences.putString("apiKey", settings.apiKey);
+    preferences.putString("otaPassword", settings.otaPassword);
     preferences.putBool("setupMode", settings.setupMode);
     preferences.putInt("defaulTimeout", settings.defaulTimeout);
     preferences.putBool("apiToken", settings.apiToken);

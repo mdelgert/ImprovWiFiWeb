@@ -1,5 +1,4 @@
 ## Active
-- [] Implement OTA
 - [] Implement https
 - [] Implement secure MqttHandler
 - [] Implement multiselect actions as files
@@ -14,6 +13,7 @@
 - [x] Add wifi handler
 - [x] Implement ConfigManager
 - [x] Implement MqttHandler
+- [x] Implement OTA
 
 ## Bugs
 Github pages not deploying from tag. Modified to deploy from action.
