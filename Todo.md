@@ -1,5 +1,5 @@
 ## Active
-- [] Implement secure MqttHandler
+- [] Implement secure MqttHandler with EMQX
 - [] Rather than action handler implment CommandHandler example tft hello led blue etc. 
 - [] No json consistent central for bluetooth, debuggert and mqtt
 - [] Remote debug disable telnet
