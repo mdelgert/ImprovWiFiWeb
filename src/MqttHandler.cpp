@@ -3,20 +3,17 @@
 #include "MqttHandler.h"
 
 // Create the Wi-Fi client & MQTT client
-WiFiClient wifiClient;
-PubSubClient mqttClient(wifiClient);
+//WiFiClient wifiClient;
+//PubSubClient mqttClient(wifiClient);
+
+WiFiClientSecure wiFiClientSecure;
+PubSubClient mqttClient(wiFiClientSecure);
 
 // Optional: Use a NonBlockingTimer to avoid continuously retrying in busy loops
 static NonBlockingTimer mqttTimer(2000);
 
 void MqttHandler::init()
 {
-    debugI("MqttHandler: init() called");
-    debugI("settings.mqttServer: %s", settings.mqttServer.c_str());
-    debugI("settings.mqttPort: %d", settings.mqttPort);
-    debugI("settings.mqttUsername: %s", settings.mqttUsername.c_str());
-    debugI("settings.mqttPassword: %s", settings.mqttPassword.c_str());
-
     // Point the MQTT client to the broker from settings
     mqttClient.setServer(settings.mqttServer.c_str(), settings.mqttPort);
 
@@ -34,7 +31,7 @@ void MqttHandler::loop()
     {
         if (mqttTimer.isReady())
         {
-            debugI("MqttHandler: Not connected, attempting reconnect...");
+            //debugI("MqttHandler: Not connected, attempting reconnect...");
             //Suspect this is blocking remote debugger terminal windows stops working 
             //when it fails disabling as a test................
             //connectToMqtt();
@@ -64,20 +61,17 @@ void MqttHandler::publish(const char *topic, const char *message)
 
 void MqttHandler::connectToMqtt()
 {
-    debugI("MqttHandler: Attempting MQTT connection to %s:%d",
-           settings.mqttServer.c_str(), settings.mqttPort);
+    debugI("MqttHandler: Attempting MQTT connection to %s:%d", settings.mqttServer.c_str(), settings.mqttPort);
+    
+    wiFiClientSecure.setCACert(ca_cert);
 
     bool isConnected = false;
 
     // If username/password are not empty, use them
     if (!settings.mqttUsername.isEmpty() || !settings.mqttPassword.isEmpty())
     {
-        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]",
-               settings.mqttUsername.c_str());
-        isConnected = mqttClient.connect(
-            settings.deviceName.c_str(),
-            settings.mqttUsername.c_str(),
-            settings.mqttPassword.c_str());
+        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]", settings.mqttUsername.c_str());
+        isConnected = mqttClient.connect(settings.deviceName.c_str(), settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
     }
     else
     {
@@ -122,3 +116,11 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
 }
 
 #endif // ENABLE_MQTT_HANDLER
+
+/*
+debugI("MqttHandler: init() called");
+debugI("settings.mqttServer: %s", settings.mqttServer.c_str());
+debugI("settings.mqttPort: %d", settings.mqttPort);
+debugI("settings.mqttUsername: %s", settings.mqttUsername.c_str());
+debugI("settings.mqttPassword: %s", settings.mqttPassword.c_str());
+*/
