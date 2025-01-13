@@ -45,6 +45,7 @@
       }
     }
 
+    /*
     // Populate the dropdown with firmware options
     function populateDropdown(releases) {
       releases.forEach((release) => {
@@ -61,6 +62,27 @@
       // Set default manifest in install button
       if (releases.length > 0) {
         installButton.setAttribute('manifest', `firmware/${releases[0].tag_name}.json`);
+      }
+    }
+    */
+
+    // Make sure this matches tools/manifests.py
+    function populateDropdown(releases) {
+      const limitedReleases = releases.slice(0, 3); // Limit to the last 3 releases
+      limitedReleases.forEach((release) => {
+        const tagName = release.tag_name;
+        const manifestPath = `firmware/${tagName}.json`;
+
+        // Create an option element for each release
+        const option = document.createElement('option');
+        option.value = manifestPath;
+        option.textContent = `${tagName}`;
+        firmwareSelect.appendChild(option);
+      });
+
+      // Set default manifest in install button
+      if (limitedReleases.length > 0) {
+        installButton.setAttribute('manifest', `firmware/${limitedReleases[0].tag_name}.json`);
       }
     }
 
