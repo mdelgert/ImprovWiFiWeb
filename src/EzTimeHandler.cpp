@@ -40,10 +40,11 @@ void EzTimeHandler::loop()
     events();
 
     // If time has never been synced, keep trying until success
-    if (!isTimeSynced)
-    {
-        syncTime();
-    }
+    // This will flood the logs if not connected to WiFi, so be careful.
+    // if (!isTimeSynced)
+    // {
+    //     syncTime();
+    // }
 
     // Periodically re-sync using your NonBlockingTimer
     if (syncTimer.isReady())
@@ -59,7 +60,7 @@ void EzTimeHandler::loop()
         //GfxHandler::printMessage(myTZ.dateTime(F("H:i:s")).c_str());
         settings.upTime++;
         settings.currentTime = myTZ.dateTime(F("H:i:s")).c_str();
-        settings.currentDate = myTZ.dateTime(F("d/m/Y")).c_str();
+        settings.currentDate = myTZ.dateTime(F("m/d/Y")).c_str();
     }
 }
 

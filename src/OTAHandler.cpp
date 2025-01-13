@@ -6,7 +6,7 @@ static NonBlockingTimer setupDelay(1000);
 
 void OTAHandler::setupOTA()
 {
-    ArduinoOTA.setPassword("password");
+    ArduinoOTA.setPassword(settings.otaPassword.c_str());
 
     //Without this dns resolution will fail
     ArduinoOTA.setHostname(settings.deviceName.c_str());
