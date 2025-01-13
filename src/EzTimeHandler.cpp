@@ -56,7 +56,7 @@ void EzTimeHandler::loop()
     {
         // debugI("EzTimeHandler: Local time is now: %s", getFormattedTime());
         // printExampleTimeFormats();
-        GfxHandler::printMessage(myTZ.dateTime(F("H:i:s")).c_str());
+        //GfxHandler::printMessage(myTZ.dateTime(F("H:i:s")).c_str());
         settings.upTime++;
         settings.currentTime = myTZ.dateTime(F("H:i:s")).c_str();
     }

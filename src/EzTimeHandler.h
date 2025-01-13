@@ -3,9 +3,8 @@
 #ifdef ENABLE_EZTIME_HANDLER
 
 #include "Globals.h"
-#include <ezTime.h>
-#include "NonBlockingTimer.h"
 #include "GfxHandler.h"
+#include <ezTime.h>
 
 /**
  * EzTimeHandler uses the ezTime library to automatically handle
