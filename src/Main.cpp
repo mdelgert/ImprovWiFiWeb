@@ -10,6 +10,7 @@
 #include "BluetoothHandler.h"
 #include "MqttHandler.h"
 #include "EzTimeHandler.h"
+#include "OTAHandler.h"
 
 void setup()
 {
@@ -25,7 +26,8 @@ void setup()
   ButtonHandler::init();
   MqttHandler::init();
   EzTimeHandler::init();
-  GfxHandler::printMessage(SOFTWARE_VERSION);
+  OTAHandler::init();
+  //GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");
 }
@@ -41,4 +43,5 @@ void loop()
   ButtonHandler::loop();
   MqttHandler::loop();
   EzTimeHandler::loop();
+  OTAHandler::loop();
 }

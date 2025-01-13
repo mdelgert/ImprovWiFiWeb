@@ -1,4 +1,6 @@
-Hello I would like to implement .... in my esp32-s3 micro controller.
+Hello I would like to implement OTA in my esp32-s3 micro controller.
+
+Please assume the code base already has wifi connectivity.
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
 #pragma once
