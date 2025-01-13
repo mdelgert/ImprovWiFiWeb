@@ -25,6 +25,7 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["bootTime"] = settings.bootTime;
         doc["upTime"]    = settings.upTime;
         doc["currentTime"]  = settings.currentTime;
+        doc["currentDate"]  = settings.currentDate;
 
         doc["ssid"]        = WiFi.SSID();
         doc["ip"]          = WiFi.localIP().toString();

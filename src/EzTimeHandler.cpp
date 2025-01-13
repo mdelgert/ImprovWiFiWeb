@@ -59,6 +59,7 @@ void EzTimeHandler::loop()
         //GfxHandler::printMessage(myTZ.dateTime(F("H:i:s")).c_str());
         settings.upTime++;
         settings.currentTime = myTZ.dateTime(F("H:i:s")).c_str();
+        settings.currentDate = myTZ.dateTime(F("d/m/Y")).c_str();
     }
 }
 
