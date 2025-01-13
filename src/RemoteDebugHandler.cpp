@@ -23,6 +23,9 @@ void RemoteDebugHandler::init()
     Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
     Debug.showColors(true);         // Enable colors
 
+    //TODO add to settings
+    //Debug.setPassword("");     // Set the password for the debug console
+    
     // Add custom commands
     Debug.setHelpProjectsCmds(
         "clear - Clear the terminal\n"
