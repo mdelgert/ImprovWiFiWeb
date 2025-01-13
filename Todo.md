@@ -1,4 +1,5 @@
 ## Active
+- [] Remote debug disable telnet
 - [] Implement https
 - [] Implement secure MqttHandler
 - [] Implement multiselect actions as files
