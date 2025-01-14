@@ -12,6 +12,7 @@
 #define SECURE_MQTT_PUB_TOPIC "testtopic/pub"
 #define SECURE_MQTT_USERNAME "emqx"
 #define SECURE_MQTT_PASSWORD "public"
+#define SECURE_MQTT_SSL true
 #define SECURE_API_KEY "password"
 #define SECURE_OTA_PASSWORD "password"
 

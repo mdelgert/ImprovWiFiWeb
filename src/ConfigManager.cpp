@@ -28,6 +28,7 @@ void ConfigManager::load() {
     settings.mqttPort = preferences.getInt("mqttPort", settings.mqttPort);
     settings.mqttUsername = preferences.getString("mqttUsername", settings.mqttUsername);
     settings.mqttPassword = preferences.getString("mqttPassword", settings.mqttPassword);
+    settings.mqttSsl = preferences.getBool("mqttSsl", settings.mqttSsl);
     settings.mqttSubTopic = preferences.getString("mqttSubTopic", settings.mqttSubTopic);
     settings.mqttPubTopic = preferences.getString("mqttPubTopic", settings.mqttPubTopic);
     settings.apiKey = preferences.getString("apiKey", settings.apiKey);
@@ -61,6 +62,7 @@ void ConfigManager::save() {
     preferences.putInt("mqttPort", settings.mqttPort);
     preferences.putString("mqttUsername", settings.mqttUsername);
     preferences.putString("mqttPassword", settings.mqttPassword);
+    preferences.putBool("mqttSsl", settings.mqttSsl);
     preferences.putString("mqttSubTopic", settings.mqttSubTopic);
     preferences.putString("mqttPubTopic", settings.mqttPubTopic);
     preferences.putString("apiKey", settings.apiKey);

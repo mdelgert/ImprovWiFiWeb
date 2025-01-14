@@ -13,6 +13,7 @@ struct Settings {
     int mqttPort = SECURE_MQTT_PORT;
     String mqttUsername = SECURE_MQTT_USERNAME;
     String mqttPassword = SECURE_MQTT_PASSWORD;
+    bool mqttSsl = SECURE_MQTT_SSL;
     String mqttSubTopic = SECURE_MQTT_SUB_TOPIC;
     String mqttPubTopic = SECURE_MQTT_PUB_TOPIC;
     String apiKey = SECURE_API_KEY;
