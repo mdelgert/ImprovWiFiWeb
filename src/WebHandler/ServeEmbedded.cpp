@@ -16,7 +16,7 @@ void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, 
         response->addHeader("Content-Encoding", "identity");
         WebHandler::addCorsHeaders(response);
         request->send(response);
-        debugI("Served: %s", path); });
+        debugV("Served: %s", path); });
 }
 
 void ServeEmbedded::handleGetRequest(AsyncWebServer &server)

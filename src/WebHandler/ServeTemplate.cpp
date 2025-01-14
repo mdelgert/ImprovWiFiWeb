@@ -12,7 +12,7 @@ void ServeTemplate::handleGetRequest(AsyncWebServer &server)
 {
     server.on("/template/get", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-        debugI("Received GET request on /template/get");
+        debugV("Received GET request on /template/get");
 
         // Create a JSON response
         JsonDocument data;
@@ -25,7 +25,7 @@ void ServeTemplate::handleSetRequest(AsyncWebServer &server)
 {
     server.on("/template/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
               {
-            debugI("Received POST request on /template/set");
+            debugV("Received POST request on /template/set");
 
             // Print the request body
             WebHandler::printRequestBody(request, data, len);
@@ -42,7 +42,7 @@ void ServeTemplate::handleSetRequest(AsyncWebServer &server)
 
             // Extract a field for debugging
             const char* exampleValue = doc["example"] | "undefined";
-            debugI("Extracted JSON value: example=%s", exampleValue);
+            debugV("Extracted JSON value: example=%s", exampleValue);
 
             // Respond with success
             WebHandler::sendSuccessResponse(request, "Data received successfully"); });

@@ -13,7 +13,8 @@ void ServeSettings::registerEndpoints(AsyncWebServer &server)
 void ServeSettings::handleGetSettings(AsyncWebServer &server)
 {
     server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request){
-        debugI("Received GET request on /settings/get");
+        
+        debugV("Received GET request on /settings/get");
 
         // Prepare JSON response with global configuration values
         JsonDocument doc;
@@ -36,7 +37,8 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
 void ServeSettings::handleSetSettings(AsyncWebServer &server)
 {
     server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-        debugI("Received POST request on /settings/set");
+        
+        debugV("Received POST request on /settings/set");
 
         // Print the request body for debugging
         WebHandler::printRequestBody(request, data, len);

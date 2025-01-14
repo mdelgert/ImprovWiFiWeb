@@ -11,7 +11,8 @@ void ServeActions::registerEndpoints(AsyncWebServer &server)
 void ServeActions::handleGet(AsyncWebServer &server)
 {
     server.on("/actions/get", HTTP_GET, [](AsyncWebServerRequest *request){
-        debugI("Received GET request on /actions/get");
+        
+        debugV("Received GET request on /actions/get");
 
         File file = LittleFS.open("/actions.json", "r");
         if (!file) {
@@ -22,7 +23,8 @@ void ServeActions::handleGet(AsyncWebServer &server)
 
         String json = file.readString();
         file.close();
-        debugI("Serving /actions.json");
+
+        debugV("Serving /actions.json");
 
         JsonDocument doc;
         DeserializationError error = deserializeJson(doc, json);
@@ -39,7 +41,8 @@ void ServeActions::handleGet(AsyncWebServer &server)
 void ServeActions::handleSet(AsyncWebServer &server)
 {
     server.on("/actions/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-            debugI("Received POST request on /actions/set");
+            
+            debugV("Received POST request on /actions/set");
 
             WebHandler::printRequestBody(request, data, len);
 
@@ -64,7 +67,7 @@ void ServeActions::handleSet(AsyncWebServer &server)
             file.print(jsonString);
             file.close();
 
-            debugI("JSON saved to /actions.json");
+            debugV("JSON saved to /actions.json");
 
             ActionHandler::processMessage(doc);
 

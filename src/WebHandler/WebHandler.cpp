@@ -12,24 +12,23 @@ void WebHandler::serveNotFound()
             AsyncWebServerResponse *response = request->beginResponse(204); // No Content
             WebHandler::addCorsHeaders(response); // Add generic CORS headers
             request->send(response);
-            debugI("Handled CORS preflight request");
+            debugV("Handled CORS preflight request");
         } else { // Handle other unmatched routes
             //request->send(404, "text/plain", "Not found");
             request->redirect("/error.html");
-            debugI("Route not found: %s", request->url().c_str());
+            debugV("Route not found: %s", request->url().c_str());
         } });
 }
 
 void WebHandler::printRequestBody(AsyncWebServerRequest *request, uint8_t *data, size_t len)
 {
-    //debugI("Request Body: %.*s", len, (const char *)data);
-
     // Print as string (existing code)
     String requestBody = "";
     for (size_t i = 0; i < len; i++) {
         requestBody += (char)data[i];
     }
-    debugI("Request Body (string): %s", requestBody.c_str());
+    
+    debugV("Request Body (string): %s", requestBody.c_str());
 }
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
