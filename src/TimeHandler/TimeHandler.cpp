@@ -92,7 +92,7 @@ void TimeHandler::syncTime()
     }
 
     debugI("TimeHandler: Time successfully synchronized. Current local time: %s", formatDateTime("%Y-%m-%d %I:%M:%S %p"));
-    debugD("TimeHandler: DST flag (tm_isdst): %d", timeinfo.tm_isdst);
+    //debugD("TimeHandler: DST flag (tm_isdst): %d", timeinfo.tm_isdst);
 
     isTimeSynced = true;
 }
