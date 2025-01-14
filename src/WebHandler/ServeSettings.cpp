@@ -27,6 +27,7 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
         doc["mqtt_port"] = settings.mqttPort;
         doc["mqtt_username"] = settings.mqttUsername;
         doc["mqtt_password"] = settings.mqttPassword;
+        doc["mqtt_ssl"] = settings.mqttSsl;
         doc["mqtt_topic_sub"] = settings.mqttSubTopic;
         doc["mqtt_topic_pub"] = settings.mqttPubTopic;
         doc["api_key"] = settings.apiKey;
@@ -61,6 +62,7 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         settings.mqttPort = doc["mqtt_port"] | settings.mqttPort;
         settings.mqttUsername = doc["mqtt_username"] | settings.mqttUsername;
         settings.mqttPassword = doc["mqtt_password"] | settings.mqttPassword;
+        settings.mqttSsl = doc["mqtt_ssl"] | settings.mqttSsl;
         settings.mqttSubTopic = doc["mqtt_topic_sub"] | settings.mqttSubTopic;
         settings.mqttPubTopic = doc["mqtt_topic_pub"] | settings.mqttPubTopic;
         settings.apiKey = doc["api_key"] | settings.apiKey;
