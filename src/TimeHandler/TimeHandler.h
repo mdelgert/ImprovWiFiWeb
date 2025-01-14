@@ -17,14 +17,12 @@ class TimeHandler
 private:
     static void syncTime();
     static bool parsePosixOffsets(const char* posixStr, long* gmtOffset, int* daylightOffset);
-    static long getLinuxTime();
-    static const char* getFormattedLinuxTime();
-    static void setTftTime();
+    static void logAllDateTimeFormats();
     
 public:
     static void init();
     static void loop();
-    static const char* getFormattedTime();
+    static long getLinuxTime();
     static const char* formatDateTime(const char* format);
 };
 
@@ -39,7 +37,7 @@ class TimeHandler
 public:
     static void init() {}
     static void loop() {}
-    static const char* getFormattedTime() { return ""; }
+    static long getLinuxTime() { return 0; }
     static const char* formatDateTime(const char* format) { return ""; }
 };
 

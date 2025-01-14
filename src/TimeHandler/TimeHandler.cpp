@@ -11,16 +11,12 @@ static bool isTimeSynced = false;
 static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
-// Default region hardcoded
-const char* defaultRegion = "Etc/Zulu";
-//const char* defaultRegion = nullptr;
-//static const char *defaultRegion = "America/New_York";
-//static const char* defaultRegion = "America/Phoenix";
-//static const char* defaultRegion = "America/Los_Angeles";
-
 // Dynamically set offsets
 static long gmtOffset_sec = 0;
 static int daylightOffset_sec = 0;
+
+// Default region hardcoded
+const char* defaultRegion = "Etc/Zulu";
 
 void TimeHandler::init()
 {
@@ -72,10 +68,8 @@ void TimeHandler::loop()
 
     if (timeTimer.isReady())
     {
-        setTftTime();
-        debugD("TimeHandler: Current time: %s", getFormattedTime());
-        debugD("TimeHandler: Linux time (Epoch): %ld", getLinuxTime());
-        //debugD("TimeHandler: Formatted Linux time: %s", getFormattedLinuxTime());
+        //logAllDateTimeFormats();
+        GfxHandler::printMessage(formatDateTime("%I:%M:%S %p"));
     }
 }
 
@@ -88,7 +82,7 @@ void TimeHandler::syncTime()
         return;
     }
 
-    debugI("TimeHandler: Time successfully synchronized. Current local time: %s", getFormattedTime());
+    debugI("TimeHandler: Time successfully synchronized. Current local time: %s", formatDateTime("%Y-%m-%d %I:%M:%S %p"));
     debugD("TimeHandler: DST flag (tm_isdst): %d", timeinfo.tm_isdst);
 
     isTimeSynced = true;
@@ -132,43 +126,7 @@ long TimeHandler::getLinuxTime()
     return time(nullptr); // Returns the current time as seconds since epoch
 }
 
-const char *TimeHandler::getFormattedLinuxTime()
-{
-    static char timeString[64];
-    time_t now = time(nullptr); // Get current Linux time
-    struct tm timeinfo;
-    localtime_r(&now, &timeinfo); // Convert to local time
-    strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
-    return timeString;
-}
-
-const char *TimeHandler::getFormattedTime()
-{
-    static char timeString[64];
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo))
-    {
-        strcpy(timeString, "Time not set");
-        return timeString;
-    }
-    strftime(timeString, sizeof(timeString), "%Y-%m-%d %H:%M:%S", &timeinfo);
-    return timeString;
-}
-
-void TimeHandler::setTftTime()
-{
-    static char timeString[64];
-    struct tm timeinfo;
-    if (!getLocalTime(&timeinfo))
-    {
-        return;
-    }
-    // Use "%I" for 12-hour format and "%p" for AM/PM
-    strftime(timeString, sizeof(timeString), "%I:%M:%S %p", &timeinfo);
-    GfxHandler::printMessage(timeString);
-}
-
-const char* formatDateTime(const char* format) {
+const char* TimeHandler::formatDateTime(const char* format) {
     static char buffer[64]; // Reusable buffer for formatted output
     struct tm timeinfo;
     time_t now = time(nullptr); // Get current epoch time
@@ -179,6 +137,45 @@ const char* formatDateTime(const char* format) {
 
     strftime(buffer, sizeof(buffer), format, &timeinfo);
     return buffer;
+}
+
+void TimeHandler::logAllDateTimeFormats()
+{
+    // Full Date-Time (12-hour format with AM/PM)
+    debugI("Full Date-Time (12-hour): %s", formatDateTime("%Y-%m-%d %I:%M:%S %p"));
+
+    // Full Date-Time (24-hour format)
+    debugI("Full Date-Time (24-hour): %s", formatDateTime("%Y-%m-%d %H:%M:%S"));
+
+    // Date Only
+    debugI("Date Only: %s", formatDateTime("%Y-%m-%d"));
+
+    // Time Only (12-hour format with AM/PM)
+    debugI("Time Only (12-hour): %s", formatDateTime("%I:%M:%S %p"));
+
+    // Time Only (24-hour format)
+    debugI("Time Only (24-hour): %s", formatDateTime("%H:%M:%S"));
+
+    // Day of the Week
+    debugI("Day of the Week: %s", formatDateTime("%A"));
+
+    // Month and Year
+    debugI("Month and Year: %s", formatDateTime("%B %Y"));
+
+    // Weekday, Month, and Date
+    debugI("Weekday, Month, Date: %s", formatDateTime("%A, %B %d"));
+
+    // Short Date-Time (MM/DD/YY HH:MM)
+    debugI("Short Date-Time: %s", formatDateTime("%m/%d/%y %H:%M"));
+
+    // ISO 8601 Format
+    debugI("ISO 8601 Format: %s", formatDateTime("%Y-%m-%dT%H:%M:%S"));
+
+    // Linux Epoch Time
+    debugI("Linux Epoch Time: %ld", time(nullptr));
+
+    // Custom Timezone String
+    debugI("Custom Timezone: %s", formatDateTime("%Z"));
 }
 
 #endif // ENABLE_TIME_HANDLER
