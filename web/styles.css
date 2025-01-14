@@ -230,3 +230,19 @@ select option {
   background-color: var(--button-bg);
   color: var(--text-color);
 }
+
+.checkbox-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr; /* Checkbox in the first column, label in the second */
+  align-items: center;
+  gap: 3.5rem; /* Space between checkbox and label */
+}
+
+input[type="checkbox"] {
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+  margin-left: 2.5rem; /* Add spacing between label and checkbox */
+}
+
+
