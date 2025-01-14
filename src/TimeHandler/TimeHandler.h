@@ -3,6 +3,7 @@
 #ifdef ENABLE_TIME_HANDLER
 
 #include "Globals.h"
+#include "GfxHandler.h"
 #include "TimeZones.h"
 #include "NonBlockingTimer.h"
 #include <time.h>
@@ -16,21 +17,13 @@ class TimeHandler
 private:
     static void syncTime();
     static bool parsePosixOffsets(const char* posixStr, long* gmtOffset, int* daylightOffset);
+    static long getLinuxTime();
+    static const char* getFormattedLinuxTime();
+    static void setTftTime();
     
 public:
-    /**
-     * init() is called once at startup to configure NTP and any offsets.
-     */
     static void init();
-
-    /**
-     * loop() is called frequently to allow periodic maintenance, e.g. re-sync.
-     */
     static void loop();
-
-    /**
-     * Returns a const char* with the formatted local time (thread-safe usage pattern).
-     */
     static const char* getFormattedTime();
 };
 
