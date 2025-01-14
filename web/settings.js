@@ -19,6 +19,7 @@ async function loadSettings() {
     document.getElementById("mqtt_port").value = data.mqtt_port || "";
     document.getElementById("mqtt_username").value = data.mqtt_username || "";
     document.getElementById("mqtt_password").value = data.mqtt_password || "";
+    document.getElementById("mqtt_ssl").checked = data.mqtt_ssl || false;
     document.getElementById("mqtt_topic_sub").value = data.mqtt_topic_sub || "";
     document.getElementById("mqtt_topic_pub").value = data.mqtt_topic_pub || "";
     document.getElementById("api_key").value = data.api_key || "";
@@ -40,6 +41,7 @@ async function saveSettings() {
   const mqttPort = parseInt(document.getElementById("mqtt_port").value.trim(), 10);
   const mqttUsername = document.getElementById("mqtt_username").value.trim();
   const mqttPassword = document.getElementById("mqtt_password").value.trim();
+  const mqttSsl = document.getElementById("mqtt_ssl").checked;
   const mqttTopicSub = document.getElementById("mqtt_topic_sub").value.trim();
   const mqttTopicPub = document.getElementById("mqtt_topic_pub").value.trim();
   const apiKey = document.getElementById("api_key").value.trim();
@@ -61,6 +63,7 @@ async function saveSettings() {
       mqtt_port: mqttPort,
       mqtt_username: mqttUsername,
       mqtt_password: mqttPassword,
+      mqtt_ssl: mqttSsl,
       mqtt_topic_sub: mqttTopicSub,
       mqtt_topic_pub: mqttTopicPub,
       api_key: apiKey,
