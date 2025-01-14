@@ -1,9 +1,6 @@
 #ifdef ENABLE_TIME_HANDLER
 
 #include "TimeHandler.h"
-#include "TimeZones.h"
-#include <time.h>
-#include "NonBlockingTimer.h"
 
 // Timers for resync and periodic updates
 static NonBlockingTimer timeSyncTimer(60000);
@@ -16,6 +13,8 @@ static const char* ntpServer2 = "time.nist.gov";
 
 // Default region hardcoded
 static const char* defaultRegion = "America/New_York";
+//static const char* defaultRegion = "America/Phoenix";
+//static const char* defaultRegion = "America/Los_Angeles";
 
 // Dynamically set offsets
 static long gmtOffset_sec = 0;

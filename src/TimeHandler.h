@@ -3,6 +3,9 @@
 #ifdef ENABLE_TIME_HANDLER
 
 #include "Globals.h"
+#include "TimeZones.h"
+#include "NonBlockingTimer.h"
+#include <time.h>
 
 /**
  * TimeHandler is responsible for setting up NTP time synchronization
