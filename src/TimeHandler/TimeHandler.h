@@ -25,6 +25,7 @@ public:
     static void init();
     static void loop();
     static const char* getFormattedTime();
+    static const char* formatDateTime(const char* format);
 };
 
 #else
@@ -39,6 +40,7 @@ public:
     static void init() {}
     static void loop() {}
     static const char* getFormattedTime() { return ""; }
+    static const char* formatDateTime(const char* format) { return ""; }
 };
 
 #endif // ENABLE_TIME_HANDLER

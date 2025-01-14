@@ -168,4 +168,17 @@ void TimeHandler::setTftTime()
     GfxHandler::printMessage(timeString);
 }
 
+const char* formatDateTime(const char* format) {
+    static char buffer[64]; // Reusable buffer for formatted output
+    struct tm timeinfo;
+    time_t now = time(nullptr); // Get current epoch time
+
+    if (!getLocalTime(&timeinfo)) {
+        return "Time not available";
+    }
+
+    strftime(buffer, sizeof(buffer), format, &timeinfo);
+    return buffer;
+}
+
 #endif // ENABLE_TIME_HANDLER
