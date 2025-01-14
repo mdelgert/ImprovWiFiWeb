@@ -14,6 +14,7 @@
 - [] Document EMQX setup
 - [] Implement x,y and font size in GfxHandler
 - [] Implement build_flags consistent with other projects follow #if rather than #ifdef -DENABLE_LIB=0/1
+- [] Review code for blocking actions when not connected or missing default values after wiping preferences
 
 ### Complete
 - [x] GitHub pages action fix
