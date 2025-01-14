@@ -12,9 +12,11 @@ static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
 // Default region hardcoded
-static const char *defaultRegion = "America/New_York";
-// static const char* defaultRegion = "America/Phoenix";
-// static const char* defaultRegion = "America/Los_Angeles";
+const char* defaultRegion = "Etc/Zulu";
+//const char* defaultRegion = nullptr;
+//static const char *defaultRegion = "America/New_York";
+//static const char* defaultRegion = "America/Phoenix";
+//static const char* defaultRegion = "America/Los_Angeles";
 
 // Dynamically set offsets
 static long gmtOffset_sec = 0;
@@ -23,6 +25,15 @@ static int daylightOffset_sec = 0;
 void TimeHandler::init()
 {
     debugI("TimeHandler initialized");
+
+    if (settings.timezone && strlen(settings.timezone.c_str()) > 0) {
+        defaultRegion = settings.timezone.c_str();
+        debugI("TimeHandler: Using timezone from settings: %s", defaultRegion);
+    } else {
+        debugW("TimeHandler: No timezone set. Using default: %s", defaultRegion);
+    }
+
+    debugI("TimeHandler: Using timezone: %s", defaultRegion);
 
     // Get POSIX string for the default region
     const char *posix_str = tz_db_get_posix_str(defaultRegion);
