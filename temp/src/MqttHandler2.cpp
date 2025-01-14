@@ -5,6 +5,7 @@
 // Create the Wi-Fi client & MQTT client
 //WiFiClient wifiClient;
 //PubSubClient mqttClient(wifiClient);
+
 WiFiClientSecure wiFiClientSecure;
 PubSubClient mqttClient(wiFiClientSecure);
 
