@@ -12,6 +12,7 @@ class TimeHandler
 {
 private:
     static void syncTime();
+    static bool parsePosixOffsets(const char* posixStr, long* gmtOffset, int* daylightOffset);
     
 public:
     /**
