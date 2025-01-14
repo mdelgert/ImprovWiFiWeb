@@ -2,17 +2,29 @@
 
 #include "MqttHandler.h"
 
-// Create the Wi-Fi client & MQTT client
-//WiFiClient wifiClient;
-//PubSubClient mqttClient(wifiClient);
+// Create MQTT client; the actual client depends on the SSL flag
+WiFiClient wiFiClient;
 WiFiClientSecure wiFiClientSecure;
-PubSubClient mqttClient(wiFiClientSecure);
+PubSubClient mqttClient;
 
 // Optional: Use a NonBlockingTimer to avoid continuously retrying in busy loops
-static NonBlockingTimer mqttTimer(2000);
+static NonBlockingTimer mqttTimer(5000);
 
 void MqttHandler::init()
 {
+    // Use the appropriate client based on SSL settings
+    if (settings.mqttSsl)
+    {
+        debugI("MqttHandler: Using secure WiFi client.");
+        wiFiClientSecure.setCACert(ca_cert);
+        mqttClient.setClient(wiFiClientSecure);
+    }
+    else
+    {
+        debugI("MqttHandler: Using non-secure WiFi client.");
+        mqttClient.setClient(wiFiClient);
+    }
+
     // Point the MQTT client to the broker from settings
     mqttClient.setServer(settings.mqttServer.c_str(), settings.mqttPort);
 
@@ -25,15 +37,13 @@ void MqttHandler::init()
 
 void MqttHandler::loop()
 {
-    // If not connected, attempt to reconnect every 2 seconds
+    // If not connected, attempt to reconnect
     if (!mqttClient.connected())
     {
         if (mqttTimer.isReady())
         {
-            //debugI("MqttHandler: Not connected, attempting reconnect...");
-            //Suspect this is blocking remote debugger terminal windows stops working 
-            //when it fails disabling as a test................
-            //connectToMqtt();
+            debugW("MqttHandler: Not connected, attempting reconnect...");
+            connectToMqtt();
         }
     }
     else
@@ -61,8 +71,6 @@ void MqttHandler::publish(const char *topic, const char *message)
 void MqttHandler::connectToMqtt()
 {
     debugI("MqttHandler: Attempting MQTT connection to %s:%d", settings.mqttServer.c_str(), settings.mqttPort);
-    
-    wiFiClientSecure.setCACert(ca_cert);
 
     bool isConnected = false;
 
@@ -87,12 +95,15 @@ void MqttHandler::connectToMqtt()
         debugI("MqttHandler: Subscribed to [%s]", settings.mqttSubTopic.c_str());
 
         // Optionally publish a "hello" message
-        publish(settings.mqttPubTopic.c_str(), "Hello from ESP32-S3!");
+        //publish(settings.mqttPubTopic.c_str(), "Hello from ESP32-S3!");
+
+        String helloMessage = "Device: " + settings.deviceName + " connected.";
+        publish(settings.mqttPubTopic.c_str(), helloMessage.c_str());
+
     }
     else
     {
-        debugE("MqttHandler: Connection failed, state=%d. Will retry...",
-               mqttClient.state());
+        debugE("MqttHandler: Connection failed, state=%d. Will retry...", mqttClient.state());
     }
 }
 
@@ -117,7 +128,6 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
 #endif // ENABLE_MQTT_HANDLER
 
 /*
-debugI("MqttHandler: init() called");
 debugI("settings.mqttServer: %s", settings.mqttServer.c_str());
 debugI("settings.mqttPort: %d", settings.mqttPort);
 debugI("settings.mqttUsername: %s", settings.mqttUsername.c_str());
