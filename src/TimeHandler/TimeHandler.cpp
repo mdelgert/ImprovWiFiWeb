@@ -51,6 +51,12 @@ void TimeHandler::init()
     // Configure time
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer1, ntpServer2);
     syncTime();
+
+    // Update boot count and time
+    settings.bootCount++;
+    settings.bootTime = time(nullptr);
+    settings.upTime++;
+    ConfigManager::save();
 }
 
 void TimeHandler::loop()
@@ -70,6 +76,9 @@ void TimeHandler::loop()
     {
         //logAllDateTimeFormats();
         GfxHandler::printMessage(formatDateTime("%I:%M:%S %p"));
+        settings.upTime++;
+        settings.currentTime = formatDateTime("%I:%M:%S %p");
+        settings.currentDate = formatDateTime("%m-%d-%Y");
     }
 }
 
