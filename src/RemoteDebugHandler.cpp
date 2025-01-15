@@ -20,10 +20,9 @@ void RemoteDebugHandler::init()
     Serial.begin(115200);           // This might interfere with ImprovWifi because sending serial messages at the same time
     Debug.setSerialEnabled(true);   // Enable sending to serial debug as well (may want to disable it for release)
     Debug.setResetCmdEnabled(true); // Enable the reset command
-    Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
-    Debug.showColors(true);         // Enable colors
-
-    //TODO add to settings
+    //Debug.showTime(true);           // Show time in debug messages
+    //Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
+    //Debug.showColors(true);         // Enable colors
     //Debug.setPassword("");     // Set the password for the debug console
     
     // Add custom commands
