@@ -54,6 +54,7 @@ void GfxHandler::init()
     tft.fillScreen(TFT_BLACK);              // Clear the screen
     tft.setTextColor(TFT_WHITE, TFT_BLACK); // White text on black background
     tft.setTextSize(2);                     // Set the text size
+    CommandHandler::registerCommand("tft", runCommand);
 }
 
 void GfxHandler::printMessage(const String &message)
@@ -76,6 +77,28 @@ void GfxHandler::drawImage(int x, int y, int width, int height, const char *data
             color = tft.color565(pixel[0], pixel[1], pixel[2]); // Convert RGB888 to RGB565
             tft.drawPixel(x + i, y + j, color);                 // Draw pixel on screen
         }
+    }
+}
+
+void GfxHandler::runCommand(const String &command)
+{
+    String cmd = command;
+    String args = "";
+
+    int spaceIndex = command.indexOf(' ');
+    if (spaceIndex > 0)
+    {
+        cmd = command.substring(0, spaceIndex);
+        args = command.substring(spaceIndex + 1);
+    }
+
+    if (cmd == "print")
+    {
+        printMessage(args.c_str());
+    }
+    else
+    {
+        debugW("Unknown command: %s", cmd.c_str());
     }
 }
 

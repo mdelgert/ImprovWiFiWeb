@@ -25,6 +25,7 @@ public:
     static void init();
     static void printMessage(const String &message);
     static void drawImage(int x, int y, int width, int height, const char *data);
+    static void runCommand(const String &command);
 };
 
 #else
@@ -33,5 +34,6 @@ public:
     static void init() {}
     static void printMessage(const String &message) {} // Consistent parameter type
     static void drawImage(int, int, int, int, const char *) {}
+    static void runCommand(const String &command) {}
 };
 #endif // ENABLE_GFX_HANDLER
