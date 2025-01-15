@@ -6,36 +6,43 @@
 CRGB LedHandler::leds[NUM_LEDS];
 uint8_t LedHandler::defaultBrightness = 100; // Default brightness
 
+std::string toLower(const std::string &str) {
+    std::string lowerStr = str;
+    std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(),
+                   [](unsigned char c) { return std::tolower(c); });
+    return lowerStr;
+}
+
 // Define the color map
 const std::unordered_map<std::string, CRGB> LedHandler::colorMap = {
-    {"Red", CRGB::Red},
-    {"Green", CRGB::Green},
-    {"Blue", CRGB::Blue},
-    {"Yellow", CRGB::Yellow},
-    {"White", CRGB::White},
-    {"Black", CRGB::Black},
-    {"Orange", CRGB::Orange},
-    {"Purple", CRGB::Purple},
-    {"Pink", CRGB::Pink},
-    {"Cyan", CRGB::Cyan},
-    {"Magenta", CRGB::Magenta},
-    {"Brown", CRGB::Brown},
-    {"Lime", CRGB::Lime},
-    {"Turquoise", CRGB::Turquoise},
-    {"Violet", CRGB::Violet},
-    {"Gold", CRGB::Gold},
-    {"Silver", CRGB::Silver},
-    {"Teal", CRGB::Teal},
-    {"Navy", CRGB::Navy},
-    {"Maroon", CRGB::Maroon},
-    {"Olive", CRGB::Olive},
-    {"SkyBlue", CRGB::SkyBlue},
-    {"HotPink", CRGB::HotPink},
-    {"Chartreuse", CRGB::Chartreuse},
-    {"Aquamarine", CRGB::Aquamarine},
-    {"Khaki", CRGB::Khaki},
-    {"Lavender", CRGB::Lavender},
-    {"Beige", CRGB::Beige}
+    {"red", CRGB::Red},
+    {"green", CRGB::Green},
+    {"blue", CRGB::Blue},
+    {"yellow", CRGB::Yellow},
+    {"white", CRGB::White},
+    {"black", CRGB::Black},
+    {"orange", CRGB::Orange},
+    {"purple", CRGB::Purple},
+    {"pink", CRGB::Pink},
+    {"cyan", CRGB::Cyan},
+    {"magenta", CRGB::Magenta},
+    {"brown", CRGB::Brown},
+    {"lime", CRGB::Lime},
+    {"turquoise", CRGB::Turquoise},
+    {"violet", CRGB::Violet},
+    {"gold", CRGB::Gold},
+    {"silver", CRGB::Silver},
+    {"teal", CRGB::Teal},
+    {"navy", CRGB::Navy},
+    {"maroon", CRGB::Maroon},
+    {"olive", CRGB::Olive},
+    {"skyblue", CRGB::SkyBlue},
+    {"hotpink", CRGB::HotPink},
+    {"chartreuse", CRGB::Chartreuse},
+    {"aquamarine", CRGB::Aquamarine},
+    {"khaki", CRGB::Khaki},
+    {"lavender", CRGB::Lavender},
+    {"beige", CRGB::Beige}
 };
 
 void LedHandler::init() {
@@ -52,8 +59,20 @@ void LedHandler::setColor(const CRGB &color, uint8_t brightness) {
     debugD("LED color set to R:%d G:%d B:%d with brightness %d", color.r, color.g, color.b, brightness);
 }
 
+/*
 void LedHandler::setColorByName(const std::string &colorName, uint8_t brightness) {
     auto it = colorMap.find(colorName);
+    if (it != colorMap.end()) {
+        setColor(it->second, brightness);
+    } else {
+        debugW("Unknown color: %s", colorName.c_str());
+    }
+}
+*/
+
+void LedHandler::setColorByName(const std::string &colorName, uint8_t brightness) {
+    std::string lowerColorName = toLower(colorName); // Convert colorName to lowercase
+    auto it = colorMap.find(lowerColorName);
     if (it != colorMap.end()) {
         setColor(it->second, brightness);
     } else {
@@ -84,11 +103,11 @@ void LedHandler::runCommand(const String &command) {
         args = command.substring(spaceIndex + 1);
     }
 
-    if (cmd == "setColor") {
+    if (cmd == "color") {
         setColorByName(args.c_str(), defaultBrightness);
     } else if (cmd == "clear") {
         clear();
-    } else if (cmd == "setDefaultBrightness") {
+    } else if (cmd == "brightness") {
         setDefaultBrightness(args.toInt());
     } else {
         debugW("Unknown command: %s", cmd.c_str());
