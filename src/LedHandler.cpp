@@ -6,13 +6,6 @@
 CRGB LedHandler::leds[NUM_LEDS];
 uint8_t LedHandler::defaultBrightness = 100; // Default brightness
 
-std::string toLower(const std::string &str) {
-    std::string lowerStr = str;
-    std::transform(lowerStr.begin(), lowerStr.end(), lowerStr.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-    return lowerStr;
-}
-
 // Define the color map
 const std::unordered_map<std::string, CRGB> LedHandler::colorMap = {
     {"red", CRGB::Red},
@@ -59,27 +52,6 @@ void LedHandler::setColor(const CRGB &color, uint8_t brightness) {
     debugD("LED color set to R:%d G:%d B:%d with brightness %d", color.r, color.g, color.b, brightness);
 }
 
-/*
-void LedHandler::setColorByName(const std::string &colorName, uint8_t brightness) {
-    auto it = colorMap.find(colorName);
-    if (it != colorMap.end()) {
-        setColor(it->second, brightness);
-    } else {
-        debugW("Unknown color: %s", colorName.c_str());
-    }
-}
-*/
-
-void LedHandler::setColorByName(const std::string &colorName, uint8_t brightness) {
-    std::string lowerColorName = toLower(colorName); // Convert colorName to lowercase
-    auto it = colorMap.find(lowerColorName);
-    if (it != colorMap.end()) {
-        setColor(it->second, brightness);
-    } else {
-        debugW("Unknown color: %s", colorName.c_str());
-    }
-}
-
 void LedHandler::clear() {
     FastLED.clear();
     FastLED.show();
@@ -93,6 +65,18 @@ void LedHandler::setDefaultBrightness(uint8_t brightness) {
     debugI("Default brightness set to %d", brightness);
 }
 
+void LedHandler::setColorByName(const String &colorName, uint8_t brightness) {
+    String colorNameLower = colorName;
+    colorNameLower.toLowerCase();
+
+    auto it = colorMap.find(colorNameLower.c_str()); // Use c_str() for std::string lookup
+    if (it != colorMap.end()) {
+        setColor(it->second, brightness);
+    } else {
+        debugW("Unknown color: %s", colorName.c_str());
+    }
+}
+
 void LedHandler::runCommand(const String &command) {
     String cmd = command;
     String args = "";
@@ -102,6 +86,8 @@ void LedHandler::runCommand(const String &command) {
         cmd = command.substring(0, spaceIndex);
         args = command.substring(spaceIndex + 1);
     }
+
+    cmd.toLowerCase(); // Convert cmd to lowercase
 
     if (cmd == "color") {
         setColorByName(args.c_str(), defaultBrightness);

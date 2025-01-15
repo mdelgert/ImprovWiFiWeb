@@ -12,19 +12,20 @@
 #define LED_TYPE APA102
 #define COLOR_ORDER BGR
 
-class LedHandler {
+class LedHandler
+{
 public:
     // Initialize the LED handler
     static void init();
-
-    // Set LED color by name (e.g., "Red", "Blue")
-    static void setColorByName(const std::string &colorName, uint8_t brightness = defaultBrightness);
 
     // Turn off all LEDs
     static void clear();
 
     // Set default brightness
     static void setDefaultBrightness(uint8_t brightness);
+
+    // Set LED color by name (e.g., "Red", "Blue")
+    static void setColorByName(const String &colorName, uint8_t brightness = defaultBrightness);
 
     // Run a command (e.g., "setColor Red")
     static void runCommand(const String &command);
@@ -45,13 +46,14 @@ private:
 #include <string>
 
 // No-op implementation of LedHandler
-class LedHandler {
+class LedHandler
+{
 public:
-    static void init() {}                                // No-op
-    static void setColorByName(const std::string &, uint8_t = 0) {} // No-op
-    static void clear() {}                               // No-op
-    static void setDefaultBrightness(uint8_t) {}         // No-op
-    static void runCommand(const String &) {}            // No-op
+    static void init() {}                                           // No-op
+    static void clear() {}                                          // No-op
+    static void setDefaultBrightness(uint8_t) {}                    // No-op
+    static void setColorByName(const String &, uint8_t = 0) {} // No-op
+    static void runCommand(const String &) {}                       // No-op
 };
 
 #endif // ENABLE_LED_HANDLER
