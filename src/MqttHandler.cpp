@@ -122,7 +122,8 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
     {
         debugD("MqttHandler: Echoing message to publish topic");
         publish(settings.mqttPubTopic.c_str(), message.c_str());
-        Debug.wsOnReceive(message.c_str());
+        //Debug.wsOnReceive(message.c_str());
+        CommandHandler::handleCommand(message);
     }
 }
 

@@ -38,6 +38,8 @@ void RemoteDebugHandler::init()
 // Store the custom command handling logic in a global or class-level function
 void RemoteDebugHandler::handleCustomCommands() {
     String command = Debug.getLastCommand(); // Retrieve the last received command
+    CommandHandler::handleCommand(command); // Pass the command to the CommandHandler
+    /*
     if (command.startsWith("clear")) {
         Debug.println("\033[2J\033[H"); // Send ANSI escape codes to clear the terminal
     } else if (command.startsWith("hello")) {
@@ -61,5 +63,6 @@ void RemoteDebugHandler::handleCustomCommands() {
     } else {
         Debug.println("Unknown command");
     }
+    */
 }
 #endif // ENABLE_REMOTE_DEBUG_HANDLER

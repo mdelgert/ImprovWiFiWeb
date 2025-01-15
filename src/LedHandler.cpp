@@ -41,6 +41,7 @@ const std::unordered_map<std::string, CRGB> LedHandler::colorMap = {
 void LedHandler::init() {
     FastLED.addLeds<LED_TYPE, LED_DI_PIN, LED_CI_PIN, COLOR_ORDER>(leds, NUM_LEDS);
     clear(); // Turn off all LEDs initially
+    CommandHandler::registerCommand("led", runCommand);
     debugI("LEDHandler initialized with %d LED(s)", NUM_LEDS);
 }
 
@@ -72,4 +73,26 @@ void LedHandler::setDefaultBrightness(uint8_t brightness) {
     FastLED.show();
     debugI("Default brightness set to %d", brightness);
 }
+
+void LedHandler::runCommand(const String &command) {
+    String cmd = command;
+    String args = "";
+
+    int spaceIndex = command.indexOf(' ');
+    if (spaceIndex > 0) {
+        cmd = command.substring(0, spaceIndex);
+        args = command.substring(spaceIndex + 1);
+    }
+
+    if (cmd == "setColor") {
+        setColorByName(args.c_str(), defaultBrightness);
+    } else if (cmd == "clear") {
+        clear();
+    } else if (cmd == "setDefaultBrightness") {
+        setDefaultBrightness(args.toInt());
+    } else {
+        debugW("Unknown command: %s", cmd.c_str());
+    }
+}
+
 #endif // ENABLE_LED_HANDLER

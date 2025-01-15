@@ -26,6 +26,9 @@ public:
     // Set default brightness
     static void setDefaultBrightness(uint8_t brightness);
 
+    // Run a command (e.g., "setColor Red")
+    static void runCommand(const String &command);
+
 private:
     static CRGB leds[NUM_LEDS];       // Static array for LED data
     static uint8_t defaultBrightness; // Default brightness level
@@ -48,6 +51,7 @@ public:
     static void setColorByName(const std::string &, uint8_t = 0) {} // No-op
     static void clear() {}                               // No-op
     static void setDefaultBrightness(uint8_t) {}         // No-op
+    static void runCommand(const String &) {}            // No-op
 };
 
 #endif // ENABLE_LED_HANDLER
