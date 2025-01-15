@@ -14,6 +14,8 @@ void BluetoothHandler::RxCallback::onWrite(NimBLECharacteristic *pCharacteristic
     {
         debugI("Received: %s", receivedValue.c_str());
 
+        CommandHandler::handleCommand(receivedValue.c_str());
+
         // Process a command
         // std::string response;
 
