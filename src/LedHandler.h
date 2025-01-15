@@ -3,9 +3,8 @@
 #ifdef ENABLE_LED_HANDLER
 
 #include "Globals.h"
+#include "LedColorMap.h"
 #include <FastLED.h>
-#include <unordered_map>
-#include <string>
 
 // LED configuration
 #define NUM_LEDS 1
@@ -27,17 +26,12 @@ public:
     // Set LED color by name (e.g., "Red", "Blue")
     static void setColorByName(const String &colorName, uint8_t brightness = defaultBrightness);
 
-    // Run a command (e.g., "setColor Red")
+    // Run a command (e.g., "led color red")
     static void runCommand(const String &command);
 
 private:
     static CRGB leds[NUM_LEDS];       // Static array for LED data
     static uint8_t defaultBrightness; // Default brightness level
-
-    // Map of color names to CRGB values
-    static const std::unordered_map<std::string, CRGB> colorMap;
-
-    // Set LED color directly (internal use only)
     static void setColor(const CRGB &color, uint8_t brightness);
 };
 
