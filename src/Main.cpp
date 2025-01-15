@@ -27,9 +27,13 @@ void setup()
   MqttHandler::init();
   TimeHandler::init();
   OTAHandler::init();
-  //GfxHandler::printMessage(SOFTWARE_VERSION);
+  // GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");
+
+  // Register a "help" command
+  CommandHandler::registerCommand("help", [](const String &)
+    { CommandHandler::listCommands(); }, "Lists all available commands.");
 }
 
 void loop()

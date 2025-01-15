@@ -20,25 +20,29 @@ void RemoteDebugHandler::init()
     Serial.begin(115200);           // This might interfere with ImprovWifi because sending serial messages at the same time
     Debug.setSerialEnabled(true);   // Enable sending to serial debug as well (may want to disable it for release)
     Debug.setResetCmdEnabled(true); // Enable the reset command
-    //Debug.showTime(true);           // Show time in debug messages
+    Debug.showTime(true);           // Show time in debug messages
     //Debug.showProfiler(true);       // Profiler (Good to measure times, to optimize codes)
     //Debug.showColors(true);         // Enable colors
     //Debug.setPassword("");     // Set the password for the debug console
     
     // Add custom commands
     Debug.setHelpProjectsCmds(
-        "clear - Clear the terminal\n"
-        "hello - Print Hello, World!\n"
-        "tft [YourMessage] - Display a message on the TFT\n"
-        "led [YourColor] - Set LED color (e.g., Red, Green, Blue)"
+        "clear - Clear the terminal\n" // Clear is being implemented bry frontend javascript clear the window
+        "help - Shows command handler help\n"
+        //"hello - Print Hello, World!\n"
+        //"tft [YourMessage] - Display a message on the TFT\n"
+        //"led [YourColor] - Set LED color (e.g., Red, Green, Blue)"
     ); // Add help text for all commands
+
     Debug.setCallBackProjectCmds(handleCustomCommands); // Use the global function as the callback
 }
 
 // Store the custom command handling logic in a global or class-level function
 void RemoteDebugHandler::handleCustomCommands() {
+
     String command = Debug.getLastCommand(); // Retrieve the last received command
     CommandHandler::handleCommand(command); // Pass the command to the CommandHandler
+    
     /*
     if (command.startsWith("clear")) {
         Debug.println("\033[2J\033[H"); // Send ANSI escape codes to clear the terminal

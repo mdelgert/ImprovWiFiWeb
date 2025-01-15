@@ -9,7 +9,8 @@ uint8_t LedHandler::defaultBrightness = 100; // Default brightness
 void LedHandler::init() {
     FastLED.addLeds<LED_TYPE, LED_DI_PIN, LED_CI_PIN, COLOR_ORDER>(leds, NUM_LEDS);
     clear(); // Turn off all LEDs initially
-    CommandHandler::registerCommand("led", runCommand);
+    //CommandHandler::registerCommand("led", runCommand);
+    registerCommands();
     debugI("LEDHandler initialized with %d LED(s)", NUM_LEDS);
 }
 
@@ -45,6 +46,7 @@ void LedHandler::setColorByName(const String &colorName, uint8_t brightness) {
     }
 }
 
+/*
 void LedHandler::runCommand(const String &command) {
     String cmd = command;
     String args = "";
@@ -66,6 +68,38 @@ void LedHandler::runCommand(const String &command) {
     } else {
         debugW("Unknown command: %s", cmd.c_str());
     }
+}
+*/
+
+void LedHandler::registerCommands() {
+    CommandHandler::registerCommand("led", [](const String& command) {
+        String cmd = command;
+        String args = "";
+
+        int spaceIndex = command.indexOf(' ');
+        if (spaceIndex > 0) {
+            cmd = command.substring(0, spaceIndex);
+            args = command.substring(spaceIndex + 1);
+        }
+
+        //cmd.toLowerCase();
+
+        if (cmd == "color") {
+            setColorByName(args.c_str(), 100); // Replace 100 with your default brightness
+        } else if (cmd == "clear") {
+            clear();
+        } else if (cmd == "brightness") {
+            setDefaultBrightness(args.toInt());
+        } else {
+            debugW("Unknown LED command: %s", cmd.c_str());
+        }
+    },
+    "Handles LED commands. Usage: led <subcommand> [args]"
+    "\n  Subcommands:"
+    "\n  color <color> - Set LED color by name (e.g., Red, Green, Blue)"
+    "\n  clear - Clear all LEDs"
+    "\n  brightness <level> - Set default brightness level (0-255)"
+    );
 }
 
 #endif // ENABLE_LED_HANDLER

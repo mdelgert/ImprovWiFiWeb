@@ -1,53 +1,70 @@
 #include "CommandHandler.h"
 
 std::map<String, std::function<void(const String&)>> CommandHandler::commandRegistry;
+std::map<String, String> CommandHandler::commandDescriptions;
+std::function<void(const String&)> CommandHandler::defaultHandler = nullptr;
+
+void CommandHandler::parseCommand(const String& input, String& cmd, String& args) {
+    int spaceIndex = input.indexOf(' ');
+    if (spaceIndex > 0) {
+        cmd = input.substring(0, spaceIndex);
+        args = input.substring(spaceIndex + 1);
+    } else {
+        cmd = input;
+        args = "";
+    }
+    cmd.toLowerCase(); // Normalize command case
+}
 
 void CommandHandler::handleCommand(const String& command) {
-    String cmd = command;
-    String args = "";
+    String cmd, args;
+    parseCommand(command, cmd, args);
 
-    int spaceIndex = command.indexOf(' ');
-    if (spaceIndex > 0) {
-        cmd = command.substring(0, spaceIndex);
-        args = command.substring(spaceIndex + 1);
-    }
-
-    if (commandRegistry.find(cmd) != commandRegistry.end()) {
-        commandRegistry[cmd](args); // Call the registered handler
+    auto it = commandRegistry.find(cmd);
+    if (it != commandRegistry.end()) {
+        debugV("* Executing command: %s with args: %s", cmd.c_str(), args.c_str());
+        it->second(args); // Call the registered handler
+    } else if (defaultHandler) {
+        debugV("* Calling default handler for command: %s", command.c_str());
+        defaultHandler(command);
     } else {
-        Serial.println("Unknown command: " + cmd);
+        debugE("* Unknown command received: %s", cmd.c_str());
     }
 }
 
-void CommandHandler::registerCommand(const String& name, std::function<void(const String&)> handler) {
-    commandRegistry[name] = handler;
-}
-
-/* Usage example:
-
-#include "CommandHandler.h"
-
-void setup()
-{
-    CommandHandler::registerCommand("test", runCommand);
-}
-
-void runCommand(const String &command) {
-    String cmd = command;
-    String args = "";
-
-    int spaceIndex = command.indexOf(' ');
-    if (spaceIndex > 0) {
-        cmd = command.substring(0, spaceIndex);
-        args = command.substring(spaceIndex + 1);
+void CommandHandler::registerCommand(const String& name, std::function<void(const String&)> handler, const String& description) {
+    String lowerName = name;
+    lowerName.toLowerCase();
+    if (commandRegistry.find(lowerName) != commandRegistry.end()) {
+        debugW("* Warning: Command '%s' is being overwritten.", lowerName.c_str());
     }
+    commandRegistry[lowerName] = handler;
+    commandDescriptions[lowerName] = description;
+    debugD("* Command '%s' registered with description: %s", lowerName.c_str(), description.c_str());
+}
 
-    cmd.toLowerCase();
+void CommandHandler::registerCommandAlias(const String& alias, const String& existingCommand) {
+    String lowerAlias = alias;
+    String lowerCommand = existingCommand;
+    lowerAlias.toLowerCase();
+    lowerCommand.toLowerCase();
 
-    if (cmd == "hello") {
-        debugI("Hello World!");
+    if (commandRegistry.find(lowerCommand) != commandRegistry.end()) {
+        commandRegistry[lowerAlias] = commandRegistry[lowerCommand];
+        debugV("* Alias '%s' registered for command '%s'.", lowerAlias.c_str(), lowerCommand.c_str());
     } else {
-        debugW("Unknown command: %s", cmd.c_str());
+        debugE("* Error: Command '%s' not found for alias registration.", existingCommand.c_str());
     }
 }
-*/
+
+void CommandHandler::listCommands() {
+    debugI("* Listing all available commands:");
+    for (const auto& pair : commandDescriptions) {
+        debugI("* Command: %s - %s", pair.first.c_str(), pair.second.c_str());
+    }
+}
+
+void CommandHandler::setDefaultHandler(std::function<void(const String&)> handler) {
+    defaultHandler = handler;
+    debugD("* Default handler set.");
+}

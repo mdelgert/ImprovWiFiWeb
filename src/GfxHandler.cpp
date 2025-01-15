@@ -54,7 +54,7 @@ void GfxHandler::init()
     tft.fillScreen(TFT_BLACK);              // Clear the screen
     tft.setTextColor(TFT_WHITE, TFT_BLACK); // White text on black background
     tft.setTextSize(2);                     // Set the text size
-    CommandHandler::registerCommand("tft", runCommand);
+    //CommandHandler::registerCommand("tft", runCommand);
 }
 
 void GfxHandler::printMessage(const String &message)
