@@ -42,6 +42,8 @@ void runCommand(const String &command) {
         args = command.substring(spaceIndex + 1);
     }
 
+    cmd.toLowerCase();
+
     if (cmd == "hello") {
         debugI("Hello World!");
     } else {

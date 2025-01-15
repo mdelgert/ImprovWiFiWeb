@@ -48,14 +48,14 @@ void LedHandler::setColorByName(const String &colorName, uint8_t brightness) {
 void LedHandler::runCommand(const String &command) {
     String cmd = command;
     String args = "";
-
+    
     int spaceIndex = command.indexOf(' ');
     if (spaceIndex > 0) {
         cmd = command.substring(0, spaceIndex);
         args = command.substring(spaceIndex + 1);
     }
 
-    cmd.toLowerCase(); // Convert cmd to lowercase
+    cmd.toLowerCase();
 
     if (cmd == "color") {
         setColorByName(args.c_str(), defaultBrightness);
