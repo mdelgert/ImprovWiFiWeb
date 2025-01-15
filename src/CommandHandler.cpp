@@ -22,3 +22,30 @@ void CommandHandler::handleCommand(const String& command) {
 void CommandHandler::registerCommand(const String& name, std::function<void(const String&)> handler) {
     commandRegistry[name] = handler;
 }
+
+/* Usage example:
+
+#include "CommandHandler.h"
+
+void setup()
+{
+    CommandHandler::registerCommand("test", runCommand);
+}
+
+void runCommand(const String &command) {
+    String cmd = command;
+    String args = "";
+
+    int spaceIndex = command.indexOf(' ');
+    if (spaceIndex > 0) {
+        cmd = command.substring(0, spaceIndex);
+        args = command.substring(spaceIndex + 1);
+    }
+
+    if (cmd == "hello") {
+        debugI("Hello World!");
+    } else {
+        debugW("Unknown command: %s", cmd.c_str());
+    }
+}
+*/

@@ -8,7 +8,6 @@
 class CommandHandler {
 public:
     static void handleCommand(const String& command);
-
     static void registerCommand(const String& name, std::function<void(const String&)> handler);
 
 private:
