@@ -4,6 +4,21 @@ std::map<String, std::function<void(const String&)>> CommandHandler::commandRegi
 std::map<String, String> CommandHandler::commandDescriptions;
 std::function<void(const String&)> CommandHandler::defaultHandler = nullptr;
 
+void CommandHandler::init() {
+    // Register a "help" command
+    CommandHandler::registerCommand("help", [](const String&) {
+        CommandHandler::listCommands();
+    }, "Lists all available commands.");
+
+    // Set the default handler to call the 'help' command
+    CommandHandler::setDefaultHandler([](const String& command) {
+        debugI("Unknown command: %s. Showing help menu.", command.c_str());
+        CommandHandler::listCommands(); // Invoke the help command
+    });
+
+    debugD("* CommandHandler initialized.");
+}
+
 void CommandHandler::parseCommand(const String& input, String& cmd, String& args) {
     int spaceIndex = input.indexOf(' ');
     if (spaceIndex > 0) {

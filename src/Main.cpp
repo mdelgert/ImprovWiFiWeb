@@ -11,6 +11,7 @@
 #include "MqttHandler.h"
 #include "OTAHandler.h"
 #include "TimeHandler.h"
+#include "CommandHandler.h"
 
 void setup()
 {
@@ -27,13 +28,10 @@ void setup()
   MqttHandler::init();
   TimeHandler::init();
   OTAHandler::init();
-  // GfxHandler::printMessage(SOFTWARE_VERSION);
+  CommandHandler::init();
+  GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");
-
-  // Register a "help" command
-  CommandHandler::registerCommand("help", [](const String &)
-    { CommandHandler::listCommands(); }, "Lists all available commands.");
 }
 
 void loop()

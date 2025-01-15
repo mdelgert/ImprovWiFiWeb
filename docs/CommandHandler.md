@@ -1,183 +1,253 @@
+# CommandHandler Documentation and Examples
+
+## Overview
+
+**CommandHandler** is a utility for registering, parsing, and handling text-based commands.
+
+### Features
+
+1. **Simple Commands**: Register commands with no arguments or subcommands.
+2. **Commands with Arguments**: Handle commands with user-provided arguments.
+3. **Complex Commands with Subcommands**: Use a primary command with multiple subcommands and arguments.
+4. **Command Aliases**: Register multiple names for the same command.
+5. **Help Functionality**: Provide a list of all registered commands and descriptions.
+6. **Default Handler**: Handle unrecognized commands gracefully.
 
 ---
 
-### Long-Term Design for Command Handling
+## Complete Example Code
 
-To support complex logic like script parsing, key, and mouse commands, you can extend the current `CommandHandler` into a more robust system. Here’s how it can be structured:
-
-#### 1. **CommandHandler**: Core Command Processing
-- Acts as the central entry point for all commands.
-- Delegates commands to specialized modules (e.g., KeyHandler, MouseHandler, ScriptHandler).
-
-#### 2. **Modular Handlers**: Specialized Logic
-- Each handler (e.g., `KeyHandler`, `MouseHandler`, `ScriptHandler`) encapsulates specific functionality.
-- This keeps the `CommandHandler` clean and focused.
-
-#### 3. **Command Registry**: Dynamic Command Registration
-- Maintain a registry of available commands.
-- Allows dynamic addition of new commands without modifying the core.
-
-#### 4. **Task-Based Execution**: Asynchronous Operations
-- Use FreeRTOS tasks for operations like script execution to prevent blocking.
-
----
-
-### Updated Structure
-
-#### `CommandHandler.h`
-```cpp
-#ifndef COMMAND_HANDLER_H
-#define COMMAND_HANDLER_H
-
-#include <Arduino.h>
-#include <map>
-#include <functional>
-
-class CommandHandler {
-public:
-    static void handleCommand(const String& command);
-
-    static void registerCommand(const String& name, std::function<void(const String&)> handler);
-
-private:
-    static std::map<String, std::function<void(const String&)>> commandRegistry;
-};
-
-#endif // COMMAND_HANDLER_H
-```
-
----
-
-#### `CommandHandler.cpp`
 ```cpp
 #include "CommandHandler.h"
-#include "KeyHandler.h"
-#include "MouseHandler.h"
-#include "ScriptHandler.h"
 
-std::map<String, std::function<void(const String&)>> CommandHandler::commandRegistry;
+/**
+ * CommandHandler Overview:
+ * -------------------------
+ * CommandHandler is a utility for registering, parsing, and handling text-based commands.
+ * Features include:
+ * 1. Simple commands
+ * 2. Commands with arguments
+ * 3. Complex commands with subcommands
+ * 4. Command aliases
+ * 5. Help functionality
+ * 6. Default handler for unrecognized commands
+ */
 
-void CommandHandler::handleCommand(const String& command) {
-    String cmd = command;
-    String args = "";
-
-    int spaceIndex = command.indexOf(' ');
-    if (spaceIndex > 0) {
-        cmd = command.substring(0, spaceIndex);
-        args = command.substring(spaceIndex + 1);
-    }
-
-    if (commandRegistry.find(cmd) != commandRegistry.end()) {
-        commandRegistry[cmd](args); // Call the registered handler
-    } else {
-        Serial.println("Unknown command: " + cmd);
-    }
+/**
+ * Simple Command Example
+ * -----------------------
+ * A command with no arguments or subcommands.
+ */
+void registerSimpleCommand() {
+    CommandHandler::registerCommand("hello", [](const String&) {
+        debugI("Hello, world!");
+    }, "Greets the user with 'Hello, world!'");
 }
 
-void CommandHandler::registerCommand(const String& name, std::function<void(const String&)> handler) {
-    commandRegistry[name] = handler;
+/**
+ * Command with Arguments Example
+ * -------------------------------
+ * A command that accepts a single argument.
+ */
+void registerCommandWithArgs() {
+    CommandHandler::registerCommand("echo", [](const String& args) {
+        debugI("Echo: %s", args.c_str());
+    }, "Echoes the provided arguments. Usage: echo [message]");
 }
-```
 
----
+/**
+ * Complex Command with Subcommands Example
+ * -----------------------------------------
+ * A command with multiple subcommands and their respective arguments.
+ */
+void registerComplexCommand() {
+    CommandHandler::registerCommand("led", [](const String& command) {
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args); // Parse subcommand and arguments
 
-#### Example Handlers
-
-##### `KeyHandler.h`
-```cpp
-#ifndef KEY_HANDLER_H
-#define KEY_HANDLER_H
-
-#include <Arduino.h>
-
-class KeyHandler {
-public:
-    static void pressKey(const String& args);
-};
-
-#endif // KEY_HANDLER_H
-```
-
-##### `KeyHandler.cpp`
-```cpp
-#include "KeyHandler.h"
-
-void KeyHandler::pressKey(const String& args) {
-    // Parse and handle key press commands
-    Serial.println("Pressing key: " + args);
-    // Example: Implement keypress logic here
+        if (cmd == "color") {
+            debugI("Set LED color to %s", args.c_str());
+        } else if (cmd == "brightness") {
+            debugI("Set LED brightness to %d", args.toInt());
+        } else if (cmd == "clear") {
+            debugI("Clear all LEDs");
+        } else {
+            debugW("Unknown LED subcommand: %s", cmd.c_str());
+        }
+    }, "Controls the LED. Usage: led <color|brightness|clear> [value]");
 }
-```
 
-##### `MouseHandler.h` and `MouseHandler.cpp`
-Similar structure to `KeyHandler`, but for mouse commands (e.g., move, click).
+/**
+ * Command Alias Example
+ * ----------------------
+ * Register multiple names for the same command.
+ */
+void registerCommandAlias() {
+    CommandHandler::registerCommand("setcolor", [](const String& args) {
+        debugI("Set color to %s", args.c_str());
+    }, "Sets the LED color. Usage: setcolor [color]");
 
-##### `ScriptHandler.h` and `ScriptHandler.cpp`
-Use logic inspired by the DuckScript example for parsing and executing scripts asynchronously.
+    // Register aliases for the same command
+    CommandHandler::registerCommandAlias("color", "setcolor");
+    CommandHandler::registerCommandAlias("c", "setcolor");
+}
 
----
+/**
+ * Help Command Example
+ * ---------------------
+ * A command that lists all registered commands and their descriptions.
+ */
+void registerHelpCommand() {
+    CommandHandler::registerCommand("help", [](const String&) {
+        CommandHandler::listCommands();
+    }, "Lists all available commands.");
+}
 
-### Example Usage
+/**
+ * Default Handler Example
+ * ------------------------
+ * A fallback handler for unrecognized commands.
+ * This can be used to provide user feedback or trigger fallback actions.
+ */
+void registerDefaultHandler() {
+    CommandHandler::setDefaultHandler([](const String& command) {
+        debugW("Unknown command: %s. Showing help menu.", command.c_str());
+        CommandHandler::listCommands(); // Optionally display the help menu
+    });
+}
 
-#### Initialization (`setup()`):
-```cpp
-#include "CommandHandler.h"
-#include "KeyHandler.h"
-#include "MouseHandler.h"
-#include "ScriptHandler.h"
-
+/**
+ * Setup Example
+ * --------------
+ * Register all commands and set the default handler.
+ */
 void setup() {
     Serial.begin(115200);
 
+    debugI("* Initializing CommandHandler...");
+
     // Register commands
-    CommandHandler::registerCommand("key", KeyHandler::pressKey);
-    CommandHandler::registerCommand("mouse", MouseHandler::handleCommand);
-    CommandHandler::registerCommand("script", ScriptHandler::executeScript);
+    registerSimpleCommand();      // Registers 'hello'
+    registerCommandWithArgs();    // Registers 'echo'
+    registerComplexCommand();     // Registers 'led'
+    registerCommandAlias();       // Registers 'setcolor', 'color', and 'c'
+    registerHelpCommand();        // Registers 'help'
+    registerDefaultHandler();     // Sets default handler for unrecognized commands
+
+    debugI("* CommandHandler initialized.");
 }
-```
 
-#### Handling Commands:
-```cpp
-void onCommandReceived(const String& command) {
-    CommandHandler::handleCommand(command);
-}
-```
-
----
-
-### Script Execution with FreeRTOS
-For script execution, you can use a FreeRTOS task:
-```cpp
-void scriptTask(void* parameter) {
-    String* fileName = (String*)parameter;
-
-    ScriptHandler::run(*fileName);
-
-    delete fileName; // Clean up
-    vTaskDelete(NULL); // End task
-}
-```
-
-To start a script:
-```cpp
-void ScriptHandler::executeScript(const String& fileName) {
-    String* fileNameCopy = new String(fileName); // Allocate on the heap
-    xTaskCreate(scriptTask, "ScriptTask", 4096, fileNameCopy, 1, NULL);
+/**
+ * Loop Example
+ * -------------
+ * Simulate user input by handling commands from Serial input.
+ */
+void loop() {
+    if (Serial.available()) {
+        String input = Serial.readStringUntil('\n'); // Read user input from Serial
+        input.trim(); // Remove trailing spaces or newline characters
+        CommandHandler::handleCommand(input); // Process the command
+    }
 }
 ```
 
 ---
 
-### Benefits of the Design
-1. **Centralized Command Management**:
-   - Commands are processed in a single, extensible `CommandHandler`.
-2. **Specialized Handlers**:
-   - Each handler focuses on a specific functionality (e.g., keys, mouse, scripts).
-3. **Dynamic Command Registration**:
-   - Easily add new commands without modifying the core `CommandHandler`.
-4. **Asynchronous Execution**:
-   - Scripts and other long-running tasks won’t block the main loop.
-5. **Scalability**:
-   - The structure can accommodate complex features like script parsing and execution.
+## Usage Scenarios
 
-This design ensures that adding advanced features, such as script-like scripting or additional device controls, is straightforward and maintains code readability and modularity.
+### **Example Input and Outputs**
+
+#### **Registered Command**
+
+**Input**:
+```plaintext
+hello
+```
+
+**Output**:
+```plaintext
+Hello, world!
+```
+
+#### **Command with Arguments**
+
+**Input**:
+```plaintext
+echo Hello ESP32
+```
+
+**Output**:
+```plaintext
+Echo: Hello ESP32
+```
+
+#### **Complex Command with Subcommands**
+
+**Input**:
+```plaintext
+led color blue
+```
+
+**Output**:
+```plaintext
+Set LED color to blue
+```
+
+#### **Command Alias**
+
+**Input**:
+```plaintext
+color red
+```
+
+**Output**:
+```plaintext
+Set color to red
+```
+
+#### **Help Command**
+
+**Input**:
+```plaintext
+help
+```
+
+**Output**:
+```plaintext
+* Listing all available commands:
+ - hello: Greets the user with 'Hello, world!'
+ - echo: Echoes the provided arguments. Usage: echo [message]
+ - led: Controls the LED. Usage: led <color|brightness|clear> [value]
+ - setcolor: Sets the LED color. Usage: setcolor [color]
+```
+
+#### **Unknown Command**
+
+**Input**:
+```plaintext
+unknowncmd
+```
+
+**Output**:
+```plaintext
+Unknown command: unknowncmd. Showing help menu.
+* Listing all available commands:
+ - hello: Greets the user with 'Hello, world!'
+ - echo: Echoes the provided arguments. Usage: echo [message]
+ - led: Controls the LED. Usage: led <color|brightness|clear> [value]
+ - setcolor: Sets the LED color. Usage: setcolor [color]
+```
+
+---
+
+## Summary
+
+### Key Features:
+1. **Simple Commands**: For basic actions.
+2. **Commands with Arguments**: For actions requiring additional parameters.
+3. **Complex Commands**: For multi-level functionality.
+4. **Command Aliases**: To provide alternative names for commands.
+5. **Help Functionality**: Guides users with available commands.
+6. **Default Handler**: Ensures graceful handling of unrecognized commands.
+
+This code serves as a robust and extensible foundation for any command-driven application.
