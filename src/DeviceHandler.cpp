@@ -4,9 +4,12 @@
 
 USBHIDMouse DeviceHandler::mouse;
 USBHIDKeyboard DeviceHandler::keyboard;
+TaskHandle_t sendKeysTaskHandle = nullptr;
 
-static NonBlockingTimer mouseTimer(100);
-static NonBlockingTimer keyboardTimer(100);
+USBHIDKeyboard& DeviceHandler::getKeyboard()
+{
+    return keyboard;
+}
 
 void DeviceHandler::loop(){}
 
@@ -26,35 +29,65 @@ void DeviceHandler::sendMouseMovement(int x, int y)
     debugI("Mouse moved: x=%d, y=%d", x, y);
 }
 
+// RTOS task for sendKeys
+void sendKeysTask(void* parameter)
+{
+    String* text = static_cast<String*>(parameter);
+    USBHIDKeyboard& keyboard = DeviceHandler::getKeyboard();
+
+    for (size_t i = 0; i < text->length(); i++)
+    {
+        keyboard.write((*text)[i]);
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+    keyboard.write('\n');
+    debugI("Keys sent: %s", text->c_str());
+
+    delete text;
+    sendKeysTaskHandle = nullptr;
+    vTaskDelete(nullptr);
+}
+
 void DeviceHandler::sendKeys1(const String& text)
 {
-    // Type the provided string
-    for (size_t i = 0; i < text.length(); i++)
+    // Check if a task is already running
+    if (sendKeysTaskHandle != nullptr)
     {
-        keyboard.write(text[i]);
-        delay(20); // Delay between each key press
+        debugW("sendKeys2 task is already running");
+        return;
     }
-    keyboard.write('\n'); // Optional newline
-    debugI("Keys sent: %s", text.c_str());
+
+    // Allocate memory for the text to be sent
+    String* textCopy = new String(text);
+
+    // Create a FreeRTOS task for non-blocking key sending
+    BaseType_t result = xTaskCreate(
+        sendKeysTask,           // Task function
+        "sendKeysTask",         // Name of the task
+        2048,                    // Stack size in words
+        textCopy,                // Parameter to pass to the task
+        1,                       // Priority of the task
+        &sendKeysTaskHandle);   // Task handle
+
+    if (result == pdPASS)
+    {
+        debugI("Non-blocking sendKeys2 task started");
+    }
+    else
+    {
+        debugE("Failed to create sendKeys2 task");
+        delete textCopy; // Clean up if task creation fails
+    }
 }
 
 void DeviceHandler::sendKeys2(const String& text)
 {
     // Type the provided string
     for (size_t i = 0; i < text.length(); i++)
-    {
-        keyboard.print(text[i]);
-    }
-    keyboard.write('\n'); // Optional newline
-    debugI("Keys sent: %s", text.c_str());
-}
-
-void DeviceHandler::sendKeys3(const String& text)
-{
-    // Type the provided string
-    for (size_t i = 0; i < text.length(); i++)
-    {
+    {   // Both work with a delay between each key press. Does not work without a blocking delay added RTOS task above is better.
+        //keyboard.print(text[i]); 
         keyboard.write(text[i]);
+        delay(20); 
     }
     keyboard.write('\n'); // Optional newline
     debugI("Keys sent: %s", text.c_str());
@@ -74,15 +107,13 @@ void DeviceHandler::registerCommands()
         } else if (cmd == "keys2") {
             sendKeys2(args);
         }
-        else if (cmd == "keys3") {
-            sendKeys3(args);
-        } 
         else {
             debugW("Unknown HID subcommand: %s", cmd.c_str());
         } }, "Handles HID commands. Usage: HID <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  mouse <mouse> - Send x and y\n"
-                                         "  keys <keys> - Send keys"
+                                         "  keys1 <keys1> - Send keys1\n"
+                                         "  keys2 <keys2> - Send keys2"
                                          );
 }
 
