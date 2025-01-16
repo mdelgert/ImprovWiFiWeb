@@ -10,8 +10,8 @@ void ServeFiles::registerEndpoints(AsyncWebServer &server) {
 void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
     debugV("Received GET request on /files");
 
-    DynamicJsonDocument json(1024);
-    JsonArray files = json.createNestedArray("files");
+    JsonDocument doc;
+    JsonArray files = doc.createNestedArray("files");
 
     File root = LittleFS.open("/");
     File file = root.openNextFile();
@@ -21,7 +21,7 @@ void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
         file = root.openNextFile();
     }
 
-    WebHandler::sendSuccessResponse(request, "Files listed successfully", &json);
+    WebHandler::sendSuccessResponse(request, "Files listed successfully", &doc);
 }
 
 void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
@@ -52,12 +52,12 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
 void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
     debugV("Received POST request on /file");
 
-    if (!request->hasParam("filename", true)) {
-        debugE("Missing filename parameter");
+    if (!request->hasParam("filename")) {
         WebHandler::sendErrorResponse(request, 400, "Filename is required");
         return;
     }
-    String filename = request->getParam("filename", true)->value();
+    String filename = request->getParam("filename")->value();
+
     debugV("Filename: %s", filename.c_str());
     debugV("Data length: %d, Index: %d, Total: %d", len, index, total);
 
