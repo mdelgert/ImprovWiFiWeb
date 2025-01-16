@@ -1,5 +1,7 @@
 Hello I would like to implement keyboard mouse handler in my esp32-s3 micro controller.
 
+Please use these core libraries USB.h, USBHIDMouse.h and USBHIDKeyboard.h
+
 Please assume the code base already has wifi connectivity.
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?

@@ -1,5 +1,10 @@
 #pragma once
 
+// Custom USB descriptors
+#define CUSTOM_PRODUCT_NAME "USB KeyboardMouse"
+#define CUSTOM_MANUFACTURER "Demo"
+#define CUSTOM_SERIAL_NUMBER "123456789"
+
 #include "SecureExample.h"
 #include "ConfigManager.h"
 #include "NonBlockingTimer.h"
