@@ -8,12 +8,25 @@
 class BluetoothHandler
 {
 private:
-    static NimBLEServer* pServer;
-    static NimBLECharacteristic* pTxCharacteristic;
-    static NimBLECharacteristic* pRxCharacteristic;
+    static NimBLEServer *pServer;
+    static NimBLECharacteristic *pTxCharacteristic;
+    static NimBLECharacteristic *pRxCharacteristic;
 
-    class RxCallback : public NimBLECharacteristicCallbacks {
-        void onWrite(NimBLECharacteristic* pCharacteristic) override;
+    // Callback classes
+    class ServerCallbacks : public NimBLEServerCallbacks
+    {
+        void onConnect(NimBLEServer* pServer) override;
+        void onDisconnect(NimBLEServer* pServer) override;
+    };
+
+    class RxCallback : public NimBLECharacteristicCallbacks
+    {
+        void onWrite(NimBLECharacteristic *pCharacteristic) override;
+    };
+
+    class TxCallback : public NimBLECharacteristicCallbacks
+    {
+        void onRead(NimBLECharacteristic *pCharacteristic) override;
     };
 
 public:

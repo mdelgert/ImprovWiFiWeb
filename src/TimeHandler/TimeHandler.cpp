@@ -3,12 +3,15 @@
 #include "TimeHandler.h"
 
 // Timers for resync and periodic updates
-//static NonBlockingTimer timeSyncTimer(60000);
-static NonBlockingTimer timeSyncTimer(6000);
+//600000 = 10 minutes, 3600000 = 1 hour, 28800000 = 8 hours and 86400000 = 1 day
+static NonBlockingTimer timeSyncTimer(3600000); // 1 hour
 static NonBlockingTimer timeTimer(1000);
 static bool isTimeSynced = false;
 
 // NTP servers
+//The public rate limit (without an API key) is 5 requests in a rolling 30 second window; 
+//the rate limit with an API key is 50 requests in a rolling 30 second window.
+//A query interval of 10 minutes or longer is generally acceptable for both services.
 static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
