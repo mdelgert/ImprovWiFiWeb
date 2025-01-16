@@ -6,9 +6,17 @@ USBHIDMouse DeviceHandler::mouse;
 USBHIDKeyboard DeviceHandler::keyboard;
 TaskHandle_t sendKeysTaskHandle = nullptr;
 
+int DeviceHandler::keyPressDelay = 20; // Default delay value
+
 USBHIDKeyboard& DeviceHandler::getKeyboard()
 {
     return keyboard;
+}
+
+void DeviceHandler::setKeyPressDelay(int delay)
+{
+    keyPressDelay = delay > 0 ? delay : 20; // Ensure the delay is positive
+    debugI("Key press delay set to %d ms", keyPressDelay);
 }
 
 void DeviceHandler::loop(){}
@@ -38,7 +46,8 @@ void sendKeysTask(void* parameter)
     for (size_t i = 0; i < text->length(); i++)
     {
         keyboard.write((*text)[i]);
-        vTaskDelay(pdMS_TO_TICKS(20));
+        //vTaskDelay(pdMS_TO_TICKS(20));
+        vTaskDelay(pdMS_TO_TICKS(DeviceHandler::keyPressDelay)); // Use configurable delay
     }
     keyboard.write('\n');
     debugI("Keys sent: %s", text->c_str());
@@ -87,7 +96,8 @@ void DeviceHandler::sendKeys2(const String& text)
     {
         //keyboard.print(text[i]); 
         keyboard.write(text[i]);
-        delay(20); 
+        //delay(20);
+        delay(keyPressDelay); // Use the configurable delay
     }
     keyboard.write('\n'); // Optional newline
     debugI("Keys sent: %s", text.c_str());
@@ -119,13 +129,23 @@ void DeviceHandler::registerCommands()
         } else if (cmd == "keys2") {
             sendKeys2(args);
         }
+        else if (cmd == "delay") {
+            int delay = args.toInt();
+            if (delay > 0) {
+                DeviceHandler::setKeyPressDelay(delay);
+                debugI("HID delay set to %d ms", delay);
+            } else {
+                debugW("Invalid delay value. Expected a positive integer.");
+            }
+        }
         else {
             debugW("Unknown HID subcommand: %s", cmd.c_str());
         } }, "Handles HID commands. Usage: HID <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  mouse x,y - Move mouse by x and y\n"
                                          "  keys1 <keys1> - Send keys1\n"
-                                         "  keys2 <keys2> - Send keys2"
+                                         "  keys2 <keys2> - Send keys2\n"
+                                         "  delay <ms> - Set the delay for key presses default is 20 in milliseconds"
                                          );
 }
 

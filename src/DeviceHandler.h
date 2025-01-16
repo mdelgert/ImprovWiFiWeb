@@ -20,6 +20,8 @@ private:
 
 public:
     static USBHIDKeyboard& getKeyboard();
+    static int keyPressDelay; // Configurable delay for key presses
+    static void setKeyPressDelay(int delay);
     static void loop();
     static void init();
 };
@@ -29,7 +31,8 @@ class USBHIDKeyboard;
 class DeviceHandler
 {
 public: // No-op implementation of DeviceHandler
-    static USBHIDKeyboard fakeKeyboard; 
+    static USBHIDKeyboard fakeKeyboard;
+    static int keyPressDelay;
     static void loop() {} // No-op
     static void init() {} // No-op
 };
