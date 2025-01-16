@@ -1,5 +1,6 @@
 #include "ServeFiles.h"
 
+// Register endpoints for file management
 void ServeFiles::registerEndpoints(AsyncWebServer &server) {
     server.on("/files", HTTP_GET, handleListFiles);           // List files
     server.on("/file", HTTP_GET, handleReadFile);             // Read a file
@@ -132,6 +133,20 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     }
 }
 
+// Check if a file is protected
+bool isProtectedFile(const String &filename) {
+    static const char *protectedFiles[] = {
+        //"/settings.json",
+        //"/wifi_networks.json",
+        "/test.txt"
+    };
+
+    for (const char *protectedFile : protectedFiles) {
+        if (filename == protectedFile) return true;
+    }
+    return false;
+}
+
 // Handle deleting a file
 void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
     debugV("Received DELETE request on /file");
@@ -144,6 +159,13 @@ void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
     String filename = request->getParam("filename")->value();
     debugV("Filename to delete: %s", filename.c_str());
 
+    if (isProtectedFile(filename)) {
+        debugE("Cannot delete protected file: %s", filename.c_str());
+        WebHandler::sendErrorResponse(request, 403, "Cannot delete protected file: %s", filename.c_str());
+        //WebHandler::sendErrorResponse(request, 403, "Cannot modify protected file");
+        return;
+    }
+    
     if (LittleFS.remove(filename)) {
         debugV("File deleted: %s", filename.c_str());
         WebHandler::sendSuccessResponse(request, "File deleted successfully");
