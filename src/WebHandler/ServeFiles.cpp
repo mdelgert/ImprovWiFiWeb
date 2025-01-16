@@ -7,23 +7,64 @@ void ServeFiles::registerEndpoints(AsyncWebServer &server) {
     server.on("/file", HTTP_DELETE, handleDeleteFile);        // Delete a file
 }
 
+// Helper to ensure parent directories exist
+bool ServeFiles::ensureParentDirsExist(const String &filePath) {
+    int lastSlashIndex = filePath.lastIndexOf('/');
+    if (lastSlashIndex <= 0) return true; // No parent directories
+
+    String parentPath = filePath.substring(0, lastSlashIndex);
+    debugV("Ensuring directory exists: %s", parentPath.c_str());
+
+    if (LittleFS.exists(parentPath)) return true; // Directory already exists
+    return LittleFS.mkdir(parentPath);           // Create the directory
+}
+
+// Recursive helper for listing files
+void ServeFiles::listFilesRecursive(JsonArray &files, const String &path) {
+    // Ensure the directory path starts with "/" and does not end with "/"
+    String dirPath = path.isEmpty() ? "/" : (path.endsWith("/") ? path : path + "/");
+
+    debugV("Opening directory: %s", dirPath.c_str());
+    File dir = LittleFS.open(dirPath);
+
+    if (!dir || !dir.isDirectory()) {
+        debugE("Failed to open directory: %s", dirPath.c_str());
+        return;
+    }
+
+    File file = dir.openNextFile();
+    while (file) {
+        String fullPath = dirPath + file.name();
+
+        if (file.isDirectory()) {
+            debugV("Entering directory: %s", fullPath.c_str());
+            // Recursively list files in subdirectory
+            listFilesRecursive(files, fullPath);
+        } else {
+            debugV("Found file: %s", fullPath.c_str());
+            files.add(fullPath);
+        }
+
+        file = dir.openNextFile();
+    }
+}
+
+// Handle listing files
 void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
     debugV("Received GET request on /files");
 
+    // DynamicJsonDocument doc(4096);
+    // JsonArray files = doc["files"].to<JsonArray>();
     JsonDocument doc;
     JsonArray files = doc["files"].to<JsonArray>();
 
-    File root = LittleFS.open("/");
-    File file = root.openNextFile();
-    while (file) {
-        debugV("Found file: %s", file.name());
-        files.add(file.name());
-        file = root.openNextFile();
-    }
+    // Start recursive listing from the root directory
+    listFilesRecursive(files, "/");
 
     WebHandler::sendSuccessResponse(request, "Files listed successfully", &doc);
 }
 
+// Handle reading a file
 void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     debugV("Received GET request on /file");
 
@@ -35,10 +76,16 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     String filename = request->getParam("filename")->value();
     debugV("Requested file: %s", filename.c_str());
 
-    File file = LittleFS.open(filename, "r");
-    if (!file) {
+    if (!LittleFS.exists(filename)) {
         debugE("File not found: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 404, "File not found");
+        return;
+    }
+
+    File file = LittleFS.open(filename, "r");
+    if (!file) {
+        debugE("Failed to open file: %s", filename.c_str());
+        WebHandler::sendErrorResponse(request, 500, "Failed to open file");
         return;
     }
 
@@ -49,6 +96,7 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     request->send(200, "text/plain", content);
 }
 
+// Handle writing to a file
 void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
     debugV("Received POST request on /file");
 
@@ -57,8 +105,15 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
         return;
     }
     String filename = request->getParam("filename")->value();
-
     debugV("Filename: %s", filename.c_str());
+
+    // Ensure parent directories exist
+    if (!ensureParentDirsExist(filename)) {
+        debugE("Failed to create parent directories for: %s", filename.c_str());
+        WebHandler::sendErrorResponse(request, 500, "Failed to create directories");
+        return;
+    }
+
     debugV("Data length: %d, Index: %d, Total: %d", len, index, total);
 
     File file = LittleFS.open(filename, index == 0 ? "w" : "a");
@@ -77,6 +132,7 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     }
 }
 
+// Handle deleting a file
 void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
     debugV("Received DELETE request on /file");
 

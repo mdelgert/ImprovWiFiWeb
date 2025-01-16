@@ -8,7 +8,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### Create a new file
-POST {{baseUrl}}/file?filename=/testPath/test.txt
+POST {{baseUrl}}/file?filename=/test.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
@@ -16,8 +16,44 @@ This is the content of the new file.
 
 ###
 
-### Read a file
+### Create a new file with path
+POST {{baseUrl}}/file?filename=/hello/test1.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+Hello path1.
+
+###
+
+### Create a new file with path
+POST {{baseUrl}}/file?filename=/hello/test2.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+Hello path2.
+
+###
+
+### Read a file 1
 GET {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Read a file path
+GET {{baseUrl}}/file?filename=/hello/test.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Read a file 2
+GET {{baseUrl}}/file?filename=/settings.json
+Authorization: Bearer {{token}}
+
+###
+
+### Read a file 3
+GET {{baseUrl}}/file?filename=/wifi_networks.json
 Authorization: Bearer {{token}}
 
 ###
@@ -33,6 +69,12 @@ This is additional content appended to the file.
 
 ### Delete a file
 DELETE {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Delete a file path
+DELETE {{baseUrl}}/file?filename=/hello/test.txt
 Authorization: Bearer {{token}}
 
 ###
