@@ -138,7 +138,7 @@ bool ServeFiles::isProtectedFile(const String &filename) {
     static const char *protectedFiles[] = {
         //"/settings.json",
         //"/wifi_networks.json",
-        "/test.txt"
+        //"/test.txt"
     };
 
     for (const char *protectedFile : protectedFiles) {
