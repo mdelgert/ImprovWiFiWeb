@@ -10,6 +10,7 @@
 #include "ServeSettings.h"
 #include "ServeActions.h"
 #include "ServeEmbedded.h"
+#include "ServeFiles.h"
 
 #define ENABLE_SERVE_ACTIONS
 

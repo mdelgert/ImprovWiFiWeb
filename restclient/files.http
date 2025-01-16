@@ -1,0 +1,48 @@
+@baseUrl = http://demo1.local
+@token = test
+
+### Get files (list all files)
+GET {{baseUrl}}/files
+Authorization: Bearer {{token}}
+
+###
+
+### Create a new file
+POST {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+This is the content of the new file.
+
+###
+
+### Read a file
+GET {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Append content to an existing file
+POST {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+This is additional content appended to the file.
+
+###
+
+### Delete a file
+DELETE {{baseUrl}}/file?filename=/test.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Error case: Attempt to read a non-existent file
+GET {{baseUrl}}/file?filename=/nonexistent.txt
+Authorization: Bearer {{token}}
+
+###
+
+### Error case: Attempt to delete a non-existent file
+DELETE {{baseUrl}}/file?filename=/nonexistent.txt
+Authorization: Bearer {{token}}

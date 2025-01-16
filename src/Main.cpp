@@ -19,6 +19,13 @@ void setup()
   TemplateHandler::init();
   RemoteDebugHandler::init();
   ConfigManager::init();
+
+  if (!LittleFS.begin(true))
+  {
+    debugE("Failed to mount LittleFS");
+    return;
+  }
+
   BluetoothHandler::init();
   GfxHandler::init();
   WifiHandler::init();
