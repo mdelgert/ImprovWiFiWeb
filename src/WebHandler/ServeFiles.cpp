@@ -11,7 +11,7 @@ void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
     debugV("Received GET request on /files");
 
     JsonDocument doc;
-    JsonArray files = doc.createNestedArray("files");
+    JsonArray files = doc["files"].to<JsonArray>();
 
     File root = LittleFS.open("/");
     File file = root.openNextFile();
