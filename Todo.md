@@ -1,9 +1,10 @@
 ## Active
+- [] Implment task manager
 - [] Rather than action handler editor call it 
-- [] Rather than action handler implment CommandHandler example tft hello led blue etc. 
 - [] No json consistent central for bluetooth, debuggert and mqtt
 - [] Remote debug disable telnet
-- [] Custume remote debugger
+- [] Custume remote debugger (expose print messages so bluetooth can implement)
+- [] Implement remote deubugger terminal in bluetooth handler 
 - [] Implement https
 - [] Implement multiselect actions as files
 - [] Implement actions as buttons on home page
@@ -25,6 +26,7 @@
 - [x] Implement MqttHandler
 - [x] Implement OTA
 - [x] Implement secure MqttHandler with EMQX
+- [x] Rather than action handler implment CommandHandler example tft hello led blue etc.
 
 ## Bugs
 Github pages not deploying from tag. Modified to deploy from action.
