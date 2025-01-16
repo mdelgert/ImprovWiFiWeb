@@ -12,6 +12,7 @@
 #include "OTAHandler.h"
 #include "TimeHandler.h"
 #include "CommandHandler.h"
+#include "DeviceHandler.h"
 
 void setup()
 {
@@ -29,6 +30,7 @@ void setup()
   TimeHandler::init();
   OTAHandler::init();
   CommandHandler::init();
+  DeviceHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");
@@ -46,4 +48,5 @@ void loop()
   MqttHandler::loop();
   TimeHandler::loop();
   OTAHandler::loop();
+  DeviceHandler::loop();
 }

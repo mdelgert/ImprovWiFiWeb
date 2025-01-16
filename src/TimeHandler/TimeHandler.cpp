@@ -3,7 +3,8 @@
 #include "TimeHandler.h"
 
 // Timers for resync and periodic updates
-static NonBlockingTimer timeSyncTimer(60000);
+//static NonBlockingTimer timeSyncTimer(60000);
+static NonBlockingTimer timeSyncTimer(6000);
 static NonBlockingTimer timeTimer(1000);
 static bool isTimeSynced = false;
 

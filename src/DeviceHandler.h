@@ -3,6 +3,7 @@
 #ifdef ENABLE_DEVICE_HANDLER
 
 #include "Globals.h"
+#include "DeviceDescriptors.h" //Change usb string descriptors
 #include <USB.h>
 #include <USBHIDMouse.h>
 #include <USBHIDKeyboard.h>
@@ -12,12 +13,15 @@ class DeviceHandler
 private:
     static USBHIDMouse mouse;
     static USBHIDKeyboard keyboard;
-    static void simulateMouseMovement();
-    static void simulateKeyPress();
+    static void sendMouseMovement(int x, int y);
+    static void registerCommands();
+    static void sendKeys1(const String& text);
+    static void sendKeys2(const String& text);
+    static void sendKeys3(const String& text);
 
 public:
-    static void init();
     static void loop();
+    static void init();
 };
 
 #else
