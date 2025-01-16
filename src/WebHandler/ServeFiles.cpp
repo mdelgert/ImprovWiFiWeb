@@ -134,7 +134,7 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
 }
 
 // Check if a file is protected
-bool isProtectedFile(const String &filename) {
+bool ServeFiles::isProtectedFile(const String &filename) {
     static const char *protectedFiles[] = {
         //"/settings.json",
         //"/wifi_networks.json",
