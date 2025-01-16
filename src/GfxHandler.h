@@ -20,6 +20,7 @@ public:
 class GfxHandler {
 private:
     static LGFX_LiLyGo_TDongleS3 tft;
+    static void registerCommands();
 
 public:
     static void init();

@@ -54,7 +54,7 @@ void GfxHandler::init()
     tft.fillScreen(TFT_BLACK);              // Clear the screen
     tft.setTextColor(TFT_WHITE, TFT_BLACK); // White text on black background
     tft.setTextSize(2);                     // Set the text size
-    //CommandHandler::registerCommand("tft", runCommand);
+    registerCommands();
 }
 
 void GfxHandler::printMessage(const String &message)
@@ -80,26 +80,30 @@ void GfxHandler::drawImage(int x, int y, int width, int height, const char *data
     }
 }
 
-void GfxHandler::runCommand(const String &command)
+void GfxHandler::registerCommands()
 {
-    String cmd = command;
-    String args = "";
+    CommandHandler::registerCommand("TFT", [](const String &command)
+                                    {
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
 
-    int spaceIndex = command.indexOf(' ');
-    if (spaceIndex > 0)
-    {
-        cmd = command.substring(0, spaceIndex);
-        args = command.substring(spaceIndex + 1);
-    }
-
-    if (cmd == "print")
-    {
-        printMessage(args.c_str());
-    }
-    else
-    {
-        debugW("Unknown command: %s", cmd.c_str());
-    }
+        if (cmd == "print") {
+            printMessage(args.c_str());
+        } else if (cmd == "demo") {
+            //Transparency background color
+            //uint16_t bgColor = lcd.color565(128, 128, 128); //Grey background
+            //uint16_t bgColor = lcd.color565(0, 0, 0); //Black background
+            //drawImageWithTransparency(10, 10, width, height, header_data, bgColor);
+            //drawImage(10, 10, width, height, header_data);
+            tft.fillScreen(TFT_BLACK); // Clear the screen
+            drawImage(15, 8, width, height, header_data);
+        } else {
+            debugW("Unknown TFT subcommand: %s", cmd.c_str());
+        } }, "Handles TFT commands. Usage: led <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  print <print> - Print a message to TFT screen\n"
+                                         "  demo - Show demo lock image on tft screen"
+        );
 }
 
 #endif // USE_GFX_HANDLER
