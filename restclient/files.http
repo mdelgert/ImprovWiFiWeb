@@ -8,7 +8,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### Create a new file
-POST {{baseUrl}}/file?filename=/test.txt
+POST {{baseUrl}}/file?filename=/testPath/test.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
