@@ -94,7 +94,11 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     file.close();
     debugV("File content: %s", content.c_str());
 
-    request->send(200, "text/plain", content);
+    //request->send(200, "text/plain", content);
+
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", content);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
 }
 
 // Handle writing to a file

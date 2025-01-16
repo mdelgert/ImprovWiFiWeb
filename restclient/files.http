@@ -74,7 +74,7 @@ Authorization: Bearer {{token}}
 ###
 
 ### Delete a file path
-DELETE {{baseUrl}}/file?filename=/hello/test.txt
+DELETE {{baseUrl}}/file?filename=/hello/test2.txt
 Authorization: Bearer {{token}}
 
 ###
