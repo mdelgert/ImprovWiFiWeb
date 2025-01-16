@@ -25,10 +25,11 @@ public:
 };
 
 #else
-
+class USBHIDKeyboard;
 class DeviceHandler
 {
 public: // No-op implementation of DeviceHandler
+    static USBHIDKeyboard fakeKeyboard; 
     static void loop() {} // No-op
     static void init() {} // No-op
 };

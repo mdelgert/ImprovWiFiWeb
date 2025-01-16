@@ -82,15 +82,18 @@ void DeviceHandler::sendKeys1(const String& text)
 
 void DeviceHandler::sendKeys2(const String& text)
 {
-    // Type the provided string
+    // Send the keys one by one with a delay
     for (size_t i = 0; i < text.length(); i++)
-    {   // Both work with a delay between each key press. Does not work without a blocking delay added RTOS task above is better.
+    {
         //keyboard.print(text[i]); 
         keyboard.write(text[i]);
         delay(20); 
     }
     keyboard.write('\n'); // Optional newline
     debugI("Keys sent: %s", text.c_str());
+    // Note: Both work with a delay between each key press. Does not work without a blocking delay added RTOS task above is better.
+    // Also tested with non-blocking timmer it does not resolve the issue. Only RTOS task works for non-blocking key sending.
+    // Keeping the blocking approach for now, until further testing is complete with RTOS task.
 }
 
 void DeviceHandler::registerCommands()
@@ -101,8 +104,17 @@ void DeviceHandler::registerCommands()
         CommandHandler::parseCommand(command, cmd, args);
 
         if (cmd == "mouse") {
-           sendMouseMovement(100, 100);
-        } else if (cmd == "keys1") {
+            int x = 0, y = 0;
+            int commaIndex = args.indexOf(',');
+            if (commaIndex > 0) {
+                x = args.substring(0, commaIndex).toInt();
+                y = args.substring(commaIndex + 1).toInt();
+                DeviceHandler::sendMouseMovement(x, y);
+            } else {
+                debugW("Invalid arguments for HID mouse. Expected format: x,y");
+            }
+        }
+        else if (cmd == "keys1") {
             sendKeys1(args);
         } else if (cmd == "keys2") {
             sendKeys2(args);
@@ -111,7 +123,7 @@ void DeviceHandler::registerCommands()
             debugW("Unknown HID subcommand: %s", cmd.c_str());
         } }, "Handles HID commands. Usage: HID <subcommand> [args]\n"
                                          "  Subcommands:\n"
-                                         "  mouse <mouse> - Send x and y\n"
+                                         "  mouse x,y - Move mouse by x and y\n"
                                          "  keys1 <keys1> - Send keys1\n"
                                          "  keys2 <keys2> - Send keys2"
                                          );
