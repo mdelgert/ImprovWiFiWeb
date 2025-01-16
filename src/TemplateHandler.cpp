@@ -7,34 +7,14 @@ static NonBlockingTimer myTimer(1000);
 void TemplateHandler::init()
 {
     debugI("TemplateHandler initialized");
-
-    /*
-    debugI("* Initializing CommandHandler...");
-    // Register a "hello" command
-    CommandHandler::registerCommand("hello", [](const String &args)
-                                    {
-        debugI("* Executing 'hello' command with args: %s", args.c_str());
-        if (args.isEmpty()) {
-            debugI("Hello, world!");
-        } else {
-            debugI("Hello, %s!", args.c_str());
-        } }, "Greets the user. Usage: hello [name]");
-
-    // Register a "help" command
-    CommandHandler::registerCommand("help", [](const String &)
-                                    { CommandHandler::listCommands(); }, "Lists all available commands.");
-    debugI("* CommandHandler initialized.");
-    */
 }
 
 void TemplateHandler::loop()
 {
-    /*
     if (myTimer.isReady())
     {
         debugI("TemplateHandler loop");
     }
-    */
 }
 
 void TemplateHandler::examplePublic()
@@ -53,3 +33,28 @@ void TemplateHandler::examplePrivate()
 }
 
 #endif // ENABLE_TEMPLATE_HANDLER
+
+
+
+
+
+
+    /*
+    
+    debugI("* Initializing CommandHandler...");
+    // Register a "hello" command
+    CommandHandler::registerCommand("hello", [](const String &args)
+                                    {
+        debugI("* Executing 'hello' command with args: %s", args.c_str());
+        if (args.isEmpty()) {
+            debugI("Hello, world!");
+        } else {
+            debugI("Hello, %s!", args.c_str());
+        } }, "Greets the user. Usage: hello [name]");
+
+    // Register a "help" command
+    CommandHandler::registerCommand("help", [](const String &)
+                                    { CommandHandler::listCommands(); }, "Lists all available commands.");
+    debugI("* CommandHandler initialized.");
+    
+    */
