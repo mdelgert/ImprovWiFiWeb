@@ -2,10 +2,11 @@
 
 #include "TemplateHandler.h"
 
-static NonBlockingTimer myTimer(1000);
+static NonBlockingTimer myTimer(60000);
 
 void TemplateHandler::init()
 {
+    registerCommands();
     debugI("TemplateHandler initialized");
 }
 
@@ -13,11 +14,11 @@ void TemplateHandler::loop()
 {
     if (myTimer.isReady())
     {
-        debugI("TemplateHandler loop");
+        debugI("TemplateHandler loop timer.");
     }
 }
 
-void TemplateHandler::examplePublic()
+void TemplateHandler::debugLevels()
 {
     // Example of debug levels
     debugV("* This is a message of debug level VERBOSE");
@@ -27,34 +28,23 @@ void TemplateHandler::examplePublic()
     debugE("* This is a message of debug level ERROR");
 }
 
-void TemplateHandler::examplePrivate()
+void TemplateHandler::registerCommands()
 {
-    debugI("TemplateHandler examplePrivate");
+    CommandHandler::registerCommand("TEMPLATE", [](const String &command)
+                                    {
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
+
+        if (cmd == "debug") {
+            debugLevels();
+        } else if (cmd == "hello") {
+            debugI("Hello World!");
+        } else {
+            debugW("Unknown TEMPLATE subcommand: %s", cmd.c_str());
+        } }, "Handles TEMPLATE commands. Usage: TEMPLATE <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  debug - Prints debug levels\n"
+                                         "  hello - Prints 'Hello World!'");
 }
 
 #endif // ENABLE_TEMPLATE_HANDLER
-
-
-
-
-
-
-    /*
-    
-    debugI("* Initializing CommandHandler...");
-    // Register a "hello" command
-    CommandHandler::registerCommand("hello", [](const String &args)
-                                    {
-        debugI("* Executing 'hello' command with args: %s", args.c_str());
-        if (args.isEmpty()) {
-            debugI("Hello, world!");
-        } else {
-            debugI("Hello, %s!", args.c_str());
-        } }, "Greets the user. Usage: hello [name]");
-
-    // Register a "help" command
-    CommandHandler::registerCommand("help", [](const String &)
-                                    { CommandHandler::listCommands(); }, "Lists all available commands.");
-    debugI("* CommandHandler initialized.");
-    
-    */

@@ -2,7 +2,7 @@
 @token = test
 
 ### Create a new file
-POST {{baseUrl}}/file?filename=/script1.txt
+POST {{baseUrl}}/file?filename=/ascript1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
