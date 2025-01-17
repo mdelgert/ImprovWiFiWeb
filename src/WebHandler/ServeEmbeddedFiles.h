@@ -21,6 +21,8 @@ extern const uint8_t blueserial_html_end[] asm("_binary_web_blueserial_html_end"
 extern const uint8_t blueserial_js_start[] asm("_binary_web_blueserial_js_start");
 extern const uint8_t blueserial_js_end[] asm("_binary_web_blueserial_js_end");
 
+extern const uint8_t editor_css_start[] asm("_binary_web_editor_css_start");
+extern const uint8_t editor_css_end[] asm("_binary_web_editor_css_end");
 extern const uint8_t editor_html_start[] asm("_binary_web_editor_html_start");
 extern const uint8_t editor_html_end[] asm("_binary_web_editor_html_end");
 extern const uint8_t editor_js_start[] asm("_binary_web_editor_js_start");

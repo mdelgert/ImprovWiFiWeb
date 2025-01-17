@@ -27,6 +27,7 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/advanced.js", advanced_js_start, advanced_js_end, "application/javascript");
     serveEmbeddedFile(server, "/blueserial.html", blueserial_html_start, blueserial_html_end, "text/html");
     serveEmbeddedFile(server, "/blueserial.js", blueserial_js_start, blueserial_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/editor.css", editor_css_start, editor_css_end, "text/css");
     serveEmbeddedFile(server, "/editor.html", editor_html_start, editor_html_end, "text/html");
     serveEmbeddedFile(server, "/editor.js", editor_js_start, editor_js_end, "application/javascript");
     serveEmbeddedFile(server, "/error.html", error_html_start, error_html_end, "text/html");
