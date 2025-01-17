@@ -1,3 +1,5 @@
+//CommandHandler.h
+
 #pragma once
 
 #include "Globals.h"
@@ -14,6 +16,7 @@ public:
     static void listCommands();
     static void setDefaultHandler(std::function<void(const String&)> handler);
     static void parseCommand(const String& input, String& cmd, String& args);
+    static bool equalsIgnoreCase(const String &a, const String &b);
 
 private:
     static std::map<String, std::function<void(const String&)>> commandRegistry;

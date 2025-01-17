@@ -30,6 +30,27 @@ void TemplateHandler::debugLevels()
     debugE("* This is a message of debug level ERROR");
 }
 
+/*
+void TemplateHandler::registerCommands()
+{
+    CommandHandler::registerCommand("template", [](const String &command)
+                                    {
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
+
+        if (cmd == "debug") {
+            debugLevels();
+        } else if (cmd == "hello") {
+            debugI("Hello World!");
+        } else {
+            debugW("Unknown template subcommand: %s", cmd.c_str());
+        } }, "Handles template commands. Usage: templates <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  debug - Prints debug levels\n"
+                                         "  hello - Prints 'Hello World!'");
+}
+*/
+
 void TemplateHandler::registerCommands()
 {
     CommandHandler::registerCommand("TEMPLATE", [](const String &command)

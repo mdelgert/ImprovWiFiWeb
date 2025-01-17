@@ -7,13 +7,12 @@ std::map<String, String> CommandHandler::commandDescriptions;
 std::function<void(const String&)> CommandHandler::defaultHandler = nullptr;
 
 void CommandHandler::init() {
-    // Register a "help" command
-    CommandHandler::registerCommand("help", [](const String&) {
+    
+    CommandHandler::registerCommand("help", [](const String&) { // Register a "help" command
         CommandHandler::listCommands();
     }, "Lists all available commands.");
 
-    // Set the default handler to call the 'help' command
-    CommandHandler::setDefaultHandler([](const String& command) {
+    CommandHandler::setDefaultHandler([](const String& command) { // Set the default handler to call the 'help' command
         debugI("Unknown command: %s. Showing help menu.", command.c_str());
         CommandHandler::listCommands(); // Invoke the help command
     });
@@ -30,6 +29,7 @@ void CommandHandler::parseCommand(const String& input, String& cmd, String& args
         cmd = input;
         args = "";
     }
+    
     cmd.toLowerCase(); // Normalize command case
 }
 
@@ -84,4 +84,8 @@ void CommandHandler::listCommands() {
 void CommandHandler::setDefaultHandler(std::function<void(const String&)> handler) {
     defaultHandler = handler;
     debugD("* Default handler set.");
+}
+
+bool CommandHandler::equalsIgnoreCase(const String &a, const String &b) {
+    return a.equalsIgnoreCase(b);
 }
