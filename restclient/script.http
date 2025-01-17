@@ -1,0 +1,22 @@
+@baseUrl = http://demo1.local
+@token = test
+
+### Create a new file
+POST {{baseUrl}}/file?filename=/script1.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+REM Demo script begin
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Line
+REM Demo script end
+###
