@@ -64,12 +64,11 @@ POST {{baseUrl}}/file?filename=/1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
-REM Say hello
-TEMPLATE HELLO
-DELAY 1000
-
-REM Repeat the following block 3 times
-TEMPLATE DEBUG
+REM Start of script
+DEFAULTDELAY 1000
+led color green
+led color blue
+hid keys1 hello
 REPEAT 3
 
 REM End of script
