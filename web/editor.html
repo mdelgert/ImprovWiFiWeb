@@ -344,6 +344,33 @@
       }
     }
 
+    async function runFile(filename) {
+      if (!filename) {
+        alert('No file selected to run.');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${endPoint}/command/set`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+          },
+          body: `script file ${filename}`, // Raw text body
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+          alert(`Command executed successfully for ${filename}!`);
+        } else {
+          alert(`Error executing command: ${data.message}`);
+        }
+      } catch (err) {
+        console.error('Error running file:', err);
+        alert('Failed to execute command.');
+      }
+    }
+
     async function saveFile() {
       if (!currentFile) {
         alert('No file is open!');
