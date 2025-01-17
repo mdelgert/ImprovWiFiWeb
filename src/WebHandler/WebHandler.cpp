@@ -121,6 +121,7 @@ void WebHandler::init()
     ServeSettings::registerEndpoints(server);
     ServeActions::registerEndpoints(server);
     ServeFiles::registerEndpoints(server);
+    ServeCommand::registerEndpoints(server);
     serveNotFound();
     server.begin();
     debugI("WebHandler initialized");

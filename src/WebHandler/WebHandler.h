@@ -11,6 +11,7 @@
 #include "ServeActions.h"
 #include "ServeEmbedded.h"
 #include "ServeFiles.h"
+#include "ServeCommand.h"
 
 #define ENABLE_SERVE_ACTIONS
 

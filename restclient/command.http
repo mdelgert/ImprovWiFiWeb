@@ -1,0 +1,10 @@
+@baseUrl = http://demo2.local
+@token = test
+
+### Reboot
+POST {{baseUrl}}/command/set
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+led color green
+###
