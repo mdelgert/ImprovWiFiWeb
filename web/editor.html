@@ -8,9 +8,15 @@
   <title>Responsive File Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
+  <!--
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/darcula.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/blackboard.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/erlang-dark.min.css"> 
+  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/shell/shell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/powershell/powershell.min.js"></script>
   <!-- <link rel="stylesheet" href="editor.css" /> -->
   <style>
     body {
@@ -152,6 +158,7 @@
     let editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
       theme: "material-darker",
+      //theme: "blackboard",
       lineNumbers: true,
       tabSize: 2,
       indentWithTabs: false
@@ -248,7 +255,9 @@
         if (filename.endsWith('.json')) {
           mode = 'application/json';
         } else if (filename.endsWith('.sh')) {
-          mode = 'shell'; // Set mode for shell script files
+          mode = 'shell';
+        } else if (filename.endsWith('.ps1')) {
+          mode = 'powershell';
         } else {
           mode = 'text/plain';
         }
