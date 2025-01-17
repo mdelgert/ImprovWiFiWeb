@@ -6,17 +6,8 @@ POST {{baseUrl}}/file?filename=/ascript1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
-REM Demo script begin
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Line
-REM Demo script end
+led color red
+led color blue
+led color black
+led color white
 ###

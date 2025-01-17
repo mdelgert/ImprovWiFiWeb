@@ -13,19 +13,14 @@
 #include "TimeHandler.h"
 #include "CommandHandler.h"
 #include "DeviceHandler.h"
+#include "ScriptHandler.h"
 
 void setup()
 {
   TemplateHandler::init();
   RemoteDebugHandler::init();
+  ScriptHandler::init();
   ConfigManager::init();
-
-  if (!LittleFS.begin(true))
-  {
-    debugE("Failed to mount LittleFS");
-    return;
-  }
-
   BluetoothHandler::init();
   GfxHandler::init();
   WifiHandler::init();
@@ -47,6 +42,7 @@ void loop()
 {
   TemplateHandler::loop();
   RemoteDebugHandler::loop();
+  ScriptHandler::loop();
   BluetoothHandler::loop();
   WifiHandler::loop();
   WebHandler::loop();

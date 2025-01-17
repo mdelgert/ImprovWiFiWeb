@@ -1,6 +1,6 @@
 I would like to implement ScriptHandler using library LittleFS, that will register a command called SCRIPT.
 
-The subcommand will be called FILE
+The subcommand will be called FILE it will open the file and process each line.
 
 Please assume the code base already has wifi connectivity.
 
