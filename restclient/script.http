@@ -21,7 +21,7 @@ REM led color white
 tft print hello3
 REM led color black
 
-REPEAT 300
+REPEAT 3000000000000
 
 REM End of script
 ###
