@@ -1,6 +1,7 @@
 <!-- editor.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
   <style></style>
 </head>
+
 <body>
   <header>File Editor</header>
   <div class="container">
@@ -22,15 +24,15 @@
     <div class="toolbar">
       <div>
         <button onclick="saveFile()">Save</button>
-        <button onclick="newFile()">New File</button>
-        <button onclick="refreshFiles()">Refresh Files</button>
+        <button onclick="newFile()">New</button>
+        <button onclick="refreshFiles()">Refresh</button>
         <select id="fontSizeSelector" onchange="changeFontSize()">
-            <option value="12px">12px</option>
-            <option value="14px" selected>14px</option>
-            <option value="16px">16px</option>
-            <option value="18px">18px</option>
-            <option value="20px">20px</option>
-          </select>
+          <option value="12px">12px</option>
+          <option value="14px" selected>14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+        </select>
       </div>
     </div>
 
@@ -42,11 +44,11 @@
   </div>
 
   <script>
-    
+
     // Determine endPoint based on environment
-    const endPoint = window.location.hostname === "localhost" 
-        ? `http://demo1.local` 
-        : "";
+    const endPoint = window.location.hostname === "localhost"
+      ? `http://demo1.local`
+      : "";
 
     let editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
@@ -57,6 +59,7 @@
     });
 
     let currentFile = null;
+    let fileList = []; // Declare fileList globally to store all file names.
 
     async function refreshFiles() {
       try {
@@ -64,11 +67,11 @@
         const data = await response.json();
 
         if (data.status === 'success') {
-          const files = data.data.files || [];
+          fileList = data.data.files || []; // Populate fileList with the retrieved files.
           const fileListElement = document.getElementById('fileList');
           fileListElement.innerHTML = '';
 
-          files.forEach(file => {
+          fileList.forEach(file => {
             const li = document.createElement('li');
             li.textContent = file;
             li.onclick = () => openFile(file);
@@ -91,6 +94,30 @@
         console.error('Error refreshing files:', err);
         alert('Failed to fetch file list.');
       }
+    }
+
+    function filterFiles() {
+      const query = document.getElementById('fileSearch').value.toLowerCase();
+      const fileListElement = document.getElementById('fileList');
+      fileListElement.innerHTML = '';
+
+      // Filter the global fileList array based on the query.
+      fileList.filter(file => file.toLowerCase().includes(query)).slice(0, 20).forEach(file => {
+        const li = document.createElement('li');
+        li.textContent = file;
+        li.onclick = () => openFile(file);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.style.marginLeft = '10px';
+        deleteButton.onclick = (e) => {
+          e.stopPropagation();
+          deleteFile(file);
+        };
+
+        li.appendChild(deleteButton);
+        fileListElement.appendChild(li);
+      });
     }
 
     async function openFile(filename) {
@@ -132,7 +159,8 @@
     }
 
     async function newFile() {
-      const newFileName = prompt('Enter new file name:');
+      //const newFileName = prompt('Enter new file name:');
+      const newFileName = prompt('Enter new file name, must include full path:', '/example.txt');
       if (newFileName) {
         try {
           const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(newFileName)}`, {
@@ -185,4 +213,5 @@
     refreshFiles();
   </script>
 </body>
+
 </html>
