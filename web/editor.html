@@ -140,6 +140,11 @@
       flex: 1;
     }
 
+    .file-list-container li.active {
+      background-color: #555;
+      color: white;
+    }
+
     /* CodeMirror editor styling */
     .CodeMirror {
       height: 100%;
@@ -152,7 +157,13 @@
 </head>
 
 <body>
-  <header>Editor</header>
+  <!-- <header>Editor</header> -->
+  <header>
+    <span>Editor</span>
+    <span id="currentFileName" style="font-size: 14px; margin-left: 10px; color: #ccc;">No file selected</span> 
+    <!-- <span id="currentFileName" style="font-size: 18px; margin-left: 10px; color: #ccc;">No file selected</span> -->
+  </header>
+
   <div class="container">
     <div class="editor-container" id="editorContainer"></div>
     <div class="toolbar">
@@ -286,6 +297,18 @@
         });
     }
 
+    function highlightActiveFile(filename) {
+      const fileListElement = document.getElementById('fileList');
+      Array.from(fileListElement.children).forEach(li => {
+        const span = li.querySelector('span');
+        if (span && span.textContent === filename) {
+          li.classList.add('active');
+        } else {
+          li.classList.remove('active');
+        }
+      });
+    }
+
     async function openFile(filename) {
       try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(filename)}`);
@@ -293,6 +316,13 @@
         const content = await response.text();
         currentFile = filename;
         editor.setValue(content);
+
+        // Update the displayed file name
+        //document.getElementById('currentFileName').textContent = `Editing: ${filename}`;
+        document.getElementById('currentFileName').textContent = `${filename}`;
+
+        // Update the active file styling
+        highlightActiveFile(filename);
 
         // Determine the mode based on the file extension
         let mode;
