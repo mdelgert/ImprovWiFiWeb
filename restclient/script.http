@@ -8,16 +8,18 @@ Content-Type: text/plain
 
 REM Start of script
 DEFAULTDELAY 1000
-
 REM Say hello
 REM TEMPLATE HELLO
 REM DELAY 1000
-
 REM TEMPLATE DEBUG
-
+REM led clear
 tft print hello1
+REM led color purple
+REM led color green
 tft print hello2
+REM led color white
 tft print hello3
+REM led color black
 
 REPEAT 300
 

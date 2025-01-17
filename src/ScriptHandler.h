@@ -4,11 +4,19 @@
 
 #include "Globals.h"
 #include <LittleFS.h>
-#include <vector>
+#include <deque>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 class ScriptHandler
 {
 private:
+    // RTOS Task Handle for script execution
+    static TaskHandle_t scriptTaskHandle;
+
+    // Task function for processing scripts
+    static void scriptTask(void *pvParameters);
+
     // Handles the SCRIPT FILE subcommand to execute script files
     static void handleScriptFile(const String &args);
 
@@ -18,9 +26,12 @@ private:
     // Handles special script commands like DELAY, DEFAULTDELAY, and REPEAT
     static bool handleSpecialScriptCommand(const String &line);
 
+    // Executes a single command, applying delays if needed
+    static void executeCommand(const String &command);
+
     // State variables for script execution
     static unsigned long defaultDelay;           // Default delay between commands
-    static std::vector<String> repeatBuffer;     // Buffer to store lines for REPEAT
+    static std::deque<String> repeatBuffer;      // Buffer to store lines for REPEAT
     static unsigned int repeatCount;             // Number of times to repeat buffered commands
 
 public:

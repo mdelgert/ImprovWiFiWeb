@@ -2,10 +2,11 @@
 
 #include "ScriptHandler.h"
 
-// Define static member variables
-unsigned long ScriptHandler::defaultDelay = 0;           // Initialize default delay to 0
-std::vector<String> ScriptHandler::repeatBuffer = {};    // Initialize an empty repeat buffer
-unsigned int ScriptHandler::repeatCount = 0;             // Initialize repeat count to 0
+// Static member definitions
+unsigned long ScriptHandler::defaultDelay = 0;           // Default delay
+std::deque<String> ScriptHandler::repeatBuffer = {};     // Command buffer
+unsigned int ScriptHandler::repeatCount = 0;             // Repeat count
+TaskHandle_t ScriptHandler::scriptTaskHandle = nullptr;  // RTOS Task Handle
 
 void ScriptHandler::loop() {}
 
@@ -17,7 +18,42 @@ void ScriptHandler::init()
     }
 
     registerCommands();
-    debugI("ScriptHandler initialized.");
+
+    // Create the RTOS task for script processing
+    xTaskCreatePinnedToCore(
+        scriptTask,         // Task function
+        "ScriptTask",       // Task name
+        8192,               // Stack size
+        nullptr,            // Parameters (none in this case)
+        1,                  // Priority (1 = low)
+        &scriptTaskHandle,  // Task handle
+        tskNO_AFFINITY      // Run on any core
+    );
+
+    debugI("ScriptHandler initialized and RTOS task created.");
+}
+
+void ScriptHandler::scriptTask(void *pvParameters)
+{
+    // Infinite loop to handle scripts
+    while (true) {
+        // If there are commands in the repeat buffer, execute them
+        if (!repeatBuffer.empty() && repeatCount > 0) {
+            debugI("Executing repeated commands %u times", repeatCount);
+
+            for (unsigned int i = 0; i < repeatCount; i++) {
+                for (const String &repeatLine : repeatBuffer) {
+                    executeCommand(repeatLine);
+                }
+                vTaskDelay(1); // Yield after each repetition cycle
+            }
+
+            repeatBuffer.clear();  // Clear buffer after execution
+            repeatCount = 0;       // Reset repeat count
+        }
+
+        vTaskDelay(pdMS_TO_TICKS(100)); // Prevent busy looping (adjust as needed)
+    }
 }
 
 void ScriptHandler::handleScriptFile(const String &args)
@@ -48,23 +84,14 @@ void ScriptHandler::handleScriptFile(const String &args)
             continue;
         }
 
-        // Parse the command and handle special script commands
+        // Handle special script commands
         if (!handleSpecialScriptCommand(line)) {
             debugD("Buffering and executing line: %s", line.c_str());
-            repeatBuffer.push_back(line); // Buffer the line for REPEAT
-            CommandHandler::handleCommand(line);
-
-            // Apply the default delay after each command
-            if (defaultDelay > 0) {
-                debugD("Applying default delay: %lu ms", defaultDelay);
-                vTaskDelay(pdMS_TO_TICKS(defaultDelay));
-                //delay(defaultDelay);
-            }
-
-            // Yield control to avoid WDT reset
-            //vTaskDelay(0); // or 
-            taskYIELD();
+            repeatBuffer.push_back(line); // Add the command to the buffer
+            executeCommand(line);
         }
+
+        vTaskDelay(1); // Yield after each line to prevent WDT resets
     }
 
     scriptFile.close();
@@ -79,44 +106,33 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
     if (CommandHandler::equalsIgnoreCase(command, "DEFAULTDELAY")) {
         defaultDelay = args.toInt();
         debugI("Set default delay to %lu ms", defaultDelay);
-        return true; // Special command handled
+        return true; // Handled
     }
 
     if (CommandHandler::equalsIgnoreCase(command, "DELAY")) {
         unsigned long delayTime = args.toInt();
         debugI("Applying delay of %lu ms", delayTime);
-        vTaskDelay(pdMS_TO_TICKS(delayTime)); // Non-blocking delay
-        //delay(delayTime);
-
-        return true; // Special command handled
+        vTaskDelay(pdMS_TO_TICKS(delayTime));
+        return true; // Handled
     }
 
     if (CommandHandler::equalsIgnoreCase(command, "REPEAT")) {
         repeatCount = args.toInt();
-        debugI("Repeating buffered commands %u times", repeatCount);
-
-        for (unsigned int i = 0; i < repeatCount; i++) {
-            for (const String &repeatLine : repeatBuffer) {
-                debugD("Replaying line: %s", repeatLine.c_str());
-                CommandHandler::handleCommand(repeatLine);
-
-                // Apply the default delay after each command in the repeat buffer
-                if (defaultDelay > 0) {
-                    vTaskDelay(pdMS_TO_TICKS(defaultDelay)); // Non-blocking delay
-                    //delay(defaultDelay);
-                }
-
-                 // Yield control to avoid WDT reset
-                //vTaskDelay(0); // or 
-                taskYIELD();
-            }
-        }
-
-        repeatBuffer.clear(); // Clear the buffer after execution
-        return true; // Special command handled
+        debugI("Buffering repeated commands %u times", repeatCount);
+        return true; // Handled
     }
 
     return false; // Not a special command
+}
+
+void ScriptHandler::executeCommand(const String &command)
+{
+    CommandHandler::handleCommand(command);
+
+    // Apply the default delay after executing the command
+    if (defaultDelay > 0) {
+        vTaskDelay(pdMS_TO_TICKS(defaultDelay));
+    }
 }
 
 void ScriptHandler::registerCommands()
