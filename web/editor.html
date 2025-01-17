@@ -8,19 +8,15 @@
   <title>Responsive File Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/material-darker.min.css">
-  <link rel="stylesheet" href="editor.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+  <link rel="stylesheet" href="editor.css" />
   <style></style>
 </head>
-
 <body>
-  <header>File Editor</header>
+  <header>Editor</header>
   <div class="container">
-    <!-- Editor Section -->
     <div class="editor-container" id="editorContainer"></div>
-
-    <!-- Toolbar -->
     <div class="toolbar">
       <div>
         <button onclick="saveFile()">Save</button>
@@ -35,16 +31,12 @@
         </select>
       </div>
     </div>
-
-    <!-- File List Section -->
     <div class="file-list-container">
       <input type="text" id="fileSearch" placeholder="Search files..." oninput="filterFiles()">
       <ul id="fileList"></ul>
     </div>
   </div>
-
   <script>
-
     // Determine endPoint based on environment
     const endPoint = window.location.hostname === "localhost"
       ? `http://demo1.local`
@@ -213,5 +205,4 @@
     refreshFiles();
   </script>
 </body>
-
 </html>
