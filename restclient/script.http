@@ -64,9 +64,6 @@ POST {{baseUrl}}/file?filename=/1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
-REM Start of script
-DEFAULTDELAY 500
-
 REM Say hello
 TEMPLATE HELLO
 DELAY 1000

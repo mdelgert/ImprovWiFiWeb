@@ -1,6 +1,8 @@
-#ifndef SERVE_FILES_H
-#define SERVE_FILES_H
+#pragma once
 
+#ifdef ENABLE_WEB_HANDLER
+
+#include "Globals.h"
 #include <ESPAsyncWebServer.h>
 #include <LittleFS.h>
 #include "WebHandler.h"
@@ -19,4 +21,4 @@ private:
     static void handleDeleteFile(AsyncWebServerRequest *request);
 };
 
-#endif // SERVE_FILES_H
+#endif // ENABLE_WEB_HANDLER

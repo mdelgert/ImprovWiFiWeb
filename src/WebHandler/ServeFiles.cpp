@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeFiles.h"
 
 // Register endpoints for file management
@@ -176,3 +178,5 @@ void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
         WebHandler::sendErrorResponse(request, 500, "Failed to delete file");
     }
 }
+
+#endif // ENABLE_WEB_HANDLER
