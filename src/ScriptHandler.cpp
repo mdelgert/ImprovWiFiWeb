@@ -50,7 +50,8 @@ void ScriptHandler::handleScriptFile(const String &args)
 
         // Parse the command and handle special script commands
         if (!handleSpecialScriptCommand(line)) {
-            debugD("Executing line: %s", line.c_str());
+            debugD("Buffering and executing line: %s", line.c_str());
+            repeatBuffer.push_back(line); // Buffer the line for REPEAT
             CommandHandler::handleCommand(line);
 
             // Apply the default delay after each command
@@ -101,11 +102,6 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
 
         repeatBuffer.clear(); // Clear the buffer after execution
         return true; // Special command handled
-    }
-
-    // If not a special command, buffer the line for REPEAT
-    if (!repeatCount && repeatBuffer.size() < 100) { // Prevent excessive buffering
-        repeatBuffer.push_back(line);
     }
 
     return false; // Not a special command

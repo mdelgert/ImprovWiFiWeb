@@ -1,4 +1,4 @@
-@baseUrl = http://demo1.local
+@baseUrl = http://demo2.local
 @token = test
 
 ### Test1
@@ -27,17 +27,40 @@ Content-Type: text/plain
 
 REM Start of script
 
-led color red
+led brightness 255
+
+led color purple
 DELAY 1000
 
 led color blue
 DELAY 1000
+
+REPEAT 30
 
 REM End of script
 ###
 
 ### Test3
 POST {{baseUrl}}/file?filename=/c.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+REM Start of script
+DEFAULTDELAY 500
+
+REM Say hello
+TEMPLATE HELLO
+DELAY 1000
+
+REM Repeat the following block 3 times
+TEMPLATE DEBUG
+REPEAT 3
+
+REM End of script
+###
+
+### Test4
+POST {{baseUrl}}/file?filename=/1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 

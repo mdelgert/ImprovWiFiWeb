@@ -8,7 +8,7 @@ WiFiClientSecure wiFiClientSecure;
 PubSubClient mqttClient;
 
 // Optional: Use a NonBlockingTimer to avoid continuously retrying in busy loops
-static NonBlockingTimer mqttTimer(5000);
+static NonBlockingTimer mqttTimer(60000);
 
 void MqttHandler::init()
 {
