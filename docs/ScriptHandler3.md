@@ -1,11 +1,28 @@
+Yes, you can use `vTaskDelay(pdMS_TO_TICKS(delayTime));` to achieve non-blocking delays in FreeRTOS, which is the operating system underlying ESP32 development. This approach yields the CPU to other tasks during the delay, making it non-blocking.
+
+Here’s how to integrate `vTaskDelay` into your `ScriptHandler` for non-blocking delays:
+
+---
+
+### **Advantages of `vTaskDelay`**
+1. **Non-blocking**: Unlike `delay()`, `vTaskDelay` does not halt the entire system; it allows other tasks to run during the delay period.
+2. **Task-aware**: Works seamlessly in multitasking environments.
+3. **Efficient**: Reduces idle time and improves system responsiveness.
+
+---
+
+### Updated **ScriptHandler.cpp**
+
+Here’s how to replace blocking delays with `vTaskDelay`:
+
+```cpp
 #ifdef ENABLE_SCRIPT_HANDLER
 
 #include "ScriptHandler.h"
 
-// Define static member variables
-unsigned long ScriptHandler::defaultDelay = 0;           // Initialize default delay to 0
-std::vector<String> ScriptHandler::repeatBuffer = {};    // Initialize an empty repeat buffer
-unsigned int ScriptHandler::repeatCount = 0;             // Initialize repeat count to 0
+static unsigned long defaultDelay = 0;         // Default delay between commands
+static std::vector<String> repeatBuffer;      // Buffer to store lines for REPEAT
+static unsigned int repeatCount = 0;          // Number of times to repeat
 
 void ScriptHandler::loop() {}
 
@@ -129,3 +146,36 @@ void ScriptHandler::registerCommands()
 }
 
 #endif // ENABLE_SCRIPT_HANDLER
+```
+
+---
+
+### Key Changes
+1. **`vTaskDelay(pdMS_TO_TICKS(delayTime))`:**
+   - Replaces blocking `delay()` calls.
+   - Ensures other tasks can execute during the delay period.
+
+2. **Default Delay:**
+   - Applies `vTaskDelay` instead of `delay()` for default delays between commands.
+
+3. **Repeat Handling:**
+   - Each command in the `repeatBuffer` uses `vTaskDelay` for non-blocking delay.
+
+---
+
+### **When to Use Non-blocking Delays**
+- **Multitasking Environments**:
+  - Ensure other FreeRTOS tasks can run while the script handler waits.
+- **Responsiveness**:
+  - Maintain system responsiveness by avoiding halts.
+
+---
+
+### **Important Notes**
+1. **Task Priority**:
+   - Ensure the task running the script handler has an appropriate priority to avoid being starved by higher-priority tasks.
+
+2. **System Tick Configuration**:
+   - Ensure the system tick frequency in FreeRTOS is configured correctly for precise timing with `pdMS_TO_TICKS`.
+
+This approach ensures your delay logic is non-blocking and fits seamlessly into the multitasking environment of the ESP32. Let me know if you need further clarification!

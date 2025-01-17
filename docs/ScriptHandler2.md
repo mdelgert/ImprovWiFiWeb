@@ -1,11 +1,30 @@
+To implement commands like `REM`, `DEFAULTDELAY`, `DELAY`, and `REPEAT/REPLAY` in the `ScriptHandler`, we need to introduce state management for script execution and extend the parsing logic to handle these commands. Below is the refactored and enhanced code.
+
+---
+
+### **Updated ScriptHandler.cpp**
+
+#### New Features Added:
+1. **State Management**:
+   - `defaultDelay`: Stores the delay between commands if not explicitly overridden by `DELAY`.
+   - `repeatBuffer`: Holds the lines to be replayed for `REPEAT`.
+
+2. **Command Handling**:
+   - `REM`: Ignores comment lines.
+   - `DEFAULTDELAY`: Sets a default delay applied between commands.
+   - `DELAY`: Adds a specific delay before executing the next command.
+   - `REPEAT`: Repeats the execution of buffered commands.
+
+---
+
+```cpp
 #ifdef ENABLE_SCRIPT_HANDLER
 
 #include "ScriptHandler.h"
 
-// Define static member variables
-unsigned long ScriptHandler::defaultDelay = 0;           // Initialize default delay to 0
-std::vector<String> ScriptHandler::repeatBuffer = {};    // Initialize an empty repeat buffer
-unsigned int ScriptHandler::repeatCount = 0;             // Initialize repeat count to 0
+static unsigned long defaultDelay = 0;         // Default delay between commands
+static std::vector<String> repeatBuffer;      // Buffer to store lines for REPEAT
+static unsigned int repeatCount = 0;          // Number of times to repeat
 
 void ScriptHandler::loop() {}
 
@@ -55,8 +74,7 @@ void ScriptHandler::handleScriptFile(const String &args)
 
             // Apply the default delay after each command
             if (defaultDelay > 0) {
-                debugD("Applying default delay: %lu ms", defaultDelay);
-                vTaskDelay(pdMS_TO_TICKS(defaultDelay));
+                delay(defaultDelay);
             }
         }
     }
@@ -79,7 +97,7 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
     if (CommandHandler::equalsIgnoreCase(command, "DELAY")) {
         unsigned long delayTime = args.toInt();
         debugI("Applying delay of %lu ms", delayTime);
-        vTaskDelay(pdMS_TO_TICKS(delayTime)); // Non-blocking delay
+        delay(delayTime);
         return true; // Special command handled
     }
 
@@ -94,7 +112,7 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
 
                 // Apply the default delay after each command in the repeat buffer
                 if (defaultDelay > 0) {
-                    vTaskDelay(pdMS_TO_TICKS(defaultDelay)); // Non-blocking delay
+                    delay(defaultDelay);
                 }
             }
         }
@@ -129,3 +147,73 @@ void ScriptHandler::registerCommands()
 }
 
 #endif // ENABLE_SCRIPT_HANDLER
+```
+
+---
+
+### **How It Works**
+
+#### 1. `DEFAULTDELAY`
+- Sets a default delay applied between commands.
+- Usage in script:
+  ```
+  DEFAULTDELAY 500
+  TEMPLATE HELLO
+  TEMPLATE DEBUG
+  ```
+
+#### 2. `DELAY`
+- Introduces a specific delay before the next command is executed.
+- Usage in script:
+  ```
+  TEMPLATE HELLO
+  DELAY 1000
+  TEMPLATE DEBUG
+  ```
+
+#### 3. `REPEAT`
+- Buffers commands for repeated execution.
+- Usage in script:
+  ```
+  TEMPLATE HELLO
+  TEMPLATE DEBUG
+  REPEAT 3
+  ```
+
+#### 4. `REM`
+- Ignores lines starting with `REM` as comments.
+- Usage in script:
+  ```
+  REM This is a comment
+  TEMPLATE HELLO
+  ```
+
+---
+
+### **Example Script**
+
+```plaintext
+REM Start of script
+DEFAULTDELAY 500
+
+REM Say hello
+TEMPLATE HELLO
+DELAY 1000
+
+REM Repeat the following block 3 times
+TEMPLATE DEBUG
+REPEAT 3
+
+REM End of script
+```
+
+---
+
+### **Behavior**
+1. `DEFAULTDELAY` sets a 500ms delay between commands.
+2. `DELAY` adds a 1-second pause after `TEMPLATE HELLO`.
+3. `REPEAT 3` executes the buffered `TEMPLATE DEBUG` command three times.
+
+---
+
+This refactored code supports the discussed commands (`REM`, `DEFAULTDELAY`, `DELAY`, and `REPEAT`) in a robust and extensible way, while maintaining alignment with your current architecture. Let me know if you need further clarification or additional enhancements!

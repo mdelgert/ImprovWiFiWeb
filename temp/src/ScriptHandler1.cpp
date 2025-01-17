@@ -2,10 +2,9 @@
 
 #include "ScriptHandler.h"
 
-// Define static member variables
-unsigned long ScriptHandler::defaultDelay = 0;           // Initialize default delay to 0
-std::vector<String> ScriptHandler::repeatBuffer = {};    // Initialize an empty repeat buffer
-unsigned int ScriptHandler::repeatCount = 0;             // Initialize repeat count to 0
+static unsigned long defaultDelay = 0;         // Default delay between commands
+static std::vector<String> repeatBuffer;      // Buffer to store lines for REPEAT
+static unsigned int repeatCount = 0;          // Number of times to repeat
 
 void ScriptHandler::loop() {}
 

@@ -1,13 +1,56 @@
 @baseUrl = http://demo1.local
 @token = test
 
-### Create a new file
-POST {{baseUrl}}/file?filename=/ascript1.txt
+### Test1
+POST {{baseUrl}}/file?filename=/a.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
+REM Start of script
+DEFAULTDELAY 500
+
+REM Say hello
+TEMPLATE HELLO
+DELAY 1000
+
+REM Repeat the following block 3 times
+TEMPLATE DEBUG
+REPEAT 3
+
+REM End of script
+###
+
+### Test2
+POST {{baseUrl}}/file?filename=/b.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+REM Start of script
+
 led color red
+DELAY 1000
+
 led color blue
-led color black
-led color white
+DELAY 1000
+
+REM End of script
+###
+
+### Test3
+POST {{baseUrl}}/file?filename=/c.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+REM Start of script
+DEFAULTDELAY 500
+
+REM Say hello
+TEMPLATE HELLO
+DELAY 1000
+
+REM Repeat the following block 3 times
+TEMPLATE DEBUG
+REPEAT 3
+
+REM End of script
 ###
