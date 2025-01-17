@@ -8,11 +8,6 @@
   <title>Responsive File Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
-  <!--
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/darcula.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/blackboard.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/erlang-dark.min.css"> 
-  -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/shell/shell.min.js"></script>
@@ -53,11 +48,62 @@
       overflow: hidden;
     }
 
+    /* 
     .toolbar {
       padding: 10px;
       text-align: right;
       background-color: #333;
+    } 
+    */
+
+    .toolbar {
+      padding: 10px;
+      background-color: #333;
     }
+
+    .toolbar div {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      /* Adds spacing between toolbar items */
+    }
+
+    .toolbar input {
+      flex: 1;
+      width: auto;
+      max-width: 200px;
+      margin-top: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px;
+    }
+
+    select {
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px;
+      margin-right: 10px;
+    }
+
+    /*
+    input {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      background-color: #333;
+      color: white;
+      border: 1px solid #555;
+    }
+
+    input::placeholder {
+      color: #aaa;
+    }
+    */
 
     .file-list-container {
       max-height: 30%;
@@ -93,28 +139,6 @@
 
     button:hover {
       background-color: #555;
-    }
-
-    input {
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 10px;
-      box-sizing: border-box;
-      background-color: #333;
-      color: white;
-      border: 1px solid #555;
-    }
-
-    input::placeholder {
-      color: #aaa;
-    }
-
-    select {
-      background-color: #333;
-      color: white;
-      border: 1px solid #555;
-      padding: 8px;
-      margin-right: 10px;
     }
 
     .CodeMirror {
@@ -158,7 +182,6 @@
     let editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
       theme: "material-darker",
-      //theme: "blackboard",
       lineNumbers: true,
       tabSize: 2,
       indentWithTabs: false
@@ -225,22 +248,6 @@
         fileListElement.appendChild(li);
       });
     }
-
-    /*
-    async function openFile(filename) {
-      try {
-        const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(filename)}`);
-        if (!response.ok) throw new Error('Failed to fetch file content');
-        const content = await response.text();
-        currentFile = filename;
-        editor.setValue(content);
-        editor.setOption('mode', filename.endsWith('.json') ? 'application/json' : 'text/plain');
-      } catch (err) {
-        console.error('Error opening file:', err);
-        alert('Failed to open file.');
-      }
-    }
-    */
 
     async function openFile(filename) {
       try {
@@ -346,7 +353,7 @@
     }
 
     refreshFiles();
-    document.querySelector('.CodeMirror').style.fontSize = '20px';
+    document.querySelector('.CodeMirror').style.fontSize = '18px';
   </script>
 </body>
 
