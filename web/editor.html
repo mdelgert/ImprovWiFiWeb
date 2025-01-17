@@ -138,7 +138,7 @@
           const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(newFileName)}`, {
             method: 'POST',
             headers: { 'Content-Type': 'text/plain' },
-            body: ' ',
+            body: ' ', // create empty file with a space character or will throw error
           });
           const data = await response.json();
           if (data.status === 'success') {

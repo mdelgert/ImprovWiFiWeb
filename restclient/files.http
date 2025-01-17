@@ -16,6 +16,15 @@ This is the content of the new file.
 
 ###
 
+### Create a new file
+POST {{baseUrl}}/file?filename=/test2.txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+This is the content of the new file.
+
+###
+
 ### Create a new file with path
 POST {{baseUrl}}/file?filename=/hello/test1.txt
 Authorization: Bearer {{token}}

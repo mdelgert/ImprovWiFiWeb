@@ -54,8 +54,6 @@ void ServeFiles::listFilesRecursive(JsonArray &files, const String &path) {
 void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
     debugV("Received GET request on /files");
 
-    // DynamicJsonDocument doc(4096);
-    // JsonArray files = doc["files"].to<JsonArray>();
     JsonDocument doc;
     JsonArray files = doc["files"].to<JsonArray>();
 

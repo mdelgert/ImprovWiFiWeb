@@ -2,7 +2,7 @@
 
 #include "WebHandler.h"
 
-NonBlockingTimer WebHandler::myTimer(1000);
+NonBlockingTimer WebHandler::myTimer(60000);
 AsyncWebServer WebHandler::server(80);
 
 void WebHandler::serveNotFound()
@@ -49,9 +49,11 @@ bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
 void WebHandler::addCorsHeaders(AsyncWebServerResponse *response)
 {
     if (settings.cors) return;
-    response->addHeader("Access-Control-Allow-Origin", "*");
-    response->addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    response->addHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    response->addHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
+    response->addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS"); // Allow all standard HTTP methods
+    response->addHeader("Access-Control-Allow-Headers", "*"); // Allow any headers the client may send
+    response->addHeader("Access-Control-Allow-Credentials", "true"); // Allow credentials (optional, in case cookies or Authorization are needed)
+    response->addHeader("Access-Control-Max-Age", "86400"); // Set max age for preflight requests (optional, but improves efficiency)
 }
 
 void WebHandler::sendErrorResponse(AsyncWebServerRequest *request, int statusCode, const char *message, bool checkToken)
@@ -110,7 +112,7 @@ void WebHandler::init()
         if (myTimer.isReady())
         {
             debugI("WebHandler waiting for WiFi...");
-            break;
+            //break; // Don't break, just wait
         }
     }
 
