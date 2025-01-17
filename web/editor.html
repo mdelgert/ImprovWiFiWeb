@@ -5,7 +5,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive File Editor</title>
+  <meta name="description" content="Responsive File Editor." />
+  <title>Editor</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
@@ -160,7 +161,7 @@
   <!-- <header>Editor</header> -->
   <header>
     <span>Editor</span>
-    <span id="currentFileName" style="font-size: 14px; margin-left: 10px; color: #ccc;">No file selected</span> 
+    <!-- <span id="currentFileName" style="font-size: 14px; margin-left: 10px; color: #ccc;">No file selected</span>  -->
     <!-- <span id="currentFileName" style="font-size: 18px; margin-left: 10px; color: #ccc;">No file selected</span> -->
   </header>
 
@@ -319,7 +320,7 @@
 
         // Update the displayed file name
         //document.getElementById('currentFileName').textContent = `Editing: ${filename}`;
-        document.getElementById('currentFileName').textContent = `${filename}`;
+        //document.getElementById('currentFileName').textContent = `${filename}`;
 
         // Update the active file styling
         highlightActiveFile(filename);
