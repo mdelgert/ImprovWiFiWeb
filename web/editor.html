@@ -13,6 +13,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/shell/shell.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/powershell/powershell.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/mode/simple.min.js"></script>
   <!-- <link rel="stylesheet" href="editor.css" /> -->
 
   <style>
@@ -153,6 +154,34 @@
       border-radius: 5px;
       font-size: 16px;
     }
+
+    /* Custom Token Colors */
+    .cm-keyword {
+      color: #ff79c6;
+      /* Pink */
+    }
+
+    .cm-string {
+      color: #f1fa8c;
+      /* Yellow */
+    }
+
+    .cm-number {
+      color: #bd93f9;
+      /* Purple */
+    }
+
+    .cm-comment {
+      color: #6272a4;
+      /* Grayish Blue */
+      font-style: italic;
+    }
+
+    .cm-subcommand {
+      color: #8be9fd;
+      /* Light Blue */
+      font-style: italic;
+    }
   </style>
 
 </head>
@@ -193,12 +222,45 @@
       ? `http://demo1.local`
       : "";
 
+    // Define the custom syntax mode for CodeMirror
+    CodeMirror.defineSimpleMode("custom", {
+      start: [
+        // Keywords (case-insensitive)
+        { regex: /\b(?:rem|defaultdelay|delay|repeat|script|led|tft)\b/i, token: "keyword" },
+
+        // Highlight subcommands (case-insensitive)
+        { regex: /\b(?:set|brightness|on|off|toggle)\b/i, token: "subcommand" },
+
+        // Numbers (standalone or part of a command)
+        { regex: /\b\d+\b/, token: "number" },
+
+        // Strings (quoted text)
+        { regex: /"(.*?)"/, token: "string" },
+
+        // Comments (lines starting with REM, case-insensitive)
+        { regex: /\brem\b.*$/i, token: "comment" }
+      ],
+      meta: {
+        lineComment: "REM"
+      }
+    });
+
+    /*
     let editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
       theme: "material-darker",
       lineNumbers: true,
       tabSize: 2,
       indentWithTabs: false
+    });
+    */
+
+    editor = CodeMirror(document.getElementById("editorContainer"), {
+      mode: "text/plain",
+      theme: "material-darker",
+      lineNumbers: true,
+      tabSize: 4,
+      indentWithTabs: true
     });
 
     let currentFile = null;
@@ -333,6 +395,8 @@
           mode = 'shell';
         } else if (filename.endsWith('.ps1')) {
           mode = 'powershell';
+        } else if (filename.endsWith('.scr')) {
+          mode = 'custom';
         } else {
           mode = 'text/plain';
         }
@@ -397,7 +461,7 @@
 
     async function newFile() {
       //const newFileName = prompt('Enter new file name:');
-      const newFileName = prompt('Enter new file name, must include full path:', '/example.txt');
+      const newFileName = prompt('Enter new file name, must include full path:', '/script.scr');
       if (newFileName) {
         try {
           const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(newFileName)}`, {
