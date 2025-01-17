@@ -38,16 +38,6 @@ header {
   background-color: #333;
 }
 
-/*
-.file-list-container {
-  flex: 0 0 200px;
-  padding: 10px;
-  background-color: #1e1e1e;
-  overflow-y: auto;
-  border-top: 1px solid #444;
-}
-*/
-
 .file-list-container {
   max-height: 30%;
   background-color: #1e1e1e;
