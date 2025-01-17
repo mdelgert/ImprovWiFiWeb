@@ -46,6 +46,9 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         // doc["enableMqttHandler"] = ENABLE_MQTT_HANDLER;
         // doc["enableEzTimeHandler"] = ENABLE_EZTIME_HANDLER;
 
+        // Adding system tick rate
+        doc["tickRateHz"] = configTICK_RATE_HZ;
+
         doc["chipModel"]   = ESP.getChipModel();
         doc["chipRevision"] = (int)ESP.getChipRevision();
         doc["chipId"]      = ESP.getEfuseMac();
