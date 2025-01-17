@@ -79,7 +79,7 @@ void TimeHandler::loop()
     if (timeTimer.isReady())
     {
         //logAllDateTimeFormats();
-        GfxHandler::printMessage(formatDateTime("%I:%M:%S %p"));
+        //GfxHandler::printMessage(formatDateTime("%I:%M:%S %p"));
         settings.upTime++;
         settings.currentTime = formatDateTime("%I:%M:%S %p");
         settings.currentDate = formatDateTime("%m-%d-%Y");

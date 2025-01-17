@@ -7,17 +7,29 @@ Authorization: Bearer {{token}}
 Content-Type: text/plain
 
 REM Start of script
-DEFAULTDELAY 500
+DEFAULTDELAY 1000
 
 REM Say hello
-TEMPLATE HELLO
-DELAY 1000
+REM TEMPLATE HELLO
+REM DELAY 1000
 
-REM Repeat the following block 3 times
-TEMPLATE DEBUG
-REPEAT 3
+REM TEMPLATE DEBUG
+
+tft print hello1
+tft print hello2
+tft print hello3
+
+REPEAT 300
 
 REM End of script
+###
+
+### send command2
+POST {{baseUrl}}/command/set
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+script file /a.txt
 ###
 
 ### Test2
@@ -74,10 +86,3 @@ REPEAT 30
 REM End of script
 ###
 
-### send command2
-POST {{baseUrl}}/command/set
-Authorization: Bearer {{token}}
-Content-Type: application/json
-
-script file /1.txt
-###
