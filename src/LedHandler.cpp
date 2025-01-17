@@ -55,7 +55,7 @@ void LedHandler::setColorByName(const String &colorName, uint8_t brightness)
 
 void LedHandler::registerCommands()
 {
-    CommandHandler::registerCommand("LED", [](const String &command)
+    CommandHandler::registerCommand("led", [](const String &command)
                                     {
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
@@ -67,8 +67,8 @@ void LedHandler::registerCommands()
         } else if (cmd == "brightness") {
             setDefaultBrightness(args.toInt());
         } else {
-            debugW("Unknown LED subcommand: %s", cmd.c_str());
-        } }, "Handles LED commands. Usage: led <subcommand> [args]\n"
+            debugW("Unknown led subcommand: %s", cmd.c_str());
+        } }, "Handles led commands. Usage: led <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  color <color> - Set LED color by name (e.g., Red, Green, Blue)\n"
                                          "  clear - Clear all LEDs\n"

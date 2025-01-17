@@ -108,7 +108,7 @@ void DeviceHandler::sendKeys2(const String& text)
 
 void DeviceHandler::registerCommands()
 {
-    CommandHandler::registerCommand("HID", [](const String &command)
+    CommandHandler::registerCommand("hid", [](const String &command)
                                     {
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
@@ -133,14 +133,14 @@ void DeviceHandler::registerCommands()
             int delay = args.toInt();
             if (delay > 0) {
                 DeviceHandler::setKeyPressDelay(delay);
-                debugI("HID delay set to %d ms", delay);
+                debugI("hid delay set to %d ms", delay);
             } else {
                 debugW("Invalid delay value. Expected a positive integer.");
             }
         }
         else {
-            debugW("Unknown HID subcommand: %s", cmd.c_str());
-        } }, "Handles HID commands. Usage: HID <subcommand> [args]\n"
+            debugW("Unknown hid subcommand: %s", cmd.c_str());
+        } }, "Handles hid commands. Usage: hid <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  mouse x,y - Move mouse by x and y\n"
                                          "  keys1 <keys1> - Send keys1\n"

@@ -32,18 +32,18 @@ void TemplateHandler::debugLevels()
 
 void TemplateHandler::registerCommands()
 {
-    CommandHandler::registerCommand("TEMPLATE", [](const String &command)
+    CommandHandler::registerCommand("template", [](const String &command)
                                     {
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (cmd == "DEBUG") {
+        if (cmd == "debug") {
             debugLevels();
-        } else if (cmd == "HELLO") {
+        } else if (cmd == "hello") {
             debugI("Hello World!");
         } else {
-            debugW("Unknown TEMPLATE subcommand: %s", cmd.c_str());
-        } }, "Handles TEMPLATE commands. Usage: TEMPLATE <subcommand> [args]\n"
+            debugW("Unknown template subcommand: %s", cmd.c_str());
+        } }, "Handles template commands. Usage: templates <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  debug - Prints debug levels\n"
                                          "  hello - Prints 'Hello World!'");

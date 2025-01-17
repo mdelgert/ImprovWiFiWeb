@@ -82,7 +82,7 @@ void GfxHandler::drawImage(int x, int y, int width, int height, const char *data
 
 void GfxHandler::registerCommands()
 {
-    CommandHandler::registerCommand("TFT", [](const String &command)
+    CommandHandler::registerCommand("tft", [](const String &command)
                                     {
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
@@ -98,8 +98,8 @@ void GfxHandler::registerCommands()
             tft.fillScreen(TFT_BLACK); // Clear the screen
             drawImage(15, 8, width, height, header_data);
         } else {
-            debugW("Unknown TFT subcommand: %s", cmd.c_str());
-        } }, "Handles TFT commands. Usage: led <subcommand> [args]\n"
+            debugW("Unknown tft subcommand: %s", cmd.c_str());
+        } }, "Handles tft commands. Usage: led <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  print <print> - Print a message to TFT screen\n"
                                          "  demo - Show demo lock image on tft screen"
