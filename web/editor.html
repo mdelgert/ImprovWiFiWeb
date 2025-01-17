@@ -63,18 +63,14 @@
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      /* Align items to the left */
       gap: 10px;
-      /* Add spacing between toolbar items */
     }
 
     .toolbar input,
     .toolbar select,
     .toolbar button {
       height: 36px;
-      /* Consistent height for all toolbar items */
       padding: 0 10px;
-      /* Horizontal padding for inputs and select */
       border: 1px solid #555;
       border-radius: 4px;
       background-color: #333;
@@ -84,9 +80,7 @@
 
     .toolbar input {
       flex: 1;
-      /* Make search bar take up remaining space */
       max-width: 300px;
-      /* Limit search bar width */
     }
 
     .toolbar button {
@@ -100,10 +94,10 @@
 
     /* File list container styling */
     .file-list-container {
-      max-height: 30%;
+      height: 200px;
+      /* Fixed height for consistent layout */
       background-color: #1e1e1e;
       overflow-y: auto;
-      /* Ensure vertical scrolling */
       border-top: 1px solid #444;
     }
 
@@ -115,13 +109,10 @@
 
     .file-list-container li {
       display: flex;
-      /* Align buttons and file names in a row */
       align-items: center;
       gap: 10px;
-      /* Add spacing between buttons and file name */
       padding: 10px;
       border-bottom: 1px solid #444;
-      cursor: pointer;
     }
 
     .file-list-container li:hover {
@@ -139,6 +130,14 @@
 
     .file-list-container button:hover {
       background-color: #555;
+    }
+
+    /* Truncate long file names with ellipsis */
+    .file-list-container span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
     }
 
     /* CodeMirror editor styling */
