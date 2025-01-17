@@ -1,3 +1,5 @@
+//TemplateHandler.cpp
+
 #ifdef ENABLE_TEMPLATE_HANDLER
 
 #include "TemplateHandler.h"
@@ -35,9 +37,9 @@ void TemplateHandler::registerCommands()
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (cmd == "debug") {
+        if (cmd == "DEBUG") {
             debugLevels();
-        } else if (cmd == "hello") {
+        } else if (cmd == "HELLO") {
             debugI("Hello World!");
         } else {
             debugW("Unknown TEMPLATE subcommand: %s", cmd.c_str());

@@ -1,3 +1,5 @@
+//CommandHandler.cpp
+
 #include "CommandHandler.h"
 
 std::map<String, std::function<void(const String&)>> CommandHandler::commandRegistry;

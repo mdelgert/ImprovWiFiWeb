@@ -1,10 +1,12 @@
-Hello I would like to implement keyboard mouse handler in my esp32-s3 micro controller.
+I would like to implement ScriptHandler using library LittleFS, that will register a command called SCRIPT.
 
-Please use these core libraries USB.h, USBHIDMouse.h and USBHIDKeyboard.h
+The subcommand will be called FILE
 
 Please assume the code base already has wifi connectivity.
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
+
+//TemplateHandler.h
 
 #pragma once
 
@@ -15,12 +17,12 @@ All of my code uses the following pattern. Can you provide example following sam
 class TemplateHandler
 {
 private:
-    static void examplePrivate();
+    static void debugLevels();
+    static void registerCommands();
 
 public:
     static void init();
     static void loop();
-    static void examplePublic();
 };
 
 #else
@@ -29,19 +31,21 @@ class TemplateHandler {
 public: // No-op implementation of TemplateHandler
     static void init() {} // No-op
     static void loop() {} // No-op
-    static void examplePublic() {} // No-op;
 };
 
 #endif // ENABLE_TEMPLATE_HANDLER
+
+//TemplateHandler.cpp
 
 #ifdef ENABLE_TEMPLATE_HANDLER
 
 #include "TemplateHandler.h"
 
-static NonBlockingTimer myTimer(1000);
+static NonBlockingTimer myTimer(60000);
 
 void TemplateHandler::init()
 {
+    registerCommands();
     debugI("TemplateHandler initialized");
 }
 
@@ -49,11 +53,11 @@ void TemplateHandler::loop()
 {
     if (myTimer.isReady())
     {
-        debugI("TemplateHandler loop");
+        debugI("TemplateHandler loop timer.");
     }
 }
 
-void TemplateHandler::examplePublic()
+void TemplateHandler::debugLevels()
 {
     // Example of debug levels
     debugV("* This is a message of debug level VERBOSE");
@@ -63,9 +67,23 @@ void TemplateHandler::examplePublic()
     debugE("* This is a message of debug level ERROR");
 }
 
-void TemplateHandler::examplePrivate()
+void TemplateHandler::registerCommands()
 {
-    debugI("TemplateHandler examplePrivate");
+    CommandHandler::registerCommand("TEMPLATE", [](const String &command)
+                                    {
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
+
+        if (cmd == "debug") {
+            debugLevels();
+        } else if (cmd == "hello") {
+            debugI("Hello World!");
+        } else {
+            debugW("Unknown TEMPLATE subcommand: %s", cmd.c_str());
+        } }, "Handles TEMPLATE commands. Usage: TEMPLATE <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  debug - Prints debug levels\n"
+                                         "  hello - Prints 'Hello World!'");
 }
 
 #endif // ENABLE_TEMPLATE_HANDLER

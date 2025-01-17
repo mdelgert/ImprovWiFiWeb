@@ -1,3 +1,5 @@
+//TemplateHandler.h
+
 #pragma once
 
 #ifdef ENABLE_TEMPLATE_HANDLER
