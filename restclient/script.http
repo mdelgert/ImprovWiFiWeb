@@ -1,4 +1,4 @@
-@baseUrl = http://demo2.local
+@baseUrl = http://demo1.local
 @token = test
 
 ### Test1
@@ -66,10 +66,18 @@ Content-Type: text/plain
 
 REM Start of script
 DEFAULTDELAY 1000
-led color green
 led color blue
-hid keys1 hello
-REPEAT 3
+led color purple
+REM hid keys1 hello
+REPEAT 30
 
 REM End of script
+###
+
+### send command2
+POST {{baseUrl}}/command/set
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+script file /1.txt
 ###

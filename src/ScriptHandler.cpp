@@ -58,7 +58,12 @@ void ScriptHandler::handleScriptFile(const String &args)
             if (defaultDelay > 0) {
                 debugD("Applying default delay: %lu ms", defaultDelay);
                 vTaskDelay(pdMS_TO_TICKS(defaultDelay));
+                //delay(defaultDelay);
             }
+
+            // Yield control to avoid WDT reset
+            //vTaskDelay(0); // or 
+            taskYIELD();
         }
     }
 
@@ -81,6 +86,8 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
         unsigned long delayTime = args.toInt();
         debugI("Applying delay of %lu ms", delayTime);
         vTaskDelay(pdMS_TO_TICKS(delayTime)); // Non-blocking delay
+        //delay(delayTime);
+
         return true; // Special command handled
     }
 
@@ -96,7 +103,12 @@ bool ScriptHandler::handleSpecialScriptCommand(const String &line)
                 // Apply the default delay after each command in the repeat buffer
                 if (defaultDelay > 0) {
                     vTaskDelay(pdMS_TO_TICKS(defaultDelay)); // Non-blocking delay
+                    //delay(defaultDelay);
                 }
+
+                 // Yield control to avoid WDT reset
+                //vTaskDelay(0); // or 
+                taskYIELD();
             }
         }
 
