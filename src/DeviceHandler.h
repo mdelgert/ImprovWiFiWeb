@@ -3,7 +3,8 @@
 #ifdef ENABLE_DEVICE_HANDLER
 
 #include "Globals.h"
-#include "DeviceDescriptors.h" //Change usb string descriptors
+#include "DeviceDescriptors.h"
+#include "KeyMappings.h"
 #include <USB.h>
 #include <USBHIDMouse.h>
 #include <USBHIDKeyboard.h>
@@ -17,7 +18,10 @@ private:
     static void sendKeys1(const String& text);
     static void sendKeys2(const String& text);
     static void registerCommands();
-
+    static void tapKey(const String& key);
+    static void processKey(const String& keyName, bool press);
+    
+    
 public:
     static USBHIDKeyboard& getKeyboard();
     static int keyPressDelay; // Configurable delay for key presses
