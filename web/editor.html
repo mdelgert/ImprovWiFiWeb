@@ -82,7 +82,8 @@
 
     .toolbar input {
       flex: 1;
-      max-width: 300px;
+      /* max-width: 300px; */
+      max-width: 200px;
     }
 
     .toolbar button {
@@ -97,7 +98,6 @@
     /* File list container styling */
     .file-list-container {
       height: 200px;
-      /* Fixed height for consistent layout */
       background-color: #1e1e1e;
       overflow-y: auto;
       border-top: 1px solid #444;
@@ -121,13 +121,31 @@
       background-color: #333;
     }
 
+    /* 
     .file-list-container button {
       background-color: #444;
       color: white;
       border: none;
       padding: 6px 12px;
       border-radius: 4px;
+      cursor: pointer; 
+    } 
+   
+    .file-list-container button:hover {
+      background-color: #555;
+    } 
+    */
+
+    .file-list-container button {
+      height: 36px;
+      width: 60px;
+      background-color: #444;
+      color: white;
+      padding: 0px 10px;
+      border-radius: 4px;
       cursor: pointer;
+      border: 1px solid #555;
+      border-radius: 4px;
     }
 
     .file-list-container button:hover {
@@ -182,7 +200,72 @@
       /* Light Blue */
       font-style: italic;
     }
-    
+
+    #statusMessage {
+      flex: 1;
+      text-align: right;
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #333;
+      padding: 20px;
+      border-radius: 8px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 300px;
+    }
+
+    .modal.active {
+      display: block;
+    }
+
+    .modal button {
+      background-color: #444;
+      color: white;
+      border: 1px solid #555;
+      padding: 8px 15px;
+      margin-top: 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .modal button:hover {
+      background-color: #555;
+    }
+
+    .modal h3 {
+      margin-bottom: 15px;
+      color: white;
+      font-size: 18px;
+    }
+
+    .modal section {
+      margin-bottom: 20px;
+    }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .modal-overlay.active {
+      display: block;
+    }
   </style>
 
 </head>
@@ -190,7 +273,8 @@
 <body>
   <!-- <header>Editor</header> -->
   <header>
-    <span>Editor</span>
+    <!-- <span>Editor</span> -->
+    <span id="statusMessage">Ready</span>
     <!-- <span id="currentFileName" style="font-size: 14px; margin-left: 10px; color: #ccc;">No file selected</span>  -->
     <!-- <span id="currentFileName" style="font-size: 18px; margin-left: 10px; color: #ccc;">No file selected</span> -->
   </header>
@@ -202,7 +286,12 @@
         <input type="text" id="fileSearch" placeholder="Search files..." oninput="filterFiles()">
         <button onclick="saveFile()">Save</button>
         <button onclick="newFile()">New</button>
-        <button onclick="refreshFiles()">Refresh</button>
+        <button onclick="deleteFile(currentFile)">Delete</button>
+        <button onclick="toggleToolsModal()">Tools</button>
+        <!-- 
+        <button onclick="runFile(currentFile)">Run</button>
+        <button onclick="refreshFiles()">Refresh</button> 
+        -->
         <select id="fontSizeSelector" onchange="changeFontSize()">
           <option value="12px">12px</option>
           <option value="14px" selected>14px</option>
@@ -217,72 +306,33 @@
       <ul id="fileList"></ul>
     </div>
   </div>
+
+  <!-- Tools Modal -->
+  <div class="modal-overlay" id="toolsModalOverlay" onclick="toggleToolsModal()"></div>
+  <div class="modal" id="toolsModal">
+    <h3>Tools</h3>
+    <span id="modalMessage"></span>
+    <button onclick="formatJson()">Format JSON</button>
+    <button onclick="minifyJson()">Minify JSON</button>
+    <button onclick="validateJson()">Validate JSON</button>
+  </div>
+
   <script>
-    // Determine endPoint based on environment
-    const endPoint = window.location.hostname === "localhost"
-      ? `http://demo1.local`
-      : "";
+    const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
 
-    /*
-    // Define the custom syntax mode for CodeMirror
     CodeMirror.defineSimpleMode("custom", {
       start: [
-        // Keywords (case-insensitive)
-        { regex: /\b(?:rem|defaultdelay|delay|repeat|script|led|tft)\b/i, token: "keyword" },
-
-        // Highlight subcommands (case-insensitive)
-        { regex: /\b(?:set|brightness|on|off|toggle)\b/i, token: "subcommand" },
-
-        // Numbers (standalone or part of a command)
-        { regex: /\b\d+\b/, token: "number" },
-
-        // Strings (quoted text)
-        { regex: /"(.*?)"/, token: "string" },
-
-        // Comments (lines starting with REM, case-insensitive)
-        { regex: /\brem\b.*$/i, token: "comment" }
-      ],
-      meta: {
-        lineComment: "REM"
-      }
-    });
-    */
-    
-    // Define the custom syntax mode for CodeMirror
-    CodeMirror.defineSimpleMode("custom", {
-      start: [
-        // Keywords (case-insensitive)
         { regex: /\b(?:rem|defaultdelay|delay|repeat|led|tft)\b/i, token: "keyword" },
-
-        // Highlight subcommands (case-insensitive)
         { regex: /\b(?:print|brightness|on|off|toggle)\b/i, token: "subcommand" },
-
-        // Numbers (standalone)
         { regex: /\b\d+\b/, token: "number" },
-
-        // Strings (quoted text)
         { regex: /"(?:[^\\]|\\.)*?"/, token: "string" },
-
-        // Comments (lines starting with REM, case-insensitive)
         { regex: /\brem\b.*$/i, token: "comment" },
-
-        // Identifiers (e.g., hello1)
-        { regex: /\b[a-zA-Z_]\w*\b/, token: null }
+        { regex: /\b[a-zA-Z_]\w*\b/, token: null } // Identifiers (e.g., hello1)
       ],
       meta: {
         lineComment: "REM"
       }
     });
-
-    /*
-    let editor = CodeMirror(document.getElementById("editorContainer"), {
-      mode: "text/plain",
-      theme: "material-darker",
-      lineNumbers: true,
-      tabSize: 2,
-      indentWithTabs: false
-    });
-    */
 
     const editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
@@ -293,7 +343,63 @@
     });
 
     let currentFile = null;
-    let fileList = []; // Declare fileList globally to store all file names.
+    let fileList = [];
+
+    function updateStatus(message) {
+      document.getElementById("modalMessage").textContent = message;
+    }
+
+    function formatJson() {
+      const content = editor.getValue();
+      try {
+        const formatted = JSON.stringify(JSON.parse(content), null, 2);
+        editor.setValue(formatted);
+        updateStatus("JSON formatted successfully.");
+      } catch {
+        updateStatus("Invalid JSON. Unable to format.");
+      }
+      toggleModal();
+    }
+
+    function minifyJson() {
+      const content = editor.getValue();
+      try {
+        const minified = JSON.stringify(JSON.parse(content));
+        editor.setValue(minified);
+        updateStatus("JSON minified successfully.");
+      } catch {
+        updateStatus("Invalid JSON. Unable to minify.");
+      }
+      toggleModal();
+    }
+
+    function validateJson() {
+      const content = editor.getValue();
+      try {
+        JSON.parse(content);
+        updateStatus("JSON is valid.");
+      } catch {
+        updateStatus("Invalid JSON.");
+      }
+      toggleModal();
+    }
+
+    function toggleToolsModal() {
+      document.getElementById("toolsModal").classList.toggle("active");
+      document.getElementById("toolsModalOverlay").classList.toggle("active");
+      document.getElementById("modalMessage").textContent = "";
+    }
+
+    function showNotification(message, type = "info") {
+      const statusMessage = document.getElementById("statusMessage");
+      statusMessage.textContent = message;
+      statusMessage.style.color = type === "error" ? "#ff5555" : "#ccc";
+
+      // setTimeout(() => {
+      //   statusMessage.textContent = "Ready";
+      //   statusMessage.style.color = "#ccc";
+      // }, 4000);
+    }
 
     async function refreshFiles() {
       try {
@@ -301,7 +407,7 @@
         const data = await response.json();
 
         if (data.status === 'success') {
-          fileList = data.data.files || []; // Populate fileList with the retrieved files.
+          fileList = data.data.files || [];
           const fileListElement = document.getElementById('fileList');
           fileListElement.innerHTML = '';
 
@@ -338,11 +444,13 @@
             fileListElement.appendChild(li);
           });
         } else {
-          alert(`Error fetching files: ${data.message}`);
+          //alert(`Error fetching files: ${data.message}`);
+          showNotification(`Error fetching files: ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Error refreshing files:', err);
-        alert('Failed to fetch file list.');
+        //alert('Failed to fetch file list.');
+        showNotification('Failed to fetch file list.', 'error');
       }
     }
 
@@ -408,15 +516,8 @@
         const content = await response.text();
         currentFile = filename;
         editor.setValue(content);
-
-        // Update the displayed file name
-        //document.getElementById('currentFileName').textContent = `Editing: ${filename}`;
-        //document.getElementById('currentFileName').textContent = `${filename}`;
-
-        // Update the active file styling
         highlightActiveFile(filename);
 
-        // Determine the mode based on the file extension
         let mode;
         if (filename.endsWith('.json')) {
           mode = 'application/json';
@@ -435,6 +536,8 @@
         console.error('Error opening file:', err);
         alert('Failed to open file.');
       }
+
+      showNotification(`Opened file: ${filename}`);
     }
 
     async function runFile(filename) {
@@ -454,14 +557,19 @@
 
         const data = await response.json();
         if (data.status === 'success') {
-          alert(`Command executed successfully for ${filename}!`);
+          //alert(`Command executed successfully for ${filename}!`);
+          showNotification(`Command executed successfully for ${filename}!`);
         } else {
-          alert(`Error executing command: ${data.message}`);
+          //alert(`Error executing command: ${data.message}`);
+          showNotification(`Error executing command: ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Error running file:', err);
-        alert('Failed to execute command.');
+        //alert('Failed to execute command.');
+        showNotification('Failed to execute command.', 'error');
       }
+
+      showNotification(`Run file: ${filename}`);
     }
 
     async function saveFile() {
@@ -478,14 +586,19 @@
         });
         const data = await response.json();
         if (data.status === 'success') {
-          alert(`File ${currentFile} saved successfully!`);
+          //alert(`File ${currentFile} saved successfully!`);
+          showNotification(`File ${currentFile} saved successfully!`);
         } else {
-          alert(`Error saving file: ${data.message}`);
+          //alert(`Error saving file: ${data.message}`);
+          showNotification(`Error saving file: ${data.message}`, 'error');
         }
       } catch (err) {
         console.error('Error saving file:', err);
-        alert('Failed to save file.');
+        //alert('Failed to save file.');
+        showNotification('Failed to save file.', 'error');
       }
+
+      showNotification(`Save file: ${filename}`);
     }
 
     async function newFile() {
@@ -502,14 +615,17 @@
           if (data.status === 'success') {
             currentFile = newFileName;
             editor.setValue('');
-            alert(`New file ${newFileName} created successfully!`);
+            //alert(`New file ${newFileName} created successfully!`);
+            showNotification(`New file ${newFileName} created successfully!`);
             refreshFiles();
           } else {
-            alert(`Error creating file: ${data.message}`);
+            //alert(`Error creating file: ${data.message}`);
+            showNotification(`Error creating file: ${data.message}`, 'error');
           }
         } catch (err) {
           console.error('Error creating file:', err);
-          alert('Failed to create new file.');
+          //alert('Failed to create new file.');
+          showNotification('Failed to create new file.', 'error');
         }
       }
     }
@@ -522,14 +638,17 @@
           });
           const data = await response.json();
           if (data.status === 'success') {
-            alert(`File ${filename} deleted successfully!`);
+            //alert(`File ${filename} deleted successfully!`);
+            showNotification(`File ${filename} deleted successfully!`);
             refreshFiles();
           } else {
-            alert(`Error deleting file: ${data.message}`);
+            //alert(`Error deleting file: ${data.message}`);
+            showNotification(`Error deleting file: ${data.message}`, 'error');
           }
         } catch (err) {
           console.error('Error deleting file:', err);
-          alert('Failed to delete file.');
+          //alert('Failed to delete file.');
+          showNotification('Failed to delete file.', 'error');
         }
       }
     }
@@ -542,7 +661,7 @@
 
     refreshFiles();
     document.querySelector('.CodeMirror').style.fontSize = '18px';
+
   </script>
 </body>
-
 </html>
