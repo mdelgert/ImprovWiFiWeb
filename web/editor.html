@@ -182,6 +182,7 @@
       /* Light Blue */
       font-style: italic;
     }
+    
   </style>
 
 </head>
@@ -222,6 +223,7 @@
       ? `http://demo1.local`
       : "";
 
+    /*
     // Define the custom syntax mode for CodeMirror
     CodeMirror.defineSimpleMode("custom", {
       start: [
@@ -244,6 +246,33 @@
         lineComment: "REM"
       }
     });
+    */
+    
+    // Define the custom syntax mode for CodeMirror
+    CodeMirror.defineSimpleMode("custom", {
+      start: [
+        // Keywords (case-insensitive)
+        { regex: /\b(?:rem|defaultdelay|delay|repeat|led|tft)\b/i, token: "keyword" },
+
+        // Highlight subcommands (case-insensitive)
+        { regex: /\b(?:print|brightness|on|off|toggle)\b/i, token: "subcommand" },
+
+        // Numbers (standalone)
+        { regex: /\b\d+\b/, token: "number" },
+
+        // Strings (quoted text)
+        { regex: /"(?:[^\\]|\\.)*?"/, token: "string" },
+
+        // Comments (lines starting with REM, case-insensitive)
+        { regex: /\brem\b.*$/i, token: "comment" },
+
+        // Identifiers (e.g., hello1)
+        { regex: /\b[a-zA-Z_]\w*\b/, token: null }
+      ],
+      meta: {
+        lineComment: "REM"
+      }
+    });
 
     /*
     let editor = CodeMirror(document.getElementById("editorContainer"), {
@@ -255,7 +284,7 @@
     });
     */
 
-    editor = CodeMirror(document.getElementById("editorContainer"), {
+    const editor = CodeMirror(document.getElementById("editorContainer"), {
       mode: "text/plain",
       theme: "material-darker",
       lineNumbers: true,
