@@ -21,6 +21,8 @@ void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, 
 
 void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
 {
+    //serveEmbeddedFile(server, "/codemirror/codemirror_min.css", codemirror_css_start, codemirror_css_end, "text/css");
+
     serveEmbeddedFile(server, "/actions.html", actions_html_start, actions_html_end, "text/html");
     serveEmbeddedFile(server, "/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile(server, "/advanced.html", advanced_html_start, advanced_html_end, "text/html");
