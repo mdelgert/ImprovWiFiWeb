@@ -1,58 +1,56 @@
-//CommandHandler.cpp
+// CommandHandler.cpp
 
 #include "CommandHandler.h"
 
-std::map<String, std::function<void(const String&)>> CommandHandler::commandRegistry;
+std::map<String, std::function<void(const String &)>> CommandHandler::commandRegistry;
 std::map<String, String> CommandHandler::commandDescriptions;
-std::function<void(const String&)> CommandHandler::defaultHandler = nullptr;
+std::function<void(const String &)> CommandHandler::defaultHandler = nullptr;
 
-void CommandHandler::init() {
-    
-    CommandHandler::registerCommand("help", [](const String&) { // Register a "help" command
-        CommandHandler::listCommands();
-    }, "Lists all available commands.");
-
-    CommandHandler::setDefaultHandler([](const String& command) { // Set the default handler to call the 'help' command
-        debugI("Unknown command: %s. Showing help menu.", command.c_str());
-        CommandHandler::listCommands(); // Invoke the help command
-    });
-
-    debugD("* CommandHandler initialized.");
-}
-
-void CommandHandler::parseCommand(const String& input, String& cmd, String& args) {
+void CommandHandler::parseCommand(const String &input, String &cmd, String &args)
+{
     int spaceIndex = input.indexOf(' ');
-    if (spaceIndex > 0) {
+    if (spaceIndex > 0)
+    {
         cmd = input.substring(0, spaceIndex);
         args = input.substring(spaceIndex + 1);
-    } else {
+    }
+    else
+    {
         cmd = input;
         args = "";
     }
-    
+
     cmd.toLowerCase(); // Normalize command case
 }
 
-void CommandHandler::handleCommand(const String& command) {
+void CommandHandler::handleCommand(const String &command)
+{
     String cmd, args;
     parseCommand(command, cmd, args);
 
     auto it = commandRegistry.find(cmd);
-    if (it != commandRegistry.end()) {
+    if (it != commandRegistry.end())
+    {
         debugV("* Executing command: %s with args: %s", cmd.c_str(), args.c_str());
         it->second(args); // Call the registered handler
-    } else if (defaultHandler) {
+    }
+    else if (defaultHandler)
+    {
         debugV("* Calling default handler for command: %s", command.c_str());
         defaultHandler(command);
-    } else {
+    }
+    else
+    {
         debugE("* Unknown command received: %s", cmd.c_str());
     }
 }
 
-void CommandHandler::registerCommand(const String& name, std::function<void(const String&)> handler, const String& description) {
+void CommandHandler::registerCommand(const String &name, std::function<void(const String &)> handler, const String &description)
+{
     String lowerName = name;
     lowerName.toLowerCase();
-    if (commandRegistry.find(lowerName) != commandRegistry.end()) {
+    if (commandRegistry.find(lowerName) != commandRegistry.end())
+    {
         debugW("* Warning: Command '%s' is being overwritten.", lowerName.c_str());
     }
     commandRegistry[lowerName] = handler;
@@ -60,32 +58,62 @@ void CommandHandler::registerCommand(const String& name, std::function<void(cons
     debugD("* Command '%s' registered with description: %s", lowerName.c_str(), description.c_str());
 }
 
-void CommandHandler::registerCommandAlias(const String& alias, const String& existingCommand) {
+void CommandHandler::registerCommandAlias(const String &alias, const String &existingCommand)
+{
     String lowerAlias = alias;
     String lowerCommand = existingCommand;
     lowerAlias.toLowerCase();
     lowerCommand.toLowerCase();
 
-    if (commandRegistry.find(lowerCommand) != commandRegistry.end()) {
+    if (commandRegistry.find(lowerCommand) != commandRegistry.end())
+    {
         commandRegistry[lowerAlias] = commandRegistry[lowerCommand];
         debugV("* Alias '%s' registered for command '%s'.", lowerAlias.c_str(), lowerCommand.c_str());
-    } else {
+    }
+    else
+    {
         debugE("* Error: Command '%s' not found for alias registration.", existingCommand.c_str());
     }
 }
 
-void CommandHandler::listCommands() {
+void CommandHandler::listCommands()
+{
     debugI("* Listing all available commands:");
-    for (const auto& pair : commandDescriptions) {
+    for (const auto &pair : commandDescriptions)
+    {
         debugI("* Command: %s - %s", pair.first.c_str(), pair.second.c_str());
     }
 }
 
-void CommandHandler::setDefaultHandler(std::function<void(const String&)> handler) {
+void CommandHandler::setDefaultHandler(std::function<void(const String &)> handler)
+{
     defaultHandler = handler;
     debugD("* Default handler set.");
 }
 
-bool CommandHandler::equalsIgnoreCase(const String &a, const String &b) {
+bool CommandHandler::equalsIgnoreCase(const String &a, const String &b)
+{
     return a.equalsIgnoreCase(b);
+}
+
+void CommandHandler::init()
+{
+    CommandHandler::setDefaultHandler([](const String &command) { // Set the default handler to call the 'help' command
+        debugI("Unknown command: %s. Showing help menu.", command.c_str());
+        CommandHandler::listCommands(); // Invoke the help command
+    });
+
+    CommandHandler::registerCommand("help", [](const String &) { // Register a "help" command
+        CommandHandler::listCommands();
+    },"Lists all available commands.");
+
+    CommandHandler::registerCommand("debug", [](const String &command) { // Register a "debug" print command
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
+        debugI("Command:%s", command.c_str());
+        debugI("CMD:%s", cmd.c_str());
+        debugI("ARGS:%s", args.c_str());
+    },"Prints a debug message. Usage: debug <message>");
+
+    debugD("* CommandHandler initialized.");
 }

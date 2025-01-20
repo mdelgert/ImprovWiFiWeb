@@ -9,7 +9,6 @@
 
 class CommandHandler {
 public:
-    static void init();
     static void handleCommand(const String& command);
     static void registerCommand(const String& name, std::function<void(const String&)> handler, const String& description = "");
     static void registerCommandAlias(const String& alias, const String& existingCommand);
@@ -17,6 +16,7 @@ public:
     static void setDefaultHandler(std::function<void(const String&)> handler);
     static void parseCommand(const String& input, String& cmd, String& args);
     static bool equalsIgnoreCase(const String &a, const String &b);
+    static void init();
 
 private:
     static std::map<String, std::function<void(const String&)>> commandRegistry;
