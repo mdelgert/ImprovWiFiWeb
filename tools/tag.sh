@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v1.0.15"
+VERSION="v1.0.16"
 
 echo "Current version is $VERSION"
 

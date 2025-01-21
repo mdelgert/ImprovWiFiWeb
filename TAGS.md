@@ -18,21 +18,26 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 ## Tags
 
 ### Tag: v1.0.0
-**Date:** 2024-12-30
+**Date:** 2024-30-12
 **Description:**  
 - Testing action LED Blue
 
 ### Tag: v1.0.1
-**Date:** 2024-12-30
+**Date:** 2024-30-12
 **Description:**  
 - Testing action LED Green
 
 ### Tag: v1.0.2
-**Date:** 2024-12-30
+**Date:** 2024-30-12
 **Description:**  
 - Testing action LED Purple
 
 ### Tag: v1.0.3
-**Date:** 2024-12-30
+**Date:** 2024-30-12
 **Description:**  
 - Testing action LED Maroon
+
+### Tag: v1.0.16
+**Date:** 2025-21-01
+**Description:**  
+- Added folder support
