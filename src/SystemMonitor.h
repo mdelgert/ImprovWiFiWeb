@@ -20,7 +20,7 @@ public:
 #else
 
 class SystemMonitor { 
-public: // No-op implementation
+public:
     static void init() {} // No-op
 };
 
