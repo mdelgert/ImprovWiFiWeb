@@ -22,13 +22,12 @@ void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, 
 void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
 {
     //serveEmbeddedFile(server, "/codemirror/codemirror_min.css", codemirror_css_start, codemirror_css_end, "text/css");
-
     serveEmbeddedFile(server, "/actions.html", actions_html_start, actions_html_end, "text/html");
     serveEmbeddedFile(server, "/actions.js", actions_js_start, actions_js_end, "application/javascript");
     serveEmbeddedFile(server, "/advanced.html", advanced_html_start, advanced_html_end, "text/html");
     serveEmbeddedFile(server, "/advanced.js", advanced_js_start, advanced_js_end, "application/javascript");
-    serveEmbeddedFile(server, "/blueserial.html", blueserial_html_start, blueserial_html_end, "text/html");
-    serveEmbeddedFile(server, "/blueserial.js", blueserial_js_start, blueserial_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/device.html", device_html_start, device_html_end, "text/html");
+    serveEmbeddedFile(server, "/device.js", device_js_start, device_js_end, "application/javascript");
     serveEmbeddedFile(server, "/editor.css", editor_css_start, editor_css_end, "text/css");
     serveEmbeddedFile(server, "/editor.html", editor_html_start, editor_html_end, "text/html");
     serveEmbeddedFile(server, "/editor.js", editor_js_start, editor_js_end, "application/javascript");
