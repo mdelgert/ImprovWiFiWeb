@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark File Manager</title>
+    <title>Responsive File Manager</title>
     <style>
+        /* General body styling */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -12,7 +13,15 @@
             background-color: #1e1e1e;
             color: #d4d4d4;
             display: flex;
+            flex-direction: column;
             height: 100vh;
+        }
+
+        /* Sidebar and editor layout */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
         }
 
         .sidebar {
@@ -27,16 +36,37 @@
             flex: 1;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
+        /* Toolbar styling */
         .toolbar {
             background: #2d2d2d;
             padding: 10px;
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             border-bottom: 1px solid #3c3c3c;
         }
 
+        button {
+            padding: 8px 16px;
+            background: #3c3c3c;
+            color: #d4d4d4;
+            border: 1px solid #555;
+            border-radius: 4px;
+            cursor: pointer;
+            flex: 1;
+            min-width: 120px;
+            max-width: calc(33.33% - 20px);
+        }
+
+        button:hover {
+            background: #4fc1ff;
+            color: black;
+        }
+
+        /* File list styling */
         .file-list {
             list-style: none;
             margin: 0;
@@ -58,6 +88,7 @@
             color: #4fc1ff;
         }
 
+        /* Textarea editor */
         textarea {
             flex: 1;
             margin: 10px;
@@ -69,34 +100,51 @@
             font-family: monospace;
         }
 
-        button {
-            padding: 8px 16px;
-            background: #3c3c3c;
-            color: #d4d4d4;
-            border: 1px solid #555;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
 
-        button:hover {
-            background: #4fc1ff;
-            color: black;
+            .sidebar {
+                width: 100%;
+                height: 50%;
+                border-right: none;
+                border-bottom: 1px solid #3c3c3c;
+            }
+
+            .toolbar {
+                gap: 5px;
+            }
+
+            button {
+                flex: 1 1 auto;
+                min-width: 80px;
+                max-width: 100%;
+            }
+
+            textarea {
+                margin: 0;
+                border-radius: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <ul id="fileList" class="file-list"></ul>
-    </div>
-    <div class="editor">
-        <div class="toolbar">
-            <button onclick="createFile()">New File</button>
-            <button onclick="createFolder()">New Folder</button>
-            <button onclick="deleteItem()">Delete</button>
-            <button onclick="renameItem()">Rename</button>
-            <button onclick="saveFile()">Save</button>
+    <div class="container">
+        <div class="sidebar">
+            <ul id="fileList" class="file-list"></ul>
         </div>
-        <textarea id="editor" placeholder="Select a file to view or edit..."></textarea>
+        <div class="editor">
+            <div class="toolbar">
+                <button onclick="createFile()">New File</button>
+                <button onclick="createFolder()">New Folder</button>
+                <button onclick="deleteItem()">Delete</button>
+                <button onclick="renameItem()">Rename</button>
+                <button onclick="saveFile()">Save</button>
+            </div>
+            <textarea id="editor" placeholder="Select a file to view or edit..."></textarea>
+        </div>
     </div>
 
     <script>

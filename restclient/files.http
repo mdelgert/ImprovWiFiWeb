@@ -1,4 +1,4 @@
-@baseUrl = http://demo2.local
+@baseUrl = http://demo1.local
 @token = test
 
 ### Get all files
