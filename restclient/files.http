@@ -8,6 +8,20 @@ Content-Type: text/plain
 
 ###
 
+### Search for json files
+GET {{baseUrl}}/search?query=json
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+###
+
+### Search for text files
+GET {{baseUrl}}/search?query=txt
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+###
+
 ### Rename a file
 POST {{baseUrl}}/rename?oldname=/test.txt&newname=/test2.txt
 Authorization: Bearer {{token}}
