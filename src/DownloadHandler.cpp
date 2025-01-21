@@ -74,31 +74,53 @@ bool DownloadHandler::downloadFile(const String &url, const String &destinationP
     }
 }
 
+String getFileNameFromUrl(const String &url)
+{
+    int lastSlashIndex = url.lastIndexOf('/');
+    if (lastSlashIndex == -1 || lastSlashIndex == url.length() - 1)
+    {
+        debugE("Invalid URL format for extracting filename: %s", url.c_str());
+        return "";
+    }
+
+    return "/" + url.substring(lastSlashIndex + 1);
+}
+
 void DownloadHandler::registerCommands()
 {
     CommandHandler::registerCommand("download", [](const String &args)
                                     {
         if (args.isEmpty())
         {
-            debugW("Usage: download <url> <destination>");
+            debugW("Usage: download <url> [destination]");
             return;
         }
 
         int spaceIndex = args.indexOf(' ');
+        String url, destination;
+
         if (spaceIndex < 0)
         {
-            debugW("Invalid arguments. Usage: download <url> <destination>");
-            return;
+            // Only URL provided; derive destination from URL
+            url = args;
+            destination = getFileNameFromUrl(url);
+            if (destination.isEmpty())
+            {
+                debugE("Failed to derive destination filename from URL");
+                return;
+            }
+        }
+        else
+        {
+            url = args.substring(0, spaceIndex);
+            destination = args.substring(spaceIndex + 1);
+            destination.trim(); // Trim whitespace from the destination string
         }
 
-        String url = args.substring(0, spaceIndex);
-        String destination = args.substring(spaceIndex + 1);
-        destination.trim(); // Trim whitespace from the destination string
-
-        if (url.isEmpty() || destination.isEmpty())
+        if (url.isEmpty())
         {
-            debugW("Invalid arguments. URL or destination is empty.");
-            debugI("Usage: download <url> <destination>");
+            debugW("Invalid arguments. URL is empty.");
+            debugI("Usage: download <url> [destination]");
             return;
         }
 
@@ -112,11 +134,14 @@ void DownloadHandler::registerCommands()
         {
             debugE("Failed to download file from: %s", url.c_str());
         } },
-        "Downloads a file from a URL and saves it to LittleFS. Usage: download <url> <destination>");
+        "Downloads a file from a URL and saves it to LittleFS. Usage: download <url> [destination]");
+
+        CommandHandler::registerCommandAlias("wget", "download");
 }
 
 #endif // ENABLE_DOWNLOAD_HANDLER
 
-//CommandHandler::registerCommandAlias("wget", "download");
 // download https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr /hello1.scr
-// wget https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr /hello1.scr
+// download https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr /test1.scr
+// download https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
+// wget https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
