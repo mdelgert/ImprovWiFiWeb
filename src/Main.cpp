@@ -53,7 +53,7 @@ void loop()
   ImprovHandler::loop();
   ButtonHandler::loop();
   MqttHandler::loop();
-  TimeHandler::loop();
+  //TimeHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
   CronHandler::loop();
