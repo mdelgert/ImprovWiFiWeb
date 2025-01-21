@@ -83,3 +83,38 @@ time_t cron_prev(cron_expr* expr, time_t date);
 #if defined(__cplusplus) && !defined(CRON_COMPILE_AS_CXX)
 } /* extern "C"*/
 #endif
+
+/*
+Cron Expression Format (Extended with Seconds and Year):
+--------------------------------------------------------
+* * * * * * * /path/to/command
+│ │ │ │ │ │ │
+│ │ │ │ │ │ └── Year (1970 - 2099) [Optional, defaults to * (every year)]
+│ │ │ │ │ │
+│ │ │ │ │ └──── Day of the week (0 - 6) (Sunday=0 or SUN-SAT)
+│ │ │ │ │
+│ │ │ │ └────── Month (1 - 12 or JAN-DEC)
+│ │ │ │
+│ │ │ └──────── Day of the month (1 - 31)
+│ │ │
+│ │ └───────── Hour (0 - 23)
+│ │
+│ └────────── Minute (0 - 59)
+│
+└─────────── Second (0 - 59) [Optional, defaults to 0]
+
+Examples:
+---------
+1. 0 0 12 * * * * /path/to/command
+   - Every day at 12:00 PM.
+
+2. 30 15 9 1 1 * 2025 /path/to/command
+   - At 9:15:30 AM on January 1, 2025.
+
+3. * * 9-17 * * * * /path/to/command
+   - Every second between 9 AM and 5 PM daily.
+
+4. 0 30 9 ? JAN MON * /path/to/command
+   - At 9:30 AM on Mondays in January, every year.
+
+*/

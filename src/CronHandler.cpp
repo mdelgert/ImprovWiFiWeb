@@ -41,7 +41,7 @@ void CronHandler::updateNextExecution(CronJob &job)
 }
 
 void CronHandler::registerCommands() {
-    CommandHandler::registerCommand("cron", [](const String &command) {
+    CommandHandler::registerCommand("crontab", [](const String &command) {
         debugI("Full Command Received: %s", command.c_str());
 
         // Locate the first and second quotes for the schedule
@@ -59,24 +59,19 @@ void CronHandler::registerCommands() {
         schedule.trim(); // Trim the extracted schedule
         debugI("Parsed Schedule: %s", schedule.c_str());
 
-        // Extract everything after the first quoted string
-        String remaining = command.substring(firstQuoteEnd + 1);
-        remaining.trim();
+        // Locate the second set of quotes for the command
+        int secondQuoteStart = command.indexOf('\"', firstQuoteEnd + 1);
+        int secondQuoteEnd = command.indexOf('\"', secondQuoteStart + 1);
+        debugI("Second Quote Start: %d, Second Quote End: %d", secondQuoteStart, secondQuoteEnd);
 
-        // Locate the second set of quotes (if present)
-        int secondQuoteStart = remaining.indexOf('\"');
-        int secondQuoteEnd = remaining.indexOf('\"', secondQuoteStart + 1);
-
-        String cronCommand;
-        if (secondQuoteStart != -1 && secondQuoteEnd != -1) {
-            // Extract the actual command after the second set of quotes
-            cronCommand = remaining.substring(secondQuoteEnd + 1);
-            cronCommand.trim();
-        } else {
-            // Assume the remaining string is the command
-            cronCommand = remaining;
+        if (secondQuoteStart == -1 || secondQuoteEnd == -1) {
+            debugE("Invalid syntax. Command must be enclosed in double quotes.");
+            return;
         }
 
+        // Extract the command (second quoted string)
+        String cronCommand = command.substring(secondQuoteStart + 1, secondQuoteEnd);
+        cronCommand.trim(); // Trim the extracted command
         debugI("Parsed Command: %s", cronCommand.c_str());
 
         // Validate that both schedule and command are non-empty
@@ -96,7 +91,7 @@ void CronHandler::registerCommands() {
         const char *error = nullptr;
         cron_parse_expr(schedule.c_str(), &expr, &error);
         if (error) {
-            debugE("Invalid cron schedule: %s. Expected 6 fields (e.g., '* * * * * *').", error);
+            debugE("Invalid cron schedule: %s. Expected 5 or 6 fields (e.g., '* * * * * *').", error);
             return;
         }
 
@@ -113,7 +108,16 @@ void CronHandler::registerCommands() {
         cronJobs.push_back(job);
 
         debugI("Cron job registered: %s -> %s", schedule.c_str(), cronCommand.c_str());
-    }, "Handles cron jobs. Usage: cron register \"<schedule>\" <command>");
+    }, "Handles cron jobs. Usage: crontab \"<schedule>\" \"<command>\n"
+       "Example: crontab \"*/15 * * * * *\" \"tft print hello\"\n"
+       "Note: Schedule and command must be enclosed in double quotes.\n"
+       "Schedule format: \"<seconds> <minutes> <hours> <day of month> <month> <day of week> <year>\"");
 }
 
 #endif // ENABLE_CRON_HANDLER
+
+// Usage extended with year:
+//crontab "*/5 * * * * *" "tft print hello1"
+
+// Usage extended without year:
+//crontab "*/10 * * * *" "tft print hello2"

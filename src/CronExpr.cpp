@@ -910,6 +910,39 @@ void cron_parse_expr(const char* expression, cron_expr* target, const char** err
     }
 
     fields = split_str(expression, ' ', &len);
+
+    // If only 5 fields are provided, set the year field to '*' - https://crontab.guru/
+    // Standard cron expressions only have 5 fields, but we allow an optional 6th field for the year
+    // Default to '*' if the year field is not provided
+    if (len == 5) {
+        char** extended_fields = (char**)cron_malloc(6 * sizeof(char*));
+        if (!extended_fields) {
+            *error = "Memory allocation error";
+            goto return_res;
+        }
+        // Copy the original fields
+        for (size_t i = 0; i < len; i++) {
+            extended_fields[i] = strdupl(fields[i], strlen(fields[i]));
+            if (!extended_fields[i]) {
+                *error = "Memory allocation error";
+                free_splitted(extended_fields, 6);
+                goto return_res;
+            }
+        }
+        // Add the default '*' for the year field
+        extended_fields[5] = strdupl("*", 1);
+        if (!extended_fields[5]) {
+            *error = "Memory allocation error";
+            free_splitted(extended_fields, 6);
+            goto return_res;
+        }
+
+        // Use extended fields instead
+        free_splitted(fields, len);
+        fields = extended_fields;
+        len = 6;
+    }
+
     if (len != 6) {
         *error = "Invalid number of fields, expression must consist of 6 fields";
         goto return_res;
