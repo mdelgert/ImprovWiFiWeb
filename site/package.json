@@ -16,6 +16,6 @@
     "server": "npm run dev -- --host"
   },
   "devDependencies": {
-    "vite": "^6.0.5"
+    "vite": "^6.0.9"
   }
 }
