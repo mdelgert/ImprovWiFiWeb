@@ -8,6 +8,51 @@ void ServeFiles::registerEndpoints(AsyncWebServer &server) {
     server.on("/file", HTTP_GET, handleReadFile);             // Read a file
     server.on("/file", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleWriteFile); // Write a file
     server.on("/file", HTTP_DELETE, handleDeleteFile);        // Delete a file
+    server.on("/folder", HTTP_POST, handleCreateFolder); // Create folder
+    server.on("/folder", HTTP_DELETE, handleDeleteFolder); // Delete folder
+}
+
+void ServeFiles::handleCreateFolder(AsyncWebServerRequest *request) {
+    if (!request->hasParam("foldername")) {
+        WebHandler::sendErrorResponse(request, 400, "Folder name is required");
+        return;
+    }
+    String folderName = request->getParam("foldername")->value();
+    if (LittleFS.mkdir(folderName)) {
+        WebHandler::sendSuccessResponse(request, "Folder created successfully");
+    } else {
+        WebHandler::sendErrorResponse(request, 500, "Failed to create folder");
+    }
+}
+
+void ServeFiles::handleDeleteFolder(AsyncWebServerRequest *request) {
+    if (!request->hasParam("foldername")) {
+        WebHandler::sendErrorResponse(request, 400, "Folder name is required");
+        return;
+    }
+    String folderName = request->getParam("foldername")->value();
+    if (deleteFolderRecursive(folderName)) {
+        WebHandler::sendSuccessResponse(request, "Folder deleted successfully");
+    } else {
+        WebHandler::sendErrorResponse(request, 500, "Failed to delete folder");
+    }
+}
+
+bool ServeFiles::deleteFolderRecursive(const String &folderPath) {
+    File dir = LittleFS.open(folderPath);
+    if (!dir || !dir.isDirectory()) return false;
+
+    File file = dir.openNextFile();
+    while (file) {
+        String filePath = String(folderPath) + "/" + file.name();
+        if (file.isDirectory()) {
+            deleteFolderRecursive(filePath);
+        } else {
+            LittleFS.remove(filePath);
+        }
+        file = dir.openNextFile();
+    }
+    return LittleFS.rmdir(folderPath);
 }
 
 // Helper to ensure parent directories exist

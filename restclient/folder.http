@@ -1,0 +1,10 @@
+@baseUrl = http://demo2.local
+@token = test
+
+### Create a new folder
+POST {{baseUrl}}/folder?foldername=/test
+Authorization: Bearer {{token}}
+
+### Delete a new folder
+DELETE {{baseUrl}}/folder?foldername=/test
+Authorization: Bearer {{token}}

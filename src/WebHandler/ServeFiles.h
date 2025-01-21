@@ -12,6 +12,9 @@ public:
     static void registerEndpoints(AsyncWebServer &server);
 
 private:
+    static void handleCreateFolder(AsyncWebServerRequest *request);
+    static void handleDeleteFolder(AsyncWebServerRequest *request);
+    static bool deleteFolderRecursive(const String &folderPath);
     static bool ensureParentDirsExist(const String &filePath);
     static void listFilesRecursive(JsonArray &files, const String &path);
     static void handleListFiles(AsyncWebServerRequest *request);
