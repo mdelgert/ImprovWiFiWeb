@@ -7,6 +7,7 @@
 #include "Globals.h"
 #include "TimeHandler.h"
 #include "GfxHandler.h"
+#include "CronHandler.h"
 #include <Arduino.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>

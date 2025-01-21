@@ -76,29 +76,28 @@ void SystemMonitor::systemMonitorTask(void *parameter)
 }
 
 // Define individual handlers for each interval
-void handleSecondCheck()
+void SystemMonitor::handleSecondCheck()
 {
-  debugI("SystemMonitor: Running second-specific task.");
-  // TimeHandler::logAllDateTimeFormats();
+  debugV("SystemMonitor: Running second-specific task.");
+  CronHandler::loop();
   settings.upTime++;
-  settings.currentTime = TimeHandler::formatDateTime("%I:%M:%S %p");
-  settings.currentDate = TimeHandler::formatDateTime("%m-%d-%Y");
-  GfxHandler::printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
 }
 
-void handleMinuteCheck()
+void SystemMonitor::handleMinuteCheck()
 {
-  debugI("SystemMonitor: Running minute-specific task.");
+  debugV("SystemMonitor: Running minute-specific task.");
+
+  TimeHandler::syncTime();
 }
 
-void handleFiveMinuteCheck()
+void SystemMonitor::handleFiveMinuteCheck()
 {
-  debugI("SystemMonitor: Running five-minute-specific task.");
+  debugV("SystemMonitor: Running five-minute-specific task.");
 }
 
-void handleTenMinuteCheck()
+void SystemMonitor::handleTenMinuteCheck()
 {
-  debugI("SystemMonitor: Running ten-minute-specific task.");
+  debugV("SystemMonitor: Running ten-minute-specific task.");
 }
 
 #endif // ENABLE_SYSTEM_MONITOR

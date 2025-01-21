@@ -31,15 +31,15 @@ void setup()
   LedHandler::init();
   ButtonHandler::init();
   MqttHandler::init();
-  TimeHandler::init();
+  TimeHandler::init(settings.timezone.c_str());
   OTAHandler::init();
   CommandHandler::init();
   DeviceHandler::init();
   CronHandler::init();
   SystemMonitor::init();
-  GfxHandler::printMessage(SOFTWARE_VERSION);
-  LedHandler::setDefaultBrightness(100);
-  LedHandler::setColorByName("Purple");
+  //GfxHandler::printMessage(SOFTWARE_VERSION);
+  //LedHandler::setDefaultBrightness(100);
+  //LedHandler::setColorByName("Purple");
 }
 
 void loop()
@@ -53,7 +53,6 @@ void loop()
   ImprovHandler::loop();
   ButtonHandler::loop();
   MqttHandler::loop();
-  //TimeHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
   CronHandler::loop();

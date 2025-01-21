@@ -89,7 +89,11 @@ void GfxHandler::registerCommands()
 
         if (cmd == "print") {
             printMessage(args.c_str());
-        } else if (cmd == "demo") {
+        }
+        else if (cmd == "clock") {
+            printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
+        }
+        else if (cmd == "demo") {
             //Transparency background color
             //uint16_t bgColor = lcd.color565(128, 128, 128); //Grey background
             //uint16_t bgColor = lcd.color565(0, 0, 0); //Black background
@@ -97,11 +101,13 @@ void GfxHandler::registerCommands()
             //drawImage(10, 10, width, height, header_data);
             tft.fillScreen(TFT_BLACK); // Clear the screen
             drawImage(15, 8, width, height, header_data);
-        } else {
+        } 
+        else {
             debugW("Unknown tft subcommand: %s", cmd.c_str());
         } }, "Handles tft commands. Usage: led <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  print <print> - Print a message to TFT screen\n"
+                                         "  clock - Show current time on tft screen\n"
                                          "  demo - Show demo lock image on tft screen"
         );
 }

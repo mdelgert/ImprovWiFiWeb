@@ -29,8 +29,6 @@ struct Settings {
     uint64_t bootTime = 0;
     // Settings not saved in preferences
     uint64_t upTime = 0;
-    String currentTime = "";
-    String currentDate = "";
 };
 
 // Global settings object

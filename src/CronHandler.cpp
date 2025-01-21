@@ -4,7 +4,7 @@
 
 std::vector<CronHandler::CronJob> CronHandler::cronJobs;
 
-static NonBlockingTimer timeTimer(1000);
+// static NonBlockingTimer timeTimer(1000);
 
 void CronHandler::init()
 {
@@ -14,18 +14,17 @@ void CronHandler::init()
 
 void CronHandler::loop()
 {
-    if (timeTimer.isReady())
-    {
-        time_t now = time(nullptr);
+    // if (timeTimer.isReady()){}
 
-        for (auto &job : cronJobs)
+    time_t now = time(nullptr);
+
+    for (auto &job : cronJobs)
+    {
+        if (now >= job.nextExecution)
         {
-            if (now >= job.nextExecution)
-            {
-                debugI("Executing cron job: %s -> %s", job.schedule.c_str(), job.command.c_str());
-                CommandHandler::handleCommand(job.command.c_str());
-                updateNextExecution(job);
-            }
+            debugI("Executing cron job: %s -> %s", job.schedule.c_str(), job.command.c_str());
+            CommandHandler::handleCommand(job.command.c_str());
+            updateNextExecution(job);
         }
     }
 }
@@ -40,8 +39,10 @@ void CronHandler::updateNextExecution(CronJob &job)
     }
 }
 
-void CronHandler::registerCommands() {
-    CommandHandler::registerCommand("crontab", [](const String &command) {
+void CronHandler::registerCommands()
+{
+    CommandHandler::registerCommand("crontab", [](const String &command)
+                                    {
         debugI("Full Command Received: %s", command.c_str());
 
         // Locate the first and second quotes for the schedule
@@ -107,17 +108,25 @@ void CronHandler::registerCommands() {
         CronJob job = {schedule.c_str(), cronCommand.c_str(), expr, nextExecution};
         cronJobs.push_back(job);
 
-        debugI("Cron job registered: %s -> %s", schedule.c_str(), cronCommand.c_str());
-    }, "Handles cron jobs. Usage: crontab \"<schedule>\" \"<command>\n"
-       "Example: crontab \"*/15 * * * * *\" \"tft print hello\"\n"
-       "Note: Schedule and command must be enclosed in double quotes.\n"
-       "Schedule format: \"<seconds> <minutes> <hours> <day of month> <month> <day of week> <year>\"");
+        debugI("Cron job registered: %s -> %s", schedule.c_str(), cronCommand.c_str()); }, "Handles cron jobs. Usage: crontab \"<schedule>\" \"<command>\n"
+                                         "Example: crontab \"*/15 * * * * *\" \"tft print hello\"\n"
+                                         "Note: Schedule and command must be enclosed in double quotes.\n"
+                                         "Schedule format: \"<seconds> <minutes> <hours> <day of month> <month> <day of week> <year>\"");
 }
 
 #endif // ENABLE_CRON_HANDLER
 
 // Usage extended with year:
-//crontab "*/5 * * * * *" "tft print hello1"
+// crontab "*/5 * * * * *" "tft print hello1"
 
 // Usage extended without year:
-//crontab "*/10 * * * *" "tft print hello2"
+// crontab "1-15 * * * *" "tft print white"
+// crontab "1-15 * * * *" "led color white"
+// crontab "15-30 * * * *" "tft print green"
+// crontab "15-30 * * * *" "led color green"
+// crontab "30-45 * * * *" "tft print blue"
+// crontab "30-45 * * * *" "led color blue"
+// crontab "45-59 * * * *" "tft print purple"
+// crontab "45-59 * * * *" "led color purple"
+
+

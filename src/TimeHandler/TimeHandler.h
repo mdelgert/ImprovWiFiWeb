@@ -3,9 +3,7 @@
 #ifdef ENABLE_TIME_HANDLER
 
 #include "Globals.h"
-#include "GfxHandler.h"
 #include "TimeZones.h"
-#include "NonBlockingTimer.h"
 #include <time.h>
 
 /**
@@ -15,13 +13,12 @@
 class TimeHandler
 {
 private:
-    static void syncTime();
     static bool parsePosixOffsets(const char* posixStr, long* gmtOffset, int* daylightOffset);
     static void logAllDateTimeFormats();
     
 public:
-    static void init();
-    static void loop();
+    static void init(const char* timezone);
+    static void syncTime();
     static long getLinuxTime();
     static const char* formatDateTime(const char* format);
 };
@@ -35,8 +32,8 @@ public:
 class TimeHandler
 { 
 public:
-    static void init() {}
-    static void loop() {}
+    static void init(const char* timezone) {}
+    static void syncTime() {}
     static long getLinuxTime() { return 0; }
     static const char* formatDateTime(const char* format) { return ""; }
 };

@@ -2,16 +2,12 @@
 
 #include "TimeHandler.h"
 
-// Timers for resync and periodic updates
-//600000 = 10 minutes, 3600000 = 1 hour, 28800000 = 8 hours and 86400000 = 1 day
-static NonBlockingTimer timeSyncTimer(3600000); // 1 hour
-static NonBlockingTimer timeTimer(1000);
-static bool isTimeSynced = false;
+// Default region hardcoded
+const char* defaultRegion = "Etc/Zulu";
 
-// NTP servers
-//The public rate limit (without an API key) is 5 requests in a rolling 30 second window; 
-//the rate limit with an API key is 50 requests in a rolling 30 second window.
-//A query interval of 10 minutes or longer is generally acceptable for both services.
+// NTP servers the public rate limit (without an API key) is 5 requests in a rolling 30 second window; 
+// the rate limit with an API key is 50 requests in a rolling 30 second window. A query interval of 
+// 10 minutes or longer is generally acceptable for both services.
 static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
@@ -19,15 +15,15 @@ static const char *ntpServer2 = "time.nist.gov";
 static long gmtOffset_sec = 0;
 static int daylightOffset_sec = 0;
 
-// Default region hardcoded
-const char* defaultRegion = "Etc/Zulu";
+// Flag to indicate if time has been synchronized
+static bool isTimeSynced = false;
 
-void TimeHandler::init()
+void TimeHandler::init(const char* timezone)
 {
     debugI("TimeHandler initialized");
 
-    if (settings.timezone && strlen(settings.timezone.c_str()) > 0) {
-        defaultRegion = settings.timezone.c_str();
+    if (timezone && strlen(timezone) > 0) {
+        defaultRegion = timezone;
         debugI("TimeHandler: Using timezone from settings: %s", defaultRegion);
     } else {
         debugW("TimeHandler: No timezone set. Using default: %s", defaultRegion);
@@ -55,35 +51,6 @@ void TimeHandler::init()
     // Configure time
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer1, ntpServer2);
     syncTime();
-
-    // Update boot count and time
-    settings.bootCount++;
-    settings.bootTime = time(nullptr);
-    settings.upTime++;
-    ConfigManager::save();
-}
-
-void TimeHandler::loop()
-{
-    if (!isTimeSynced)
-    {
-        syncTime();
-    }
-
-    if (timeSyncTimer.isReady())
-    {
-        debugI("TimeHandler: Resyncing time...");
-        syncTime();
-    }
-
-    if (timeTimer.isReady())
-    {
-        //logAllDateTimeFormats();
-        //GfxHandler::printMessage(formatDateTime("%I:%M:%S %p"));
-        settings.upTime++;
-        settings.currentTime = formatDateTime("%I:%M:%S %p");
-        settings.currentDate = formatDateTime("%m-%d-%Y");
-    }
 }
 
 void TimeHandler::syncTime()
