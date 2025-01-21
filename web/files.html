@@ -168,7 +168,7 @@
 <body>
     <div class="container">
         <div class="sidebar">
-            <div class="breadcrumbs" id="breadcrumbs"></div>
+            <!-- <div class="breadcrumbs" id="breadcrumbs"></div> -->
             <ul id="fileList" class="file-list"></ul>
         </div>
         <div class="editor">
@@ -196,9 +196,17 @@
                     return;
                 }
 
-                updateBreadcrumbs(currentPath);
+                //updateBreadcrumbs(currentPath);
                 const fileList = document.getElementById("fileList");
                 fileList.innerHTML = "";
+
+                // Add back button
+                if (currentPath !== '/') {
+                    const backButton = document.createElement('li');
+                    backButton.textContent = '.. (Back)';
+                    backButton.onclick = goBack;
+                    fileList.appendChild(backButton);
+                }
 
                 // Add folders
                 data.data.folders.forEach(folder => {
@@ -277,13 +285,11 @@
             }
         }
 
-        /*
         function goBack() {
             currentPath = currentPath.substring(0, currentPath.lastIndexOf('/', currentPath.length - 2) + 1) || '/';
             refreshFiles();
         }
-        */
-       
+        
         async function saveFile() {
             if (!currentFile) {
                 alert("No file selected.");
