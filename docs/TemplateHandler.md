@@ -2,7 +2,9 @@ I would like to implement a DownloadHandler for my esp32-s3 microcontroller proj
 
 The functionality should register a command like download, wget or whatever is appropriated.
 
+For example I would like to run command https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
 
+Then the file will download to LittleFS.
 
 Please assume the code base already has wifi connectivity and time is already synced.
 
