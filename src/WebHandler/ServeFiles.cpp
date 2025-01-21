@@ -23,9 +23,6 @@ void ServeFiles::handleSearch(AsyncWebServerRequest *request) {
 
     String query = request->getParam("query")->value();
 
-    // StaticJsonDocument<1024> doc;
-    // JsonArray results = doc.createNestedArray("results");
-
     JsonDocument doc;
     JsonArray results = doc["results"].to<JsonArray>();
 
