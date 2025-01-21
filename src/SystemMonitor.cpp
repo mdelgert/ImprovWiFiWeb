@@ -79,15 +79,13 @@ void SystemMonitor::systemMonitorTask(void *parameter)
 void SystemMonitor::handleSecondCheck()
 {
   debugV("SystemMonitor: Running second-specific task.");
-  CronHandler::loop();
   settings.upTime++;
+  CronHandler::executeJobs();
 }
 
 void SystemMonitor::handleMinuteCheck()
 {
   debugV("SystemMonitor: Running minute-specific task.");
-
-  TimeHandler::syncTime();
 }
 
 void SystemMonitor::handleFiveMinuteCheck()
@@ -98,6 +96,7 @@ void SystemMonitor::handleFiveMinuteCheck()
 void SystemMonitor::handleTenMinuteCheck()
 {
   debugV("SystemMonitor: Running ten-minute-specific task.");
+  TimeHandler::syncTime();
 }
 
 #endif // ENABLE_SYSTEM_MONITOR

@@ -55,5 +55,4 @@ void loop()
   MqttHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
-  CronHandler::loop();
 }

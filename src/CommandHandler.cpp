@@ -107,6 +107,10 @@ void CommandHandler::init()
         CommandHandler::listCommands();
     },"Lists all available commands.");
 
+    CommandHandler::registerCommand("reboot", [](const String &) { // Register a "reboot" command
+        ESP.restart();
+    },"Reboot the device.");
+
     CommandHandler::registerCommand("debug", [](const String &command) { // Register a "debug" print command
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
