@@ -1,12 +1,8 @@
-I would like to implement a CronHandler using library https://github.com/Martin-Laclaustra/CronAlarms
+I would like to implement a DownloadHandler for my esp32-s3 microcontroller project.
 
-I need the cron jobs to be dynamic for example. 
+The functionality should register a command like download, wget or whatever is appropriated.
 
-registerCommand cron "* * * * *" "tft print hello" will send "tft print hello" to CommandHandler::handleCommand without the quotes.
 
-registerCommand listcron will list all cron jobs.
-
-removecron removes a cron job by index.
 
 Please assume the code base already has wifi connectivity and time is already synced.
 
