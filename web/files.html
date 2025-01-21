@@ -99,6 +99,16 @@
             fill: currentColor;
         }
 
+        /* Handle long file names */
+        .file-list li span {
+            display: inline-block;
+            max-width: 80%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+       
         /* Textarea editor */
         textarea {
             flex: 1;
@@ -289,7 +299,7 @@
             currentPath = currentPath.substring(0, currentPath.lastIndexOf('/', currentPath.length - 2) + 1) || '/';
             refreshFiles();
         }
-        
+
         async function saveFile() {
             if (!currentFile) {
                 alert("No file selected.");
