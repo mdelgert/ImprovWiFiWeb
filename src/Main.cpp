@@ -15,6 +15,7 @@
 #include "DeviceHandler.h"
 #include "ScriptHandler.h"
 #include "CronHandler.h"
+#include "SystemMonitor.h"
 
 void setup()
 {
@@ -35,6 +36,7 @@ void setup()
   CommandHandler::init();
   DeviceHandler::init();
   CronHandler::init();
+  SystemMonitor::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");

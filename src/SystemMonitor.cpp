@@ -1,25 +1,17 @@
+#ifdef ENABLE_SYSTEM_MONITOR
+
 #include "SystemMonitor.h"
-#include <WiFi.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
 
 // Timing intervals (in milliseconds)
-constexpr unsigned long wifiCheckInterval = 60000; // 1 minute
-constexpr unsigned long mqttCheckInterval = 60000; // 1 minute
-constexpr unsigned long tftUpdateInterval = 60000; // 1 minute
-constexpr unsigned long logInterval = 60000;       // 1 minute
+constexpr unsigned long secoundCheckInterval = 1000;
+constexpr unsigned long minuteCheckInterval = 60000;
+constexpr unsigned long fiveMinuteCheckInterval = 300000;
+constexpr unsigned long tenMinuteCheckInterval = 600000;
 
 // Task handle for the SystemMonitor task
 TaskHandle_t systemMonitorTaskHandle = nullptr;
 
-// Function prototypes
-void systemMonitorTask(void *parameter);
-void checkWiFiConnection();
-void checkMQTTConnection();
-void updateTFTDisplay();
-void logSystemStatus();
-
-void initializeSystemMonitor() {
+void SystemMonitor::init() {
   // Create the SystemMonitor task
   xTaskCreatePinnedToCore(
     systemMonitorTask,    // Task function
@@ -32,62 +24,41 @@ void initializeSystemMonitor() {
   );
 }
 
-void systemMonitorTask(void *parameter) {
-  unsigned long previousWiFiCheck = 0;
-  unsigned long previousMQTTCheck = 0;
-  unsigned long previousTFTUpdate = 0;
-  unsigned long previousLogTime = 0;
+void SystemMonitor::systemMonitorTask(void *parameter) {
+  unsigned long previousSecoundCheck = 0;
+  unsigned long previousMinuteCheck = 0;
+  unsigned long previousFiveMinuteCheck = 0;
+  unsigned long previousTenMinuteMinuteCheck = 0;
 
   for (;;) {
     unsigned long currentMillis = millis();
 
-    // Check WiFi connection
-    if (currentMillis - previousWiFiCheck >= wifiCheckInterval) {
-      previousWiFiCheck = currentMillis;
-      checkWiFiConnection();
+    //Secound check
+    if (currentMillis - previousSecoundCheck >= secoundCheckInterval) {
+      previousSecoundCheck = currentMillis;
+      debugI("Secound check!");
     }
 
-    // Check MQTT connection
-    if (currentMillis - previousMQTTCheck >= mqttCheckInterval) {
-      previousMQTTCheck = currentMillis;
-      checkMQTTConnection();
+    //Minute check
+    if (currentMillis - previousMinuteCheck >= minuteCheckInterval) {
+      previousMinuteCheck = currentMillis;
+      debugI("Minute check!");
     }
 
-    // Update TFT display
-    if (currentMillis - previousTFTUpdate >= tftUpdateInterval) {
-      previousTFTUpdate = currentMillis;
-      updateTFTDisplay();
+    //Five minute check
+    if (currentMillis - previousFiveMinuteCheck >= fiveMinuteCheckInterval) {
+      previousFiveMinuteCheck = currentMillis;
+      debugI("Five minute check!");
     }
 
-    // Log system status
-    if (currentMillis - previousLogTime >= logInterval) {
-      previousLogTime = currentMillis;
-      logSystemStatus();
+    //Ten minute check
+    if (currentMillis - previousTenMinuteMinuteCheck >= tenMinuteCheckInterval) {
+      previousTenMinuteMinuteCheck = currentMillis;
+      debugI("Ten minute check!");
     }
 
     vTaskDelay(100 / portTICK_PERIOD_MS); // Sleep for 100 ms
   }
 }
 
-void checkWiFiConnection() {
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi not connected. Attempting to reconnect...");
-    // Attempt to reconnect
-    // ...
-  }
-}
-
-void checkMQTTConnection() {
-  // Implement MQTT connection check and reconnection logic
-  // ...
-}
-
-void updateTFTDisplay() {
-  // Implement TFT display update logic
-  // ...
-}
-
-void logSystemStatus() {
-  // Implement logging of system status
-  // ...
-}
+#endif // ENABLE_SYSTEM_MONITOR

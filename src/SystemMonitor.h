@@ -1,9 +1,27 @@
-#ifndef SYSTEM_MONITOR_H
-#define SYSTEM_MONITOR_H
+//SystemMonitor.h
 
+#pragma once
+
+#ifdef ENABLE_SYSTEM_MONITOR
+
+#include "Globals.h"
 #include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
-// Function to initialize the SystemMonitor task
-void initializeSystemMonitor();
+class SystemMonitor {
+private:
+    static void systemMonitorTask(void *parameter);
 
-#endif // SYSTEM_MONITOR_H
+public:
+    static void init();
+};
+
+#else
+
+class SystemMonitor { 
+public: // No-op implementation
+    static void init() {} // No-op
+};
+
+#endif // ENABLE_SYSTEM_MONITOR
