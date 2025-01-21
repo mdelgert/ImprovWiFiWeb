@@ -1,35 +1,12 @@
-/*
- * Copyright 2015, alex at staticlibs.net
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /* 
- * File:   ccronexpr.c
+ * File:   CronExpr.cpp
  * Author: alex
  * 
  * Created on February 24, 2015, 9:35 AM
+ * Modfied on January 20, 2025 by Matthew Elgert
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <errno.h>
-#include <limits.h>
-#include <string.h>
-#include <math.h>
-
-#include "ccronexpr.h"
+#include "CronExpr.h"
 
 #define CRON_MAX_SECONDS 60
 #define CRON_MAX_MINUTES 60
@@ -38,7 +15,6 @@
 #define CRON_MAX_DAYS_OF_MONTH 32
 #define CRON_MAX_MONTHS 12
 #define CRON_MAX_YEARS_DIFF 4
-
 #define CRON_CF_SECOND 0
 #define CRON_CF_MINUTE 1
 #define CRON_CF_HOUR_OF_DAY 2
@@ -46,7 +22,6 @@
 #define CRON_CF_DAY_OF_MONTH 4
 #define CRON_CF_MONTH 5
 #define CRON_CF_YEAR 6
-
 #define CRON_CF_ARR_LEN 7
 
 #define CRON_INVALID_INSTANT ((time_t) -1)
