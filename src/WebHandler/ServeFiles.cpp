@@ -12,6 +12,44 @@ void ServeFiles::registerEndpoints(AsyncWebServer &server) {
     server.on("/folder", HTTP_DELETE, handleDeleteFolder); // Delete folder
     server.on("/folders", HTTP_GET, handleListFolders); // List folders
     server.on("/rename", HTTP_POST, handleRename); // Rename file or folder
+    server.on("/search", HTTP_GET, handleSearch); // Search files and folders
+}
+
+void ServeFiles::handleSearch(AsyncWebServerRequest *request) {
+    if (!request->hasParam("query")) {
+        WebHandler::sendErrorResponse(request, 400, "Search query is required");
+        return;
+    }
+
+    String query = request->getParam("query")->value();
+
+    // StaticJsonDocument<1024> doc;
+    // JsonArray results = doc.createNestedArray("results");
+
+    JsonDocument doc;
+    JsonArray results = doc["results"].to<JsonArray>();
+
+    // Search files and folders
+    searchRecursive(results, "/", query);
+
+    WebHandler::sendSuccessResponse(request, "Search completed", &doc);
+}
+
+void ServeFiles::searchRecursive(JsonArray &results, const String &path, const String &query) {
+    File dir = LittleFS.open(path);
+    if (!dir || !dir.isDirectory()) return;
+
+    File file = dir.openNextFile();
+    while (file) {
+        String name = file.name();
+        if (name.indexOf(query) >= 0) {
+            results.add(path + name);
+        }
+        if (file.isDirectory()) {
+            searchRecursive(results, path + name + "/", query);
+        }
+        file = dir.openNextFile();
+    }
 }
 
 void ServeFiles::handleRename(AsyncWebServerRequest *request) {
