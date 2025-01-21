@@ -145,3 +145,4 @@ void DownloadHandler::registerCommands()
 // download https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr /test1.scr
 // download https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
 // wget https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
+// wget https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/cron1.scr
