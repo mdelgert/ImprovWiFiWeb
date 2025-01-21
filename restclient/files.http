@@ -1,8 +1,15 @@
 @baseUrl = http://demo2.local
 @token = test
 
-### Get files (list all files)
+### Get all files
 GET {{baseUrl}}/files
+Authorization: Bearer {{token}}
+Content-Type: text/plain
+
+###
+
+### Get all file anmd folder names
+GET {{baseUrl}}/filemanager
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 

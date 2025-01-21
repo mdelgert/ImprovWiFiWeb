@@ -3,20 +3,93 @@
 #include "ServeFiles.h"
 
 // Register endpoints for file management
-void ServeFiles::registerEndpoints(AsyncWebServer &server) {
-    server.on("/files", HTTP_GET, handleListFiles);           // List files
-    server.on("/file", HTTP_GET, handleReadFile);             // Read a file
+void ServeFiles::registerEndpoints(AsyncWebServer &server)
+{
+    server.on("/files", HTTP_GET, handleListFiles);                                              // List files
+    server.on("/file", HTTP_GET, handleReadFile);                                                // Read a file
     server.on("/file", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleWriteFile); // Write a file
-    server.on("/file", HTTP_DELETE, handleDeleteFile);        // Delete a file
-    server.on("/folder", HTTP_POST, handleCreateFolder); // Create folder
-    server.on("/folder", HTTP_DELETE, handleDeleteFolder); // Delete folder
-    server.on("/folders", HTTP_GET, handleListFolders); // List folders
-    server.on("/rename", HTTP_POST, handleRename); // Rename file or folder
-    server.on("/search", HTTP_GET, handleSearch); // Search files and folders
+    server.on("/file", HTTP_DELETE, handleDeleteFile);                                           // Delete a file
+    server.on("/folder", HTTP_POST, handleCreateFolder);                                         // Create folder
+    server.on("/folder", HTTP_DELETE, handleDeleteFolder);                                       // Delete folder
+    server.on("/folders", HTTP_GET, handleListFolders);                                          // List folders
+    server.on("/rename", HTTP_POST, handleRename);                                               // Rename file or folder
+    server.on("/filemanager", HTTP_GET, handleFileManager);                                      // List files and folders together
 }
 
-void ServeFiles::handleSearch(AsyncWebServerRequest *request) {
-    if (!request->hasParam("query")) {
+// Handler for `/filemanager`
+void ServeFiles::handleFileManager(AsyncWebServerRequest *request)
+{
+    String path = "/";
+    if (request->hasParam("path"))
+    {
+        path = request->getParam("path")->value();
+    }
+    if (!path.endsWith("/"))
+    {
+        path += "/";
+    }
+
+    debugV("Received request for file manager with path: %s", path.c_str());
+
+    File dir = LittleFS.open(path);
+    if (!dir || !dir.isDirectory())
+    {
+        debugE("Failed to open directory: %s", path.c_str());
+        WebHandler::sendErrorResponse(request, 404, "Invalid directory path");
+        return;
+    }
+
+    // StaticJsonDocument<1024> doc;
+    // JsonArray files = doc.createNestedArray("files");
+    // JsonArray folders = doc.createNestedArray("folders");
+
+    JsonDocument doc;
+    JsonArray files = doc["files"].to<JsonArray>();
+    JsonArray folders = doc["folders"].to<JsonArray>();
+
+    // List files and folders
+    listFilesAndFolders(files, folders, path);
+
+    doc["path"] = path;
+    WebHandler::sendSuccessResponse(request, "Directory contents fetched successfully", &doc);
+}
+
+// Helper to list files and folders
+void ServeFiles::listFilesAndFolders(JsonArray &files, JsonArray &folders, const String &path)
+{
+    File dir = LittleFS.open(path);
+    if (!dir || !dir.isDirectory())
+    {
+        debugE("Failed to open directory: %s", path.c_str());
+        return;
+    }
+
+    File file = dir.openNextFile();
+    while (file)
+    {
+        String name = file.name();
+        if (name.startsWith(path))
+        {
+            name = name.substring(path.length());
+        }
+        if (file.isDirectory())
+        {
+            debugV("Found folder: %s", name.c_str());
+            folders.add(name);
+        }
+        else
+        {
+            debugV("Found file: %s", name.c_str());
+            files.add(name);
+        }
+        file = dir.openNextFile();
+    }
+}
+
+void ServeFiles::handleSearch(AsyncWebServerRequest *request)
+{
+    if (!request->hasParam("query"))
+    {
         WebHandler::sendErrorResponse(request, 400, "Search query is required");
         return;
     }
@@ -32,25 +105,32 @@ void ServeFiles::handleSearch(AsyncWebServerRequest *request) {
     WebHandler::sendSuccessResponse(request, "Search completed", &doc);
 }
 
-void ServeFiles::searchRecursive(JsonArray &results, const String &path, const String &query) {
+void ServeFiles::searchRecursive(JsonArray &results, const String &path, const String &query)
+{
     File dir = LittleFS.open(path);
-    if (!dir || !dir.isDirectory()) return;
+    if (!dir || !dir.isDirectory())
+        return;
 
     File file = dir.openNextFile();
-    while (file) {
+    while (file)
+    {
         String name = file.name();
-        if (name.indexOf(query) >= 0) {
+        if (name.indexOf(query) >= 0)
+        {
             results.add(path + name);
         }
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             searchRecursive(results, path + name + "/", query);
         }
         file = dir.openNextFile();
     }
 }
 
-void ServeFiles::handleRename(AsyncWebServerRequest *request) {
-    if (!request->hasParam("oldname") || !request->hasParam("newname")) {
+void ServeFiles::handleRename(AsyncWebServerRequest *request)
+{
+    if (!request->hasParam("oldname") || !request->hasParam("newname"))
+    {
         WebHandler::sendErrorResponse(request, 400, "Both oldname and newname are required");
         return;
     }
@@ -58,32 +138,40 @@ void ServeFiles::handleRename(AsyncWebServerRequest *request) {
     String oldName = request->getParam("oldname")->value();
     String newName = request->getParam("newname")->value();
 
-    if (!LittleFS.exists(oldName)) {
+    if (!LittleFS.exists(oldName))
+    {
         WebHandler::sendErrorResponse(request, 404, "File or folder not found");
         return;
     }
 
-    if (LittleFS.rename(oldName, newName)) {
+    if (LittleFS.rename(oldName, newName))
+    {
         WebHandler::sendSuccessResponse(request, "Renamed successfully");
-    } else {
+    }
+    else
+    {
         WebHandler::sendErrorResponse(request, 500, "Failed to rename");
     }
 }
 
-void ServeFiles::listFoldersRecursive(JsonArray &folders, const String &path) {
+void ServeFiles::listFoldersRecursive(JsonArray &folders, const String &path)
+{
     String dirPath = path.isEmpty() ? "/" : (path.endsWith("/") ? path : path + "/");
 
     debugV("Opening directory: %s", dirPath.c_str());
     File dir = LittleFS.open(dirPath);
 
-    if (!dir || !dir.isDirectory()) {
+    if (!dir || !dir.isDirectory())
+    {
         debugE("Failed to open directory: %s", dirPath.c_str());
         return;
     }
 
     File file = dir.openNextFile();
-    while (file) {
-        if (file.isDirectory()) {
+    while (file)
+    {
+        if (file.isDirectory())
+        {
             String fullPath = dirPath + file.name();
             debugV("Found folder: %s", fullPath.c_str());
             folders.add(fullPath);
@@ -94,7 +182,8 @@ void ServeFiles::listFoldersRecursive(JsonArray &folders, const String &path) {
     }
 }
 
-void ServeFiles::handleListFolders(AsyncWebServerRequest *request) {
+void ServeFiles::handleListFolders(AsyncWebServerRequest *request)
+{
     debugV("Received GET request on /folders");
 
     JsonDocument doc;
@@ -106,42 +195,58 @@ void ServeFiles::handleListFolders(AsyncWebServerRequest *request) {
     WebHandler::sendSuccessResponse(request, "Folders listed successfully", &doc);
 }
 
-void ServeFiles::handleCreateFolder(AsyncWebServerRequest *request) {
-    if (!request->hasParam("foldername")) {
+void ServeFiles::handleCreateFolder(AsyncWebServerRequest *request)
+{
+    if (!request->hasParam("foldername"))
+    {
         WebHandler::sendErrorResponse(request, 400, "Folder name is required");
         return;
     }
     String folderName = request->getParam("foldername")->value();
-    if (LittleFS.mkdir(folderName)) {
+    if (LittleFS.mkdir(folderName))
+    {
         WebHandler::sendSuccessResponse(request, "Folder created successfully");
-    } else {
+    }
+    else
+    {
         WebHandler::sendErrorResponse(request, 500, "Failed to create folder");
     }
 }
 
-void ServeFiles::handleDeleteFolder(AsyncWebServerRequest *request) {
-    if (!request->hasParam("foldername")) {
+void ServeFiles::handleDeleteFolder(AsyncWebServerRequest *request)
+{
+    if (!request->hasParam("foldername"))
+    {
         WebHandler::sendErrorResponse(request, 400, "Folder name is required");
         return;
     }
     String folderName = request->getParam("foldername")->value();
-    if (deleteFolderRecursive(folderName)) {
+    if (deleteFolderRecursive(folderName))
+    {
         WebHandler::sendSuccessResponse(request, "Folder deleted successfully");
-    } else {
+    }
+    else
+    {
         WebHandler::sendErrorResponse(request, 500, "Failed to delete folder");
     }
 }
 
-bool ServeFiles::deleteFolderRecursive(const String &folderPath) {
+bool ServeFiles::deleteFolderRecursive(const String &folderPath)
+{
     File dir = LittleFS.open(folderPath);
-    if (!dir || !dir.isDirectory()) return false;
+    if (!dir || !dir.isDirectory())
+        return false;
 
     File file = dir.openNextFile();
-    while (file) {
+    while (file)
+    {
         String filePath = String(folderPath) + "/" + file.name();
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             deleteFolderRecursive(filePath);
-        } else {
+        }
+        else
+        {
             LittleFS.remove(filePath);
         }
         file = dir.openNextFile();
@@ -150,39 +255,48 @@ bool ServeFiles::deleteFolderRecursive(const String &folderPath) {
 }
 
 // Helper to ensure parent directories exist
-bool ServeFiles::ensureParentDirsExist(const String &filePath) {
+bool ServeFiles::ensureParentDirsExist(const String &filePath)
+{
     int lastSlashIndex = filePath.lastIndexOf('/');
-    if (lastSlashIndex <= 0) return true; // No parent directories
+    if (lastSlashIndex <= 0)
+        return true; // No parent directories
 
     String parentPath = filePath.substring(0, lastSlashIndex);
     debugV("Ensuring directory exists: %s", parentPath.c_str());
 
-    if (LittleFS.exists(parentPath)) return true; // Directory already exists
-    return LittleFS.mkdir(parentPath);           // Create the directory
+    if (LittleFS.exists(parentPath))
+        return true;                   // Directory already exists
+    return LittleFS.mkdir(parentPath); // Create the directory
 }
 
 // Recursive helper for listing files
-void ServeFiles::listFilesRecursive(JsonArray &files, const String &path) {
+void ServeFiles::listFilesRecursive(JsonArray &files, const String &path)
+{
     // Ensure the directory path starts with "/" and does not end with "/"
     String dirPath = path.isEmpty() ? "/" : (path.endsWith("/") ? path : path + "/");
 
     debugV("Opening directory: %s", dirPath.c_str());
     File dir = LittleFS.open(dirPath);
 
-    if (!dir || !dir.isDirectory()) {
+    if (!dir || !dir.isDirectory())
+    {
         debugE("Failed to open directory: %s", dirPath.c_str());
         return;
     }
 
     File file = dir.openNextFile();
-    while (file) {
+    while (file)
+    {
         String fullPath = dirPath + file.name();
 
-        if (file.isDirectory()) {
+        if (file.isDirectory())
+        {
             debugV("Entering directory: %s", fullPath.c_str());
             // Recursively list files in subdirectory
             listFilesRecursive(files, fullPath);
-        } else {
+        }
+        else
+        {
             debugV("Found file: %s", fullPath.c_str());
             files.add(fullPath);
         }
@@ -192,7 +306,8 @@ void ServeFiles::listFilesRecursive(JsonArray &files, const String &path) {
 }
 
 // Handle listing files
-void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
+void ServeFiles::handleListFiles(AsyncWebServerRequest *request)
+{
     debugV("Received GET request on /files");
 
     JsonDocument doc;
@@ -205,10 +320,12 @@ void ServeFiles::handleListFiles(AsyncWebServerRequest *request) {
 }
 
 // Handle reading a file
-void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
+void ServeFiles::handleReadFile(AsyncWebServerRequest *request)
+{
     debugV("Received GET request on /file");
 
-    if (!request->hasParam("filename")) {
+    if (!request->hasParam("filename"))
+    {
         debugE("Missing filename parameter");
         WebHandler::sendErrorResponse(request, 400, "Filename is required");
         return;
@@ -216,14 +333,16 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     String filename = request->getParam("filename")->value();
     debugV("Requested file: %s", filename.c_str());
 
-    if (!LittleFS.exists(filename)) {
+    if (!LittleFS.exists(filename))
+    {
         debugE("File not found: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 404, "File not found");
         return;
     }
 
     File file = LittleFS.open(filename, "r");
-    if (!file) {
+    if (!file)
+    {
         debugE("Failed to open file: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 500, "Failed to open file");
         return;
@@ -233,7 +352,7 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
     file.close();
     debugV("File content: %s", content.c_str());
 
-    //request->send(200, "text/plain", content);
+    // request->send(200, "text/plain", content);
 
     AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", content);
     WebHandler::addCorsHeaders(response);
@@ -241,10 +360,12 @@ void ServeFiles::handleReadFile(AsyncWebServerRequest *request) {
 }
 
 // Handle writing to a file
-void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
     debugV("Received POST request on /file");
 
-    if (!request->hasParam("filename")) {
+    if (!request->hasParam("filename"))
+    {
         WebHandler::sendErrorResponse(request, 400, "Filename is required");
         return;
     }
@@ -252,7 +373,8 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     debugV("Filename: %s", filename.c_str());
 
     // Ensure parent directories exist
-    if (!ensureParentDirsExist(filename)) {
+    if (!ensureParentDirsExist(filename))
+    {
         debugE("Failed to create parent directories for: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 500, "Failed to create directories");
         return;
@@ -261,7 +383,8 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     debugV("Data length: %d, Index: %d, Total: %d", len, index, total);
 
     File file = LittleFS.open(filename, index == 0 ? "w" : "a");
-    if (!file) {
+    if (!file)
+    {
         debugE("Failed to open file for writing: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 500, "Failed to open file for writing");
         return;
@@ -271,30 +394,36 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     file.close();
     debugV("Data written to file: %s", filename.c_str());
 
-    if (index + len == total) {
+    if (index + len == total)
+    {
         WebHandler::sendSuccessResponse(request, "File saved successfully");
     }
 }
 
 // Check if a file is protected
-bool ServeFiles::isProtectedFile(const String &filename) {
+bool ServeFiles::isProtectedFile(const String &filename)
+{
     static const char *protectedFiles[] = {
         //"/settings.json",
         //"/wifi_networks.json",
         //"/test.txt"
     };
 
-    for (const char *protectedFile : protectedFiles) {
-        if (filename == protectedFile) return true;
+    for (const char *protectedFile : protectedFiles)
+    {
+        if (filename == protectedFile)
+            return true;
     }
     return false;
 }
 
 // Handle deleting a file
-void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
+void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request)
+{
     debugV("Received DELETE request on /file");
 
-    if (!request->hasParam("filename")) {
+    if (!request->hasParam("filename"))
+    {
         debugE("Missing filename parameter");
         WebHandler::sendErrorResponse(request, 400, "Filename is required");
         return;
@@ -302,17 +431,21 @@ void ServeFiles::handleDeleteFile(AsyncWebServerRequest *request) {
     String filename = request->getParam("filename")->value();
     debugV("Filename to delete: %s", filename.c_str());
 
-    if (isProtectedFile(filename)) {
+    if (isProtectedFile(filename))
+    {
         debugE("Cannot delete protected file: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 403, "Cannot delete protected file: %s", filename.c_str());
-        //WebHandler::sendErrorResponse(request, 403, "Cannot modify protected file");
+        // WebHandler::sendErrorResponse(request, 403, "Cannot modify protected file");
         return;
     }
-    
-    if (LittleFS.remove(filename)) {
+
+    if (LittleFS.remove(filename))
+    {
         debugV("File deleted: %s", filename.c_str());
         WebHandler::sendSuccessResponse(request, "File deleted successfully");
-    } else {
+    }
+    else
+    {
         debugE("Failed to delete file: %s", filename.c_str());
         WebHandler::sendErrorResponse(request, 500, "Failed to delete file");
     }

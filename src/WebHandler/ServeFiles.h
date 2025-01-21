@@ -12,6 +12,8 @@ public:
     static void registerEndpoints(AsyncWebServer &server);
 
 private:
+    static void handleFileManager(AsyncWebServerRequest *request);
+    static void listFilesAndFolders(JsonArray &files, JsonArray &folders, const String &path);
     static void handleSearch(AsyncWebServerRequest *request);
     static void searchRecursive(JsonArray &results, const String &path, const String &query);
     static void handleRename(AsyncWebServerRequest *request);
