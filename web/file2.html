@@ -101,41 +101,6 @@
             font-family: monospace;
         }
 
-        .icon {
-            width: 1.5em;
-            /* Scales with font size */
-            height: 1.5em;
-            margin-right: 0.5em;
-            vertical-align: middle;
-            fill: #4fc1ff;
-            /* Default folder color */
-        }
-
-        .file .icon {
-            fill: #d4d4d4;
-            /* Default file color */
-        }
-
-        .breadcrumbs {
-            padding: 10px;
-            background-color: #2d2d2d;
-            color: #d4d4d4;
-            display: flex;
-            gap: 5px;
-            align-items: center;
-            font-size: 14px;
-            border-bottom: 1px solid #3c3c3c;
-        }
-
-        .breadcrumbs span {
-            cursor: pointer;
-            text-decoration: underline;
-        }
-
-        .breadcrumbs span:hover {
-            color: #4fc1ff;
-        }
-
         /* Mobile adjustments */
         @media (max-width: 768px) {
             .container {
@@ -190,15 +155,49 @@
                 margin-right: 8px;
             }
 
-            /* 
             .file-list li.folder .icon {
                 content: url('folder-icon.svg');
             }
 
             .file-list li.file .icon {
                 content: url('file-icon.svg');
-            } 
-            */
+            }
+
+            /* Breadcrumbs for navigation */
+            .breadcrumbs {
+                padding: 10px;
+                background-color: #2d2d2d;
+                color: #d4d4d4;
+                display: flex;
+                gap: 5px;
+                align-items: center;
+                font-size: 14px;
+                border-bottom: 1px solid #3c3c3c;
+            }
+
+            .breadcrumbs span {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+
+            .breadcrumbs span:hover {
+                color: #4fc1ff;
+            }
+
+            .icon {
+                width: 20px;
+                height: 20px;
+                margin-right: 8px;
+                vertical-align: middle;
+                fill: #4fc1ff;
+                /* Folder: Blue */
+            }
+
+            .file .icon {
+                fill: #d4d4d4;
+                /* File: Neutral Gray */
+            }
+
 
         }
     </style>
@@ -310,8 +309,7 @@
             try {
                 const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + file)}`);
                 const content = await response.text();
-                currentFile = file;
-                document.getElementById('editor').value = content;
+                alert(`File content:\n${content}`); // Replace with your file editor logic
             } catch (err) {
                 console.error("Error opening file:", err);
             }
