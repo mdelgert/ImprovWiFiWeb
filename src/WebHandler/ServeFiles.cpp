@@ -10,6 +10,65 @@ void ServeFiles::registerEndpoints(AsyncWebServer &server) {
     server.on("/file", HTTP_DELETE, handleDeleteFile);        // Delete a file
     server.on("/folder", HTTP_POST, handleCreateFolder); // Create folder
     server.on("/folder", HTTP_DELETE, handleDeleteFolder); // Delete folder
+    server.on("/folders", HTTP_GET, handleListFolders); // List folders
+    server.on("/rename", HTTP_POST, handleRename); // Rename file or folder
+}
+
+void ServeFiles::handleRename(AsyncWebServerRequest *request) {
+    if (!request->hasParam("oldname") || !request->hasParam("newname")) {
+        WebHandler::sendErrorResponse(request, 400, "Both oldname and newname are required");
+        return;
+    }
+
+    String oldName = request->getParam("oldname")->value();
+    String newName = request->getParam("newname")->value();
+
+    if (!LittleFS.exists(oldName)) {
+        WebHandler::sendErrorResponse(request, 404, "File or folder not found");
+        return;
+    }
+
+    if (LittleFS.rename(oldName, newName)) {
+        WebHandler::sendSuccessResponse(request, "Renamed successfully");
+    } else {
+        WebHandler::sendErrorResponse(request, 500, "Failed to rename");
+    }
+}
+
+void ServeFiles::listFoldersRecursive(JsonArray &folders, const String &path) {
+    String dirPath = path.isEmpty() ? "/" : (path.endsWith("/") ? path : path + "/");
+
+    debugV("Opening directory: %s", dirPath.c_str());
+    File dir = LittleFS.open(dirPath);
+
+    if (!dir || !dir.isDirectory()) {
+        debugE("Failed to open directory: %s", dirPath.c_str());
+        return;
+    }
+
+    File file = dir.openNextFile();
+    while (file) {
+        if (file.isDirectory()) {
+            String fullPath = dirPath + file.name();
+            debugV("Found folder: %s", fullPath.c_str());
+            folders.add(fullPath);
+            // Recursively list subdirectories
+            listFoldersRecursive(folders, fullPath);
+        }
+        file = dir.openNextFile();
+    }
+}
+
+void ServeFiles::handleListFolders(AsyncWebServerRequest *request) {
+    debugV("Received GET request on /folders");
+
+    JsonDocument doc;
+    JsonArray folders = doc["folders"].to<JsonArray>();
+
+    // Start recursive folder listing from the root directory
+    listFoldersRecursive(folders, "/");
+
+    WebHandler::sendSuccessResponse(request, "Folders listed successfully", &doc);
 }
 
 void ServeFiles::handleCreateFolder(AsyncWebServerRequest *request) {

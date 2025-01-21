@@ -1,10 +1,22 @@
 @baseUrl = http://demo2.local
 @token = test
 
+### Get all folders
+GET {{baseUrl}}/folders
+Authorization: Bearer {{token}}
+###
+
 ### Create a new folder
 POST {{baseUrl}}/folder?foldername=/test
 Authorization: Bearer {{token}}
+###
+
+### Rename a folder
+POST {{baseUrl}}/rename?oldname=/test&newname=/test2
+Authorization: Bearer {{token}}
+###
 
 ### Delete a new folder
-DELETE {{baseUrl}}/folder?foldername=/test
+DELETE {{baseUrl}}/folder?foldername=/test2/
 Authorization: Bearer {{token}}
+###

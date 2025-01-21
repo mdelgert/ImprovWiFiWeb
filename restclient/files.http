@@ -4,17 +4,15 @@
 ### Get files (list all files)
 GET {{baseUrl}}/files
 Authorization: Bearer {{token}}
-
-###
-
-### Create a new file
-POST {{baseUrl}}/file?filename=/test.txt
-Authorization: Bearer {{token}}
 Content-Type: text/plain
 
 This is the content of the new file.
 
 ###
+
+### Rename a file
+POST {{baseUrl}}/rename?oldname=/test.txt&newname=/test2.txt
+Authorization: Bearer {{token}}
 
 ### Create a new file
 POST {{baseUrl}}/file?filename=/test2.txt
