@@ -1,8 +1,14 @@
-I would like to implement a
+I would like to implement a CronHandler using library https://github.com/Martin-Laclaustra/CronAlarms
 
-The subcommand will be called FILE it will open the file and process each line.
+I need the cron jobs to be dynamic for example. 
 
-Please assume the code base already has wifi connectivity.
+registerCommand cron "* * * * *" "tft print hello" will send "tft print hello" to CommandHandler::handleCommand without the quotes.
+
+registerCommand listcron will list all cron jobs.
+
+removecron removes a cron job by index.
+
+Please assume the code base already has wifi connectivity and time is already synced.
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
 

@@ -14,6 +14,7 @@
 #include "CommandHandler.h"
 #include "DeviceHandler.h"
 #include "ScriptHandler.h"
+#include "CronHandler.h"
 
 void setup()
 {
@@ -33,6 +34,7 @@ void setup()
   OTAHandler::init();
   CommandHandler::init();
   DeviceHandler::init();
+  CronHandler::init();
   GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
   LedHandler::setColorByName("Purple");
@@ -52,4 +54,5 @@ void loop()
   TimeHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
+  CronHandler::loop();
 }
