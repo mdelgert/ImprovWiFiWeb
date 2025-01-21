@@ -27,7 +27,7 @@ POST {{baseUrl}}/rename?oldname=/test.txt&newname=/test2.txt
 Authorization: Bearer {{token}}
 
 ### Create a new file
-POST {{baseUrl}}/file?filename=/test2.txt
+POST {{baseUrl}}/file?filename=/hello/test2.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
