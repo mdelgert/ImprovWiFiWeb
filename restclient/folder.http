@@ -20,3 +20,8 @@ Authorization: Bearer {{token}}
 DELETE {{baseUrl}}/folder?foldername=/hello/
 Authorization: Bearer {{token}}
 ###
+
+### Delete a new folder
+DELETE {{baseUrl}}/folder?foldername=/test1
+Authorization: Bearer {{token}}
+###

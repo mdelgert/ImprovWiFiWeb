@@ -227,6 +227,7 @@ void ServeFiles::handleDeleteFolder(AsyncWebServerRequest *request)
     }
 }
 
+/*
 bool ServeFiles::deleteFolderRecursive(const String &folderPath)
 {
     File dir = LittleFS.open(folderPath);
@@ -248,6 +249,73 @@ bool ServeFiles::deleteFolderRecursive(const String &folderPath)
         file = dir.openNextFile();
     }
     return LittleFS.rmdir(folderPath);
+}
+*/
+
+//Does not appear to work with nested files skipping the recursive delete
+bool ServeFiles::deleteFolderRecursive(const String &folderPath)
+{
+    debugI("Attempting to delete folder: %s", folderPath.c_str());
+
+    // Open the directory
+    File dir = LittleFS.open(folderPath);
+    if (!dir || !dir.isDirectory())
+    {
+        debugI("Error: Unable to open folder or not a directory: %s", folderPath.c_str());
+        return false;
+    }
+
+    // Iterate through all files and subdirectories
+    while (true)
+    {
+        File file = dir.openNextFile();
+        if (!file)
+        {
+            // No more files
+            break;
+        }
+
+        String filePath = folderPath + "/" + file.name(); // Construct the full path
+        if (file.isDirectory())
+        {
+            // Recursively delete subdirectories
+            debugI("Entering directory: %s", filePath.c_str());
+            if (!deleteFolderRecursive(filePath))
+            {
+                debugI("Error: Failed to delete directory: %s", filePath.c_str());
+                file.close();
+                dir.close();
+                return false;
+            }
+        }
+        else
+        {
+            // Delete the file
+            debugI("Deleting file: %s", filePath.c_str());
+            if (!LittleFS.remove(filePath))
+            {
+                debugI("Error: Failed to delete file: %s", filePath.c_str());
+                file.close();
+                dir.close();
+                return false;
+            }
+            debugI("Successfully deleted file: %s", filePath.c_str());
+        }
+        file.close(); // Explicitly close the file
+    }
+
+    dir.close(); // Close the directory handle
+
+    // Attempt to remove the directory itself
+    debugI("Deleting folder: %s", folderPath.c_str());
+    if (!LittleFS.rmdir(folderPath))
+    {
+        debugI("Error: Failed to delete folder: %s", folderPath.c_str());
+        return false;
+    }
+
+    debugI("Successfully deleted folder: %s", folderPath.c_str());
+    return true;
 }
 
 // Helper to ensure parent directories exist
