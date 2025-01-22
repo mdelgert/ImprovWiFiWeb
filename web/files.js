@@ -1,7 +1,30 @@
 // files.js
 const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
+
 let currentPath = "/";
 let currentFile = "";
+
+CodeMirror.defineSimpleMode("custom", {
+    start: [
+        { regex: /\b(?:rem|defaultdelay|delay|repeat|led|tft)\b/i, token: "keyword" },
+        { regex: /\b(?:print|brightness|on|off|toggle)\b/i, token: "subcommand" },
+        { regex: /\b\d+\b/, token: "number" },
+        { regex: /"(?:[^\\]|\\.)*?"/, token: "string" },
+        { regex: /\brem\b.*$/i, token: "comment" },
+        { regex: /\b[a-zA-Z_]\w*\b/, token: null } // Identifiers (e.g., hello1)
+    ],
+    meta: {
+        lineComment: "REM"
+    }
+});
+
+const editor = CodeMirror(document.getElementById("editorContainer"), {
+    mode: "text/plain",
+    theme: "material-darker",
+    lineNumbers: true,
+    tabSize: 4,
+    indentWithTabs: true
+});
 
 function showNotification(message, type = "info") {
     const statusMessage = document.getElementById("statusMessage");
@@ -68,13 +91,44 @@ async function refreshFiles() {
     }
 }
 
+function highlightActiveFile(filename) {
+    const fileListElement = document.getElementById('fileList');
+    Array.from(fileListElement.children).forEach(li => {
+        const span = li.querySelector('span');
+        if (span && span.textContent === filename) {
+            li.classList.add('active');
+        } else {
+            li.classList.remove('active');
+        }
+    });
+}
+
 async function openFile(file) {
     try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + file)}`);
         const content = await response.text();
         currentFile = file;
         showNotification(currentFile);
-        document.getElementById('editor').value = content;
+        highlightActiveFile(currentFile);
+
+        //document.getElementById('editor').value = content;
+
+        editor.setValue(content);
+
+        let mode;
+        if (currentFile.endsWith('.json')) {
+          mode = 'application/json';
+        } else if (currentFile.endsWith('.sh')) {
+          mode = 'shell';
+        } else if (currentFile.endsWith('.ps1')) {
+          mode = 'powershell';
+        } else if (currentFile.endsWith('.scr')) {
+          mode = 'custom';
+        } else {
+          mode = 'text/plain';
+        }
+
+        editor.setOption('mode', mode);
     } catch (err) {
         console.error("Error opening file:", err);
         showNotification("Error opening file", "error");
@@ -96,7 +150,10 @@ async function saveFile() {
         showNotification("No file selected.", "error");
         return;
     }
-    const content = document.getElementById('editor').value;
+    
+    //const content = document.getElementById('editor').value;
+    const content = editor.getValue();
+    
     try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`, {
             method: 'POST',
@@ -156,7 +213,7 @@ async function createFolder() {
 }
 
 async function deleteItem(isFolder) {
-    
+
     const endpoint = isFolder ? '/folder?foldername=' : '/file?filename=';
     const item = isFolder ? currentPath : currentPath + currentFile;
     const fullPath = `${endPoint}${endpoint}${encodeURIComponent(item)}`;
@@ -167,7 +224,7 @@ async function deleteItem(isFolder) {
     // if (!confirmed) {
     //     return;
     // }
-    
+
     try {
         const response = await fetch(`${fullPath}`, {
             method: 'DELETE'
@@ -209,3 +266,4 @@ async function renameItem() {
 }
 
 refreshFiles();
+document.querySelector('.CodeMirror').style.fontSize = '18px';
