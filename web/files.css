@@ -136,6 +136,21 @@ textarea {
     color: #4fc1ff;
 }
 
+/* 
+#statusMessage {
+    flex: 1;
+    text-align: right;
+    font-size: 14px;
+    color: #ccc;
+} 
+*/
+
+#statusMessage {
+    font-size: 14px;
+    padding: 8px 10px;
+    color: #ccc;
+}
+
 /* Mobile adjustments */
 @media (max-width: 768px) {
     .container {
