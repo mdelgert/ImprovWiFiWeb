@@ -153,7 +153,7 @@ async function saveFile() {
     
     //const content = document.getElementById('editor').value;
     const content = editor.getValue();
-    
+
     try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`, {
             method: 'POST',
@@ -218,12 +218,12 @@ async function deleteItem(isFolder) {
     const item = isFolder ? currentPath : currentPath + currentFile;
     const fullPath = `${endPoint}${endpoint}${encodeURIComponent(item)}`;
 
-    // alert(fullPath);
-    // const confirmed = window.confirm(`Are you sure you want to delete ${item}?`);
+    //alert(fullPath);
+    const confirmed = window.confirm(`Are you sure you want to delete ${item}?`);
 
-    // if (!confirmed) {
-    //     return;
-    // }
+    if (!confirmed) {
+        return;
+    }
 
     try {
         const response = await fetch(`${fullPath}`, {
