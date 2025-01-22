@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const rebootButton = document.getElementById("rebootButton");
   rebootButton.addEventListener("click", rebootDevice);
 });
+
 window.addEventListener('DOMContentLoaded', async () => {
   try {
     const response = await httpGet('/device/info');
