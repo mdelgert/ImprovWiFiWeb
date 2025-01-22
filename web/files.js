@@ -26,6 +26,59 @@ const editor = CodeMirror(document.getElementById("editorContainer"), {
     indentWithTabs: true
 });
 
+function changeFontSize() {
+    const fontSize = document.getElementById('fontSizeSelector').value;
+    document.querySelector('.CodeMirror').style.fontSize = fontSize;
+    editor.refresh();
+}
+
+// Modal functions begin
+function toggleToolsModal() {
+    document.getElementById("toolsModal").classList.toggle("active");
+    document.getElementById("toolsModalOverlay").classList.toggle("active");
+    document.getElementById("modalMessage").textContent = "";
+}
+
+function updateStatus(message) {
+    document.getElementById("modalMessage").textContent = message;
+}
+
+function formatJson() {
+    const content = editor.getValue();
+    try {
+        const formatted = JSON.stringify(JSON.parse(content), null, 2);
+        editor.setValue(formatted);
+        updateStatus("JSON formatted successfully.");
+    } catch {
+        updateStatus("Invalid JSON. Unable to format.");
+    }
+    toggleModal();
+}
+
+function minifyJson() {
+    const content = editor.getValue();
+    try {
+        const minified = JSON.stringify(JSON.parse(content));
+        editor.setValue(minified);
+        updateStatus("JSON minified successfully.");
+    } catch {
+        updateStatus("Invalid JSON. Unable to minify.");
+    }
+    toggleModal();
+}
+
+function validateJson() {
+    const content = editor.getValue();
+    try {
+        JSON.parse(content);
+        updateStatus("JSON is valid.");
+    } catch {
+        updateStatus("Invalid JSON.");
+    }
+    toggleModal();
+}
+// Modal functions end
+
 function showNotification(message, type = "info") {
     const statusMessage = document.getElementById("statusMessage");
     statusMessage.textContent = message;
@@ -110,22 +163,19 @@ async function openFile(file) {
         currentFile = file;
         showNotification(currentFile);
         highlightActiveFile(currentFile);
-
-        //document.getElementById('editor').value = content;
-
         editor.setValue(content);
 
         let mode;
         if (currentFile.endsWith('.json')) {
-          mode = 'application/json';
+            mode = 'application/json';
         } else if (currentFile.endsWith('.sh')) {
-          mode = 'shell';
+            mode = 'shell';
         } else if (currentFile.endsWith('.ps1')) {
-          mode = 'powershell';
+            mode = 'powershell';
         } else if (currentFile.endsWith('.scr')) {
-          mode = 'custom';
+            mode = 'custom';
         } else {
-          mode = 'text/plain';
+            mode = 'text/plain';
         }
 
         editor.setOption('mode', mode);
@@ -150,8 +200,7 @@ async function saveFile() {
         showNotification("No file selected.", "error");
         return;
     }
-    
-    //const content = document.getElementById('editor').value;
+
     const content = editor.getValue();
 
     try {

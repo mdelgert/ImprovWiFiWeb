@@ -41,3 +41,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-21-01
 **Description:**  
 - Added folder support
+
+### Tag: v1.0.17
+**Date:** 2025-22-01
+**Description:**  
+- Updated file editor

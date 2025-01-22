@@ -24,21 +24,26 @@
             <ul id="fileList" class="file-list"></ul>
         </div>
         <div class="editor">
-            <span id="statusMessage"></span>
-            <!-- <textarea id="editor" placeholder="Select a file to view or edit..."></textarea> -->
-            <div class="editor-container" id="editorContainer"></div>
             <div class="toolbar">
+                <select id="fontSizeSelector" onchange="changeFontSize()">
+                    <option value="12px">12px</option>
+                    <option value="14px" selected>14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                </select>
                 <button onclick="createFile()">New File</button>
                 <button onclick="createFolder()">New Folder</button>
                 <button onclick="deleteItem()">Delete File</button>
                 <button onclick="deleteItem(true)">Delete Folder</button>
-            </div>
-            <div class="toolbar">
                 <button onclick="renameItem()">Rename</button>
                 <button onclick="saveFile()">Save</button>
                 <button onclick="">Run</button>
-                <button onclick="">Tools</button>
+                <button onclick="toggleToolsModal()">Tools</button>
             </div>
+            <!-- <div class="toolbar"></div> -->
+            <span id="statusMessage"></span>
+            <div class="editor-container" id="editorContainer"></div>
         </div>
     </div>
     <div class="modal-overlay" id="toolsModalOverlay" onclick="toggleToolsModal()"></div>
