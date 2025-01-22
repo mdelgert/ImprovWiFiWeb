@@ -39,9 +39,9 @@ void setup()
   CronHandler::init();
   SystemMonitor::init();
   DownloadHandler::init();
-  //GfxHandler::printMessage(SOFTWARE_VERSION);
-  //LedHandler::setDefaultBrightness(100);
-  //LedHandler::setColorByName("Purple");
+  // GfxHandler::printMessage(SOFTWARE_VERSION);
+  // LedHandler::setDefaultBrightness(100);
+  // LedHandler::setColorByName("Purple");
 }
 
 void loop()
