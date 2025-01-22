@@ -42,15 +42,17 @@
  }
 
  button {
-     padding: 10px 16px;
+     /* padding: 10px 16px; */
+     padding: 10px 10px;
      background: #3c3c3c;
      color: #d4d4d4;
      border: 1px solid #555;
      border-radius: 4px;
      cursor: pointer;
      flex: 1 1 calc(33.33% - 20px);
-     min-width: 50px;
-     max-width: 200px;
+     /* min-width: 50px; */
+     /* max-width: 200px; */
+     max-width: 150px;
  }
 
  button:hover {
