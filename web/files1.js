@@ -1,18 +1,10 @@
 // files.js
+console.log('files.js loaded');
+//import { BASE_URL, httpGet, showMessage } from './global.js';
+
 const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
 let currentPath = "/";
-let currentFile = "";
-
-function showNotification(message, type = "info") {
-    const statusMessage = document.getElementById("statusMessage");
-    statusMessage.textContent = message;
-    statusMessage.style.color = type === "error" ? "#ff5555" : "#ccc";
-}
-
-function breadcrumbPath(path) {
-    const breadcrumbs = document.getElementById("breadcrumbs");
-    breadcrumbs.innerHTML = path;
-}
+let currentFile = ""; // Declare globally
 
 async function refreshFiles() {
     try {
@@ -24,12 +16,11 @@ async function refreshFiles() {
             return;
         }
 
+        //updateBreadcrumbs(currentPath);
         const fileList = document.getElementById("fileList");
         fileList.innerHTML = "";
 
-        //updateBreadcrumbs(currentPath);
-        breadcrumbPath(currentPath);
-
+        // Add back button
         if (currentPath !== '/') {
             const backButton = document.createElement('li');
             backButton.textContent = '.. (Back)';
@@ -37,6 +28,7 @@ async function refreshFiles() {
             fileList.appendChild(backButton);
         }
 
+        // Add folders
         data.data.folders.forEach(folder => {
             const li = document.createElement("li");
             li.classList.add("folder");
@@ -49,6 +41,7 @@ async function refreshFiles() {
             fileList.appendChild(li);
         });
 
+        // Add files
         data.data.files.forEach(file => {
             const li = document.createElement("li");
             li.classList.add("file");
@@ -67,21 +60,50 @@ async function refreshFiles() {
     }
 }
 
+function updateBreadcrumbs(path) {
+    const breadcrumbs = document.getElementById("breadcrumbs");
+    breadcrumbs.innerHTML = "";
+
+    const segments = path.split("/").filter(Boolean);
+    let accumulatedPath = "/";
+    const root = document.createElement("span");
+    root.textContent = "Root";
+    root.onclick = () => navigateTo("/");
+    breadcrumbs.appendChild(root);
+
+    segments.forEach(segment => {
+        accumulatedPath += `${segment}/`;
+        const crumb = document.createElement("span");
+        crumb.textContent = segment;
+        crumb.onclick = () => navigateTo(accumulatedPath);
+        breadcrumbs.appendChild(document.createTextNode(" / "));
+        breadcrumbs.appendChild(crumb);
+    });
+}
+
+// Navigate to a directory
+function navigateTo(path) {
+    currentPath = path;
+    refreshFiles();
+}
+
+// Open folder
+function openFolder(folder) {
+    currentPath = `${currentPath}${folder}/`;
+    refreshFiles();
+}
+
+// Open file
 async function openFile(file) {
     try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + file)}`);
         const content = await response.text();
         currentFile = file;
-        showNotification(currentFile);
+        //alert(currentFile);
         document.getElementById('editor').value = content;
     } catch (err) {
         console.error("Error opening file:", err);
     }
-}
-
-function openFolder(folder) {
-    currentPath = `${currentPath}${folder}/`;
-    refreshFiles();
 }
 
 function goBack() {
@@ -90,6 +112,9 @@ function goBack() {
 }
 
 async function saveFile() {
+    //alert('saveFile');
+    //alert(currentFile);
+
     if (!currentFile) {
         alert("No file selected.");
         return;
@@ -150,111 +175,6 @@ async function createFolder() {
     }
 }
 
-async function deleteItem(isFolder) {
-    
-    const endpoint = isFolder ? '/folder' : '/file';
-    const itemName = isFolder ? currentPath : currentFile;
-    const confirmed = window.confirm(`Are you sure you want to delete ${itemName}?`);
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`${endPoint}${endpoint}?filename=${encodeURIComponent(currentPath + itemName)}`, {
-            method: 'DELETE'
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            showNotification("Error deleting item: " + result.message, "error");
-        }
-    } catch (err) {
-        showNotification("Error deleting item: " + err.message, "error");
-    }
-}
-
-async function renameItem() {
-    const oldName = prompt("Enter current name:");
-    if (!oldName) return;
-    const newName = prompt("Enter new name:");
-    if (!newName) return;
-    try {
-        const response = await fetch(`${endPoint}/rename`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ oldname: currentPath + oldName, newname: currentPath + newName })
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            alert("Error renaming item: " + result.message);
-        }
-    } catch (err) {
-        console.error("Error renaming item:", err);
-    }
-}
-
-refreshFiles();
-
-/*
-function updateBreadcrumbs(path) {
-    const breadcrumbs = document.getElementById("breadcrumbs");
-    breadcrumbs.innerHTML = "";
-
-    const segments = path.split("/").filter(Boolean);
-    let accumulatedPath = "/";
-    const root = document.createElement("span");
-    root.textContent = "Root";
-    root.onclick = () => navigateTo("/");
-    breadcrumbs.appendChild(root);
-
-    segments.forEach(segment => {
-        accumulatedPath += `${segment}/`;
-        const crumb = document.createElement("span");
-        crumb.textContent = segment;
-        crumb.onclick = () => navigateTo(accumulatedPath);
-        breadcrumbs.appendChild(document.createTextNode(" / "));
-        breadcrumbs.appendChild(crumb);
-    });
-}
-
-function navigateTo(path) {
-    currentPath = path;
-    refreshFiles();
-}
-
-
-async function deleteFile() {
-
-    alert(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`);
-    showNotification(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`);
-
-    const confirmed = window.confirm(`Are you sure you want to delete ${currentPath}${currentFile}?`);
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`, {
-            method: 'DELETE'
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            //alert("Error deleting item: " + result.message);
-            showNotification("Error deleting item: " + result.message, "error");
-        }
-    } catch (err) {
-        //console.error("Error deleting item:", err);
-        showNotification("Error deleting item: " + err.message, "error");
-    }
-}
-
 async function deleteItem() {
     const itemName = prompt("Enter file or folder name to delete:");
     if (!itemName) return;
@@ -296,5 +216,6 @@ async function renameItem() {
         console.error("Error renaming item:", err);
     }
 }
-*/
 
+// Initial load
+refreshFiles();

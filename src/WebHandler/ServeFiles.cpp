@@ -39,10 +39,6 @@ void ServeFiles::handleFileManager(AsyncWebServerRequest *request)
         return;
     }
 
-    // StaticJsonDocument<1024> doc;
-    // JsonArray files = doc.createNestedArray("files");
-    // JsonArray folders = doc.createNestedArray("folders");
-
     JsonDocument doc;
     JsonArray files = doc["files"].to<JsonArray>();
     JsonArray folders = doc["folders"].to<JsonArray>();

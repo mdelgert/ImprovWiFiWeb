@@ -1,4 +1,4 @@
- /* General body styling */
+ /* files.css */
  body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -10,7 +10,6 @@
     height: 100vh;
 }
 
-/* Main container layout */
 .container {
     display: flex;
     flex: 1;
@@ -32,7 +31,6 @@
     overflow: hidden;
 }
 
-/* Toolbar styling */
 .toolbar {
     background: #2d2d2d;
     padding: 10px;
@@ -60,7 +58,6 @@ button:hover {
     transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* File list styling */
 .file-list {
     list-style: none;
     margin: 0;
@@ -102,7 +99,6 @@ button:hover {
     vertical-align: middle;
 }
 
-/* Textarea editor */
 textarea {
     flex: 1;
     margin: 10px;
@@ -114,7 +110,6 @@ textarea {
     font-family: monospace;
 }
 
-/* Breadcrumbs */
 .breadcrumbs {
     padding: 10px;
     background-color: #2d2d2d;
@@ -136,15 +131,6 @@ textarea {
     color: #4fc1ff;
 }
 
-/* 
-#statusMessage {
-    flex: 1;
-    text-align: right;
-    font-size: 14px;
-    color: #ccc;
-} 
-*/
-
 #statusMessage {
     font-size: 14px;
     padding: 8px 10px;
@@ -157,13 +143,27 @@ textarea {
         flex-direction: column;
     }
 
+    /*
     .sidebar {
         width: 100%;
         height: 50%;
         border-right: none;
         border-bottom: 1px solid #3c3c3c;
     }
+    */
 
+    .sidebar {
+        width: 100%; /* Make sidebar span the full width */
+        order: 2; /* Move sidebar below the editor */
+        height: auto; /* Allow sidebar to adjust height */
+        border-right: none;
+        border-top: 1px solid #3c3c3c; /* Add border on top for separation */
+    }
+
+    .editor {
+        order: 1; /* Ensure editor stays above the sidebar */
+    }
+    
     button {
         flex: 1 1 auto;
         min-width: 80px;

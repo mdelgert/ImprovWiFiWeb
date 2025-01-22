@@ -1,28 +1,25 @@
+<!-- files.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive File Manager</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/shell/shell.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/powershell/powershell.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/addon/mode/simple.min.js"></script>
     <link rel="stylesheet" href="files.css" />
-    <!-- <script type="module" src="files.js" defer></script> -->
+    <script src="files.js"></script>
     <style></style>
 </head>
-
 <body>
-    <!-- <header><span>Editor</span></header> -->
     <div class="container">
         <div class="sidebar">
-            <!-- <div class="breadcrumbs" id="breadcrumbs"></div> -->
+            <div class="breadcrumbs" id="breadcrumbs"></div>
             <ul id="fileList" class="file-list"></ul>
         </div>
         <div class="editor">
@@ -31,7 +28,8 @@
             <div class="toolbar">
                 <button onclick="createFile()">New File</button>
                 <button onclick="createFolder()">New Folder</button>
-                <button onclick="deleteItem()">Delete</button>
+                <button onclick="deleteItem()">Delete File</button>
+                <button onclick="deleteItem(true)">Delete Folder</button>
             </div>
             <div class="toolbar">
                 <button onclick="renameItem()">Rename</button>
@@ -40,7 +38,5 @@
         </div>
     </div>
     <script></script>
-    <script src="files.js"></script>
 </body>
-
 </html>

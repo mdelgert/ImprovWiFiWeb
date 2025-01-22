@@ -20,7 +20,7 @@ async function refreshFiles() {
         const data = await response.json();
 
         if (data.status !== "success") {
-            alert(`Error fetching directory contents: ${data.message}`);
+            showNotification(`Error fetching directory contents: ${data.message}`, "error");
             return;
         }
 
@@ -63,7 +63,7 @@ async function refreshFiles() {
         });
 
     } catch (err) {
-        console.error("Error refreshing file list:", err);
+        showNotification("Error refreshing file list: " + err.message, "error");
     }
 }
 
@@ -72,10 +72,10 @@ async function openFile(file) {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + file)}`);
         const content = await response.text();
         currentFile = file;
-        showNotification(currentFile);
         document.getElementById('editor').value = content;
+        showNotification(currentFile);
     } catch (err) {
-        console.error("Error opening file:", err);
+        showNotification("Error opening file: " + err.message, "error");
     }
 }
 
@@ -91,7 +91,7 @@ function goBack() {
 
 async function saveFile() {
     if (!currentFile) {
-        alert("No file selected.");
+        showNotification("No file selected.", "error");
         return;
     }
     const content = document.getElementById('editor').value;
@@ -103,12 +103,12 @@ async function saveFile() {
         });
         const result = await response.json();
         if (result.status === "success") {
-            alert("File saved successfully!");
+            showNotification("File saved successfully!");
         } else {
-            alert("Error saving file: " + result.message);
+            showNotification("Error saving file: " + result.message, "error");
         }
     } catch (err) {
-        console.error("Error saving file:", err);
+        showNotification("Error saving file: " + err.message, "error");
     }
 }
 
@@ -125,10 +125,10 @@ async function createFile() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error creating file: " + result.message);
+            showNotification("Error creating file: " + result.message, "error");
         }
     } catch (err) {
-        console.error("Error creating file:", err);
+        showNotification("Error creating file: " + err.message, "error");
     }
 }
 
@@ -143,10 +143,10 @@ async function createFolder() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error creating folder: " + result.message);
+            showNotification("Error creating folder: " + result.message, "error");
         }
     } catch (err) {
-        console.error("Error creating folder:", err);
+        showNotification("Error creating folder: " + err.message, "error");
     }
 }
 
@@ -190,10 +190,10 @@ async function renameItem() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error renaming item: " + result.message);
+            showNotification("Error renaming item: " + result.message, "error");
         }
     } catch (err) {
-        console.error("Error renaming item:", err);
+        showNotification("Error renaming item: " + err.message, "error");
     }
 }
 

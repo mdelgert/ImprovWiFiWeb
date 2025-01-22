@@ -34,7 +34,7 @@ POST {{baseUrl}}/rename?oldname=/test.txt&newname=/test2.txt
 Authorization: Bearer {{token}}
 
 ### Create a new file
-POST {{baseUrl}}/file?filename=/hello/test2.txt
+POST {{baseUrl}}/file?filename=/hello1.txt
 Authorization: Bearer {{token}}
 Content-Type: text/plain
 
@@ -94,7 +94,7 @@ This is additional content appended to the file.
 ###
 
 ### Delete a file
-DELETE {{baseUrl}}/file?filename=/test.txt
+DELETE {{baseUrl}}/file?filename=/hello1.txt
 Authorization: Bearer {{token}}
 
 ###
