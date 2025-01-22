@@ -6,6 +6,8 @@ ImprovWiFi ImprovHandler::improvSerial(&Serial);
 
 void ImprovHandler::init()
 {
+    //Todo cleanup wifi handler as if in AP mode ImprovWiFi will not work
+    //WiFi.mode(WIFI_STA);
     improvSerial.setDeviceInfo(ImprovTypes::
                                    ChipFamily::CF_ESP32_S3,
                                "ImprovWiFi", SOFTWARE_VERSION,
