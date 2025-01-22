@@ -9,16 +9,6 @@
 // extern const uint8_t codemirror_css_start[] asm("_binary_web_codemirror_codemirror_min_css_start");
 // extern const uint8_t codemirror_css_end[] asm("_binary_web_codemirror_codemirror_min_css_end");
 
-extern const uint8_t actions_html_start[] asm("_binary_web_actions_html_start");
-extern const uint8_t actions_html_end[] asm("_binary_web_actions_html_end");
-extern const uint8_t actions_js_start[] asm("_binary_web_actions_js_start");
-extern const uint8_t actions_js_end[] asm("_binary_web_actions_js_end");
-
-extern const uint8_t advanced_html_start[] asm("_binary_web_advanced_html_start");
-extern const uint8_t advanced_html_end[] asm("_binary_web_advanced_html_end");
-extern const uint8_t advanced_js_start[] asm("_binary_web_advanced_js_start");
-extern const uint8_t advanced_js_end[] asm("_binary_web_advanced_js_end");
-
 extern const uint8_t device_html_start[] asm("_binary_web_device_html_start");
 extern const uint8_t device_html_end[] asm("_binary_web_device_html_end");
 extern const uint8_t device_js_start[] asm("_binary_web_device_js_start");
