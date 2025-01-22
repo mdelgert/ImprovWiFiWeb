@@ -1,6 +1,7 @@
 <!-- files.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="files.css" />
     <style></style>
 </head>
+
 <body>
     <div class="container">
         <div class="sidebar">
@@ -38,6 +40,14 @@
                 <button onclick="">Tools</button>
             </div>
         </div>
+    </div>
+    <div class="modal-overlay" id="toolsModalOverlay" onclick="toggleToolsModal()"></div>
+    <div class="modal" id="toolsModal">
+        <h3>Tools</h3>
+        <span id="modalMessage"></span>
+        <button onclick="formatJson()">Format JSON</button>
+        <button onclick="minifyJson()">Minify JSON</button>
+        <button onclick="validateJson()">Validate JSON</button>
     </div>
     <script></script>
     <script src="files.js"></script>
