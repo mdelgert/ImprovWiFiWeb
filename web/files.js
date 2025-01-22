@@ -20,7 +20,7 @@ async function refreshFiles() {
         const data = await response.json();
 
         if (data.status !== "success") {
-            alert(`Error fetching directory contents: ${data.message}`);
+            showNotification(`Error fetching directory contents: ${data.message}`, "error");
             return;
         }
 
@@ -64,6 +64,7 @@ async function refreshFiles() {
 
     } catch (err) {
         console.error("Error refreshing file list:", err);
+        showNotification("Error fetching directory contents", "error");
     }
 }
 
@@ -76,6 +77,7 @@ async function openFile(file) {
         document.getElementById('editor').value = content;
     } catch (err) {
         console.error("Error opening file:", err);
+        showNotification("Error opening file", "error");
     }
 }
 
@@ -91,7 +93,7 @@ function goBack() {
 
 async function saveFile() {
     if (!currentFile) {
-        alert("No file selected.");
+        showNotification("No file selected.", "error");
         return;
     }
     const content = document.getElementById('editor').value;
@@ -103,12 +105,13 @@ async function saveFile() {
         });
         const result = await response.json();
         if (result.status === "success") {
-            alert("File saved successfully!");
+            showNotification("File saved successfully");
         } else {
-            alert("Error saving file: " + result.message);
+            showNotification("Error saving file: " + result.message, "error");
         }
     } catch (err) {
         console.error("Error saving file:", err);
+        showNotification("Error saving file", "error");
     }
 }
 
@@ -125,10 +128,11 @@ async function createFile() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error creating file: " + result.message);
+            showNotification("Error creating file: " + result.message, "error");
         }
     } catch (err) {
         console.error("Error creating file:", err);
+        showNotification("Error creating file: " + err.message, "error");
     }
 }
 
@@ -143,34 +147,40 @@ async function createFolder() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error creating folder: " + result.message);
+            showNotification("Error creating folder: " + result.message, "error");
         }
     } catch (err) {
         console.error("Error creating folder:", err);
+        showNotification("Error creating folder: " + err.message, "error");
     }
 }
 
 async function deleteItem(isFolder) {
     
-    const endpoint = isFolder ? '/folder' : '/file';
-    const itemName = isFolder ? currentPath : currentFile;
-    const confirmed = window.confirm(`Are you sure you want to delete ${itemName}?`);
+    const endpoint = isFolder ? '/folder?foldername=' : '/file?filename=';
+    const item = isFolder ? currentPath : currentPath + currentFile;
+    const fullPath = `${endPoint}${endpoint}${encodeURIComponent(item)}`;
 
-    if (!confirmed) {
-        return;
-    }
+    // alert(fullPath);
+    // const confirmed = window.confirm(`Are you sure you want to delete ${item}?`);
 
+    // if (!confirmed) {
+    //     return;
+    // }
+    
     try {
-        const response = await fetch(`${endPoint}${endpoint}?filename=${encodeURIComponent(currentPath + itemName)}`, {
+        const response = await fetch(`${fullPath}`, {
             method: 'DELETE'
         });
         const result = await response.json();
         if (result.status === "success") {
-            refreshFiles();
+            isFolder ? goBack() : refreshFiles();
+            showNotification("Item deleted successfully");
         } else {
             showNotification("Error deleting item: " + result.message, "error");
         }
     } catch (err) {
+        console.error("Error deleting item:", err);
         showNotification("Error deleting item: " + err.message, "error");
     }
 }
@@ -190,111 +200,12 @@ async function renameItem() {
         if (result.status === "success") {
             refreshFiles();
         } else {
-            alert("Error renaming item: " + result.message);
+            showNotification("Error renaming item: " + result.message, "error");
         }
     } catch (err) {
         console.error("Error renaming item:", err);
+        showNotification("Error renaming item: " + err.message, "error");
     }
 }
 
 refreshFiles();
-
-/*
-function updateBreadcrumbs(path) {
-    const breadcrumbs = document.getElementById("breadcrumbs");
-    breadcrumbs.innerHTML = "";
-
-    const segments = path.split("/").filter(Boolean);
-    let accumulatedPath = "/";
-    const root = document.createElement("span");
-    root.textContent = "Root";
-    root.onclick = () => navigateTo("/");
-    breadcrumbs.appendChild(root);
-
-    segments.forEach(segment => {
-        accumulatedPath += `${segment}/`;
-        const crumb = document.createElement("span");
-        crumb.textContent = segment;
-        crumb.onclick = () => navigateTo(accumulatedPath);
-        breadcrumbs.appendChild(document.createTextNode(" / "));
-        breadcrumbs.appendChild(crumb);
-    });
-}
-
-function navigateTo(path) {
-    currentPath = path;
-    refreshFiles();
-}
-
-
-async function deleteFile() {
-
-    alert(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`);
-    showNotification(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`);
-
-    const confirmed = window.confirm(`Are you sure you want to delete ${currentPath}${currentFile}?`);
-
-    if (!confirmed) {
-        return;
-    }
-
-    try {
-        const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`, {
-            method: 'DELETE'
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            //alert("Error deleting item: " + result.message);
-            showNotification("Error deleting item: " + result.message, "error");
-        }
-    } catch (err) {
-        //console.error("Error deleting item:", err);
-        showNotification("Error deleting item: " + err.message, "error");
-    }
-}
-
-async function deleteItem() {
-    const itemName = prompt("Enter file or folder name to delete:");
-    if (!itemName) return;
-    const isFolder = confirm("Is this a folder?");
-    const endpoint = isFolder ? '/folder' : '/file';
-    try {
-        const response = await fetch(`${endPoint}${endpoint}?filename=${encodeURIComponent(currentPath + itemName)}`, {
-            method: 'DELETE'
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            alert("Error deleting item: " + result.message);
-        }
-    } catch (err) {
-        console.error("Error deleting item:", err);
-    }
-}
-
-async function renameItem() {
-    const oldName = prompt("Enter current name:");
-    if (!oldName) return;
-    const newName = prompt("Enter new name:");
-    if (!newName) return;
-    try {
-        const response = await fetch(`${endPoint}/rename`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ oldname: currentPath + oldName, newname: currentPath + newName })
-        });
-        const result = await response.json();
-        if (result.status === "success") {
-            refreshFiles();
-        } else {
-            alert("Error renaming item: " + result.message);
-        }
-    } catch (err) {
-        console.error("Error renaming item:", err);
-    }
-}
-*/
-

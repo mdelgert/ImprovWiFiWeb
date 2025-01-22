@@ -1,4 +1,4 @@
-@baseUrl = http://demo2.local
+@baseUrl = http://demo1.local
 @token = test
 
 ### Get all folders
@@ -12,11 +12,11 @@ Authorization: Bearer {{token}}
 ###
 
 ### Rename a folder
-POST {{baseUrl}}/rename?oldname=/test&newname=/test2
+POST {{baseUrl}}/rename?foldname=/test&newname=/test2
 Authorization: Bearer {{token}}
 ###
 
 ### Delete a new folder
-DELETE {{baseUrl}}/folder?foldername=/test2/
+DELETE {{baseUrl}}/folder?foldername=/hello/
 Authorization: Bearer {{token}}
 ###
