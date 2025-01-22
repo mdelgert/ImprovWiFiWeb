@@ -37,6 +37,13 @@ extern const uint8_t error_html_end[] asm("_binary_web_error_html_end");
 extern const uint8_t favicon_ico_start[] asm("_binary_web_favicon_ico_start");
 extern const uint8_t favicon_ico_end[]   asm("_binary_web_favicon_ico_end");
 
+extern const uint8_t files_css_start[] asm("_binary_web_files_css_start");
+extern const uint8_t files_css_end[] asm("_binary_web_files_css_end");
+extern const uint8_t files_html_start[] asm("_binary_web_files_html_start");
+extern const uint8_t files_html_end[] asm("_binary_web_files_html_end");
+extern const uint8_t files_js_start[] asm("_binary_web_files_js_start");
+extern const uint8_t files_js_end[] asm("_binary_web_files_js_end");
+
 extern const uint8_t footer_html_start[] asm("_binary_web_footer_html_start");
 extern const uint8_t footer_html_end[] asm("_binary_web_footer_html_end");
 
