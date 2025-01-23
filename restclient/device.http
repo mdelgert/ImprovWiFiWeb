@@ -1,5 +1,11 @@
-@baseUrl = http://demo.local
+@baseUrl = http://demo1.local
 @token = test
+
+### backup
+GET {{baseUrl}}/device/backup
+Authorization: Bearer {{token}}
+
+###
 
 ### Get
 GET {{baseUrl}}/device/info

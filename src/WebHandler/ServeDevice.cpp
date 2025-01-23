@@ -9,6 +9,7 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
     handleDeviceInfo(server);
     handleDeviceReboot(server);
     handleDeviceWifiNetworks(server);
+    handleDeviceBackup(server);
 }
 
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
@@ -132,6 +133,54 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         }
 
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
+}
+
+void ServeDevice::handleDeviceBackup(AsyncWebServer &server)
+{
+    server.on("/device/backup", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+                  debugV("Received GET request on /device/backup");
+
+                  File exportFile = LittleFS.open("/backup.tar", "w");
+                  if (!exportFile)
+                  {
+                      request->send(500, "text/plain", "Failed to create export file");
+                      return;
+                  }
+
+                  File root = LittleFS.open("/");
+                  File file = root.openNextFile();
+
+                  while (file)
+                  {
+                      // Write file metadata
+                      String header = "FILE:" + String(file.name()) + "\nSIZE:" + String(file.size()) + "\n";
+                      exportFile.write((const uint8_t *)header.c_str(), header.length());
+
+                      // Write file content
+                      uint8_t buffer[512];
+                      while (file.available())
+                      {
+                          size_t bytesRead = file.read(buffer, sizeof(buffer));
+                          exportFile.write(buffer, bytesRead);
+                      }
+
+                      //exportFile.write("\nEND\n", 5); // Mark the end of the file
+                      exportFile.write(reinterpret_cast<const uint8_t*>("\nEND\n"), 5); // Mark the end of the file
+                      file = root.openNextFile();
+                  }
+
+                  exportFile.close();
+                  //request->send(200, "text/plain", "Backup exported successfully to /backup.tar");
+
+                  // Create a JSON response
+                  JsonDocument data;
+                  data["data"] = "Backup success";
+
+                  WebHandler::sendSuccessResponse(request, "GET /device/backup", &data);
+
+              });
+              
 }
 
 #endif // ENABLE_WEB_HANDLER

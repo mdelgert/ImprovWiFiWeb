@@ -8,7 +8,8 @@
     <!-- <title>Responsive File Manager</title> -->
     <title>Files</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/theme/material-darker.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.18/mode/shell/shell.min.js"></script>
@@ -73,6 +74,7 @@
                 <button onclick="toggleToolsModal()">Tools</button>
                 <button onclick="saveFile()">Save</button>
                 <button onclick="renameItem()">Rename</button>
+                <button onclick="downloadFile()">Download</button>
                 -->
                 <button onclick="renameItem()" class="svg-button" title="Rename Item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -109,6 +111,12 @@
                         <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" />
                     </svg>
                 </button>
+                <button onclick="downloadFile()" class="svg-button" title="Download File">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
+                    fill="currentColor" class="icon">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg>
+                </button>
             </div>
             <!-- <div class="toolbar"></div> -->
             <span id="statusMessage"></span>
@@ -126,4 +134,5 @@
     <script></script>
     <script src="files.js"></script>
 </body>
+
 </html>

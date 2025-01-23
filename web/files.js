@@ -186,6 +186,42 @@ async function openFile(file) {
     }
 }
 
+async function downloadFile() {
+    
+    const filename = currentPath + currentFile;
+
+    try {
+        // Fetch the file content from the server
+        const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(filename)}`);
+        if (!response.ok) {
+            throw new Error(`Failed to download file: ${response.statusText}`);
+        }
+
+        // Convert the response to a blob
+        const blob = await response.blob();
+
+        // Create a temporary anchor element
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(blob);
+
+        // Set the file name for the download
+        downloadLink.download = currentFile;
+
+        // Append the anchor to the body (necessary for Firefox)
+        document.body.appendChild(downloadLink);
+
+        // Programmatically click the anchor to start the download
+        downloadLink.click();
+
+        // Clean up
+        URL.revokeObjectURL(downloadLink.href); // Free memory
+        document.body.removeChild(downloadLink);
+    } catch (err) {
+        console.error("Error downloading file:", err);
+        showNotification("Error downloading file", "error");
+    }
+}
+
 function openFolder(folder) {
     currentPath = `${currentPath}${folder}/`;
     refreshFiles();
