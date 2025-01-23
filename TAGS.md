@@ -46,3 +46,13 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-22-01
 **Description:**  
 - Updated file editor
+
+### Tag: v1.0.18
+**Date:** 2025-22-01
+**Description:**  
+- Stable editor
+
+### Tag: v1.0.19
+**Date:** 2025-23-01
+**Description:**  
+- Before including libraries source
