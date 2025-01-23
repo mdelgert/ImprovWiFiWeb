@@ -175,6 +175,8 @@ async function openFile(file) {
             mode = 'powershell';
         } else if (currentFile.endsWith('.scr')) {
             mode = 'custom';
+        } else if (currentFile.endsWith('')) {
+            mode = 'custom';
         } else {
             mode = 'text/plain';
         }
