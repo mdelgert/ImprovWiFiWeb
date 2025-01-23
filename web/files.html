@@ -62,18 +62,53 @@
                     <option value="16px">16px</option>
                     <option value="18px">18px</option>
                     <option value="20px">20px</option>
+                    <option value="24px">24px</option>
                 </select>
                 <!-- 
                 <button onclick="createFile()">New File</button>
                 <button onclick="createFolder()">New Folder</button>
                 <button onclick="deleteItem()">Delete File</button>
-                <button onclick="deleteItem(true)">Delete Folder</button> 
-                -->
-                <button onclick="toggleToolsModal()">Tools</button>
-                <button onclick="renameItem()">Rename</button>
-                <button onclick="saveFile()">Save</button>
+                <button onclick="deleteItem(true)">Delete Folder</button>
                 <button onclick="runFile()">Run</button>
-                
+                <button onclick="toggleToolsModal()">Tools</button>
+                <button onclick="saveFile()">Save</button>
+                <button onclick="renameItem()">Rename</button>
+                -->
+                <button onclick="renameItem()" class="svg-button" title="Rename Item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-edit">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+                        <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+                        <path d="M16 5l3 3" />
+                    </svg>
+                </button>
+                <button onclick="saveFile()" class="svg-button" title="Save Changes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" />
+                        <path d="M12 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                        <path d="M14 4l0 4l-6 0l0 -4" />
+                    </svg>
+                </button>
+                <button onclick="toggleToolsModal()" class="svg-button" title="Show Tools">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="icon icon-tabler icons-tabler-outline icon-tabler-tool">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M7 10h3v-3l-3.5 -3.5a6 6 0 0 1 8 8l6 6a2 2 0 0 1 -3 3l-6 -6a6 6 0 0 1 -8 -8l3.5 3.5" />
+                    </svg>
+                </button>
+                <button onclick="runFile()" class="svg-button" title="Run Script">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-player-play">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M6 4v16a1 1 0 0 0 1.524 .852l13 -8a1 1 0 0 0 0 -1.704l-13 -8a1 1 0 0 0 -1.524 .852z" />
+                    </svg>
+                </button>
             </div>
             <!-- <div class="toolbar"></div> -->
             <span id="statusMessage"></span>

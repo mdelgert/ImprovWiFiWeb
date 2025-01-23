@@ -1,6 +1,7 @@
 // files.js
 const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
 
+let fontSize = '18px';
 let currentPath = "/";
 let currentFile = "";
 
@@ -289,7 +290,7 @@ async function runFile() {
         showNotification('Failed to execute command.', 'error');
     }
 
-    showNotification(`Run file: ${filename}`);
+    showNotification(`Running file ${filename}`);
 }
 
 async function deleteItem(isFolder) {
@@ -321,15 +322,17 @@ async function deleteItem(isFolder) {
 }
 
 async function renameItem() {
-    const oldName = prompt("Enter current name:");
-    if (!oldName) return;
+    if (!currentFile) {
+        showNotification('No file selected to rename.', 'error');
+        return;
+    }
+
     const newName = prompt("Enter new name:");
+
     if (!newName) return;
     try {
-        const response = await fetch(`${endPoint}/rename`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ oldname: currentPath + oldName, newname: currentPath + newName })
+        const response = await fetch(`${endPoint}/rename?oldname=${currentPath}${currentFile}&newname=${currentPath}${newName}`, {
+            method: 'POST'
         });
         const result = await response.json();
         if (result.status === "success") {
@@ -343,6 +346,11 @@ async function renameItem() {
     }
 }
 
-refreshFiles();
+function setDefaultFontSize() {
+    const selector = document.getElementById("fontSizeSelector");
+    selector.value = fontSize;
+    document.querySelector('.CodeMirror').style.fontSize = fontSize;
+}
 
-document.querySelector('.CodeMirror').style.fontSize = '18px';
+refreshFiles();
+setDefaultFontSize();
