@@ -125,6 +125,17 @@
         // btn.style.padding = button.style?.padding || "var(--padding-small)";
         // btn.style.width = button.style?.width || "100%";
 
+        // Apply inline styles only if provided
+        if (button.style?.color) btn.style.color = button.style.color;
+        if (button.style?.fontSize) btn.style.fontSize = button.style.fontSize;
+        if (button.style?.backgroundColor) btn.style.backgroundColor = button.style.backgroundColor;
+        if (button.style?.borderWidth && button.style?.borderColor) {
+          btn.style.border = `${button.style.borderWidth} solid ${button.style.borderColor}`;
+        }
+        if (button.style?.borderRadius) btn.style.borderRadius = button.style.borderRadius;
+        if (button.style?.padding) btn.style.padding = button.style.padding;
+        if (button.style?.width) btn.style.width = button.style.width;
+
         // Add tooltip if available
         if (button.tooltip) {
           //btn.setAttribute("data-tooltip", button.tooltip);
