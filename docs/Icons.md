@@ -1,3 +1,4 @@
+https://www.svgrepo.com/
 https://heroicons.com/
 https://feathericons.com/
 https://icons.getbootstrap.com/
