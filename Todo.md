@@ -1,4 +1,6 @@
 ## Active
+- [] Implement AES
+- [] Copy all libraries into project
 - [] Confirm or centralize LittleFS intialization
 - [] Implement backup and restore of LittleFS
 - [] No json consistent central for bluetooth, debuggert and mqtt
@@ -16,6 +18,10 @@
 - [] Implement x,y and font size in GfxHandler
 - [] Implement build_flags consistent with other projects follow #if rather than #ifdef -DENABLE_LIB=0/1
 - [] Review code for blocking actions when not connected or missing default values after wiping preferences
+
+### Bugs
+- [] Nested folders
+- [] Reboot loop if clock and settings are cleared
 
 ### Complete
 - [x] GitHub pages action fix
