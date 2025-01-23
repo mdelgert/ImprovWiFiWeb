@@ -1,7 +1,6 @@
 ## Active
-- [] Implemente modal
-- [] Dynamic buttons
-- [] Rather than action handler editor call it 
+- [] Confirm or centralize LittleFS intialization
+- [] Implement backup and restore of LittleFS
 - [] No json consistent central for bluetooth, debuggert and mqtt
 - [] Remote debug disable telnet
 - [] Custume remote debugger (expose print messages so bluetooth can implement)
@@ -17,7 +16,6 @@
 - [] Implement x,y and font size in GfxHandler
 - [] Implement build_flags consistent with other projects follow #if rather than #ifdef -DENABLE_LIB=0/1
 - [] Review code for blocking actions when not connected or missing default values after wiping preferences
-- [x] Implment task manager
 
 ### Complete
 - [x] GitHub pages action fix
@@ -29,6 +27,9 @@
 - [x] Implement OTA
 - [x] Implement secure MqttHandler with EMQX
 - [x] Rather than action handler implment CommandHandler example tft hello led blue etc.
+- [x] Implemente modal
+- [x] Dynamic buttons
+- [x] Implment task manager
 
 ## Bugs
 Github pages not deploying from tag. Modified to deploy from action.
