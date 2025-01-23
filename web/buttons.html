@@ -9,6 +9,21 @@
   <link rel="stylesheet" href="styles.css" />
   <script type="module" src="global.js" defer></script>
   <style>
+    /* Root Variables for Dark Theme */
+    :root {
+      --background-color: #121212;
+      --text-color: #ffffff;
+      --button-bg: #3c3c3c;
+      --button-border: #444444;
+      --button-hover-bg: #555555;
+      --tooltip-bg: #222222;
+      --tooltip-text: #ffffff;
+      --border-radius: 8px;
+      --padding-small: 10px;
+      --padding-large: 20px;
+      --font-size: 1rem;
+    }
+
     #buttonContainer {
       display: flex;
       flex-direction: column;
@@ -25,15 +40,54 @@
       border-radius: var(--border-radius);
       font-size: var(--font-size);
       width: 100%;
-      /* Full width for mobile */
       max-width: 400px;
-      /* Limit width for larger screens */
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
     }
+
+    .button:hover {
+      background-color: var(--button-hover-bg);
+      border-color: var(--button-hover-bg);
+      transform: scale(1.05);
+    }
+
+    /* Tooltip styling */
+    .button[data-tooltip] {
+      position: relative;
+      /* Required for the tooltip positioning */
+    }
+
+    .button[data-tooltip]::after {
+      content: attr(data-tooltip);
+      /* Use the value of the 'data-tooltip' attribute */
+      position: absolute;
+      bottom: 100%;
+      /* Position above the button */
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--tooltip-bg);
+      color: var(--tooltip-text);
+      padding: 5px 10px;
+      border-radius: var(--border-radius);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      z-index: 10;
+      opacity: 0;
+      /* Initially hidden */
+      visibility: hidden;
+      /* Prevent focusable area */
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+
+    .button[data-tooltip]:hover::after {
+      opacity: 1;
+      /* Make tooltip visible on hover */
+      visibility: visible;
+    }
   </style>
 </head>
+
 <body>
   <div id="navbar-container"></div>
   <main>
@@ -57,7 +111,7 @@
       }
     }
 
-    // Render Buttons Dynamically
+    /*
     function renderButtons(buttons) {
       const container = document.getElementById("buttonContainer");
       container.innerHTML = ""; // Clear previous content
@@ -75,6 +129,37 @@
         btn.style.borderRadius = button.style.borderRadius;
         btn.style.padding = button.style.padding;
         btn.style.width = button.style.width;
+
+        // Add tooltip if available
+        if (button.tooltip) {
+          btn.setAttribute("data-tooltip", button.tooltip);
+        }
+
+        // Attach click event to send the command
+        btn.onclick = () => sendCommand(button.command);
+
+        container.appendChild(btn);
+      });
+    }
+    */
+
+    function renderButtons(buttons) {
+      const container = document.getElementById("buttonContainer");
+      container.innerHTML = ""; // Clear previous content
+
+      buttons.forEach(button => {
+        const btn = document.createElement("button");
+        btn.className = "button tooltip";
+        btn.textContent = button.label;
+
+        // Apply inline styles with defaults
+        btn.style.color = button.style?.color || "var(--text-color)";
+        btn.style.fontSize = button.style?.fontSize || "var(--font-size)";
+        btn.style.backgroundColor = button.style?.backgroundColor || "var(--button-bg)";
+        btn.style.border = `${button.style?.borderWidth || "2px"} solid ${button.style?.borderColor || "var(--button-border)"}`;
+        btn.style.borderRadius = button.style?.borderRadius || "var(--border-radius)";
+        btn.style.padding = button.style?.padding || "var(--padding-small)";
+        btn.style.width = button.style?.width || "100%"; // Default to full width for responsiveness
 
         // Add tooltip if available
         if (button.tooltip) {
@@ -113,4 +198,5 @@
     loadButtons();
   </script>
 </body>
+
 </html>
