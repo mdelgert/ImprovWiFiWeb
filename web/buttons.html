@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Buttons</title>
   <meta charset="UTF-8" />
@@ -31,7 +32,7 @@
     }
 
     .button {
-      /* display: block; */
+      display: block;
       padding: var(--padding-small) var(--padding-large);
       background-color: var(--button-bg);
       color: var(--text-color);
@@ -42,31 +43,25 @@
       max-width: 400px;
       text-align: center;
       cursor: pointer;
-      transition: all 0.3s ease;
-      /*Icons*/
-      font-size: 1.2rem;
-      vertical-align: middle;
-      margin-right: 10px;
+      /* transition: all 0.3s ease; */
     }
 
     .button:hover {
       background-color: var(--button-hover-bg);
       border-color: var(--button-hover-bg);
-      transform: scale(1.05);
+      /* transform: scale(1.05); */
     }
 
     /* Tooltip styling */
+    /*
     .button[data-tooltip] {
       position: relative;
-      /* Required for the tooltip positioning */
     }
 
     .button[data-tooltip]::after {
       content: attr(data-tooltip);
-      /* Use the value of the 'data-tooltip' attribute */
       position: absolute;
       bottom: 100%;
-      /* Position above the button */
       left: 50%;
       transform: translateX(-50%);
       background-color: var(--tooltip-bg);
@@ -77,19 +72,18 @@
       white-space: nowrap;
       z-index: 10;
       opacity: 0;
-      /* Initially hidden */
       visibility: hidden;
-      /* Prevent focusable area */
       transition: opacity 0.2s ease, visibility 0.2s ease;
     }
 
     .button[data-tooltip]:hover::after {
       opacity: 1;
-      /* Make tooltip visible on hover */
       visibility: visible;
     }
+  */
   </style>
 </head>
+
 <body>
   <div id="navbar-container"></div>
   <main>
@@ -122,95 +116,19 @@
         btn.className = "button tooltip";
         btn.textContent = button.label;
 
-        // Apply inline styles
-        btn.style.color = button.style.color;
-        btn.style.fontSize = button.style.fontSize;
-        btn.style.backgroundColor = button.style.backgroundColor;
-        btn.style.border = `${button.style.borderWidth} solid ${button.style.borderColor}`;
-        btn.style.borderRadius = button.style.borderRadius;
-        btn.style.padding = button.style.padding;
-        btn.style.width = button.style.width;
-
-        // Add tooltip if available
-        if (button.tooltip) {
-          btn.setAttribute("data-tooltip", button.tooltip);
-        }
-
-        // Attach click event to send the command
-        btn.onclick = () => sendCommand(button.command);
-
-        container.appendChild(btn);
-      });
-    }
-
-    /*
-    //<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-    //"icon": "fas fa-play-circle",
-
-    function renderButtons(buttons) {
-      const container = document.getElementById("buttonContainer");
-      container.innerHTML = ""; // Clear previous content
-
-      buttons.forEach(button => {
-        const btn = document.createElement("button");
-        btn.className = "button tooltip";
-        btn.textContent = button.label;
-
         // Apply inline styles with defaults
-        btn.style.color = button.style?.color || "var(--text-color)";
-        btn.style.fontSize = button.style?.fontSize || "var(--font-size)";
-        btn.style.backgroundColor = button.style?.backgroundColor || "var(--button-bg)";
-        btn.style.border = `${button.style?.borderWidth || "2px"} solid ${button.style?.borderColor || "var(--button-border)"}`;
-        btn.style.borderRadius = button.style?.borderRadius || "var(--border-radius)";
-        btn.style.padding = button.style?.padding || "var(--padding-small)";
-        btn.style.width = button.style?.width || "100%"; // Default to full width for responsiveness
+        // btn.style.color = button.style?.color || "var(--text-color)";
+        // btn.style.fontSize = button.style?.fontSize || "var(--font-size)";
+        // btn.style.backgroundColor = button.style?.backgroundColor || "var(--button-bg)";
+        // btn.style.border = `${button.style?.borderWidth || "2px"} solid ${button.style?.borderColor || "var(--button-border)"}`;
+        // btn.style.borderRadius = button.style?.borderRadius || "var(--border-radius)";
+        // btn.style.padding = button.style?.padding || "var(--padding-small)";
+        // btn.style.width = button.style?.width || "100%";
 
         // Add tooltip if available
         if (button.tooltip) {
-          btn.setAttribute("data-tooltip", button.tooltip);
+          //btn.setAttribute("data-tooltip", button.tooltip);
         }
-
-        // Attach click event to send the command
-        btn.onclick = () => sendCommand(button.command);
-
-        container.appendChild(btn);
-      });
-    }
-    */
-
-    function renderButtons(buttons) {
-      const container = document.getElementById("buttonContainer");
-      container.innerHTML = ""; // Clear previous content
-
-      buttons.forEach(button => {
-        const btn = document.createElement("button");
-        btn.className = "button tooltip";
-
-        // Apply inline styles with defaults
-        btn.style.color = button.style?.color || "var(--text-color)";
-        btn.style.fontSize = button.style?.fontSize || "var(--font-size)";
-        btn.style.backgroundColor = button.style?.backgroundColor || "var(--button-bg)";
-        btn.style.border = `${button.style?.borderWidth || "2px"} solid ${button.style?.borderColor || "var(--button-border)"}`;
-        btn.style.borderRadius = button.style?.borderRadius || "var(--border-radius)";
-        btn.style.padding = button.style?.padding || "var(--padding-small)";
-        btn.style.width = button.style?.width || "100%";
-
-        // Add tooltip if available
-        if (button.tooltip) {
-          btn.setAttribute("data-tooltip", button.tooltip);
-        }
-
-        // Create an icon element if specified
-        if (button.icon) {
-          const icon = document.createElement("i");
-          icon.className = button.icon; // Assign the icon class from JSON
-          icon.style.marginRight = "10px"; // Add spacing between icon and text
-          btn.appendChild(icon);
-        }
-
-        // Add button label
-        const label = document.createTextNode(button.label);
-        btn.appendChild(label);
 
         // Attach click event to send the command
         btn.onclick = () => sendCommand(button.command);
@@ -221,6 +139,14 @@
 
     // Send Command to Server
     async function sendCommand(command) {
+
+      // Trigger vibration haptic feedback for 50ms
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      } else {
+        console.log("Vibration API not supported on this device.");
+      }
+
       try {
         const response = await fetch(`${endPoint}/command/set`, {
           method: "POST",
@@ -244,4 +170,5 @@
     loadButtons();
   </script>
 </body>
+
 </html>
