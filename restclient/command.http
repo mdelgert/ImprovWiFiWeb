@@ -1,12 +1,10 @@
-@baseUrl = http://demo2.local
+@baseUrl = http://demo1.local
 @token = test
 
 ### send command1
 POST {{baseUrl}}/command/set
-Authorization: Bearer {{token}}
-Content-Type: application/json
 
-hid keys1 test
+tft print button1
 ###
 
 ### send command2

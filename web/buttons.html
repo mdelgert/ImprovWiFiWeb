@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Buttons</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Device Info Page displaying ESP32 hardware and system information." />
+  <link rel="stylesheet" href="styles.css" />
+  <script type="module" src="global.js" defer></script>
+  <style>
+    #buttonContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .button {
+      display: block;
+      padding: var(--padding-small) var(--padding-large);
+      background-color: var(--button-bg);
+      color: var(--text-color);
+      border: 2px solid var(--button-border);
+      border-radius: var(--border-radius);
+      font-size: var(--font-size);
+      width: 100%;
+      /* Full width for mobile */
+      max-width: 400px;
+      /* Limit width for larger screens */
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+  <main>
+    <div id="buttonContainer"></div>
+    <div id="message-box" class="message-box hidden" aria-live="polite" role="alert"></div>
+    <div id="footer-container"></div>
+  </main>
+  <script>
+    const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+
+    // Fetch and Render Buttons
+    async function loadButtons() {
+      try {
+        const response = await fetch(`${endPoint}/file?filename=/buttons.json`);
+        if (!response.ok) throw new Error("Failed to fetch buttons");
+        const data = await response.json();
+        renderButtons(data.buttons);
+      } catch (error) {
+        console.error(error);
+        document.getElementById("buttonContainer").innerHTML = "<p>Error loading buttons.</p>";
+      }
+    }
+
+    // Render Buttons Dynamically
+    function renderButtons(buttons) {
+      const container = document.getElementById("buttonContainer");
+      container.innerHTML = ""; // Clear previous content
+
+      buttons.forEach(button => {
+        const btn = document.createElement("button");
+        btn.className = "button tooltip";
+        btn.textContent = button.label;
+
+        // Apply inline styles
+        btn.style.color = button.style.color;
+        btn.style.fontSize = button.style.fontSize;
+        btn.style.backgroundColor = button.style.backgroundColor;
+        btn.style.border = `${button.style.borderWidth} solid ${button.style.borderColor}`;
+        btn.style.borderRadius = button.style.borderRadius;
+        btn.style.padding = button.style.padding;
+        btn.style.width = button.style.width;
+
+        // Add tooltip if available
+        if (button.tooltip) {
+          btn.setAttribute("data-tooltip", button.tooltip);
+        }
+
+        // Attach click event to send the command
+        btn.onclick = () => sendCommand(button.command);
+
+        container.appendChild(btn);
+      });
+    }
+
+    // Send Command to Server
+    async function sendCommand(command) {
+      try {
+        const response = await fetch(`${endPoint}/command/set`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain",
+          },
+          body: command,
+        });
+        if (response.ok) {
+          //alert(`Command sent: ${command}`);
+        } else {
+          alert("Failed to send command");
+        }
+      } catch (error) {
+        console.error("Error sending command:", error);
+        alert("Error sending command");
+      }
+    }
+
+    // Load buttons on page load
+    loadButtons();
+  </script>
+</body>
+</html>

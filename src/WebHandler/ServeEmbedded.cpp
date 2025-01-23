@@ -22,7 +22,8 @@ void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, 
 void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
 {
     //serveEmbeddedFile(server, "/codemirror/codemirror_min.css", codemirror_css_start, codemirror_css_end, "text/css");
-   
+    serveEmbeddedFile(server, "/buttons.html", buttons_html_start, buttons_html_end, "text/html");
+    serveEmbeddedFile(server, "/buttons.js", buttons_js_start, buttons_js_end, "application/javascript");
     serveEmbeddedFile(server, "/device.html", device_html_start, device_html_end, "text/html");
     serveEmbeddedFile(server, "/device.js", device_js_start, device_js_end, "application/javascript");
     serveEmbeddedFile(server, "/editor.css", editor_css_start, editor_css_end, "text/css");
@@ -45,7 +46,6 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/terminal.html", terminal_html_start, terminal_html_end, "text/html");
     serveEmbeddedFile(server, "/terminal.js", terminal_js_start, terminal_js_end, "application/javascript");
     serveEmbeddedFile(server, "/timezones.json", timezones_json_start, timezones_json_end, "application/json");
-
     debugI("ServeEmbedded handleGetRequest registered");
 }
 
