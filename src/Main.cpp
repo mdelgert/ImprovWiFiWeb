@@ -17,6 +17,7 @@
 #include "CronHandler.h"
 #include "SystemMonitor.h"
 #include "DownloadHandler.h"
+#include "AesHandler.h"
 
 void setup()
 {
@@ -39,6 +40,7 @@ void setup()
   CronHandler::init();
   SystemMonitor::init();
   DownloadHandler::init();
+  AesHandler::init();
   // GfxHandler::printMessage(SOFTWARE_VERSION);
   // LedHandler::setDefaultBrightness(100);
   // LedHandler::setColorByName("Purple");
