@@ -1,6 +1,7 @@
 https://heroicons.com/
 https://feathericons.com/
-
+https://icons.getbootstrap.com/
+https://tabler.io/icons/icon/files
 
 folder
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">

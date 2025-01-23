@@ -261,13 +261,42 @@ async function createFolder() {
     }
 }
 
+async function runFile() {
+    const filename = currentPath + currentFile;
+
+    if (!currentFile) {
+        showNotification('No file selected to run.', 'error');
+        return;
+    }
+
+    try {
+        const response = await fetch(`${endPoint}/command/set`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain',
+            },
+            body: `script file ${filename}`, // Raw text body
+        });
+
+        const data = await response.json();
+        if (data.status === 'success') {
+            showNotification(`Command executed successfully for ${filename}!`);
+        } else {
+            showNotification(`Error executing command: ${data.message}`, 'error');
+        }
+    } catch (err) {
+        console.error('Error running file:', err);
+        showNotification('Failed to execute command.', 'error');
+    }
+
+    showNotification(`Run file: ${filename}`);
+}
+
 async function deleteItem(isFolder) {
 
     const endpoint = isFolder ? '/folder?foldername=' : '/file?filename=';
     const item = isFolder ? currentPath : currentPath + currentFile;
     const fullPath = `${endPoint}${endpoint}${encodeURIComponent(item)}`;
-
-    //alert(fullPath);
     const confirmed = window.confirm(`Are you sure you want to delete ${item}?`);
 
     if (!confirmed) {
@@ -315,4 +344,5 @@ async function renameItem() {
 }
 
 refreshFiles();
+
 document.querySelector('.CodeMirror').style.fontSize = '18px';
