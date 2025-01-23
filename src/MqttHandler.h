@@ -12,6 +12,7 @@ class MqttHandler
 private:
     static void connectToMqtt();
     static void mqttCallback(char* topic, byte* payload, unsigned int length);
+    static void registerCommands();
 
 public:
     static void init();

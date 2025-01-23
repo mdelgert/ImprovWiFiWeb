@@ -33,6 +33,8 @@ void MqttHandler::init()
 
     // Attempt initial connection
     connectToMqtt();
+
+    registerCommands();
 }
 
 void MqttHandler::loop()
@@ -65,8 +67,6 @@ void MqttHandler::publish(const char *topic, const char *message)
     debugI("MqttHandler: Publishing on [%s]: %s", topic, message);
     mqttClient.publish(topic, message);
 }
-
-// ------------------- Private functions -------------------
 
 void MqttHandler::connectToMqtt()
 {
@@ -125,6 +125,30 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
         //Debug.wsOnReceive(message.c_str());
         CommandHandler::handleCommand(message);
     }
+}
+
+void MqttHandler::registerCommands()
+{
+    CommandHandler::registerCommand("mqtt", [](const String &command){
+        String cmd, args;
+        CommandHandler::parseCommand(command, cmd, args);
+
+        if (CommandHandler::equalsIgnoreCase(cmd, "msg")) {
+            MqttHandler::publish(settings.mqttPubTopic.c_str(), args.c_str());
+        }
+        if (CommandHandler::equalsIgnoreCase(cmd, "topic")) {
+            int delimiterPos = args.indexOf(' ');
+            String topic = args.substring(0, delimiterPos);
+            String message = args.substring(delimiterPos + 1);
+            MqttHandler::publish(topic.c_str(), message.c_str());
+        } 
+        else {
+            debugW("Unknown MQTT subcommand: %s", cmd.c_str());
+        } }, "Handles MQTT commands. Usage: MQTT <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  msg <message> - Publishes a message to the MQTT broker default topic\n"
+                                         "  topic <topic> <message> - Publishes a message to the specified topic"
+        );
 }
 
 #endif // ENABLE_MQTT_HANDLER
