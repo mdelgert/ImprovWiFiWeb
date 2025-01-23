@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <title>Buttons</title>
   <meta charset="UTF-8" />
@@ -32,7 +31,7 @@
     }
 
     .button {
-      display: block;
+      /* display: block; */
       padding: var(--padding-small) var(--padding-large);
       background-color: var(--button-bg);
       color: var(--text-color);
@@ -44,6 +43,10 @@
       text-align: center;
       cursor: pointer;
       transition: all 0.3s ease;
+      /*Icons*/
+      font-size: 1.2rem;
+      vertical-align: middle;
+      margin-right: 10px;
     }
 
     .button:hover {
@@ -87,7 +90,6 @@
     }
   </style>
 </head>
-
 <body>
   <div id="navbar-container"></div>
   <main>
@@ -111,7 +113,6 @@
       }
     }
 
-    /*
     function renderButtons(buttons) {
       const container = document.getElementById("buttonContainer");
       container.innerHTML = ""; // Clear previous content
@@ -141,7 +142,10 @@
         container.appendChild(btn);
       });
     }
-    */
+
+    /*
+    //<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    //"icon": "fas fa-play-circle",
 
     function renderButtons(buttons) {
       const container = document.getElementById("buttonContainer");
@@ -165,6 +169,48 @@
         if (button.tooltip) {
           btn.setAttribute("data-tooltip", button.tooltip);
         }
+
+        // Attach click event to send the command
+        btn.onclick = () => sendCommand(button.command);
+
+        container.appendChild(btn);
+      });
+    }
+    */
+
+    function renderButtons(buttons) {
+      const container = document.getElementById("buttonContainer");
+      container.innerHTML = ""; // Clear previous content
+
+      buttons.forEach(button => {
+        const btn = document.createElement("button");
+        btn.className = "button tooltip";
+
+        // Apply inline styles with defaults
+        btn.style.color = button.style?.color || "var(--text-color)";
+        btn.style.fontSize = button.style?.fontSize || "var(--font-size)";
+        btn.style.backgroundColor = button.style?.backgroundColor || "var(--button-bg)";
+        btn.style.border = `${button.style?.borderWidth || "2px"} solid ${button.style?.borderColor || "var(--button-border)"}`;
+        btn.style.borderRadius = button.style?.borderRadius || "var(--border-radius)";
+        btn.style.padding = button.style?.padding || "var(--padding-small)";
+        btn.style.width = button.style?.width || "100%";
+
+        // Add tooltip if available
+        if (button.tooltip) {
+          btn.setAttribute("data-tooltip", button.tooltip);
+        }
+
+        // Create an icon element if specified
+        if (button.icon) {
+          const icon = document.createElement("i");
+          icon.className = button.icon; // Assign the icon class from JSON
+          icon.style.marginRight = "10px"; // Add spacing between icon and text
+          btn.appendChild(icon);
+        }
+
+        // Add button label
+        const label = document.createTextNode(button.label);
+        btn.appendChild(label);
 
         // Attach click event to send the command
         btn.onclick = () => sendCommand(button.command);
@@ -198,5 +244,4 @@
     loadButtons();
   </script>
 </body>
-
 </html>
