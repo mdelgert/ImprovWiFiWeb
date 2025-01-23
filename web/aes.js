@@ -8,7 +8,8 @@ window.AesHelper = {
     KEY_SIZE: 32, // 256 bits = 32 bytes
     BLOCK_SIZE: 16, // 128 bits = 16 bytes
     SALT_SIZE: 16, // 16 bytes for the salt
-    ITERATIONS: 10000, // PBKDF2 iterations
+    //ITERATIONS: 10000, // PBKDF2 iterations
+    ITERATIONS: 1000, // PBKDF2 iterations
 
     /**
      * Encrypts the given plaintext using the specified password.
@@ -141,3 +142,50 @@ window.AesHelper = {
         return dec.decode(decryptedData);
     },
 };
+
+
+window.addEventListener('DOMContentLoaded', () => {
+    const encryptBtn = document.getElementById('encrypt-btn');
+    const decryptBtn = document.getElementById('decrypt-btn');
+    const textArea = document.getElementById('aes-textarea');
+    const passwordInput = document.getElementById('aes-password');
+    const messageBox = document.getElementById('message-box');
+
+    encryptBtn.addEventListener('click', async () => {
+        const text = textArea.value;
+        const password = passwordInput.value;
+
+        if (!text || !password) {
+            showMessage("Please provide both text and password.", "success");
+            return;
+        }
+
+        try {
+            const encryptedText = await window.AesHelper.encrypt(text, password);
+            textArea.value = encryptedText;
+            showMessage("Text encrypted successfully!", "success");
+        } catch (err) {
+            console.error('Encryption error:', err);
+            showMessage("Encryption failed. Check the console for details.", "error");
+        }
+    });
+
+    decryptBtn.addEventListener('click', async () => {
+        const text = textArea.value;
+        const password = passwordInput.value;
+
+        if (!text || !password) {
+            showMessage("Please provide both text and password.", "success");
+            return;
+        }
+
+        try {
+            const decryptedText = await window.AesHelper.decrypt(text, password);
+            textArea.value = decryptedText;
+            showMessage("Text decrypted successfully!", "success");
+        } catch (err) {
+            console.error('Decryption error:', err);
+            showMessage("Decryption failed. Check the console for details.", "error");
+        }
+    });
+});
