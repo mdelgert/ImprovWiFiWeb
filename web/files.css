@@ -89,6 +89,22 @@
      background-color: #555;
  }
 
+ .actionIcon {
+    width: 1.5em;
+    height: 1.5em;
+    fill: currentColor;
+    padding: 10px;
+    cursor: pointer; /* Ensures the pointer cursor is shown */
+    transition: transform 0.2s ease, fill 0.2s ease; /* Smooth animation for hover effects */
+}
+
+.actionIcon:hover {
+    transform: scale(1.2); /* Slightly enlarge the icon on hover */
+    fill: #007bff; /* Change the color on hover */
+    background-color: rgba(0, 123, 255, 0.1); /* Optional: Add a subtle background color */
+    border-radius: 50%; /* Optional: Round the edges for a circular hover effect */
+}
+
  .file-list {
      list-style: none;
      margin: 0;
