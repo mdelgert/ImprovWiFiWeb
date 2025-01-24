@@ -173,7 +173,7 @@ async function openFile(file) {
             mode = 'shell';
         } else if (currentFile.endsWith('.ps1')) {
             mode = 'powershell';
-        } else if (currentFile.endsWith('.scr')) {
+        } else if (currentFile.endsWith('.ptxt')) {
             mode = 'custom';
         } else if (currentFile.endsWith('')) {
             mode = 'custom';
