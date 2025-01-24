@@ -62,4 +62,5 @@ void loop()
   OTAHandler::loop();
   DeviceHandler::loop();
   CronHandler::loop();
+  JiggleHandler::loop();
 }

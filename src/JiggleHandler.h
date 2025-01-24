@@ -10,12 +10,13 @@ class JiggleHandler
 {
 private:
     static NonBlockingTimer jiggleTimer;
-    static bool jiggleEnabled;
     static int jiggleInterval;
     static int jiggleAmount;
-    static void registerCommands();
+    static bool showCountdown;
+    static bool jiggleEnabled;
     static void performJiggle();
-
+    static void registerCommands();
+    
 public:
     static void init();
     static void loop();

@@ -31,16 +31,6 @@ public:
     {
         previousMillis = millis();
     }
-
-    unsigned long remaining()
-    {
-        unsigned long currentMillis = millis();
-        if (currentMillis - previousMillis >= interval)
-        {
-            return 0; // Timer has expired
-        }
-        return interval - (currentMillis - previousMillis);
-    }
 };
 
 // Usage:

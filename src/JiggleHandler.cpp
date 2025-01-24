@@ -4,15 +4,17 @@
 
 #include "JiggleHandler.h"
 #include "DeviceHandler.h"
+#include "GfxHandler.h"
 
 // Define the default interval and amount in one place
 constexpr int DEFAULT_JIGGLE_INTERVAL = 60000;
 constexpr int DEFAULT_JIGGLE_AMOUNT = 5;
 
-bool JiggleHandler::jiggleEnabled = false;                            // Jiggle initially disabled
 NonBlockingTimer JiggleHandler::jiggleTimer(DEFAULT_JIGGLE_INTERVAL); // Use the default interval here
 int JiggleHandler::jiggleInterval = DEFAULT_JIGGLE_INTERVAL;          // Use the same default interval here
 int JiggleHandler::jiggleAmount = DEFAULT_JIGGLE_AMOUNT;              // Default jiggle amount
+bool JiggleHandler::showCountdown = true;                             // Show countdown by default
+bool JiggleHandler::jiggleEnabled = false;                            // Jiggle initially disabled
 
 void JiggleHandler::init()
 {
@@ -22,9 +24,19 @@ void JiggleHandler::init()
 
 void JiggleHandler::loop()
 {
-    if (jiggleEnabled && jiggleTimer.isReady())
+    if (jiggleEnabled)
     {
-        performJiggle();
+        if (showCountdown)
+        {
+            unsigned long timeRemaining = jiggleTimer.remaining();
+            GfxHandler::printMessage(String("Next jiggle in: ") + timeRemaining + " ms");
+            debugI("Next jiggle in: %lu ms", timeRemaining);
+        }
+
+        if (jiggleTimer.isReady())
+        {
+            performJiggle();
+        }
     }
 }
 
@@ -82,6 +94,33 @@ void JiggleHandler::registerCommands()
                 debugW("Invalid amount: %s", args.c_str());
             }
         }
+        else if (CommandHandler::equalsIgnoreCase(cmd, "countdown"))
+        {
+            if (CommandHandler::equalsIgnoreCase(args, "true"))
+            {
+                showCountdown = true;
+                debugI("Countdown display enabled.");
+            }
+            else if (CommandHandler::equalsIgnoreCase(args, "false"))
+            {
+                showCountdown = false;
+                debugI("Countdown display disabled.");
+            }
+            else
+            {
+                debugW("Invalid argument for countdown: %s", args.c_str());
+            }
+        }
+        else if (CommandHandler::equalsIgnoreCase(cmd, "state"))
+        {
+            String stateMessage = String("Jiggle State:\n") +
+                                  "  Enabled: " + (jiggleEnabled ? "true" : "false") + "\n" +
+                                  "  Interval: " + jiggleInterval + " ms\n" +
+                                  "  Amount: " + jiggleAmount + " pixels\n" +
+                                  "  Countdown: " + (showCountdown ? "true" : "false");
+            debugI("%s", stateMessage.c_str());
+            //GfxHandler::printMessage(stateMessage);
+        }
         else
         {
             debugW("Unknown jiggle subcommand: %s", cmd.c_str());
@@ -90,7 +129,9 @@ void JiggleHandler::registerCommands()
              "  true - Enables mouse jiggle\n"
              "  false - Disables mouse jiggle\n"
              "  time <ms> - Sets the jiggle interval in milliseconds\n"
-             "  amount <pixels> - Sets the jiggle amount in pixels");
+             "  amount <pixels> - Sets the jiggle amount in pixels\n"
+             "  countdown <true|false> - Enables or disables countdown display\n"
+             "  state - Prints the current jiggle state");
 }
 
 #endif // ENABLE_JIGGLE_HANDLER
