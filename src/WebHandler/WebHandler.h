@@ -12,6 +12,7 @@
 #include "ServeEmbedded.h"
 #include "ServeFiles.h"
 #include "ServeCommand.h"
+#include "ServeButtons.h"
 
 #define ENABLE_SERVE_ACTIONS
 
