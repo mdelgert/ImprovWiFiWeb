@@ -18,6 +18,7 @@
 #include "SystemMonitor.h"
 #include "DownloadHandler.h"
 #include "AesHandler.h"
+#include "JiggleHandler.h"
 
 void setup()
 {
@@ -41,6 +42,7 @@ void setup()
   DownloadHandler::init();
   AesHandler::init();
   TimeHandler::init();
+  JiggleHandler::init();
   // GfxHandler::printMessage(SOFTWARE_VERSION);
   // LedHandler::setDefaultBrightness(100);
   // LedHandler::setColorByName("Purple");
@@ -59,4 +61,5 @@ void loop()
   MqttHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
+  CronHandler::loop();
 }

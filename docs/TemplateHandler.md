@@ -1,10 +1,12 @@
-I would like to implement a DownloadHandler for my esp32-s3 microcontroller project.
+I would like to implement a ExampleHandler for my esp32-s3 microcontroller project.
 
-The functionality should register a command like download, wget or whatever is appropriated.
+DeviceHandler::sendMouseMovement(x, y);
 
-For example I would like to run command https://raw.githubusercontent.com/mdelgert/ImprovWiFiWeb/refs/heads/main/scripts/hello1.scr
+The functionality should register a commands like 
 
-Then the file will download to LittleFS.
+handler exampel test
+
+or whatever is appropriated.
 
 Please assume the code base already has wifi connectivity and time is already synced.
 
