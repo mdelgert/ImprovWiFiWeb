@@ -7,9 +7,11 @@ class NonBlockingTimer
 private:
     unsigned long previousMillis;
     unsigned long interval;
+    unsigned long pausedAt = 0;
 
 public:
-    NonBlockingTimer(unsigned long interval) : previousMillis(0), interval(interval) {}
+    NonBlockingTimer(unsigned long interval) : interval(interval) { reset(); }
+    NonBlockingTimer() : previousMillis(0), interval(0) {}
 
     void setInterval(unsigned long newInterval)
     {
@@ -41,17 +43,39 @@ public:
         }
         return interval - (currentMillis - previousMillis);
     }
+
+    void stop()
+    {
+        previousMillis = millis() + interval; // Effectively disables the timer
+    }
+
+    bool isRunning()
+    {
+        return remaining() > 0;
+    }
+
+    void pause()
+    {
+        pausedAt = millis() - previousMillis;
+        previousMillis = 0; // Mark as paused
+    }
+
+    void resume()
+    {
+        if (pausedAt > 0)
+        {
+            previousMillis = millis() - pausedAt;
+            pausedAt = 0;
+        }
+    }
+
+    void debugInfo()
+    {
+        Serial.print("Timer Info: Interval=");
+        Serial.print(interval);
+        Serial.print(" ms, Remaining=");
+        Serial.print(remaining());
+        Serial.print(" ms, PreviousMillis=");
+        Serial.println(previousMillis);
+    }
 };
-
-// Usage:
-// #include "NonBlockingTimer.h"
-// NonBlockingTimer myTimer(5000);
-
-// if (myTimer.isReady())
-// {
-//     debugV("* This is a message of debug level VERBOSE");
-//     debugD("* This is a message of debug level DEBUG");
-//     debugI("* This is a message of debug level INFO");
-//     debugW("* This is a message of debug level WARNING");
-//     debugE("* This is a message of debug level ERROR");
-// }

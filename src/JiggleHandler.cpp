@@ -28,9 +28,18 @@ void JiggleHandler::loop()
     {
         if (showCountdown)
         {
-            unsigned long timeRemaining = jiggleTimer.remaining();
-            GfxHandler::printMessage(String("Next jiggle in: ") + timeRemaining + " ms");
-            debugI("Next jiggle in: %lu ms", timeRemaining);
+            static unsigned long lastCountdownUpdate = 0; // Tracks the last update time for the countdown
+            unsigned long currentMillis = millis();
+
+            if (currentMillis - lastCountdownUpdate >= 1000) // Update every 1 second
+            {
+                lastCountdownUpdate = currentMillis;
+
+                unsigned long timeRemaining = jiggleTimer.remaining();
+                unsigned long secondsRemaining = (timeRemaining + 999) / 1000; // Round up to the nearest second
+                GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining + " s");
+                debugI("Jiggle in: %lu s", secondsRemaining);
+            }
         }
 
         if (jiggleTimer.isReady())
