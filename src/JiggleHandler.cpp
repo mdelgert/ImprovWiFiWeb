@@ -37,8 +37,9 @@ void JiggleHandler::loop()
 
                 unsigned long timeRemaining = jiggleTimer.remaining();
                 unsigned long secondsRemaining = (timeRemaining + 999) / 1000; // Round up to the nearest second
-                GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining + " s");
-                debugI("Jiggle in: %lu s", secondsRemaining);
+                //GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining + " s");
+                GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining);
+                //debugI("Jiggle in: %lu s", secondsRemaining);
             }
         }
 
