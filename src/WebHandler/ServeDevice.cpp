@@ -24,14 +24,21 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["deviceName"]   = settings.deviceName;
         //doc["timezone"]    = settings.timezone;
         doc["timezone"]    = TimeHandler::getDefaultRegion();
-        
+
         //Need to cleanup when clock was not set caused reboot loop
         doc["bootCount"]    = settings.bootCount;
-        doc["bootTime"] = settings.bootTime;
+
         doc["upTime"]    = settings.upTime;
+
+        //doc["bootTime"] = settings.bootTime;
+        time_t bootTime = settings.bootTime; // Previously saved timestamp
+        String formattedBootTime = TimeHandler::formatDateTime("%I:%M:%S %p %m-%d-%Y", bootTime);
         
-        doc["currentTime"]  = TimeHandler::formatDateTime("%I:%M:%S %p");
-        doc["currentDate"]  = TimeHandler::formatDateTime("%m-%d-%Y");
+        doc["bootTime"] = formattedBootTime;
+        doc["currentTime"]  = TimeHandler::formatDateTime("%I:%M:%S %p %m-%d-%Y");
+
+        // doc["currentTime"]  = TimeHandler::formatDateTime("%I:%M:%S %p");
+        // doc["currentDate"]  = TimeHandler::formatDateTime("%m-%d-%Y");
 
         doc["ssid"]        = WiFi.SSID();
         doc["ip"]          = WiFi.localIP().toString();

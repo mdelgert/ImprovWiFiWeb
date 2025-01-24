@@ -14,15 +14,16 @@ class TimeHandler
 {
 private:
     static bool parsePosixOffsets(const char* posixStr, long* gmtOffset, int* daylightOffset);
-    static void logAllDateTimeFormats();
     
 public:
+    static bool getTimeSyncStatus();
+    static const char* getDefaultRegion();
     static void init();
     static void loop();
     static void syncTime();
     static long getLinuxTime();
-    static String formatDateTime(const char* format);
-    static const char* getDefaultRegion();
+    static String formatDateTime(const char *format, time_t timestamp = 0);
+    static void logAllDateTimeFormats();
 };
 
 #else
@@ -34,12 +35,14 @@ public:
 class TimeHandler
 { 
 public:
-     static void init() {}
+    static bool getTimeSyncStatus() { return false; }
+    static const char* getDefaultRegion() { return ""; }
+    static void init() {}
     static void loop() {}
     static void syncTime() {}
     static long getLinuxTime() { return 0; }
-    static String formatDateTime(const char* format) { return ""; }
-    static const char* getDefaultRegion() { return ""; }
+    static String formatDateTime(const char* format, time_t timestamp = 0) { return ""; }
+    static void logAllDateTimeFormats() {}
 };
 
 #endif // ENABLE_TIME_HANDLER

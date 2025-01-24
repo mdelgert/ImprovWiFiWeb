@@ -19,7 +19,12 @@ static int daylightOffset_sec = 0;
 
 // Flag to indicate if time has been synchronized
 static bool isTimeSynced = false;
-static NonBlockingTimer timeDelay(1000);
+//static NonBlockingTimer timeDelay(1000);
+
+bool TimeHandler::getTimeSyncStatus()
+{
+    return isTimeSynced;
+}
 
 const char *TimeHandler::getDefaultRegion()
 {
@@ -56,12 +61,12 @@ void TimeHandler::loop()
 {
     if (!isTimeSynced)
     {
-        //syncTime();
-        if (timeDelay.isReady())
-        {
-            debugI("TimeHandler: Resyncing time...");
-            syncTime();
-        }
+        syncTime();
+        // if (timeDelay.isReady())
+        // {
+        //     debugI("TimeHandler: Resyncing time...");
+        //     syncTime();
+        // }
     }
 }
 
@@ -118,17 +123,26 @@ long TimeHandler::getLinuxTime()
     return time(nullptr); // Returns the current time as seconds since epoch
 }
 
-String TimeHandler::formatDateTime(const char *format)
+String TimeHandler::formatDateTime(const char *format, time_t timestamp)
 {
     struct tm timeinfo;
-    time_t now = time(nullptr);
 
-    if (now < 100000)
+    // Use the provided timestamp, or fall back to the current time
+    time_t timeToFormat = (timestamp != 0) ? timestamp : time(nullptr);
+
+    if (timeToFormat < 100000)
     {
         return "Clock not synced.";
     }
 
-    if (!getLocalTime(&timeinfo))
+    // Convert the time_t to a tm struct
+    // if (!gmtime_r(&timeToFormat, &timeinfo)) // Use gmtime_r for thread safety
+    // {
+    //     return "Time unavailable.";
+    // }
+
+    // Convert the time_t to a tm struct for local time
+    if (!localtime_r(&timeToFormat, &timeinfo)) // Use localtime_r for thread safety
     {
         return "Time unavailable.";
     }

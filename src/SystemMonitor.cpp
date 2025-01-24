@@ -14,12 +14,6 @@ TaskHandle_t systemMonitorTaskHandle = nullptr;
 // Function prototypes
 void SystemMonitor::init()
 {
-  // Update boot count was causing reboot loop when clock was not set need to cleanup this logic
-  settings.bootCount++;
-  settings.bootTime = time(nullptr);
-  settings.upTime++;
-  ConfigManager::save();
-
   // Create the SystemMonitor task
   xTaskCreatePinnedToCore(
       systemMonitorTask,        // Task function
@@ -82,6 +76,17 @@ void SystemMonitor::handleSecondCheck()
   settings.upTime++;
   CronHandler::executeJobs();
   TimeHandler::loop();
+
+  // Increment boot count and update boot time only once after time is synced
+  static bool bootUpdated = false; // Tracks if the update has been performed
+  if (!bootUpdated && TimeHandler::getTimeSyncStatus())
+  {
+    settings.bootCount++;
+    settings.bootTime = time(nullptr);
+    ConfigManager::save();
+    bootUpdated = true; // Mark as updated
+    debugV("Boot count and boot time updated.");
+  }
 }
 
 void SystemMonitor::handleMinuteCheck()
