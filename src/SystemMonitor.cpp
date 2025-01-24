@@ -16,8 +16,8 @@ void SystemMonitor::init()
 {
   // Update boot count was causing reboot loop when clock was not set need to cleanup this logic
   settings.bootCount++;
-  //settings.bootTime = time(nullptr);
-  //settings.upTime++;
+  settings.bootTime = time(nullptr);
+  settings.upTime++;
   ConfigManager::save();
 
   // Create the SystemMonitor task
@@ -81,6 +81,7 @@ void SystemMonitor::handleSecondCheck()
   debugV("SystemMonitor: Running second-specific task.");
   settings.upTime++;
   CronHandler::executeJobs();
+  TimeHandler::loop();
 }
 
 void SystemMonitor::handleMinuteCheck()

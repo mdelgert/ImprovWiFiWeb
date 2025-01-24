@@ -40,6 +40,7 @@ void setup()
   SystemMonitor::init();
   DownloadHandler::init();
   AesHandler::init();
+  //TimeHandler::init(settings.timezone.c_str());
   TimeHandler::init();
   // GfxHandler::printMessage(SOFTWARE_VERSION);
   // LedHandler::setDefaultBrightness(100);
@@ -59,4 +60,5 @@ void loop()
   MqttHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
+  TimeHandler::loop();
 }

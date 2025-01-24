@@ -1,5 +1,5 @@
 ## Active
-- [] Implement AES
+- [] Allow setting timezone
 - [] Copy all libraries into project
 - [] Confirm or centralize LittleFS intialization
 - [] Implement backup and restore of LittleFS
@@ -36,6 +36,7 @@
 - [x] Implemente modal
 - [x] Dynamic buttons
 - [x] Implment task manager
+- [x] Implement AES
 
 ## Bugs
 Github pages not deploying from tag. Modified to deploy from action.

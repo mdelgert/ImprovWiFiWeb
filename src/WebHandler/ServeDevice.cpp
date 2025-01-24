@@ -22,14 +22,16 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         JsonDocument doc;
 
         doc["deviceName"]   = settings.deviceName;
-        doc["timezone"]    = settings.timezone;
+        //doc["timezone"]    = settings.timezone;
+        doc["timezone"]    = TimeHandler::getDefaultRegion();
         
         //Need to cleanup when clock was not set caused reboot loop
-        //doc["bootCount"]    = settings.bootCount;
-        //doc["bootTime"] = settings.bootTime;
-        //doc["upTime"]    = settings.upTime;
-        //doc["currentTime"]  = TimeHandler::formatDateTime("%I:%M:%S %p");
-        //doc["currentDate"]  = TimeHandler::formatDateTime("%m-%d-%Y");
+        doc["bootCount"]    = settings.bootCount;
+        doc["bootTime"] = settings.bootTime;
+        doc["upTime"]    = settings.upTime;
+        
+        doc["currentTime"]  = TimeHandler::formatDateTime("%I:%M:%S %p");
+        doc["currentDate"]  = TimeHandler::formatDateTime("%m-%d-%Y");
 
         doc["ssid"]        = WiFi.SSID();
         doc["ip"]          = WiFi.localIP().toString();
@@ -53,6 +55,16 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["freePsram"]   = ESP.getFreePsram();
         doc["lastResetTime"] = esp_timer_get_time(); // Example: microseconds since startup
         
+        // LittleFS Info
+        if (LittleFS.begin(true)) {
+            doc["littleFsTotalSpace"] = LittleFS.totalBytes();       // Total flash allocated for LittleFS
+            doc["littleFsUsedSpace"] = LittleFS.usedBytes();         // Space already used in LittleFS
+            doc["littleFsFreeSpace"] = LittleFS.totalBytes() - LittleFS.usedBytes(); // Available space
+            LittleFS.end();
+        } else {
+            doc["littleFsError"] = "Failed to mount LittleFS";
+        }
+
          // Add reset reason
         esp_reset_reason_t resetReason = esp_reset_reason();
         switch (resetReason) {

@@ -17,10 +17,12 @@ private:
     static void logAllDateTimeFormats();
     
 public:
+    //static void init(const char* timezone);
     static void init();
     static void loop();
     static void syncTime();
     static long getLinuxTime();
+    //static const char* formatDateTime(const char* format);
     static String formatDateTime(const char* format);
     static const char* getDefaultRegion();
 };
@@ -34,10 +36,12 @@ public:
 class TimeHandler
 { 
 public:
+    //static void init(const char* timezone) {}
      static void init() {}
     static void loop() {}
     static void syncTime() {}
     static long getLinuxTime() { return 0; }
+    //static const char* formatDateTime(const char* format) { return ""; }
     static String formatDateTime(const char* format) { return ""; }
     static const char* getDefaultRegion() { return ""; }
 };

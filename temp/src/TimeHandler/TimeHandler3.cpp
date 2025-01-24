@@ -3,13 +3,12 @@
 #include "TimeHandler.h"
 
 // Default region hardcoded
-//const char *defaultRegion = "Etc/Zulu";
-const char *defaultRegion = "America/New_York";
+const char *defaultRegion = "Etc/Zulu";
+//const char *defaultRegion = "America/New_York";
 
 // NTP servers the public rate limit (without an API key) is 5 requests in a rolling 30 second window;
 // the rate limit with an API key is 50 requests in a rolling 30 second window. A query interval of
 // 10 minutes or longer is generally acceptable for both services.
-
 static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
@@ -26,9 +25,22 @@ const char *TimeHandler::getDefaultRegion()
     return defaultRegion;
 }
 
+//void TimeHandler::init(const char *timezone)
 void TimeHandler::init()
 {
-    debugI("TimeHandler initialized using timezone: %s", defaultRegion);
+    debugI("TimeHandler initialized");
+
+    // if (timezone && strlen(timezone) > 0)
+    // {
+    //     defaultRegion = timezone;
+    //     debugI("TimeHandler: Using timezone from settings: %s", defaultRegion);
+    // }
+    // else
+    // {
+    //     debugW("TimeHandler: No timezone set. Using default: %s", defaultRegion);
+    // }
+
+    debugI("TimeHandler: Using timezone: %s", defaultRegion);
 
     // Get POSIX string for the default region
     const char *posix_str = tz_db_get_posix_str(defaultRegion);
@@ -178,3 +190,40 @@ void TimeHandler::logAllDateTimeFormats()
 }
 
 #endif // ENABLE_TIME_HANDLER
+
+/*
+//Original code
+const char* TimeHandler::formatDateTime(const char* format) {
+    static char buffer[64]; // Reusable buffer for formatted output
+    struct tm timeinfo;
+    time_t now = time(nullptr); // Get current epoch time
+
+    if (!getLocalTime(&timeinfo)) {
+        return "Time not available";
+    }
+
+    strftime(buffer, sizeof(buffer), format, &timeinfo);
+    return buffer;
+}
+
+//Improved code
+const char* TimeHandler::formatDateTime(const char* format) {
+    static char buffer[64]; // Reusable buffer for formatted output
+    struct tm timeinfo;
+    time_t now = time(nullptr); // Get current epoch time
+
+    // Check if the clock is synchronized
+    if (now < 100000) { // Arbitrary threshold for "uninitialized" time
+        return "Clock not set";
+    }
+
+    // Try to get local time
+    if (!getLocalTime(&timeinfo)) {
+        return "Time not available";
+    }
+
+    // Format the date/time into the buffer
+    strftime(buffer, sizeof(buffer), format, &timeinfo);
+    return buffer;
+}
+*/
