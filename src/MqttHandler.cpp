@@ -129,14 +129,14 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
 
 void MqttHandler::registerCommands()
 {
-    CommandHandler::registerCommand("mqtt", [](const String &command){
+    CommandHandler::registerCommand("MQTT", [](const String &command){
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (CommandHandler::equalsIgnoreCase(cmd, "msg")) {
+        if (CommandHandler::equalsIgnoreCase(cmd, "MSG")) {
             MqttHandler::publish(settings.mqttPubTopic.c_str(), args.c_str());
         }
-        if (CommandHandler::equalsIgnoreCase(cmd, "topic")) {
+        else if (CommandHandler::equalsIgnoreCase(cmd, "TOPIC")) {
             int delimiterPos = args.indexOf(' ');
             String topic = args.substring(0, delimiterPos);
             String message = args.substring(delimiterPos + 1);
