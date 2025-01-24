@@ -35,6 +35,22 @@ Content-Type: application/json
 
 ###
 
+### update a button
+POST {{baseUrl}}/buttons
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "buttons": [
+    {
+      "id": 1,
+      "notes": "Updated WiFi password for guests"
+    }
+  ]
+}
+
+###
+
 ### Delete a Button
 DELETE {{baseUrl}}/buttons
 Authorization: Bearer {{token}}

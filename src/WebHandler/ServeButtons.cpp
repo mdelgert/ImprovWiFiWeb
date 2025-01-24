@@ -65,6 +65,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     request->send(200, "application/json", "{\"message\":\"Button deleted successfully\"}");
 }
 
+/*
 void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     debugV("Received POST request on /buttons");
@@ -96,4 +97,80 @@ void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *da
         debugV("Completed JSON file upload");
         WebHandler::sendSuccessResponse(request, "Buttons updated successfully");
     }
+}
+*/
+
+void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /buttons");
+
+    // Accumulate incoming data
+    static String requestBody;
+    if (index == 0) {
+        requestBody = ""; // Start a new request body
+    }
+    requestBody += String((char *)data).substring(0, len); // Append the current chunk
+
+    if (index + len != total) {
+        return; // Wait until all chunks are received
+    }
+
+    debugV("Complete request body received: %s", requestBody.c_str());
+
+    // Parse the incoming JSON payload
+    StaticJsonDocument<2048> incomingDoc;
+    DeserializationError error = deserializeJson(incomingDoc, requestBody);
+    if (error) {
+        debugE("JSON deserialization failed: %s", error.c_str());
+        WebHandler::sendErrorResponse(request, 400, "Invalid JSON payload");
+        return;
+    }
+
+    // Read the existing JSON file
+    File file = LittleFS.open(BUTTONS_FILE, "r");
+    StaticJsonDocument<4096> existingDoc;
+    if (file) {
+        deserializeJson(existingDoc, file); // Deserialize existing data
+        file.close();
+    } else {
+        debugW("No existing file found; initializing new document");
+        existingDoc["buttons"] = JsonArray(); // Initialize an empty "buttons" array
+    }
+
+    JsonArray existingButtons = existingDoc["buttons"];
+    JsonArray incomingButtons = incomingDoc["buttons"];
+
+    // Update existing buttons or add new ones
+    for (JsonObject newButton : incomingButtons) {
+        bool found = false;
+
+        for (JsonObject existingButton : existingButtons) {
+            if (existingButton["id"] == newButton["id"]) {
+                // Update only the provided fields for the matching button
+                for (JsonPair kv : newButton) {
+                    existingButton[kv.key()] = kv.value();
+                }
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            // Add new button
+            existingButtons.add(newButton);
+        }
+    }
+
+    // Write the updated JSON back to the file
+    file = LittleFS.open(BUTTONS_FILE, "w");
+    if (!file) {
+        debugE("Failed to open file for writing: %s", BUTTONS_FILE);
+        WebHandler::sendErrorResponse(request, 500, "Failed to write buttons2.json");
+        return;
+    }
+
+    serializeJson(existingDoc, file); // Save updated JSON
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Buttons updated successfully");
 }
