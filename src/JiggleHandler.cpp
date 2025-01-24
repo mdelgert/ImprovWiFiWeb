@@ -10,11 +10,11 @@
 constexpr int DEFAULT_JIGGLE_INTERVAL = 60000;
 constexpr int DEFAULT_JIGGLE_AMOUNT = 5;
 
-NonBlockingTimer JiggleHandler::jiggleTimer(DEFAULT_JIGGLE_INTERVAL); // Use the default interval here
-int JiggleHandler::jiggleInterval = DEFAULT_JIGGLE_INTERVAL;          // Use the same default interval here
-int JiggleHandler::jiggleAmount = DEFAULT_JIGGLE_AMOUNT;              // Default jiggle amount
-bool JiggleHandler::showCountdown = true;                             // Show countdown by default
-bool JiggleHandler::jiggleEnabled = true;                            // Jiggle initially disabled
+NonBlockingTimer JiggleHandler::jiggleTimer(DEFAULT_JIGGLE_INTERVAL, 1000); // 1-second status updates
+int JiggleHandler::jiggleInterval = DEFAULT_JIGGLE_INTERVAL;                // Use the same default interval here
+int JiggleHandler::jiggleAmount = DEFAULT_JIGGLE_AMOUNT;                    // Default jiggle amount
+bool JiggleHandler::showCountdown = true;                                   // Show countdown by default
+bool JiggleHandler::jiggleEnabled = true;                                   // Jiggle initially disabled
 
 void JiggleHandler::init()
 {
@@ -26,24 +26,15 @@ void JiggleHandler::loop()
 {
     if (jiggleEnabled)
     {
-        if (showCountdown)
+        if (showCountdown && jiggleTimer.isStatusReady()) // Status check every 1 second
         {
-            static unsigned long lastCountdownUpdate = 0; // Tracks the last update time for the countdown
-            unsigned long currentMillis = millis();
-
-            if (currentMillis - lastCountdownUpdate >= 1000) // Update every 1 second
-            {
-                lastCountdownUpdate = currentMillis;
-
-                unsigned long timeRemaining = jiggleTimer.remaining();
-                unsigned long secondsRemaining = (timeRemaining + 999) / 1000; // Round up to the nearest second
-                //GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining + " s");
-                GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining);
-                //debugI("Jiggle in: %lu s", secondsRemaining);
-            }
+            unsigned long timeRemaining = jiggleTimer.remaining();
+            unsigned long secondsRemaining = (timeRemaining + 999) / 1000; // Round up to the nearest second
+            GfxHandler::printMessage(String("Jiggle: ") + secondsRemaining);
+            debugV("Jiggle countdown: %lu ms remaining", timeRemaining);
         }
 
-        if (jiggleTimer.isReady())
+        if (jiggleTimer.isReady()) // Jiggle action when timer expires
         {
             performJiggle();
         }
