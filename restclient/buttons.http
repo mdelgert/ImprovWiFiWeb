@@ -44,7 +44,7 @@ Content-Type: application/json
   "buttons": [
     {
       "id": 1,
-      "notes": "Updated WiFi password for guests"
+      "notes": "Updated WiFi password for guests2"
     }
   ]
 }
@@ -52,10 +52,9 @@ Content-Type: application/json
 ###
 
 ### Delete a Button
-DELETE {{baseUrl}}/buttons
+DELETE {{baseUrl}}/buttons?id=1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
-{
-  "id": 1
-}
+###
+
