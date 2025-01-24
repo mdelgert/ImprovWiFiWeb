@@ -56,3 +56,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-23-01
 **Description:**  
 - Before including libraries source
+
+### Tag: v1.0.20
+**Date:** 2025-23-01
+**Description:**  
+- Include and lock all libraries source
