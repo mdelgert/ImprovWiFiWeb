@@ -65,41 +65,6 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     request->send(200, "application/json", "{\"message\":\"Button deleted successfully\"}");
 }
 
-/*
-void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
-{
-    debugV("Received POST request on /buttons");
-
-    if (index == 0) {
-        // Open the file for writing at the start of the upload
-        debugV("Starting new JSON file upload");
-        File file = LittleFS.open(BUTTONS_FILE, "w");
-        if (!file) {
-            debugE("Failed to open file for writing: %s", BUTTONS_FILE);
-            WebHandler::sendErrorResponse(request, 500, "Failed to open file for writing");
-            return;
-        }
-        file.close(); // Close immediately to ensure the file is ready for appending chunks
-    }
-
-    // Append data chunk to the file
-    File file = LittleFS.open(BUTTONS_FILE, "a");
-    if (!file) {
-        debugE("Failed to open file for appending: %s", BUTTONS_FILE);
-        WebHandler::sendErrorResponse(request, 500, "Failed to open file for appending");
-        return;
-    }
-    file.write(data, len);
-    file.close();
-    debugV("Data chunk written to file: %d bytes", len);
-
-    if (index + len == total) {
-        debugV("Completed JSON file upload");
-        WebHandler::sendSuccessResponse(request, "Buttons updated successfully");
-    }
-}
-*/
-
 void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     debugV("Received POST request on /buttons");
@@ -118,8 +83,9 @@ void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *da
     debugV("Complete request body received: %s", requestBody.c_str());
 
     // Parse the incoming JSON payload
-    StaticJsonDocument<2048> incomingDoc;
+    JsonDocument incomingDoc;
     DeserializationError error = deserializeJson(incomingDoc, requestBody);
+    
     if (error) {
         debugE("JSON deserialization failed: %s", error.c_str());
         WebHandler::sendErrorResponse(request, 400, "Invalid JSON payload");
@@ -128,7 +94,8 @@ void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *da
 
     // Read the existing JSON file
     File file = LittleFS.open(BUTTONS_FILE, "r");
-    StaticJsonDocument<4096> existingDoc;
+    JsonDocument existingDoc;
+    
     if (file) {
         deserializeJson(existingDoc, file); // Deserialize existing data
         file.close();
