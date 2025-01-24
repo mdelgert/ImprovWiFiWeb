@@ -63,7 +63,8 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["lastResetTime"] = esp_timer_get_time(); // Example: microseconds since startup
         
         // LittleFS Info
-        if (LittleFS.begin(true)) {
+        /*
+        if (LittleFS.begin(true)) { // Format if mounting fails blocking exsisting file manager
             doc["littleFsTotalSpace"] = LittleFS.totalBytes();       // Total flash allocated for LittleFS
             doc["littleFsUsedSpace"] = LittleFS.usedBytes();         // Space already used in LittleFS
             doc["littleFsFreeSpace"] = LittleFS.totalBytes() - LittleFS.usedBytes(); // Available space
@@ -71,7 +72,12 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         } else {
             doc["littleFsError"] = "Failed to mount LittleFS";
         }
+        */
 
+        doc["littleFsTotalSpace"] = LittleFS.totalBytes();
+        doc["littleFsUsedSpace"] = LittleFS.usedBytes();
+        doc["littleFsFreeSpace"] = LittleFS.totalBytes() - LittleFS.usedBytes();
+       
          // Add reset reason
         esp_reset_reason_t resetReason = esp_reset_reason();
         switch (resetReason) {
@@ -184,22 +190,20 @@ void ServeDevice::handleDeviceBackup(AsyncWebServer &server)
                           exportFile.write(buffer, bytesRead);
                       }
 
-                      //exportFile.write("\nEND\n", 5); // Mark the end of the file
-                      exportFile.write(reinterpret_cast<const uint8_t*>("\nEND\n"), 5); // Mark the end of the file
+                      // exportFile.write("\nEND\n", 5); // Mark the end of the file
+                      exportFile.write(reinterpret_cast<const uint8_t *>("\nEND\n"), 5); // Mark the end of the file
                       file = root.openNextFile();
                   }
 
                   exportFile.close();
-                  //request->send(200, "text/plain", "Backup exported successfully to /backup.tar");
+                  // request->send(200, "text/plain", "Backup exported successfully to /backup.tar");
 
                   // Create a JSON response
                   JsonDocument data;
                   data["data"] = "Backup success";
 
                   WebHandler::sendSuccessResponse(request, "GET /device/backup", &data);
-
               });
-              
 }
 
 #endif // ENABLE_WEB_HANDLER
