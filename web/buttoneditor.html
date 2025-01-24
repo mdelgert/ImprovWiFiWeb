@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PassTxt Manager</title>
+  <title>Button Editor</title>
   <style>
     body {
       background-color: #121212;
@@ -13,7 +13,7 @@
       padding: 0;
     }
     .container {
-      max-width: 600px;
+      max-width: 400px;
       margin: 20px auto;
       padding: 20px;
       background: #1e1e1e;
@@ -54,7 +54,7 @@
     button:hover {
       background-color: #444;
     }
-    input, select {
+    input, select, textarea {
       width: calc(100% - 20px);
       margin: 10px 0;
       padding: 10px;
@@ -62,6 +62,10 @@
       border: 1px solid #333;
       background: #222;
       color: #fff;
+    }
+    textarea {
+      resize: none;
+      height: 80px;
     }
     .modal {
       display: none;
@@ -99,7 +103,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>PassTxt Manager</h1>
+    <h1>Button Manager</h1>
     <ul id="itemList"></ul>
     <button onclick="openModalForAdd()">Add Button</button>
   </div>
@@ -108,16 +112,23 @@
   <div class="modal" id="editModal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 id="modalTitle">Edit Item</h2>
+        <h2 id="modalTitle">Edit Button</h2>
         <button onclick="closeModal()">X</button>
       </div>
       <div class="modal-body">
         <input type="text" id="editName" placeholder="Button Label" required>
+        <select id="editCategory">
+          <option value="General">General</option>
+          <option value="Commands">Commands</option>
+          <option value="Passwords">Passwords</option>
+          <option value="LED Controls">LED Controls</option>
+        </select>
         <select id="editAction">
           <option value="Type">Send Password</option>
           <option value="Run">Run Command</option>
         </select>
         <input type="text" id="editCommand" placeholder="Command or Password" required>
+        <textarea id="editNotes" placeholder="Notes (optional)"></textarea>
       </div>
       <div class="modal-footer">
         <button onclick="saveChanges()">Save</button>
@@ -128,8 +139,8 @@
 
   <script>
     let items = [
-      { id: 1, name: 'WiFi Password', action: 'Type', command: 'password123' },
-      { id: 2, name: 'Reboot Command', action: 'Run', command: 'reboot' },
+      { id: 1, name: 'WiFi Password', category: 'Passwords', action: 'Type', command: 'password123', notes: 'Used for guest WiFi' },
+      { id: 2, name: 'Reboot Command', category: 'Commands', action: 'Run', command: 'reboot', notes: 'Reboots the ESP32 device' },
     ];
     let editingItemId = null;
 
@@ -139,7 +150,7 @@
       items.forEach((item) => {
         const li = document.createElement('li');
         li.innerHTML = `
-          <span>${item.name} (${item.action}): ${item.command}</span>
+          <span>${item.name}</span>
           <div class="actions">
             <button onclick="openModal(${item.id})">Edit</button>
             <button onclick="deleteItem(${item.id})">Delete</button>
@@ -153,18 +164,22 @@
       editingItemId = id;
       const item = items.find((i) => i.id === id);
       document.getElementById('editName').value = item.name;
+      document.getElementById('editCategory').value = item.category;
       document.getElementById('editAction').value = item.action;
       document.getElementById('editCommand').value = item.command;
-      document.getElementById('modalTitle').textContent = 'Edit Item';
+      document.getElementById('editNotes').value = item.notes || '';
+      document.getElementById('modalTitle').textContent = 'Edit Button';
       document.getElementById('editModal').style.display = 'flex';
     };
 
     const openModalForAdd = () => {
       editingItemId = null;
       document.getElementById('editName').value = '';
+      document.getElementById('editCategory').value = 'General';
       document.getElementById('editAction').value = 'Type';
       document.getElementById('editCommand').value = '';
-      document.getElementById('modalTitle').textContent = 'Add New Item';
+      document.getElementById('editNotes').value = '';
+      document.getElementById('modalTitle').textContent = 'Add New Button';
       document.getElementById('editModal').style.display = 'flex';
     };
 
@@ -174,19 +189,23 @@
 
     const saveChanges = () => {
       const name = document.getElementById('editName').value;
+      const category = document.getElementById('editCategory').value;
       const action = document.getElementById('editAction').value;
       const command = document.getElementById('editCommand').value;
+      const notes = document.getElementById('editNotes').value;
       if (!name || !command) return;
 
       if (editingItemId !== null) {
         // Update existing item
         const item = items.find((i) => i.id === editingItemId);
         item.name = name;
+        item.category = category;
         item.action = action;
         item.command = command;
+        item.notes = notes;
       } else {
         // Add new item
-        items.push({ id: Date.now(), name, action, command });
+        items.push({ id: Date.now(), name, category, action, command, notes });
       }
 
       renderList();
