@@ -1,7 +1,8 @@
 #include "ServeButtons.h"
 
 // Define the file path for the buttons JSON file
-const char *ServeButtons::BUTTONS_FILE = "/buttons2.json";
+//const char *ServeButtons::BUTTONS_FILE = "/buttons2.json";
+const char *ServeButtons::BUTTONS_FILE = "/buttons.json";
 
 void ServeButtons::registerEndpoints(AsyncWebServer &server)
 {
