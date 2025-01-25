@@ -91,8 +91,8 @@ void GfxHandler::registerCommands()
             printMessage(args.c_str());
         }
         else if (cmd == "clock") {
-            //printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
-            printMessage(TimeHandler::formatDateTime("%Y-%m-%d %I:%M:%S %p"));
+            printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
+            //printMessage(TimeHandler::formatDateTime("%Y-%m-%d %I:%M:%S %p"));
         }
         else if (cmd == "demo") {
             //Transparency background color

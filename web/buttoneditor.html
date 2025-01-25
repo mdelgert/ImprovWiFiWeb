@@ -193,6 +193,7 @@
         li.innerHTML = `
       <span>${item.name}</span>
       <div class="actions">
+        <button onclick="sendCommand('${encodeURIComponent(item.command)}')">Run</button>
         <button onclick="openModal(${item.id})">Edit</button>
         <button onclick="deleteItem(${item.id})">Delete</button>
       </div>
@@ -217,7 +218,7 @@
       editingItemId = null;
       document.getElementById("editName").value = "";
       document.getElementById("editCategory").value = "General";
-      document.getElementById("editAction").value = "Type";
+      document.getElementById("editAction").value = "Command";
       document.getElementById("editCommand").value = "";
       document.getElementById("editNotes").value = "";
       document.getElementById("modalTitle").textContent = "Add New Button";
@@ -269,7 +270,41 @@
       }
     };
 
+    async function sendCommand(command) {
+      // Decode the command (in case of special characters encoded in the URL)
+      const decodedCommand = decodeURIComponent(command);
+
+      // Trigger vibration feedback if supported
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      } else {
+        console.log("Vibration API not supported on this device.");
+      }
+
+      try {
+        const response = await fetch(`${endPoint}/command/set`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "text/plain",
+          },
+          body: decodedCommand,
+        });
+
+        if (response.ok) {
+          console.log(`Command sent successfully: ${decodedCommand}`);
+          //alert(`Command sent: ${decodedCommand}`);
+        } else {
+          console.error(`Failed to send command. Status: ${response.status}`);
+          alert("Failed to send command");
+        }
+      } catch (error) {
+        console.error("Error sending command:", error);
+        alert("Error sending command");
+      }
+    }
+
     fetchButtons();
   </script>
 </body>
+
 </html>
