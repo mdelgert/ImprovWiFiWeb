@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Button Manager</title>
+  <title>Button Editor</title>
   <style>
-    /* Your existing styles remain unchanged */
     body {
       background-color: #121212;
       color: #ffffff;
@@ -13,24 +13,32 @@
       margin: 0;
       padding: 0;
     }
+
+    /* Main Container */
     .container {
       max-width: 600px;
+      /* Wider container for desktop and tablet */
       margin: 20px auto;
       padding: 20px;
       background: #1e1e1e;
       border-radius: 8px;
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
     }
+
+    /* Heading */
     h1 {
       font-size: 1.5rem;
       text-align: center;
       margin-bottom: 20px;
     }
+
+    /* List */
     ul {
       list-style: none;
       padding: 0;
       margin: 0;
     }
+
     li {
       display: flex;
       justify-content: space-between;
@@ -38,13 +46,17 @@
       padding: 10px 0;
       border-bottom: 1px solid #333;
     }
+
     li:last-child {
       border-bottom: none;
     }
+
+    /* Action Buttons in List Items */
     .actions {
       display: flex;
       gap: 10px;
     }
+
     button {
       background-color: #333;
       color: #fff;
@@ -55,10 +67,15 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     button:hover {
       background-color: #444;
     }
-    input, select, textarea {
+
+    /* Form Elements */
+    input,
+    select,
+    textarea {
       width: calc(100% - 20px);
       margin: 10px 0;
       padding: 10px;
@@ -68,10 +85,13 @@
       color: #fff;
       font-size: 1rem;
     }
+
     textarea {
       resize: none;
       height: 80px;
     }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -84,28 +104,69 @@
       align-items: center;
       z-index: 1000;
     }
+
     .modal-content {
       background: #1e1e1e;
       padding: 20px;
       border-radius: 8px;
       width: 90%;
+      /* Responsive width */
       max-width: 500px;
+      /* Prevent modal from becoming too wide */
       box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      /* Prevent scrollbars inside the modal */
     }
-    .modal-header, .modal-footer {
+
+    .modal-header,
+    .modal-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
+
     .modal-header h2 {
       margin: 0;
       font-size: 1.2rem;
     }
+
     .modal-footer {
       margin-top: 15px;
       justify-content: flex-end;
       gap: 10px;
+    }
+
+    /* Adjust Modal Buttons */
+    .modal-footer button {
+      padding: 8px 15px;
+    }
+
+    /* Responsive Adjustments for Small Screens */
+    @media (max-width: 600px) {
+      .container {
+        max-width: 90%;
+        /* Reduce container width for small screens */
+        padding: 15px;
+      }
+
+      button {
+        font-size: 0.9rem;
+        padding: 8px 12px;
+      }
+
+      li {
+        flex-direction: column;
+        /* Stack text and buttons vertically */
+        align-items: flex-start;
+      }
+
+      .actions {
+        margin-top: 10px;
+      }
+
+      h1 {
+        font-size: 1.2rem;
+      }
     }
   </style>
 </head>
@@ -146,32 +207,17 @@
   </div>
 
   <script>
-    const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
-
-    let items = [];
+    let items = [
+      { id: 1, name: 'WiFi Password', category: 'Passwords', action: 'Type', command: 'password123', notes: 'Used for guest WiFi' },
+      { id: 2, name: 'Reboot Command', category: 'Commands', action: 'Run', command: 'reboot', notes: 'Reboots the ESP32 device' },
+    ];
     let editingItemId = null;
 
-    
-    const fetchButtons = async () => {
-      try {
-        const response = await fetch(`${endPoint}/buttons`, { method: "GET" });
-        if (response.ok) {
-          const data = await response.json();
-          items = data.buttons || [];
-          renderList();
-        } else {
-          console.error("Failed to fetch buttons");
-        }
-      } catch (err) {
-        console.error("Error fetching buttons:", err);
-      }
-    };
-
     const renderList = () => {
-      const itemList = document.getElementById("itemList");
-      itemList.innerHTML = "";
+      const itemList = document.getElementById('itemList');
+      itemList.innerHTML = '';
       items.forEach((item) => {
-        const li = document.createElement("li");
+        const li = document.createElement('li');
         li.innerHTML = `
           <span>${item.name}</span>
           <div class="actions">
@@ -186,72 +232,62 @@
     const openModal = (id) => {
       editingItemId = id;
       const item = items.find((i) => i.id === id);
-      document.getElementById("editName").value = item.name;
-      document.getElementById("editCategory").value = item.category;
-      document.getElementById("editAction").value = item.action;
-      document.getElementById("editCommand").value = item.command;
-      document.getElementById("editNotes").value = item.notes || "";
-      document.getElementById("modalTitle").textContent = "Edit Button";
-      document.getElementById("editModal").style.display = "flex";
+      document.getElementById('editName').value = item.name;
+      document.getElementById('editCategory').value = item.category;
+      document.getElementById('editAction').value = item.action;
+      document.getElementById('editCommand').value = item.command;
+      document.getElementById('editNotes').value = item.notes || '';
+      document.getElementById('modalTitle').textContent = 'Edit Button';
+      document.getElementById('editModal').style.display = 'flex';
     };
 
     const openModalForAdd = () => {
       editingItemId = null;
-      document.getElementById("editName").value = "";
-      document.getElementById("editCategory").value = "General";
-      document.getElementById("editAction").value = "Type";
-      document.getElementById("editCommand").value = "";
-      document.getElementById("editNotes").value = "";
-      document.getElementById("modalTitle").textContent = "Add New Button";
-      document.getElementById("editModal").style.display = "flex";
+      document.getElementById('editName').value = '';
+      document.getElementById('editCategory').value = 'General';
+      document.getElementById('editAction').value = 'Type';
+      document.getElementById('editCommand').value = '';
+      document.getElementById('editNotes').value = '';
+      document.getElementById('modalTitle').textContent = 'Add New Button';
+      document.getElementById('editModal').style.display = 'flex';
     };
 
     const closeModal = () => {
-      document.getElementById("editModal").style.display = "none";
+      document.getElementById('editModal').style.display = 'none';
     };
 
-    const saveChanges = async () => {
-      const name = document.getElementById("editName").value;
-      const category = document.getElementById("editCategory").value;
-      const action = document.getElementById("editAction").value;
-      const command = document.getElementById("editCommand").value;
-      const notes = document.getElementById("editNotes").value;
+    const saveChanges = () => {
+      const name = document.getElementById('editName').value;
+      const category = document.getElementById('editCategory').value;
+      const action = document.getElementById('editAction').value;
+      const command = document.getElementById('editCommand').value;
+      const notes = document.getElementById('editNotes').value;
       if (!name || !command) return;
 
-      const button = { id: editingItemId || Date.now(), name, category, action, command, notes };
-
-      try {
-        const response = await fetch(`${endPoint}/buttons`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ buttons: [button] }),
-        });
-
-        if (response.ok) {
-          await fetchButtons(); // Refresh the list
-          closeModal();
-        } else {
-          console.error("Failed to save button");
-        }
-      } catch (err) {
-        console.error("Error saving button:", err);
+      if (editingItemId !== null) {
+        // Update existing item
+        const item = items.find((i) => i.id === editingItemId);
+        item.name = name;
+        item.category = category;
+        item.action = action;
+        item.command = command;
+        item.notes = notes;
+      } else {
+        // Add new item
+        items.push({ id: Date.now(), name, category, action, command, notes });
       }
+
+      renderList();
+      closeModal();
     };
 
-    const deleteItem = async (id) => {
-      try {
-        const response = await fetch(`${endPoint}/buttons?id=${id}`, { method: "DELETE" });
-        if (response.ok) {
-          await fetchButtons(); // Refresh the list
-        } else {
-          console.error("Failed to delete button");
-        }
-      } catch (err) {
-        console.error("Error deleting button:", err);
-      }
+    const deleteItem = (id) => {
+      items = items.filter((i) => i.id !== id);
+      renderList();
     };
 
-    fetchButtons();
+    renderList();
   </script>
 </body>
+
 </html>

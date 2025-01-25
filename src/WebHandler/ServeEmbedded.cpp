@@ -25,6 +25,7 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
 
     serveEmbeddedFile(server, "/aes.html", aes_html_start, aes_html_end, "text/html");
     serveEmbeddedFile(server, "/aes.js", aes_js_start, aes_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/buttoneditor.html", buttoneditor_html_start, buttoneditor_html_end, "text/html");
     serveEmbeddedFile(server, "/buttons.html", buttons_html_start, buttons_html_end, "text/html");
     serveEmbeddedFile(server, "/buttons.js", buttons_js_start, buttons_js_end, "application/javascript");
     serveEmbeddedFile(server, "/device.html", device_html_start, device_html_end, "text/html");

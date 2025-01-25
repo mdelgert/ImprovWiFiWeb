@@ -15,21 +15,24 @@ void ServeButtons::handleGetButtons(AsyncWebServerRequest *request)
     // Open the file for reading
     File file = LittleFS.open(BUTTONS_FILE, "r");
     if (!file || file.size() == 0) {
-        request->send(500, "application/json", "{\"error\":\"Failed to read buttons2.json or file is empty\"}");
+        WebHandler::sendErrorResponse(request, 400, "Failed to read buttons2.json or file is empty");
         return;
     }
 
     String json = file.readString(); // Read the file content into a string
     file.close(); // Close the file
 
-    request->send(200, "application/json", json); // Send the file content as JSON
+    //request->send(200, "application/json", json); // Send the file content as JSON
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
 }
 
 void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
 {
     // Check if the "id" parameter is provided
     if (!request->hasParam("id")) {
-        request->send(400, "application/json", "{\"error\":\"Missing button ID\"}");
+        WebHandler::sendErrorResponse(request, 400, "Missing button ID");
         return;
     }
 
@@ -40,7 +43,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     File file = LittleFS.open(BUTTONS_FILE, "r");
     if (!file) {
         debugE("Failed to open file for reading: %s", BUTTONS_FILE);
-        request->send(500, "application/json", "{\"error\":\"Failed to read buttons2.json\"}");
+        WebHandler::sendErrorResponse(request, 500, "Failed to read buttons2.json");
         return;
     }
 
@@ -51,7 +54,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
 
     if (error) {
         debugE("Failed to parse JSON file: %s", error.c_str());
-        request->send(500, "application/json", "{\"error\":\"Invalid JSON format in buttons2.json\"}");
+        WebHandler::sendErrorResponse(request, 500, "Invalid JSON format in buttons2.json");
         return;
     }
 
@@ -69,7 +72,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
 
     if (!buttonFound) {
         debugW("Button with ID %d not found", buttonId);
-        request->send(404, "application/json", "{\"error\":\"Button ID not found\"}");
+        WebHandler::sendErrorResponse(request, 404, "Button ID not found");
         return;
     }
 
@@ -77,7 +80,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     file = LittleFS.open(BUTTONS_FILE, "w");
     if (!file) {
         debugE("Failed to open file for writing: %s", BUTTONS_FILE);
-        request->send(500, "application/json", "{\"error\":\"Failed to write buttons2.json\"}");
+        WebHandler::sendErrorResponse(request, 500, "Failed to write buttons2.json");
         return;
     }
 
@@ -85,7 +88,7 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     file.close();
 
     debugV("Button with ID %d deleted successfully", buttonId);
-    request->send(200, "application/json", "{\"message\":\"Button deleted successfully\"}");
+    WebHandler::sendSuccessResponse(request, "Button deleted successfully");
 }
 
 void ServeButtons::handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
