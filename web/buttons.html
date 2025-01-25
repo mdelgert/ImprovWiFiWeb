@@ -134,7 +134,8 @@
       buttons.forEach(button => {
         const btn = document.createElement("button");
         btn.className = "button tooltip";
-        btn.textContent = button.label;
+        //btn.textContent = button.label;
+        btn.textContent = button.name;
 
         // Apply inline styles only if provided
         if (button.style?.color) btn.style.color = button.style.color;
