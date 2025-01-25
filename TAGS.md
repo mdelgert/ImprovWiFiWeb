@@ -61,3 +61,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-23-01
 **Description:**  
 - Include and lock all libraries source
+
+### Tag: v1.0.21
+**Date:** 2025-25-01
+**Description:**  
+- Add button editor
