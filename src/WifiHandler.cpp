@@ -12,8 +12,9 @@ void WifiHandler::init()
 {
     debugI("WifiHandler initialized");
     GfxHandler::printMessage("WifiHandler initialized");
-    scanAndSaveNetworks(filePath);
+    //scanAndSaveNetworks(filePath);
     connectToWifi();
+    //startAccessPoint();
 }
 
 void WifiHandler::loop()
@@ -85,8 +86,8 @@ void WifiHandler::startAccessPoint()
     }
 
     // TODO see why this is not working
-    dnsServer.start(53, "*", WiFi.softAPIP());
-    debugI("DNS Server started to route all traffic to AP IP");
+    //dnsServer.start(53, "*", WiFi.softAPIP());
+    //debugI("DNS Server started to route all traffic to AP IP");
 }
 
 void WifiHandler::initializeMDNS()
