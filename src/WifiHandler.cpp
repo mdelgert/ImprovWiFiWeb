@@ -64,7 +64,8 @@ void WifiHandler::connectToWifi()
     {
         debugE("Failed to connect to WiFi!");
         GfxHandler::printMessage("Failed to connect to WiFi 2!");
-        startAccessPoint();
+        // This will block ImprovWifi from starting
+        //startAccessPoint();
     }
 }
 
