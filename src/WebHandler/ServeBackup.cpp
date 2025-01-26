@@ -68,6 +68,7 @@ void ServeBackup::handleBackupRequest(AsyncWebServer &server)
             });
 
         response->addHeader("Content-Disposition", "attachment; filename=backup.tar");
+        WebHandler::addCorsHeaders(response);
         request->send(response);
     });
 }

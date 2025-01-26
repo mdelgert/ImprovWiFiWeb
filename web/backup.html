@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Backup and Restore</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button, input[type="file"] {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: #ffffff;
+      background-color: #333333;
+      border: 1px solid #555555;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover, input[type="file"]:hover {
+      background-color: #555555;
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #00ff00;
+    }
+  </style>
+</head>
+<body>
+  <h1>Backup and Restore</h1>
+
+  <!-- Download Button -->
+  <button id="backupBtn">Download Backup</button>
+
+  <!-- File Upload -->
+  <input type="file" id="restoreFile" accept=".tar">
+  <button id="restoreBtn">Upload and Restore</button>
+
+  <!-- Status Message -->
+  <div id="status"></div>
+
+  <script>
+    // Determine the endpoint based on the environment
+    const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+
+    // Select elements
+    const backupBtn = document.getElementById('backupBtn');
+    const restoreFile = document.getElementById('restoreFile');
+    const restoreBtn = document.getElementById('restoreBtn');
+    const status = document.getElementById('status');
+
+    // Backup functionality
+    backupBtn.addEventListener('click', () => {
+      status.textContent = 'Starting backup...';
+
+      fetch(`${endPoint}/backup`)
+        .then(response => {
+          if (!response.ok) throw new Error('Backup failed!');
+          return response.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'backup.tar'; // Suggested filename
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+          status.textContent = 'Backup completed!';
+        })
+        .catch(err => {
+          console.error(err);
+          status.textContent = 'Backup failed. Check console for details.';
+        });
+    });
+
+    // Restore functionality
+    restoreBtn.addEventListener('click', () => {
+      const file = restoreFile.files[0];
+      if (!file) {
+        status.textContent = 'Please select a file to restore.';
+        return;
+      }
+
+      status.textContent = 'Uploading and restoring...';
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      fetch(`${endPoint}/restore`, {
+        method: 'POST',
+        body: formData,
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Restore failed!');
+          return response.text();
+        })
+        .then(text => {
+          status.textContent = 'Restore completed: ' + text;
+        })
+        .catch(err => {
+          console.error(err);
+          status.textContent = 'Restore failed. Check console for details.';
+        });
+    });
+  </script>
+</body>
+</html>
