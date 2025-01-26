@@ -43,6 +43,10 @@ void setup()
   AesHandler::init();
   TimeHandler::init();
   JiggleHandler::init();
+
+  // settings.WifiScan = true;
+  // ConfigManager::save();
+  
   // GfxHandler::printMessage(SOFTWARE_VERSION);
   // LedHandler::setDefaultBrightness(100);
   // LedHandler::setColorByName("Purple");

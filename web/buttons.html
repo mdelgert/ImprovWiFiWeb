@@ -118,7 +118,8 @@
     // Fetch and Render Buttons
     async function loadButtons() {
       try {
-        const response = await fetch(`${endPoint}/file?filename=/buttons.json`);
+        //const response = await fetch(`${endPoint}/file?filename=/buttons.json`);
+        const response = await fetch(`${endPoint}/buttons`);
         if (!response.ok) throw new Error("Failed to fetch buttons");
         const data = await response.json();
         renderButtons(data.buttons);
