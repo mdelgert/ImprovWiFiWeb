@@ -71,3 +71,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-26-01
 **Description:**  
 - Add LittleFs data folder
+
+### Tag: v1.0.24
+**Date:** 2025-27-01
+**Description:**  
+- Add partitions.csv
