@@ -23,10 +23,33 @@ def merge_bin(source, target, env):
     # Ensure LittleFS is built first
     build_littlefs(env)
 
-    # The list contains all extra images (bootloader, partitions, eboot) and the final application binary
-    flash_images = env.Flatten(env.get("FLASH_EXTRA_IMAGES", [])) + ["${ESP32_APP_OFFSET}", target[0].get_abspath()]
+    # Define absolute paths for all binaries
+    build_dir = env.subst("${BUILD_DIR}")
+    merged_image = join(build_dir, "device.bin")
+    bootloader_path = join(build_dir, "bootloader.bin")
+    partition_table_path = join(build_dir, "partitions.bin")
+    littlefs_path = join(build_dir, "littlefs.bin")
+
+    # Stick with target[0].get_abspath() unless you are confident the firmware name is always firmware.bin. 
+    # It ensures your script works seamlessly with PlatformIO's flexibility.
+    firmware_path = target[0].get_abspath()
+    #firmware_path = join(build_dir, "firmware.bin")
+
+    # Check if required files exist
+    for path in [bootloader_path, partition_table_path, firmware_path, littlefs_path]:
+        if not os.path.exists(path):
+            print(f"Error: {path} does not exist.")
+            env.Exit(1)
+
+    # The list contains all images to be merged
+    flash_images = [
+        f"0x0 {bootloader_path}",
+        f"0x8000 {partition_table_path}",
+        f"${{ESP32_APP_OFFSET}} {firmware_path}",
+        f"0x670000 {littlefs_path}"  # Add LittleFS at its correct offset
+    ]
+    
     board_config = env.BoardConfig()
-    merged_image = os.path.join("${BUILD_DIR}", "device.bin")
 
     # Figure out flash frequency and mode
     flash_freq = board_config.get("build.f_flash", "40000000L")
@@ -42,24 +65,13 @@ def merge_bin(source, target, env):
 
     # Run esptool to merge images into a single binary
     env.Execute(
-        " ".join(
-            [
-                "${PYTHONEXE}",
-                "${OBJCOPY}",
-                "--chip",
-                board_config.get("build.mcu", "esp32"),
-                "merge_bin",
-                "--flash_size",
-                board_config.get("upload.flash_size", "4MB"),
-                "--flash_mode",
-                flash_mode,
-                "--flash_freq",
-                flash_freq,
-                "-o",
-                merged_image,
-            ]
-            + flash_images
-        )
+        f"{env.subst('${PYTHONEXE}')} {env.subst('${OBJCOPY}')} "
+        f"--chip {board_config.get('build.mcu', 'esp32')} merge_bin "
+        f"--flash_size {board_config.get('upload.flash_size', '16MB')} "
+        f"--flash_mode {flash_mode} "
+        f"--flash_freq {flash_freq} "
+        f"-o {merged_image} "
+        f"{' '.join(flash_images)}"
     )
 
 # Add a post action that runs LittleFS build and then merges images

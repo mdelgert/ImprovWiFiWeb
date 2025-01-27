@@ -23,6 +23,7 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 
         JsonDocument doc;
 
+        doc["firmwareVersion"]   = SOFTWARE_VERSION;
         doc["deviceName"]   = settings.deviceName;
         //doc["timezone"]    = settings.timezone;
         doc["timezone"]    = TimeHandler::getDefaultRegion();
