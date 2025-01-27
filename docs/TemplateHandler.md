@@ -1,14 +1,4 @@
-I would like to implement a ExampleHandler for my esp32-s3 microcontroller project.
-
-DeviceHandler::sendMouseMovement(x, y);
-
-The functionality should register a commands like 
-
-handler exampel test
-
-or whatever is appropriated.
-
-Please assume the code base already has wifi connectivity and time is already synced.
+I would like to implement a ImprovWiFiHandler for my esp32-s3 microcontroller project using library ImprovWiFiLibrary.h
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
 

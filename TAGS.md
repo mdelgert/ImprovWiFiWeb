@@ -81,3 +81,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Add ota web interface
+
+### Tag: v1.0.27
+**Date:** 2025-27-01
+**Description:**  
+- Add littleFs support for merge2.y
