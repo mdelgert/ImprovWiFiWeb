@@ -1,0 +1,17 @@
+{
+  "funding_url": "https://github.com/mdelgert/ImprovWiFiWeb",
+  "new_install_prompt_erase": true,
+  "name": "Demo",
+  "version": "v1.0.23",
+  "builds": [
+    {
+      "chipFamily": "ESP32-S3",
+      "parts": [
+        {
+          "path": "v1.0.23.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
