@@ -91,3 +91,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Wifi cleanup device disabled
+
+### Tag: v1.0.29
+**Date:** 2025-27-01
+**Description:**  
+- Device enabled
