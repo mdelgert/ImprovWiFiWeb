@@ -123,7 +123,6 @@ void WebHandler::init()
     ServeFiles::registerEndpoints(server);
     ServeCommand::registerEndpoints(server);
     ServeButtons::registerEndpoints(server);
-    ServeBackup::registerEndpoints(server);
     serveNotFound();
     server.begin();
     debugI("WebHandler initialized");

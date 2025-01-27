@@ -13,7 +13,6 @@
 #include "ServeFiles.h"
 #include "ServeCommand.h"
 #include "ServeButtons.h"
-#include "ServeBackup.h"
 
 #define ENABLE_SERVE_ACTIONS
 
