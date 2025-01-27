@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Client-Side Backup (Dark Theme)</title>
+  <title>Backup & Restore (Dark Theme)</title>
   <!-- Include JSZip from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
@@ -31,8 +31,16 @@
     button:hover {
       background-color: #555;
     }
+    input[type="file"] {
+      margin: 0.5rem 0;
+      background-color: #333;
+      color: #ccc;
+      border: 1px solid #666;
+      padding: 5px;
+      font-size: 1rem;
+    }
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
     }
     .log {
@@ -40,11 +48,12 @@
       color: #ccc;
       padding: 10px;
       margin-top: 1rem;
-      height: 200px;
+      height: 250px;
       overflow-y: auto;
       border-radius: 4px;
       font-family: monospace;
       font-size: 0.9rem;
+      white-space: pre;
     }
     a {
       color: #9cf;
@@ -53,26 +62,36 @@
 </head>
 <body>
   <div class="container">
-    <h1>Client-Side Backup (Dark Theme)</h1>
-    <p>This page fetches a list of files from your device, downloads them, then bundles everything into a single ZIP.</p>
+    <h1>Backup &amp; Restore (Dark Theme)</h1>
+    <p>This page can both download all files from your device into a single ZIP, and restore them from a ZIP you select.</p>
+
+    <h2>Backup</h2>
     <button onclick="downloadAllAsZip()">Download All Files as ZIP</button>
+
+    <h2>Restore</h2>
+    <input type="file" id="restoreZipInput" accept=".zip" />
+    <br/>
+    <button onclick="restoreFromZip()">Restore Selected ZIP</button>
 
     <div class="log" id="logOutput"></div>
   </div>
 
   <script>
-    // Endpoint logic: if we're on localhost, use 'http://demo1.local' as base
+    // 1. Endpoint logic: if we're on localhost, use 'http://demo1.local' as base
     const endPoint = window.location.hostname === "localhost"
       ? "http://demo1.local"
       : "";
 
-    // Simple logger to append messages to the .log div
+    // 2. Simple logger to append messages to the .log div
     function log(message) {
       const logEl = document.getElementById('logOutput');
       logEl.textContent += message + "\n";
       logEl.scrollTop = logEl.scrollHeight;
     }
 
+    // ===========================
+    // BACKUP: Download All Files
+    // ===========================
     async function downloadAllAsZip() {
       log("Starting backup process...");
 
@@ -87,6 +106,11 @@
         }
         const fileListJson = await fileListRes.json();
         const files = fileListJson.data.files || [];
+
+        if (files.length === 0) {
+          log("No files found on the device.");
+          return;
+        }
 
         log(`Found ${files.length} files: ${files.join(", ")}`);
 
@@ -108,9 +132,9 @@
           // Get the file data as a binary ArrayBuffer
           const fileData = await fileRes.arrayBuffer();
 
-          // Trim leading slash so it doesn't create an empty folder in the zip
+          // Remove leading slash so it doesn't create a top-level empty folder in the zip
           let zipName = filePath.startsWith("/") ? filePath.substring(1) : filePath;
-          // Add file to the ZIP
+          // Add to the ZIP
           zip.file(zipName, fileData);
         }
 
@@ -127,9 +151,84 @@
         link.click();
         URL.revokeObjectURL(url);
 
-        log("All files zipped and download started.");
+        log("All files zipped and download triggered successfully.");
       } catch (error) {
-        log("Error: " + error.message);
+        log("Error (Backup): " + error.message);
+        console.error(error);
+      }
+    }
+
+    // ===========================
+    // RESTORE: Upload ZIP Files
+    // ===========================
+    async function restoreFromZip() {
+      const fileInput = document.getElementById("restoreZipInput");
+      if (!fileInput.files || fileInput.files.length === 0) {
+        log("Please select a .zip file first.");
+        return;
+      }
+
+      const zipFile = fileInput.files[0];
+      if (!zipFile) {
+        log("No file selected.");
+        return;
+      }
+
+      log(`Reading ZIP file: ${zipFile.name}`);
+
+      try {
+        // 1. Read the chosen ZIP file as ArrayBuffer
+        const arrayBuffer = await zipFile.arrayBuffer();
+
+        // 2. Load it into JSZip
+        const zip = await JSZip.loadAsync(arrayBuffer);
+        const fileNames = Object.keys(zip.files);
+        log(`ZIP contains ${fileNames.length} entries:`);
+
+        // 3. For each entry in the ZIP, upload to device
+        // We'll assume each entry is a regular file (no directories).
+        for (const name of fileNames) {
+          log(`Extracting & uploading: ${name}`);
+
+          const entry = zip.files[name];
+          if (entry.dir) {
+            log(` -> ${name} is a directory. Skipping...`);
+            continue;
+          }
+
+          // readAsArrayBuffer
+          const fileData = await entry.async("arrayBuffer");
+
+          // We might want to store it with a leading slash in the device
+          // if your device expects that. For example:
+          const devicePath = "/" + name; // i.e. "/www/index.html"
+
+          const encodedPath = encodeURIComponent(devicePath);
+          const uploadUrl = `${endPoint}/file?filename=${encodedPath}`;
+
+          // 4. Upload to device
+          // Adjust method or endpoint to match your firmware. 
+          // Using POST as an example:
+          const res = await fetch(uploadUrl, {
+            method: "POST", 
+            headers: {
+              // Possibly set "Content-Type" if your firmware expects it
+              // But if it's purely binary, sometimes no content-type is fine
+              // "Content-Type": "application/octet-stream"
+            },
+            body: fileData
+          });
+
+          if (!res.ok) {
+            log(` -> Upload failed (HTTP ${res.status}) for ${devicePath}`);
+          } else {
+            log(` -> Upload success for ${devicePath}`);
+          }
+        }
+
+        log("Restore completed.");
+      } catch (error) {
+        log("Error (Restore): " + error.message);
         console.error(error);
       }
     }
