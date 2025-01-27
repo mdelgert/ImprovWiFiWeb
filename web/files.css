@@ -210,29 +210,35 @@
  /* Custom Token Colors */
  .cm-keyword {
      color: #ff79c6;
-     /* Pink */
  }
 
  .cm-string {
      color: #f1fa8c;
-     /* Yellow */
  }
 
  .cm-number {
      color: #bd93f9;
-     /* Purple */
  }
 
  .cm-comment {
      color: #6272a4;
-     /* Grayish Blue */
-     font-style: italic;
+     /* font-style: italic; */
  }
 
+ .cm-command {
+    color: #82aaff;
+}
+
  .cm-subcommand {
+     /* 
      color: #8be9fd;
-     /* Light Blue */
-     font-style: italic;
+     color: #82aaff;
+     color:#c792ea;
+     color: #bd93f9;
+     color: #eff;
+     */
+     color: #ffcb6b;
+     /* font-style: italic; */
  }
 
  .modal {

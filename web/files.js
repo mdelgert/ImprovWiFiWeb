@@ -7,8 +7,9 @@ let currentFile = "";
 
 CodeMirror.defineSimpleMode("custom", {
     start: [
-        { regex: /\b(?:rem|defaultdelay|delay|repeat|led|tft)\b/i, token: "keyword" },
-        { regex: /\b(?:print|brightness|on|off|toggle)\b/i, token: "subcommand" },
+        { regex: /\b(?:rem|defaultdelay|delay|repeat)\b/i, token: "keyword" },
+        { regex: /\b(?:aes|hid|crontab|device|download|jiggle|led|mqtt|script|tft|wget)\b/i, token: "command" },
+        { regex: /\b(?:color|processkey|tapkey|add|enc|dec|print|brightness|on|off|toggle|msg)\b/i, token: "subcommand" },
         { regex: /\b\d+\b/, token: "number" },
         { regex: /"(?:[^\\]|\\.)*?"/, token: "string" },
         { regex: /\brem\b.*$/i, token: "comment" },
