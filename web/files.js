@@ -28,13 +28,20 @@ const editor = CodeMirror(document.getElementById("editorContainer"), {
     indentWithTabs: true
 });
 
+const mixedMode = {
+    name: "htmlmixed",
+    scriptTypes: [{matches: /\/x-handlebars-template|\/x-mustache/i,
+                   mode: null},
+                  {matches: /(text|application)\/(x-)?vb(a|script)/i,
+                   mode: "vbscript"}]
+};
+
 function changeFontSize() {
     const fontSize = document.getElementById('fontSizeSelector').value;
     document.querySelector('.CodeMirror').style.fontSize = fontSize;
     editor.refresh();
 }
 
-// Modal functions begin
 function toggleToolsModal() {
     document.getElementById("toolsModal").classList.toggle("active");
     document.getElementById("toolsModalOverlay").classList.toggle("active");
@@ -79,7 +86,6 @@ function validateJson() {
     }
     toggleModal();
 }
-// Modal functions end
 
 function showNotification(message, type = "info") {
     const statusMessage = document.getElementById("statusMessage");
@@ -170,6 +176,13 @@ async function openFile(file) {
         let mode;
         if (currentFile.endsWith('.json')) {
             mode = 'application/json';
+        } else if (currentFile.endsWith('.html')) {
+            //mode = 'text/html';
+            mode = mixedMode; // Use the custom mode spec for HTML
+        } else if (currentFile.endsWith('.css')) {
+            mode = 'css';
+        } else if (currentFile.endsWith('.js')) {
+            mode = 'javascript';
         } else if (currentFile.endsWith('.sh')) {
             mode = 'shell';
         } else if (currentFile.endsWith('.ps1')) {
