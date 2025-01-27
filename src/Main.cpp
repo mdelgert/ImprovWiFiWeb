@@ -52,6 +52,7 @@ void loop()
   RemoteDebugHandler::loop();
   ScriptHandler::loop();
   BluetoothHandler::loop();
+  GfxHandler::loop();
   ImprovWiFiHandler::loop();
   WebHandler::loop();
   ButtonHandler::loop();

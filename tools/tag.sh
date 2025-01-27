@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="v1.0.30"
+VERSION="v1.0.31"
 
 echo "Current version is $VERSION"
 git tag -d $VERSION
