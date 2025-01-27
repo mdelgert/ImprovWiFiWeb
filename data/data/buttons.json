@@ -63,6 +63,22 @@
       "action": "Command",
       "command": "led color green",
       "notes": ""
+    },
+    {
+      "id": 1738020914074,
+      "name": "SHOW CLOCK",
+      "category": "General",
+      "action": "Command",
+      "command": "tft clock true",
+      "notes": ""
+    },
+    {
+      "id": 1738020928833,
+      "name": "HIDE CLOCK",
+      "category": "General",
+      "action": "Command",
+      "command": "tft clock false",
+      "notes": ""
     }
   ]
 }
