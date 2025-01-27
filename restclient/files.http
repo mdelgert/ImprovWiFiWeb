@@ -8,6 +8,13 @@ Content-Type: text/plain
 
 ###
 
+### Create a new file
+POST http://demo1.local/file?filename=/hello1.txt
+Content-Type: text/plain
+
+This is the content of the new file.
+###
+
 ### Get all file anmd folder names
 GET {{baseUrl}}/filemanager
 Authorization: Bearer {{token}}
