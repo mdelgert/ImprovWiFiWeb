@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Backup & Restore (Dark Theme)</title>
+  <title>Backup &amp; Restore (Dark Theme)</title>
   <!-- Include JSZip from a CDN -->
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
@@ -15,8 +15,9 @@
       margin: 0;
       padding: 20px;
     }
-    h1, h2, h3 {
+    h1, h2 {
       color: #eee;
+      margin-bottom: 0.5rem;
     }
     button {
       background-color: #444;
@@ -30,14 +31,6 @@
     }
     button:hover {
       background-color: #555;
-    }
-    input[type="file"] {
-      margin: 0.5rem 0;
-      background-color: #333;
-      color: #ccc;
-      border: 1px solid #666;
-      padding: 5px;
-      font-size: 1rem;
     }
     .container {
       max-width: 700px;
@@ -58,6 +51,34 @@
     a {
       color: #9cf;
     }
+
+    /* ----- Styled file input ----- */
+    input[type="file"] {
+      display: none; /* Hide the default file input */
+    }
+    label.file-label {
+      display: inline-block;
+      background-color: #444;
+      color: #ccc;
+      border: 1px solid #666;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
+    }
+    label.file-label:hover {
+      background-color: #555;
+    }
+
+    /* If you want the chosen file name to appear somewhere, you can style that too. */
+    #chosenFileName {
+      display: inline-block;
+      margin-left: 10px;
+      color: #ccc;
+      font-size: 0.95rem;
+      font-style: italic;
+    }
   </style>
 </head>
 <body>
@@ -65,14 +86,22 @@
     <h1>Backup &amp; Restore (Dark Theme)</h1>
     <p>This page can both download all files from your device into a single ZIP, and restore them from a ZIP you select.</p>
 
+    <!-- BACKUP SECTION -->
     <h2>Backup</h2>
     <button onclick="downloadAllAsZip()">Download All Files as ZIP</button>
 
+    <!-- RESTORE SECTION -->
     <h2>Restore</h2>
-    <input type="file" id="restoreZipInput" accept=".zip" />
+
+    <!-- Styled "Choose File" button: a label pointing to a hidden file input -->
+    <label for="restoreZipInput" class="file-label">Choose ZIP File</label>
+    <span id="chosenFileName"></span>
+    <input type="file" id="restoreZipInput" accept=".zip" onchange="onZipSelected(event)" />
+
     <br/>
     <button onclick="restoreFromZip()">Restore Selected ZIP</button>
 
+    <!-- LOG OUTPUT -->
     <div class="log" id="logOutput"></div>
   </div>
 
@@ -87,6 +116,17 @@
       const logEl = document.getElementById('logOutput');
       logEl.textContent += message + "\n";
       logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // Show the chosen file name next to the button
+    function onZipSelected(event) {
+      const fileInput = event.target;
+      const chosenFileNameEl = document.getElementById("chosenFileName");
+      if (fileInput.files && fileInput.files.length > 0) {
+        chosenFileNameEl.textContent = fileInput.files[0].name;
+      } else {
+        chosenFileNameEl.textContent = "";
+      }
     }
 
     // ===========================
@@ -132,7 +172,7 @@
           // Get the file data as a binary ArrayBuffer
           const fileData = await fileRes.arrayBuffer();
 
-          // Remove leading slash so it doesn't create a top-level empty folder in the zip
+          // Remove leading slash so it doesn't create an empty top-level folder in the zip
           let zipName = filePath.startsWith("/") ? filePath.substring(1) : filePath;
           // Add to the ZIP
           zip.file(zipName, fileData);
@@ -200,22 +240,15 @@
           const fileData = await entry.async("arrayBuffer");
 
           // We might want to store it with a leading slash in the device
-          // if your device expects that. For example:
           const devicePath = "/" + name; // i.e. "/www/index.html"
 
           const encodedPath = encodeURIComponent(devicePath);
           const uploadUrl = `${endPoint}/file?filename=${encodedPath}`;
 
           // 4. Upload to device
-          // Adjust method or endpoint to match your firmware. 
-          // Using POST as an example:
+          // Adjust method or endpoint if needed by your firmware
           const res = await fetch(uploadUrl, {
             method: "POST", 
-            headers: {
-              // Possibly set "Content-Type" if your firmware expects it
-              // But if it's purely binary, sometimes no content-type is fine
-              // "Content-Type": "application/octet-stream"
-            },
             body: fileData
           });
 
