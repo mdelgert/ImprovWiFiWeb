@@ -5,8 +5,8 @@
 #define CUSTOM_MANUFACTURER "Demo"
 #define CUSTOM_SERIAL_NUMBER "123456789"
 
-//#include "Secure.h"
-#include "SecureExample.h"
+#include "Secure.h"
+//#include "SecureExample.h"
 #include "ConfigManager.h"
 #include "NonBlockingTimer.h"
 #include "RemoteDebugHandler.h"
