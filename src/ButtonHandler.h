@@ -6,6 +6,7 @@
 #include <OneButton.h>
 #include "LedHandler.h"
 #include "GfxHandler.h"
+#include <LittleFS.h>
 
 // Full implementation of ButtonHandler
 class ButtonHandler {

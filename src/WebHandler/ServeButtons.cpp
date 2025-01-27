@@ -1,3 +1,5 @@
+#ifdef ENABLE_WEB_HANDLER
+
 #include "ServeButtons.h"
 
 // Define the file path for the buttons JSON file
@@ -234,3 +236,5 @@ void ServeButtons::handleDeleteButton(AsyncWebServerRequest *request)
     debugV("Button with ID %s deleted successfully", buttonId.c_str());
     WebHandler::sendSuccessResponse(request, "Button deleted successfully");
 }
+
+#endif // ENABLE_WEB_HANDLER

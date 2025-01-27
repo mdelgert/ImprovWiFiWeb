@@ -66,7 +66,7 @@ def merge_bin(source, target, env):
     # Run esptool to merge images into a single binary
     env.Execute(
         f"{env.subst('${PYTHONEXE}')} {env.subst('${OBJCOPY}')} "
-        f"--chip {board_config.get('build.mcu', 'esp32')} merge_bin "
+        f"--chip {board_config.get('build.mcu', 'esp32s3')} merge_bin "
         f"--flash_size {board_config.get('upload.flash_size', '16MB')} "
         f"--flash_mode {flash_mode} "
         f"--flash_freq {flash_freq} "

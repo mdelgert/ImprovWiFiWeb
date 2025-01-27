@@ -1,11 +1,9 @@
 #include "Globals.h"
 #include "TemplateHandler.h"
 #include "RemoteDebugHandler.h"
-#include "ImprovHandler.h"
 #include "GfxHandler.h"
 #include "LedHandler.h"
 #include "ButtonHandler.h"
-#include "WifiHandler.h"
 #include "WebHandler.h"
 #include "BluetoothHandler.h"
 #include "MqttHandler.h"
@@ -19,6 +17,7 @@
 #include "DownloadHandler.h"
 #include "AesHandler.h"
 #include "JiggleHandler.h"
+#include "ImprovWiFiHandler.h"
 
 void setup()
 {
@@ -28,9 +27,8 @@ void setup()
   ConfigManager::init();
   BluetoothHandler::init();
   GfxHandler::init();
-  WifiHandler::init();
+  ImprovWiFiHandler::init();
   WebHandler::init();
-  ImprovHandler::init();
   LedHandler::init();
   ButtonHandler::init();
   MqttHandler::init();
@@ -43,11 +41,9 @@ void setup()
   AesHandler::init();
   TimeHandler::init();
   JiggleHandler::init();
-  // settings.WifiScan = true;
-  // ConfigManager::save();
-  GfxHandler::printMessage(SOFTWARE_VERSION);
+  //GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
-  LedHandler::setColorByName("Purple");
+  LedHandler::setColorByName("purple");
 }
 
 void loop()
@@ -56,9 +52,8 @@ void loop()
   RemoteDebugHandler::loop();
   ScriptHandler::loop();
   BluetoothHandler::loop();
-  WifiHandler::loop();
+  ImprovWiFiHandler::loop();
   WebHandler::loop();
-  ImprovHandler::loop();
   ButtonHandler::loop();
   MqttHandler::loop();
   OTAHandler::loop();

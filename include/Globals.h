@@ -1,5 +1,7 @@
 #pragma once
 
+#define WIFI_NETWORKS_FILE "/wifiNetworks.json"
+
 // Custom USB descriptors
 #define CUSTOM_PRODUCT_NAME "USB KeyboardMouse"
 #define CUSTOM_MANUFACTURER "Demo"

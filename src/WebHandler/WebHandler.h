@@ -28,7 +28,7 @@ public:
     static void loop();
     
 private:
-    static NonBlockingTimer myTimer;
+    //static NonBlockingTimer myTimer;
     static AsyncWebServer server;
     static void serveNotFound();
 };

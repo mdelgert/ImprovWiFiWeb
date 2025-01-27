@@ -2,7 +2,7 @@
 
 #include "WebHandler.h"
 
-NonBlockingTimer WebHandler::myTimer(60000);
+//NonBlockingTimer WebHandler::myTimer(60000);
 AsyncWebServer WebHandler::server(80);
 
 void WebHandler::serveNotFound()
@@ -107,14 +107,16 @@ void WebHandler::init()
 {
     if (!settings.WebHandler) return;
 
-    while (WiFi.status() != WL_CONNECTED)
-    {
-        if (myTimer.isReady())
-        {
-            debugI("WebHandler waiting for WiFi...");
-            //break; // Don't break, just wait
-        }
-    }
+    // Appears to block Improv WiFi setup if enabled
+    // Todo test and remove if not needed
+    // while (WiFi.status() != WL_CONNECTED)
+    // {
+    //     if (myTimer.isReady())
+    //     {
+    //         debugI("WebHandler waiting for WiFi...");
+    //         //break; // Don't break, just wait
+    //     }
+    // }
 
     ServeEmbedded::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);

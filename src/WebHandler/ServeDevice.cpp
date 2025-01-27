@@ -135,7 +135,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
 {
     server.on("/device/wifi/networks", HTTP_GET, [](AsyncWebServerRequest *request)
               {
-        const char *filePath = "/wifi_networks.json";
+        //const char *filePath = "/wifi_networks.json";
 
         if (!LittleFS.begin(true)) {
             debugE("Failed to mount LittleFS");
@@ -143,9 +143,9 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
             return;
         }
 
-        File file = LittleFS.open(filePath, "r");
+        File file = LittleFS.open(WIFI_NETWORKS_FILE, "r");
         if (!file) {
-            debugE("Failed to open file %s for reading", filePath);
+            debugE("Failed to open file %s for reading", WIFI_NETWORKS_FILE);
             WebHandler::sendErrorResponse(request, 500, "Failed to open network scan results");
             return;
         }
@@ -155,7 +155,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         file.close();
 
         if (error) {
-            debugE("Failed to parse JSON from file %s", filePath);
+            debugE("Failed to parse JSON from file %s", WIFI_NETWORKS_FILE);
             WebHandler::sendErrorResponse(request, 500, "Failed to parse network scan results");
             return;
         }

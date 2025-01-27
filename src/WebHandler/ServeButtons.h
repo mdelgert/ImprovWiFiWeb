@@ -1,5 +1,6 @@
-#ifndef SERVE_BUTTONS_H
-#define SERVE_BUTTONS_H
+#pragma once
+
+#ifdef ENABLE_WEB_HANDLER
 
 #include "Globals.h"
 #include "WebHandler.h"
@@ -19,4 +20,4 @@ private:
     static void handlePostButtons(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
 };
 
-#endif // SERVE_BUTTONS_H
+#endif // ENABLE_WEB_HANDLER

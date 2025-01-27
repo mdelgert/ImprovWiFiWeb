@@ -4,14 +4,14 @@
 #include <Arduino.h>
 
 #define SECURE_DEVICE_NAME "demo"
-#define SECURE_WIFI_SSID "defaultWifiSSID"
-#define SECURE_WIFI_PASSWORD "defaultWifiPassword"
-#define SECURE_MQTT_SERVER "localhost"
+#define SECURE_WIFI_SSID ""
+#define SECURE_WIFI_PASSWORD ""
+#define SECURE_MQTT_SERVER "yourmqttserver"
 #define SECURE_MQTT_PORT 1883
 #define SECURE_MQTT_SUB_TOPIC "testtopic/sub"
 #define SECURE_MQTT_PUB_TOPIC "testtopic/pub"
-#define SECURE_MQTT_USERNAME "emqx"
-#define SECURE_MQTT_PASSWORD "public"
+#define SECURE_MQTT_USERNAME "yourusername"
+#define SECURE_MQTT_PASSWORD "yourpassword"
 #define SECURE_MQTT_SSL true
 #define SECURE_API_KEY "password"
 #define SECURE_OTA_PASSWORD "password"

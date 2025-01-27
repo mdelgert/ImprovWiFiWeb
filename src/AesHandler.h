@@ -35,4 +35,18 @@ private:
     static void decryptData(const uint8_t *cipherText, size_t length, const uint8_t *key, const uint8_t *iv, uint8_t *output);
 };
 
+#else
+
+/**
+ * No-op implementation if ENABLE_AES_HANDLER is not defined.
+ * This allows other code to compile without changing references.
+ */
+class AesHandler
+{
+public:
+    static String encrypt(const String &plainText, const String &password) { return ""; }
+    static String decrypt(const String &cipherText, const String &password) { return ""; }
+    static void init() {}
+};
+
 #endif //ENABLE_AES_HANDLER
