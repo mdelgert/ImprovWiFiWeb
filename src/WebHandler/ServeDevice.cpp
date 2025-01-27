@@ -9,7 +9,8 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
     handleDeviceInfo(server);
     handleDeviceReboot(server);
     handleDeviceWifiNetworks(server);
-    handleDeviceBackup(server);
+    //handleDeviceBackup(server);
+    handleDeviceFormat(server);
 }
 
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
@@ -160,6 +161,8 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
 }
 
+/*
+// Tar not functioning at this time zipping files on frontend
 void ServeDevice::handleDeviceBackup(AsyncWebServer &server)
 {
     server.on("/device/backup", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -202,8 +205,32 @@ void ServeDevice::handleDeviceBackup(AsyncWebServer &server)
                   JsonDocument data;
                   data["data"] = "Backup success";
 
-                  WebHandler::sendSuccessResponse(request, "GET /device/backup", &data);
-              });
+                  WebHandler::sendSuccessResponse(request, "GET /device/backup", &data); });
 }
+*/
 
+void ServeDevice::handleDeviceFormat(AsyncWebServer &server)
+{
+    server.on("/device/format", HTTP_GET, [](AsyncWebServerRequest *request)
+              {
+        debugV("Received GET request on /device/format");
+
+        JsonDocument data;
+        data["message"] = "Formating device";
+        data["success"] = true;
+
+        WebHandler::sendSuccessResponse(request, "GET /device/format", &data);
+
+        // Format LittleFS
+        if (LittleFS.format())
+        {
+            debugI("LittleFS formatted successfully!");
+        }
+        else
+        {
+            debugE("Failed to format LittleFS.");
+        }
+
+        });
+}
 #endif // ENABLE_WEB_HANDLER

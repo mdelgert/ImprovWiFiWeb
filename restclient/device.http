@@ -1,26 +1,22 @@
 @baseUrl = http://demo1.local
 @token = test
 
-### backup
-GET {{baseUrl}}/device/backup
-Authorization: Bearer {{token}}
-
-###
-
 ### Get
 GET {{baseUrl}}/device/info
 Authorization: Bearer {{token}}
-
 ###
 
-### Get
+### Scan networks
 GET {{baseUrl}}/device/wifi/networks
 Authorization: Bearer {{token}}
-
 ###
 
-### Get
+### Reboot
 GET {{baseUrl}}/device/reboot
 Authorization: Bearer {{token}}
+###
 
+### Format device
+GET {{baseUrl}}/device/format
+Authorization: Bearer {{token}}
 ###
