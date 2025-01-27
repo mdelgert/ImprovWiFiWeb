@@ -20,11 +20,15 @@ public:
 // Define the handler for LovyanGFX
 class GfxHandler {
 private:
+    static NonBlockingTimer clockTimer;
+    static bool showClock;
+    static void toggleClock(bool state);
     static LGFX_LiLyGo_TDongleS3 tft;
     static void registerCommands();
 
 public:
     static void init();
+    static void loop();
     static void printMessage(const String &message);
     static void drawImage(int x, int y, int width, int height, const char *data);
 };
@@ -33,6 +37,7 @@ public:
 class GfxHandler {
 public:
     static void init() {}
+    static void loop() {}
     static void printMessage(const String &message) {} // Consistent parameter type
     static void drawImage(int, int, int, int, const char *) {}
 };

@@ -1,20 +1,68 @@
 {
-    "buttons": [
-      {
-        "id": 1,
-        "name": "Test1",
-        "category": "General",
-        "action": "Command",
-        "command": "tft print test1",
-        "notes": "Test1"
-      },
-      {
-        "id": 2,
-        "name": "Test2",
-        "category": "General",
-        "action": "Command",
-        "command": "tft print test2",
-        "notes": "Test2"
-      }
-    ]
-  }
+  "buttons": [
+    {
+      "id": 1,
+      "name": "TFT HELLO",
+      "category": "General",
+      "action": "Command",
+      "command": "tft print hello",
+      "notes": "Print hello to tft"
+    },
+    {
+      "id": 2,
+      "name": "LED OFF",
+      "category": "General",
+      "action": "Command",
+      "command": "led color black",
+      "notes": "Turn led off"
+    },
+    {
+      "id": 1738019343279,
+      "name": "LED ON",
+      "category": "General",
+      "action": "Command",
+      "command": "led color white",
+      "notes": ""
+    },
+    {
+      "id": 1738019396599,
+      "name": "JIGGLE ON",
+      "category": "General",
+      "action": "Command",
+      "command": "jiggle true",
+      "notes": ""
+    },
+    {
+      "id": 1738019411713,
+      "name": "JIGGLE OFF",
+      "category": "General",
+      "action": "Command",
+      "command": "jiggle false",
+      "notes": ""
+    },
+    {
+      "id": 1738019468785,
+      "name": "LOCK IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft demo",
+      "notes": ""
+    },
+    {
+      "id": 1738019520898,
+      "name": "LED PURPLE",
+      "category": "General",
+      "action": "Command",
+      "command": "led color purple",
+      "notes": ""
+    },
+    {
+      "id": 1738019539126,
+      "name": "LED GREEN",
+      "category": "General",
+      "action": "Command",
+      "command": "led color green",
+      "notes": ""
+    }
+  ]
+}

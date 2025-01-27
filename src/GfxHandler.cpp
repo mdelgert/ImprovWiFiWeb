@@ -4,6 +4,8 @@
 
 // Initialize the static member
 LGFX_LiLyGo_TDongleS3 GfxHandler::tft;
+NonBlockingTimer GfxHandler::clockTimer(1000);
+bool GfxHandler::showClock;
 
 // Constructor implementation for LGFX_LiLyGo_TDongleS3
 LGFX_LiLyGo_TDongleS3::LGFX_LiLyGo_TDongleS3()
@@ -45,6 +47,11 @@ LGFX_LiLyGo_TDongleS3::LGFX_LiLyGo_TDongleS3()
     setPanel(&_panel_instance); // Attach the panel
 }
 
+void GfxHandler::toggleClock(bool state)
+{
+    showClock = state;
+}
+
 // Implementation for GfxHandler methods
 void GfxHandler::init()
 {
@@ -55,6 +62,14 @@ void GfxHandler::init()
     tft.setTextColor(TFT_WHITE, TFT_BLACK); // White text on black background
     tft.setTextSize(2);                     // Set the text size
     registerCommands();
+}
+
+void GfxHandler::loop()
+{
+    if (showClock && clockTimer.isReady())
+    {
+        printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
+    }
 }
 
 void GfxHandler::printMessage(const String &message)
@@ -91,8 +106,8 @@ void GfxHandler::registerCommands()
             printMessage(args.c_str());
         }
         else if (cmd == "clock") {
-            printMessage(TimeHandler::formatDateTime("%I:%M:%S %p"));
-            //printMessage(TimeHandler::formatDateTime("%Y-%m-%d %I:%M:%S %p"));
+            bool state = args.equalsIgnoreCase("true");
+            toggleClock(state);
         }
         else if (cmd == "demo") {
             //Transparency background color
@@ -108,7 +123,7 @@ void GfxHandler::registerCommands()
         } }, "Handles tft commands. Usage: led <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  print <print> - Print a message to TFT screen\n"
-                                         "  clock - Show current time on tft screen\n"
+                                         "  clock <true|false> - Show or hide current time on tft screen\n"
                                          "  demo - Show demo lock image on tft screen"
         );
 }
