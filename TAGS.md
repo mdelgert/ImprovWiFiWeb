@@ -76,3 +76,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Add partitions.csv
+
+### Tag: v1.0.26
+**Date:** 2025-27-01
+**Description:**  
+- Add ota web interface
