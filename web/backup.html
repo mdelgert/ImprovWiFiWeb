@@ -1,128 +1,138 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Backup and Restore</title>
+  <title>Client-Side Backup (Dark Theme)</title>
+  <!-- Include JSZip from a CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
   <style>
+    /* ----- Simple Dark Theme Styles ----- */
     body {
-      font-family: Arial, sans-serif;
-      background-color: #1e1e1e;
-      color: #ffffff;
+      background-color: #222;
+      color: #ccc;
+      font-family: "Helvetica Neue", Arial, sans-serif;
       margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
+      padding: 20px;
     }
-
-    h1 {
-      margin-bottom: 20px;
+    h1, h2, h3 {
+      color: #eee;
     }
-
-    button, input[type="file"] {
-      margin: 10px;
+    button {
+      background-color: #444;
+      color: #ccc;
+      border: 1px solid #666;
       padding: 10px 20px;
-      font-size: 16px;
-      color: #ffffff;
-      background-color: #333333;
-      border: 1px solid #555555;
-      border-radius: 5px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 4px;
     }
-
-    button:hover, input[type="file"]:hover {
-      background-color: #555555;
+    button:hover {
+      background-color: #555;
     }
-
-    #status {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #00ff00;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .log {
+      background: #333;
+      color: #ccc;
+      padding: 10px;
+      margin-top: 1rem;
+      height: 200px;
+      overflow-y: auto;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 0.9rem;
+    }
+    a {
+      color: #9cf;
     }
   </style>
 </head>
 <body>
-  <h1>Backup and Restore</h1>
+  <div class="container">
+    <h1>Client-Side Backup (Dark Theme)</h1>
+    <p>This page fetches a list of files from your device, downloads them, then bundles everything into a single ZIP.</p>
+    <button onclick="downloadAllAsZip()">Download All Files as ZIP</button>
 
-  <!-- Download Button -->
-  <button id="backupBtn">Download Backup</button>
-
-  <!-- File Upload -->
-  <input type="file" id="restoreFile" accept=".tar">
-  <button id="restoreBtn">Upload and Restore</button>
-
-  <!-- Status Message -->
-  <div id="status"></div>
+    <div class="log" id="logOutput"></div>
+  </div>
 
   <script>
-    // Determine the endpoint based on the environment
-    const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+    // Endpoint logic: if we're on localhost, use 'http://demo1.local' as base
+    const endPoint = window.location.hostname === "localhost"
+      ? "http://demo1.local"
+      : "";
 
-    // Select elements
-    const backupBtn = document.getElementById('backupBtn');
-    const restoreFile = document.getElementById('restoreFile');
-    const restoreBtn = document.getElementById('restoreBtn');
-    const status = document.getElementById('status');
+    // Simple logger to append messages to the .log div
+    function log(message) {
+      const logEl = document.getElementById('logOutput');
+      logEl.textContent += message + "\n";
+      logEl.scrollTop = logEl.scrollHeight;
+    }
 
-    // Backup functionality
-    backupBtn.addEventListener('click', () => {
-      status.textContent = 'Starting backup...';
+    async function downloadAllAsZip() {
+      log("Starting backup process...");
 
-      fetch(`${endPoint}/backup`)
-        .then(response => {
-          if (!response.ok) throw new Error('Backup failed!');
-          return response.blob();
-        })
-        .then(blob => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = 'backup.tar'; // Suggested filename
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          window.URL.revokeObjectURL(url);
-          status.textContent = 'Backup completed!';
-        })
-        .catch(err => {
-          console.error(err);
-          status.textContent = 'Backup failed. Check console for details.';
-        });
-    });
+      try {
+        // 1. Fetch the file list: GET /files
+        const fileListUrl = `${endPoint}/files`;
+        log(`Fetching file list from: ${fileListUrl}`);
 
-    // Restore functionality
-    restoreBtn.addEventListener('click', () => {
-      const file = restoreFile.files[0];
-      if (!file) {
-        status.textContent = 'Please select a file to restore.';
-        return;
+        const fileListRes = await fetch(fileListUrl);
+        if (!fileListRes.ok) {
+          throw new Error(`Failed to fetch file list: HTTP ${fileListRes.status}`);
+        }
+        const fileListJson = await fileListRes.json();
+        const files = fileListJson.data.files || [];
+
+        log(`Found ${files.length} files: ${files.join(", ")}`);
+
+        // 2. Create a new JSZip instance
+        const zip = new JSZip();
+
+        // 3. Fetch each file and add to ZIP
+        for (const filePath of files) {
+          const encodedPath = encodeURIComponent(filePath);
+          const downloadUrl = `${endPoint}/file?filename=${encodedPath}`;
+
+          log(`Downloading: ${filePath}`);
+          const fileRes = await fetch(downloadUrl);
+          if (!fileRes.ok) {
+            log(` -> Skipping file (HTTP ${fileRes.status}).`);
+            continue;
+          }
+
+          // Get the file data as a binary ArrayBuffer
+          const fileData = await fileRes.arrayBuffer();
+
+          // Trim leading slash so it doesn't create an empty folder in the zip
+          let zipName = filePath.startsWith("/") ? filePath.substring(1) : filePath;
+          // Add file to the ZIP
+          zip.file(zipName, fileData);
+        }
+
+        // 4. Generate the ZIP (as a Blob)
+        log("Generating ZIP archive...");
+        const zipBlob = await zip.generateAsync({ type: "blob" });
+
+        // 5. Trigger download in the browser
+        log("Triggering download of backup.zip");
+        const url = URL.createObjectURL(zipBlob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "backup.zip";
+        link.click();
+        URL.revokeObjectURL(url);
+
+        log("All files zipped and download started.");
+      } catch (error) {
+        log("Error: " + error.message);
+        console.error(error);
       }
-
-      status.textContent = 'Uploading and restoring...';
-
-      const formData = new FormData();
-      formData.append('file', file);
-
-      fetch(`${endPoint}/restore`, {
-        method: 'POST',
-        body: formData,
-      })
-        .then(response => {
-          if (!response.ok) throw new Error('Restore failed!');
-          return response.text();
-        })
-        .then(text => {
-          status.textContent = 'Restore completed: ' + text;
-        })
-        .catch(err => {
-          console.error(err);
-          status.textContent = 'Restore failed. Check console for details.';
-        });
-    });
+    }
   </script>
 </body>
 </html>
