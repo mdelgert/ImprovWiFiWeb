@@ -24,6 +24,7 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     //serveEmbeddedFile(server, "/codemirror/codemirror_min.css", codemirror_css_start, codemirror_css_end, "text/css");
     serveEmbeddedFile(server, "/aes.html", aes_html_start, aes_html_end, "text/html");
     serveEmbeddedFile(server, "/aes.js", aes_js_start, aes_js_end, "application/javascript");
+    serveEmbeddedFile(server, "/backup.html", backup_html_start, backup_html_end, "text/html");
     serveEmbeddedFile(server, "/buttoneditor.html", buttoneditor_html_start, buttoneditor_html_end, "text/html");
     serveEmbeddedFile(server, "/buttoneditor.css", buttoneditor_css_start, buttoneditor_css_end, "text/css");
     serveEmbeddedFile(server, "/buttoneditor.js", buttoneditor_js_start, buttoneditor_js_end, "application/javascript");

@@ -14,6 +14,9 @@ extern const uint8_t aes_html_end[] asm("_binary_web_aes_html_end");
 extern const uint8_t aes_js_start[] asm("_binary_web_aes_js_start");
 extern const uint8_t aes_js_end[] asm("_binary_web_aes_js_end");
 
+extern const uint8_t backup_html_start[] asm("_binary_web_backup_html_start");
+extern const uint8_t backup_html_end[] asm("_binary_web_backup_html_end");
+
 extern const uint8_t buttoneditor_html_start[] asm("_binary_web_buttoneditor_html_start");
 extern const uint8_t buttoneditor_html_end[] asm("_binary_web_buttoneditor_html_end");
 extern const uint8_t buttoneditor_css_start[] asm("_binary_web_buttoneditor_css_start");
