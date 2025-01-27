@@ -66,3 +66,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-25-01
 **Description:**  
 - Add button editor
+
+### Tag: v1.0.23
+**Date:** 2025-26-01
+**Description:**  
+- Add LittleFs data folder
