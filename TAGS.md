@@ -86,3 +86,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Add littleFs support for merge2.y
+
+### Tag: v1.0.28
+**Date:** 2025-27-01
+**Description:**  
+- Wifi cleanup device disabled
