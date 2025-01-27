@@ -45,6 +45,7 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/", index_html_start, index_html_end, "text/html");
     serveEmbeddedFile(server, "/index.js", index_js_start, index_js_end, "application/javascript");
     serveEmbeddedFile(server, "/navbar.html", navbar_html_start, navbar_html_end, "text/html");
+    serveEmbeddedFile(server, "/ota.html", ota_html_start, ota_html_end, "text/html");
     serveEmbeddedFile(server, "/settings.html", settings_html_start, settings_html_end, "text/html");
     serveEmbeddedFile(server, "/settings.js", settings_js_start, settings_js_end, "application/javascript");
     serveEmbeddedFile(server, "/styles.css", styles_css_start, styles_css_end, "text/css");

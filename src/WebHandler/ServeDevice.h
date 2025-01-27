@@ -8,6 +8,7 @@
 #include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
+#include <ArduinoOTA.h>
 
 class ServeDevice {
 public:
@@ -19,6 +20,7 @@ private:
     static void handleDeviceWifiNetworks(AsyncWebServer& server);
     //static void handleDeviceBackup(AsyncWebServer& server);
     static void handleDeviceFormat(AsyncWebServer& server);
+    static void handleDeviceOTA(AsyncWebServer &server);
 };
 
 #endif // ENABLE_WEB_HANDLER

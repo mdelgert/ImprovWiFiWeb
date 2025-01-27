@@ -11,6 +11,7 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
     handleDeviceWifiNetworks(server);
     //handleDeviceBackup(server);
     handleDeviceFormat(server);
+    handleDeviceOTA(server);
 }
 
 void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
@@ -233,4 +234,47 @@ void ServeDevice::handleDeviceFormat(AsyncWebServer &server)
 
         });
 }
+
+void ServeDevice::handleDeviceOTA(AsyncWebServer &server)
+{
+    server.on("/device/ota", HTTP_POST, [](AsyncWebServerRequest *request) {
+        if (Update.hasError()) {
+            JsonDocument data;
+            data["message"] = "Update failed!";
+            data["success"] = false;
+            String response;
+            serializeJson(data, response);
+            WebHandler::sendErrorResponse(request, 500, response.c_str());
+        } else {
+            JsonDocument data;
+            data["message"] = "Update successful! Rebooting...";
+            data["success"] = true;
+            String response;
+            serializeJson(data, response);
+            WebHandler::sendSuccessResponse(request, "POST /device/ota", &data);
+            delay(1000);
+            ESP.restart();
+        }
+    }, [](AsyncWebServerRequest *request, String filename, size_t index, uint8_t *data, size_t len, bool final) {
+        if (index == 0) {
+            debugV("Update Start: %s", filename.c_str());
+            if (!Update.begin((ESP.getFreeSketchSpace() - 0x1000) & 0xFFFFF000)) {
+                Update.printError(Serial);
+            }
+        }
+        if (!Update.hasError()) {
+            if (Update.write(data, len) != len) {
+                Update.printError(Serial);
+            }
+        }
+        if (final) {
+            if (Update.end(true)) {
+                debugV("Update Success: %u bytes", index + len);
+            } else {
+                Update.printError(Serial);
+            }
+        }
+    });
+}
+
 #endif // ENABLE_WEB_HANDLER

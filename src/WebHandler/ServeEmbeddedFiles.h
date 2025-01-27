@@ -68,6 +68,9 @@ extern const uint8_t index_js_end[] asm("_binary_web_index_js_end");
 extern const uint8_t navbar_html_start[] asm("_binary_web_navbar_html_start");
 extern const uint8_t navbar_html_end[] asm("_binary_web_navbar_html_end");
 
+extern const uint8_t ota_html_start[] asm("_binary_web_ota_html_start");
+extern const uint8_t ota_html_end[] asm("_binary_web_ota_html_end");
+
 extern const uint8_t settings_html_start[] asm("_binary_web_settings_html_start");
 extern const uint8_t settings_html_end[] asm("_binary_web_settings_html_end");
 extern const uint8_t settings_js_start[] asm("_binary_web_settings_js_start");

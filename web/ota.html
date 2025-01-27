@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ESP32 OTA Firmware Update</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+    .file-input {
+      display: none;
+    }
+    .custom-file-label {
+      display: inline-block;
+      background-color: #6200ee;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 20px;
+    }
+    .custom-file-label:hover {
+      background-color: #3700b3;
+    }
+    .file-name {
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: #aaaaaa;
+    }
+    button {
+      background-color: #6200ee;
+      color: #ffffff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #3700b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>OTA Firmware Update</h1>
+    <form method="POST" action="/device/ota" enctype="multipart/form-data">
+      <!-- Hidden file input -->
+      <input id="firmware" class="file-input" type="file" name="firmware" required>
+      <!-- Custom label -->
+      <label for="firmware" class="custom-file-label">Choose File</label>
+      <!-- Display selected file name -->
+      <div id="file-name" class="file-name">No file chosen</div>
+      <br>
+      <button type="submit">Upload Firmware</button>
+    </form>
+  </div>
+
+  <script>
+    // JavaScript to update the file name display
+    const fileInput = document.getElementById('firmware');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        fileNameDisplay.textContent = fileInput.files[0].name;
+      } else {
+        fileNameDisplay.textContent = 'No file chosen';
+      }
+    });
+  </script>
+</body>
+</html>
