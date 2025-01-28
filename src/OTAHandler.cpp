@@ -1,6 +1,7 @@
 #ifdef ENABLE_OTA_HANDLER
 
 #include "OTAHandler.h"
+#include <ArduinoOTA.h>
 
 static NonBlockingTimer setupDelay(1000);
 

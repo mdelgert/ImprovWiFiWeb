@@ -3,7 +3,6 @@
 #ifdef ENABLE_OTA_HANDLER
 
 #include "Globals.h"
-#include <ArduinoOTA.h>
 
 class OTAHandler
 {
