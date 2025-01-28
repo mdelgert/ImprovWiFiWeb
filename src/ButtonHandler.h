@@ -2,8 +2,6 @@
 
 #ifdef ENABLE_BUTTON_HANDLER
 
-#include "Globals.h"
-
 // Full implementation of ButtonHandler
 class ButtonHandler {
 public:

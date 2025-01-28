@@ -1,6 +1,7 @@
 #ifdef ENABLE_BUTTON_HANDLER
 
 #include "ButtonHandler.h"
+#include "Globals.h"
 #include "LedHandler.h"
 #include "GfxHandler.h"
 #include <OneButton.h>
