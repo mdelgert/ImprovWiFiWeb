@@ -1,6 +1,7 @@
 #ifdef ENABLE_AES_HANDLER
 // AesHandler.cpp
 #include "AesHandler.h"
+#include "Globals.h"
 #include <aes/esp_aes.h>
 #include "mbedtls/md.h"
 #include "mbedtls/pkcs5.h"

@@ -2,7 +2,6 @@
 // AesHandler.h
 #pragma once
 
-#include "Globals.h"
 #include <Arduino.h>
 #include <vector>
 
