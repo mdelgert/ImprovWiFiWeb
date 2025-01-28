@@ -4,14 +4,6 @@
 
 #ifdef ENABLE_SYSTEM_MONITOR
 
-#include "Globals.h"
-#include "TimeHandler.h"
-#include "GfxHandler.h"
-#include "CronHandler.h"
-#include <Arduino.h>
-#include <freertos/FreeRTOS.h>
-#include <freertos/task.h>
-
 class SystemMonitor {
 private:
     static void systemMonitorTask(void *parameter);

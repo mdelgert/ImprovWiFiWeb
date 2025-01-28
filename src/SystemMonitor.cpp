@@ -1,6 +1,13 @@
 #ifdef ENABLE_SYSTEM_MONITOR
 
 #include "SystemMonitor.h"
+#include "Globals.h"
+#include "TimeHandler.h"
+#include "GfxHandler.h"
+#include "CronHandler.h"
+#include <Arduino.h>
+#include <freertos/FreeRTOS.h>
+#include <freertos/task.h>
 
 // Timing intervals (in milliseconds)
 constexpr unsigned long SECOND_CHECK_INTERVAL = 1000;
