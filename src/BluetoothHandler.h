@@ -2,7 +2,6 @@
 
 #ifdef ENABLE_BLUETOOTH_HANDLER
 
-#include "Globals.h"
 #include <NimBLEDevice.h>
 
 class BluetoothHandler

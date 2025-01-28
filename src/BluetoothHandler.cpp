@@ -1,6 +1,7 @@
 #ifdef ENABLE_BLUETOOTH_HANDLER
 
 #include "BluetoothHandler.h"
+#include "Globals.h"
 
 NimBLEServer *BluetoothHandler::pServer = nullptr;
 NimBLECharacteristic *BluetoothHandler::pTxCharacteristic = nullptr;
