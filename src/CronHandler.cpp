@@ -1,6 +1,8 @@
 #ifdef ENABLE_CRON_HANDLER
 
 #include "CronHandler.h"
+#include "CommandHandler.h"
+#include "NonBlockingTimer.h"
 
 std::vector<CronHandler::CronJob> CronHandler::cronJobs;
 static NonBlockingTimer cronTimer(1000);
