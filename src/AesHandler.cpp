@@ -1,6 +1,10 @@
 #ifdef ENABLE_AES_HANDLER
 // AesHandler.cpp
 #include "AesHandler.h"
+#include <aes/esp_aes.h>
+#include "mbedtls/md.h"
+#include "mbedtls/pkcs5.h"
+#include "arduino_base64.hpp"
 
 //const size_t AesHandler::iterations = 10000; //Anything above 10000 starts to become really slow
 const size_t AesHandler::iterations = 1000; //Fast but less secure

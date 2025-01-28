@@ -3,10 +3,6 @@
 #pragma once
 
 #include "Globals.h"
-#include <aes/esp_aes.h>
-#include "mbedtls/md.h"
-#include "mbedtls/pkcs5.h"
-#include "arduino_base64.hpp"
 #include <Arduino.h>
 #include <vector>
 
