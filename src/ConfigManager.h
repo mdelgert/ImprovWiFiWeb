@@ -27,7 +27,6 @@ struct Settings {
     //String timezone = DEFAULT_TIMEZONE;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;
-    // Settings not saved in preferences
     uint64_t upTime = 0;
 };
 
