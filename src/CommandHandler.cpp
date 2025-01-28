@@ -1,6 +1,7 @@
 // CommandHandler.cpp
 
 #include "CommandHandler.h"
+#include "Globals.h"
 
 std::map<String, std::function<void(const String &)>> CommandHandler::commandRegistry;
 std::map<String, String> CommandHandler::commandDescriptions;

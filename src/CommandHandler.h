@@ -2,7 +2,6 @@
 
 #pragma once
 
-#include "Globals.h"
 #include <Arduino.h>
 #include <map>
 #include <functional>
