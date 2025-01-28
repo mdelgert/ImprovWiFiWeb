@@ -18,11 +18,12 @@
 #include "AesHandler.h"
 #include "JiggleHandler.h"
 #include "ImprovWiFiHandler.h"
+#include "LittleFsHandler.h"
 
 void setup()
 {
-  TemplateHandler::init();
   RemoteDebugHandler::init();
+  LittleFsHandler::init();
   ScriptHandler::init();
   ConfigManager::init();
   BluetoothHandler::init();
@@ -48,7 +49,6 @@ void setup()
 
 void loop()
 {
-  TemplateHandler::loop();
   RemoteDebugHandler::loop();
   ScriptHandler::loop();
   BluetoothHandler::loop();

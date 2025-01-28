@@ -1,4 +1,15 @@
-I would like to implement a ImprovWiFiHandler for my esp32-s3 microcontroller project using library ImprovWiFiLibrary.h
+I would like to implement and centralize LittleFsHandler for my esp32-s3 microcontroller project using library LittleFS.h
+
+I have multiple handlers in my code that access LittleFS but I want to centralize the logic including the opening and closing
+of files. Earlier this week you suggested something like this please provide a complete design.
+
+Please include commands for all file operations including formating deleteing all files.
+
+If possible please provide commands to recursivly delete a folder and all sub folders.
+
+Also a command to create a file and send some text to it and or append text.
+
+Please provide all valuable features a good application should have.
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
 
@@ -50,16 +61,6 @@ void TemplateHandler::loop()
     {
         debugI("TemplateHandler loop timer.");
     }
-}
-
-void TemplateHandler::debugLevels()
-{
-    // Example of debug levels
-    debugV("* This is a message of debug level VERBOSE");
-    debugD("* This is a message of debug level DEBUG");
-    debugI("* This is a message of debug level INFO");
-    debugW("* This is a message of debug level WARNING");
-    debugE("* This is a message of debug level ERROR");
 }
 
 void TemplateHandler::registerCommands()
