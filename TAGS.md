@@ -101,3 +101,13 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Device enabled
+
+### Tag: v1.0.31
+**Date:** 2025-27-01
+**Description:**  
+- Cleanup compile of GFX
+
+### Tag: v1.0.32
+**Date:** 2025-27-01
+**Description:**  
+- Headers cleanup

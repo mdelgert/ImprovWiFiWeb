@@ -121,7 +121,6 @@ void WebHandler::init()
     ServeEmbedded::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);
     ServeSettings::registerEndpoints(server);
-    ServeActions::registerEndpoints(server);
     ServeFiles::registerEndpoints(server);
     ServeCommand::registerEndpoints(server);
     ServeButtons::registerEndpoints(server);
