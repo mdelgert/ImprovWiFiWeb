@@ -3,9 +3,10 @@
 #ifdef ENABLE_BUTTON_HANDLER
 
 #include "Globals.h"
-#include <OneButton.h>
 #include "LedHandler.h"
 #include "GfxHandler.h"
+#include <OneButton.h>
+#include <WiFi.h>
 #include <LittleFS.h>
 
 // Full implementation of ButtonHandler
