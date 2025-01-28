@@ -111,3 +111,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-27-01
 **Description:**  
 - Headers cleanup
+
+### Tag: v1.0.33
+**Date:** 2025-28-01
+**Description:**  
+- Before web folder cleanup
