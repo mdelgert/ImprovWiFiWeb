@@ -467,6 +467,35 @@ void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, 
     }
 }
 
+/*
+static String fileBuffer;
+void ServeFiles::handleWriteFile(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    if (!request->hasParam("filename")) {
+        WebHandler::sendErrorResponse(request, 400, "Filename is required");
+        return;
+    }
+
+    String filename = request->getParam("filename")->value();
+
+    // Add the chunk to the buffer
+    fileBuffer.concat((char *)data, len);
+
+    // Write to file when all chunks are received
+    if (index + len == total) {
+        File file = LittleFS.open(filename, "w");
+        if (!file) {
+            WebHandler::sendErrorResponse(request, 500, "Failed to open file for writing");
+            return;
+        }
+        file.print(fileBuffer); // Write the entire buffer
+        file.close();
+        fileBuffer = ""; // Clear the buffer
+        WebHandler::sendSuccessResponse(request, "File saved successfully");
+    }
+}
+*/
+
 // Check if a file is protected
 bool ServeFiles::isProtectedFile(const String &filename)
 {

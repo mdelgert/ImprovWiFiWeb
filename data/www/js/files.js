@@ -257,8 +257,9 @@ async function saveFile() {
     try {
         const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(currentPath + currentFile)}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
-            body: content
+            headers: { 'Content-Type': 'application/octet-stream' },
+            body: content,
+            timeout: 60000
         });
         const result = await response.json();
         if (result.status === "success") {
