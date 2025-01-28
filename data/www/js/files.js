@@ -236,6 +236,41 @@ async function downloadFile() {
     }
 }
 
+async function uploadFile() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        showNotification("No file selected.", "error");
+        return;
+    }
+
+    const filename = currentPath + file.name;
+
+    // Read the file content
+    const fileContent = await file.text();
+
+    try {
+        // Send the file content to the server
+        const response = await fetch(`${endPoint}/file?filename=${encodeURIComponent(filename)}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain' },
+            body: fileContent,
+        });
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            showNotification("File uploaded successfully");
+            refreshFiles(); // Refresh the file list after upload
+        } else {
+            showNotification("Error uploading file: " + result.message, "error");
+        }
+    } catch (err) {
+        console.error("Error uploading file:", err);
+        showNotification("Error uploading file", "error");
+    }
+}
+
 function openFolder(folder) {
     currentPath = `${currentPath}${folder}/`;
     refreshFiles();

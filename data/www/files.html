@@ -1,7 +1,6 @@
 <!-- files.html -->
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,7 +19,6 @@
     <link rel="stylesheet" href="/css/files.css" />
     <style></style>
 </head>
-
 <body>
     <div class="container">
         <div class="sidebar">
@@ -67,17 +65,6 @@
                     <option value="20px">20px</option>
                     <option value="24px">24px</option>
                 </select>
-                <!-- 
-                <button onclick="createFile()">New File</button>
-                <button onclick="createFolder()">New Folder</button>
-                <button onclick="deleteItem()">Delete File</button>
-                <button onclick="deleteItem(true)">Delete Folder</button>
-                <button onclick="runFile()">Run</button>
-                <button onclick="toggleToolsModal()">Tools</button>
-                <button onclick="saveFile()">Save</button>
-                <button onclick="renameItem()">Rename</button>
-                <button onclick="downloadFile()">Download</button>
-                -->
                 <button onclick="renameItem()" class="svg-button" title="Rename Item">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -115,12 +102,20 @@
                 </button>
                 <button onclick="downloadFile()" class="svg-button" title="Download File">
                     <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
-                    fill="currentColor" class="icon">
+                    fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                    stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-download">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                    <path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg>
+                </button>
+                <button onclick="document.getElementById('fileInput').click()" class="svg-button" title="Upload File">
+                    <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  
+                    fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  
+                    stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 11l5 5l5 -5" /><path d="M12 4l0 12" /></svg>
+                    <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
                 </button>
             </div>
-            <!-- <div class="toolbar"></div> -->
+            <input type="file" id="fileInput" style="display:none" onchange="uploadFile()">
             <span id="statusMessage"></span>
             <div class="editor-container" id="editorContainer"></div>
         </div>
@@ -136,5 +131,4 @@
     <script></script>
     <script src="/js/files.js"></script>
 </body>
-
 </html>
