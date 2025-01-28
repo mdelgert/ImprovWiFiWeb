@@ -3,7 +3,6 @@
 
 #include <map>
 #include <string>
-#include <USBHIDKeyboard.h>
 
 // Map for friendly command names to HID key codes
 extern const std::map<std::string, uint8_t> keyMap;

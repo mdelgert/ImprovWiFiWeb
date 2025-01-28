@@ -1,5 +1,6 @@
 #include "KeyMappings.h"
 #include <algorithm>
+#include <USBHIDKeyboard.h>
 
 // Key mappings for script commands
 const std::map<std::string, uint8_t> keyMap = {
