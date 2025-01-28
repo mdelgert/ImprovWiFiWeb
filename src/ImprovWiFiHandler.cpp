@@ -1,6 +1,11 @@
 #ifdef ENABLE_IMPROV_WIFI_HANDLER
 
 #include "ImprovWiFiHandler.h"
+#include "GfxHandler.h"
+#include <ESPmDNS.h>
+#include <DNSServer.h>
+#include <ArduinoJson.h>
+#include <LittleFS.h>
 
 static IPAddress apIP(192, 168, 4, 1);
 static IPAddress netMsk(255, 255, 255, 0);
