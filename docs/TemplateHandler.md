@@ -8,8 +8,6 @@ All of my code uses the following pattern. Can you provide example following sam
 
 #ifdef ENABLE_TEMPLATE_HANDLER
 
-#include "Globals.h"
-
 class TemplateHandler
 {
 private:
@@ -36,6 +34,7 @@ public: // No-op implementation of TemplateHandler
 #ifdef ENABLE_TEMPLATE_HANDLER
 
 #include "TemplateHandler.h"
+#include "Globals.h"
 
 static NonBlockingTimer myTimer(60000);
 

@@ -3,6 +3,7 @@
 #ifdef ENABLE_TEMPLATE_HANDLER
 
 #include "TemplateHandler.h"
+#include "Globals.h"
 
 static NonBlockingTimer myTimer(60000);
 

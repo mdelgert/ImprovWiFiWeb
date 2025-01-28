@@ -4,8 +4,6 @@
 
 #ifdef ENABLE_TEMPLATE_HANDLER
 
-#include "Globals.h"
-
 class TemplateHandler
 {
 private:
