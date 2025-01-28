@@ -1,6 +1,10 @@
 #ifdef ENABLE_DEVICE_HANDLER
 
 #include "DeviceHandler.h"
+#include "Globals.h"
+#include "DeviceDescriptors.h"
+#include "KeyMappings.h"
+#include <USB.h>
 
 USBHIDMouse DeviceHandler::mouse;
 USBHIDKeyboard DeviceHandler::keyboard;
