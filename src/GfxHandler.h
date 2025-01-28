@@ -3,9 +3,9 @@
 #ifdef ENABLE_GFX_HANDLER
 
 #include "Globals.h"
-#include <LovyanGFX.hpp>
 #include "GfxLockImage.h"
 #include "TimeHandler.h"
+#include <LovyanGFX.hpp>
 
 // Define the display configuration for LILYGO T-Dongle-S3
 class LGFX_LiLyGo_TDongleS3 : public lgfx::LGFX_Device {
@@ -34,11 +34,15 @@ public:
 };
 
 #else
+
+#include <Arduino.h> // For String class
+
 class GfxHandler {
 public:
     static void init() {}
     static void loop() {}
-    static void printMessage(const String &message) {} // Consistent parameter type
+    static void printMessage(const String &message) {} // Provide a stub for consistency
     static void drawImage(int, int, int, int, const char *) {}
 };
+
 #endif // ENABLE_GFX_HANDLER

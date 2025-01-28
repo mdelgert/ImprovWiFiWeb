@@ -4,6 +4,7 @@
 
 #include "Globals.h"
 #include "ImprovWiFiLibrary.h"
+#include "GfxHandler.h"
 #include <ESPmDNS.h>
 #include <DNSServer.h>
 #include <ArduinoJson.h>
