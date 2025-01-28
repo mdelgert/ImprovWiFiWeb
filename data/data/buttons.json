@@ -79,6 +79,14 @@
       "action": "Command",
       "command": "tft clock false",
       "notes": ""
+    },
+    {
+      "id": 1738044328667,
+      "name": "LOCK WINDOWS",
+      "category": "General",
+      "action": "Command",
+      "command": "script file /scripts/lockwindows.txt",
+      "notes": ""
     }
   ]
 }

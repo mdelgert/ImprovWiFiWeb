@@ -1,0 +1,6 @@
+REM LOCK WINDOWS BEGIN
+hid processkey HID_KEY_GUI_LEFT press
+hid processkey HID_KEY_L press
+hid processkey HID_KEY_GUI_LEFT release
+hid processkey HID_KEY_L release
+REM LOCK WINDOWS END
