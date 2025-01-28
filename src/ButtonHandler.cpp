@@ -1,10 +1,15 @@
 #ifdef ENABLE_BUTTON_HANDLER
 
 #include "ButtonHandler.h"
+#include "LedHandler.h"
+#include "GfxHandler.h"
+#include <OneButton.h>
+#include <WiFi.h>
+#include <LittleFS.h>
 
 // Define static members
 static NonBlockingTimer myTimer(1000);
-OneButton ButtonHandler::button(BUTTON_PIN, true);
+static OneButton button(BUTTON_PIN, true);
 
 // Initialize the button
 void ButtonHandler::init()
