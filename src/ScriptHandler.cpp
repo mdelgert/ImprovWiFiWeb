@@ -1,6 +1,7 @@
 #ifdef ENABLE_SCRIPT_HANDLER
 
 #include "ScriptHandler.h"
+#include <LittleFS.h>
 
 // Static member definitions
 unsigned long ScriptHandler::defaultDelay = 0;           // Default delay

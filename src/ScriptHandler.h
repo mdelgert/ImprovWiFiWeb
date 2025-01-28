@@ -3,7 +3,6 @@
 #ifdef ENABLE_SCRIPT_HANDLER
 
 #include "Globals.h"
-#include <LittleFS.h>
 #include <deque>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
