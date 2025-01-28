@@ -2,8 +2,6 @@
 
 #ifdef ENABLE_OTA_HANDLER
 
-#include "Globals.h"
-
 class OTAHandler
 {
 private:
