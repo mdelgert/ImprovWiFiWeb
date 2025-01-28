@@ -2,10 +2,8 @@
 
 #ifdef ENABLE_WEB_HANDLER
 
-#include "Globals.h"
 #include <ESPAsyncWebServer.h>
-#include <LittleFS.h>
-#include "WebHandler.h"
+#include <ArduinoJson.h>
 
 class ServeFiles {
 public:

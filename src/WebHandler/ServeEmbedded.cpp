@@ -5,6 +5,7 @@
 #include "WebHandler.h"
 #include "ServeEmbeddedFiles.h"
 #include <ArduinoJson.h>
+#include <LittleFS.h>
 
 void ServeEmbedded::registerEndpoints(AsyncWebServer &server)
 {

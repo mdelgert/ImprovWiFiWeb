@@ -1,6 +1,9 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeFiles.h"
+#include "Globals.h"
+#include "WebHandler.h"
+#include <LittleFS.h>
 
 // Register endpoints for file management
 void ServeFiles::registerEndpoints(AsyncWebServer &server)

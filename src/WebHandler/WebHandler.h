@@ -4,14 +4,8 @@
 
 #ifdef ENABLE_WEB_HANDLER
 
-#include "Globals.h"
 #include <ESPAsyncWebServer.h>
-#include "ServeDevice.h"
-#include "ServeSettings.h"
-#include "ServeEmbedded.h"
-#include "ServeFiles.h"
-#include "ServeCommand.h"
-#include "ServeButtons.h"
+#include <ArduinoJson.h>
 
 #define ENABLE_SERVE_ACTIONS
 

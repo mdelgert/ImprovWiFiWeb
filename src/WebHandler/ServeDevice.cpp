@@ -7,6 +7,7 @@
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
+#include <LittleFS.h>
 
 static NonBlockingTimer delayTimer(1000);
 

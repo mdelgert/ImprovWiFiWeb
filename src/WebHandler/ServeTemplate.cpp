@@ -1,6 +1,9 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeTemplate.h"
+#include "Globals.h"
+#include "WebHandler.h"
+#include <ArduinoJson.h>
 
 void ServeTemplate::registerEndpoints(AsyncWebServer &server)
 {

@@ -1,6 +1,13 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "WebHandler.h"
+#include "Globals.h"
+#include "ServeDevice.h"
+#include "ServeSettings.h"
+#include "ServeEmbedded.h"
+#include "ServeFiles.h"
+#include "ServeCommand.h"
+#include "ServeButtons.h"
 
 //NonBlockingTimer WebHandler::myTimer(60000);
 AsyncWebServer WebHandler::server(80);
