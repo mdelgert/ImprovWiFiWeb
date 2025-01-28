@@ -2,7 +2,6 @@
 
 #ifdef ENABLE_IMPROV_WIFI_HANDLER
 
-#include "Globals.h"
 #include "ImprovWiFiLibrary.h"
 
 class ImprovWiFiHandler

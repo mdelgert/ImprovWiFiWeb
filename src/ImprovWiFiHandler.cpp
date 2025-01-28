@@ -1,6 +1,7 @@
 #ifdef ENABLE_IMPROV_WIFI_HANDLER
 
 #include "ImprovWiFiHandler.h"
+#include "Globals.h"
 #include "GfxHandler.h"
 #include <ESPmDNS.h>
 #include <DNSServer.h>
