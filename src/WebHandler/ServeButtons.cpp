@@ -1,11 +1,10 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeButtons.h"
-
-// Define the file path for the buttons JSON file
-//const char *ServeButtons::BUTTONS_FILE = "/buttons2.json";
-//const char *ServeButtons::BUTTONS_FILE = "/buttons.json";
-const char *ServeButtons::BUTTONS_FILE = "/data/buttons.json";
+#include "Globals.h"
+#include "WebHandler.h"
+#include <ArduinoJson.h>
+#include <LittleFS.h>
 
 void ServeButtons::registerEndpoints(AsyncWebServer &server)
 {
