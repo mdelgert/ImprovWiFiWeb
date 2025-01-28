@@ -1,6 +1,9 @@
 #ifdef ENABLE_REMOTE_DEBUG_HANDLER
 
 #include "RemoteDebugHandler.h"
+#include "Globals.h"
+#include "GfxHandler.h"
+#include "LedHandler.h"
 
 RemoteDebug Debug;
 
