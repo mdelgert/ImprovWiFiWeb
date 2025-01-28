@@ -2,13 +2,7 @@
 
 #ifdef ENABLE_WEB_HANDLER
 
-#include "Globals.h"
-#include "TimeHandler.h"
-#include <WiFi.h>
-#include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
-#include <ArduinoJson.h>
-#include <ArduinoOTA.h>
 
 class ServeDevice {
 public:

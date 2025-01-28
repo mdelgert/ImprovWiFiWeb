@@ -1,6 +1,12 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeDevice.h"
+#include "Globals.h"
+#include "WebHandler.h"
+#include "TimeHandler.h"
+#include <WiFi.h>
+#include <ArduinoJson.h>
+#include <ArduinoOTA.h>
 
 static NonBlockingTimer delayTimer(1000);
 
