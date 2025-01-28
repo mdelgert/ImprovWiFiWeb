@@ -1,6 +1,7 @@
 #ifdef ENABLE_LED_HANDLER
 
 #include "LedHandler.h"
+#include "Globals.h"
 
 // Define static members
 CRGB LedHandler::leds[NUM_LEDS];

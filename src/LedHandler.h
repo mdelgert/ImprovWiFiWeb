@@ -2,7 +2,6 @@
 
 #ifdef ENABLE_LED_HANDLER
 
-#include "Globals.h"
 #include "LedColorMap.h"
 #include <FastLED.h>
 
