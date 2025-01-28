@@ -1,6 +1,8 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeCommand.h"
+#include "Globals.h"
+#include "WebHandler.h"
 
 void ServeCommand::registerEndpoints(AsyncWebServer &server)
 {

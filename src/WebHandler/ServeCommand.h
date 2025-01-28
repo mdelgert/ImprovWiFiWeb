@@ -2,8 +2,6 @@
 
 #ifdef ENABLE_WEB_HANDLER
 
-#include "Globals.h"
-#include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
 
 class ServeCommand
