@@ -1,6 +1,10 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeEmbedded.h"
+#include "Globals.h"
+#include "WebHandler.h"
+#include "ServeEmbeddedFiles.h"
+#include <ArduinoJson.h>
 
 void ServeEmbedded::registerEndpoints(AsyncWebServer &server)
 {

@@ -2,11 +2,7 @@
 
 #ifdef ENABLE_WEB_HANDLER
 
-#include "Globals.h"
-#include "ServeEmbeddedFiles.h"
-#include "WebHandler.h"
 #include <ESPAsyncWebServer.h>
-#include <ArduinoJson.h>
 
 class ServeEmbedded {
 public:
