@@ -9,6 +9,7 @@ class LittleFsHandler
 private:
     static void registerCommands();
     static bool deleteRecursive(const String &path);
+    static void listFiles();
 
 public:
     static void init();

@@ -52,6 +52,10 @@ LGFX_LiLyGo_TDongleS3::LGFX_LiLyGo_TDongleS3()
 void GfxHandler::toggleClock(bool state)
 {
     showClock = state;
+
+    if(!state){
+        tft.fillScreen(TFT_BLACK); // Clear the screen
+    }
 }
 
 // Implementation for GfxHandler methods

@@ -7,7 +7,7 @@
 
 void LittleFsHandler::init()
 {
-    if (!LittleFS.begin())
+    if (!LittleFS.begin(true))
     {
         debugE("Failed to mount LittleFS");
         return;
@@ -103,6 +103,23 @@ bool LittleFsHandler::deleteRecursive(const String &path)
     return LittleFS.rmdir(path);
 }
 
+void LittleFsHandler::listFiles()
+{
+    debugI("Listing all files in LittleFS:");
+    File root = LittleFS.open("/");
+    if (!root || !root.isDirectory())
+    {
+        debugE("Failed to open root directory");
+        return;
+    }
+
+    File file = root.openNextFile();
+    while (file)
+    {
+        debugI("File: %s, Size: %d", file.name(), file.size());
+        file = root.openNextFile();
+    }
+}
 
 void LittleFsHandler::registerCommands()
 {
@@ -111,7 +128,9 @@ void LittleFsHandler::registerCommands()
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (CommandHandler::equalsIgnoreCase(cmd, "FORMAT")) {
+        if (CommandHandler::equalsIgnoreCase(cmd, "LIST")) {
+            listFiles();
+        } else if (CommandHandler::equalsIgnoreCase(cmd, "FORMAT")) {
             if (LittleFS.format()) {
                 debugI("LittleFS formatted successfully");
             } else {
@@ -180,18 +199,18 @@ void LittleFsHandler::registerCommands()
             }
         } else {
             debugW("Unknown LITTLEFS subcommand: %s", cmd.c_str());
-        } }, 
-        "Handles LittleFS commands. Usage: LITTLEFS <subcommand> [args]\n"
-        "  Subcommands:\n"
-        "  FORMAT - Formats LittleFS\n"
-        "  WRITE <path> <content> - Writes to a file\n"
-        "  READ <path> - Reads a file\n"
-        "  DELETE <path> - Deletes a file\n"
-        "  DELETE_ALL - Deletes all files\n"
-        "  MKDIR <path> - Creates a folder\n"
-        "  RMDIR <path> - Recursively deletes a folder and its contents");
+        } }, "Handles LittleFS commands. Usage: LITTLEFS <subcommand> [args]\n"
+                                         "  Subcommands:\n"
+                                         "  LIST - Lists all files in LittleFS\n"
+                                         "  FORMAT - Formats LittleFS\n"
+                                         "  WRITE <path> <content> - Writes to a file\n"
+                                         "  READ <path> - Reads a file\n"
+                                         "  DELETE <path> - Deletes a file\n"
+                                         "  DELETE_ALL - Deletes all files\n"
+                                         "  MKDIR <path> - Creates a folder\n"
+                                         "  RMDIR <path> - Recursively deletes a folder and its contents");
 
-        CommandHandler::registerCommandAlias("lfs", "littlefs");
+    CommandHandler::registerCommandAlias("lfs", "littlefs");
 }
 
 #endif // ENABLE_LITTLEFS_HANDLER

@@ -104,21 +104,52 @@ void CommandHandler::init()
         CommandHandler::listCommands(); // Invoke the help command
     });
 
-    CommandHandler::registerCommand("help", [](const String &) { // Register a "help" command
-        CommandHandler::listCommands();
-    },"Lists all available commands.");
+    // CommandHandler::registerCommand("help", [](const String &) { // Register a "help" command
+    //     CommandHandler::listCommands();
+    // },"Lists all available commands.");
+
+    CommandHandler::registerCommand("help", [](const String &args)
+                                    {
+    if (args.isEmpty())
+    {
+        // List all command names
+        debugI("Available commands:");
+        for (const auto &pair : commandDescriptions)
+        {
+            debugI("* %s", pair.first.c_str());
+        }
+        debugI("Type 'help <command>' for more details on a specific command.");
+    }
+    else
+    {
+        // Show details for a specific command
+        String lowerArgs = args;
+        lowerArgs.toLowerCase();
+        auto it = commandDescriptions.find(lowerArgs);
+        if (it != commandDescriptions.end())
+        {
+            debugI("Command: %s", it->first.c_str());
+            debugI("Description: %s", it->second.c_str());
+        }
+        else
+        {
+            debugE("Unknown command: %s. Use 'help' to list all commands.", args.c_str());
+        }
+    } }, "Lists all available commands or shows details for a specific command. Usage: help [command]");
 
     CommandHandler::registerCommand("reboot", [](const String &) { // Register a "reboot" command
         ESP.restart();
-    },"Reboot the device.");
+    },
+                                    "Reboot the device.");
 
-    CommandHandler::registerCommand("debug", [](const String &command) { // Register a "debug" print command
-        String cmd, args;
-        CommandHandler::parseCommand(command, cmd, args);
-        debugI("Command:%s", command.c_str());
-        debugI("CMD:%s", cmd.c_str());
-        debugI("ARGS:%s", args.c_str());
-    },"Prints a debug message. Usage: debug <message>");
+    // CommandHandler::registerCommand("debug", [](const String &command) { // Register a "debug" print command
+    //     String cmd, args;
+    //     CommandHandler::parseCommand(command, cmd, args);
+    //     debugI("Command:%s", command.c_str());
+    //     debugI("CMD:%s", cmd.c_str());
+    //     debugI("ARGS:%s", args.c_str());
+    // },
+    //                                 "Prints a debug message. Usage: debug <message>");
 
     debugD("* CommandHandler initialized.");
 }
