@@ -1,6 +1,9 @@
 #ifdef ENABLE_MQTT_HANDLER
 
 #include "MqttHandler.h"
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <PubSubClient.h>
 
 // Create MQTT client; the actual client depends on the SSL flag
 WiFiClient wiFiClient;

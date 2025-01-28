@@ -3,9 +3,6 @@
 #ifdef ENABLE_MQTT_HANDLER
 
 #include "Globals.h"
-#include <WiFi.h>
-#include <WiFiClientSecure.h>
-#include <PubSubClient.h>
 
 class MqttHandler
 {
