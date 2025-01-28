@@ -1,7 +1,8 @@
 #pragma once
 
-#define WIFI_NETWORKS_FILE "/wifiNetworks.json"
+#define WIFI_NETWORKS_FILE "/data/wifi_networks.json"
 #define BUTTONS_FILE "/data/buttons.json"
+#define TIMEZONES_FILE "/data/timezones.json"
 
 // Custom USB descriptors
 #define CUSTOM_PRODUCT_NAME "USB KeyboardMouse"

@@ -16,6 +16,7 @@ void ServeDevice::registerEndpoints(AsyncWebServer &server)
     handleDeviceInfo(server);
     handleDeviceReboot(server);
     handleDeviceWifiNetworks(server);
+    handleDeviceTimezones(server);
     //handleDeviceBackup(server);
     handleDeviceFormat(server);
     handleDeviceOTA(server);
@@ -168,6 +169,35 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         }
 
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
+}
+
+void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
+{
+    server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request){
+        if (!LittleFS.begin(true)) {
+            debugE("Failed to mount LittleFS");
+            WebHandler::sendErrorResponse(request, 500, "Failed to mount filesystem");
+            return;
+        }
+
+        File file = LittleFS.open(TIMEZONES_FILE, "r");
+        if (!file) {
+            debugE("Failed to open file %s for reading", TIMEZONES_FILE);
+            WebHandler::sendErrorResponse(request, 500, "Failed to open timezones file");
+            return;
+        }
+
+        JsonDocument doc;
+        DeserializationError error = deserializeJson(doc, file);
+        file.close();
+
+        if (error) {
+            debugE("Failed to parse JSON from file %s", TIMEZONES_FILE);
+            WebHandler::sendErrorResponse(request, 500, "Failed to parse timezones");
+            return;
+        }
+
+        WebHandler::sendSuccessResponse(request, "GET /device/timezones", &doc); });
 }
 
 /*

@@ -26,6 +26,7 @@ void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, 
 
 void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
 {
+    /*
     serveEmbeddedFile(server, "/backup.html", backup_html_start, backup_html_end, "text/html");
     serveEmbeddedFile(server, "/buttoneditor.html", buttoneditor_html_start, buttoneditor_html_end, "text/html");
     serveEmbeddedFile(server, "/buttoneditor.css", buttoneditor_css_start, buttoneditor_css_end, "text/css");
@@ -49,10 +50,12 @@ void ServeEmbedded::handleGetRequest(AsyncWebServer &server)
     serveEmbeddedFile(server, "/terminal.html", terminal_html_start, terminal_html_end, "text/html");
     serveEmbeddedFile(server, "/terminal.js", terminal_js_start, terminal_js_end, "application/javascript");
     serveEmbeddedFile(server, "/timezones.json", timezones_json_start, timezones_json_end, "application/json");
-    
+    */
+     
     //server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
     //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
-    server.serveStatic("/www", LittleFS, "/www").setDefaultFile("index.html");
+    //server.serveStatic("/www", LittleFS, "/www").setDefaultFile("index.html");
+    server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
     
     debugI("ServeEmbedded handleGetRequest registered");
 }
