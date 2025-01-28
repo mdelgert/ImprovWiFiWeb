@@ -3,8 +3,6 @@
 #ifdef ENABLE_GFX_HANDLER
 
 #include "Globals.h"
-#include "GfxLockImage.h"
-#include "TimeHandler.h"
 #include <LovyanGFX.hpp>
 
 // Define the display configuration for LILYGO T-Dongle-S3

@@ -1,6 +1,8 @@
 #ifdef ENABLE_GFX_HANDLER // Compile this file only if the feature flag is enabled
 
 #include "GfxHandler.h"
+#include "GfxLockImage.h"
+#include "TimeHandler.h"
 
 // Initialize the static member
 LGFX_LiLyGo_TDongleS3 GfxHandler::tft;
