@@ -6,14 +6,6 @@
 
 // Declarations for embedded files
 
-// extern const uint8_t codemirror_css_start[] asm("_binary_web_codemirror_codemirror_min_css_start");
-// extern const uint8_t codemirror_css_end[] asm("_binary_web_codemirror_codemirror_min_css_end");
-
-extern const uint8_t aes_html_start[] asm("_binary_web_aes_html_start");
-extern const uint8_t aes_html_end[] asm("_binary_web_aes_html_end");
-extern const uint8_t aes_js_start[] asm("_binary_web_aes_js_start");
-extern const uint8_t aes_js_end[] asm("_binary_web_aes_js_end");
-
 extern const uint8_t backup_html_start[] asm("_binary_web_backup_html_start");
 extern const uint8_t backup_html_end[] asm("_binary_web_backup_html_end");
 
@@ -28,18 +20,6 @@ extern const uint8_t buttons_html_start[] asm("_binary_web_buttons_html_start");
 extern const uint8_t buttons_html_end[] asm("_binary_web_buttons_html_end");
 extern const uint8_t buttons_js_start[] asm("_binary_web_buttons_js_start");
 extern const uint8_t buttons_js_end[] asm("_binary_web_buttons_js_end");
-
-extern const uint8_t device_html_start[] asm("_binary_web_device_html_start");
-extern const uint8_t device_html_end[] asm("_binary_web_device_html_end");
-extern const uint8_t device_js_start[] asm("_binary_web_device_js_start");
-extern const uint8_t device_js_end[] asm("_binary_web_device_js_end");
-
-extern const uint8_t editor_css_start[] asm("_binary_web_editor_css_start");
-extern const uint8_t editor_css_end[] asm("_binary_web_editor_css_end");
-extern const uint8_t editor_html_start[] asm("_binary_web_editor_html_start");
-extern const uint8_t editor_html_end[] asm("_binary_web_editor_html_end");
-extern const uint8_t editor_js_start[] asm("_binary_web_editor_js_start");
-extern const uint8_t editor_js_end[] asm("_binary_web_editor_js_end");
 
 extern const uint8_t error_html_start[] asm("_binary_web_error_html_start");
 extern const uint8_t error_html_end[] asm("_binary_web_error_html_end");
@@ -67,9 +47,6 @@ extern const uint8_t index_js_end[] asm("_binary_web_index_js_end");
 
 extern const uint8_t navbar_html_start[] asm("_binary_web_navbar_html_start");
 extern const uint8_t navbar_html_end[] asm("_binary_web_navbar_html_end");
-
-extern const uint8_t ota_html_start[] asm("_binary_web_ota_html_start");
-extern const uint8_t ota_html_end[] asm("_binary_web_ota_html_end");
 
 extern const uint8_t settings_html_start[] asm("_binary_web_settings_html_start");
 extern const uint8_t settings_html_end[] asm("_binary_web_settings_html_end");
