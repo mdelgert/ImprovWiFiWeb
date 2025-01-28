@@ -1,6 +1,8 @@
 #ifdef ENABLE_DOWNLOAD_HANDLER
 
 #include "DownloadHandler.h"
+#include <LittleFS.h>
+#include <HTTPClient.h>
 
 void DownloadHandler::init()
 {

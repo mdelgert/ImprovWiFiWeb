@@ -3,8 +3,6 @@
 #ifdef ENABLE_DOWNLOAD_HANDLER
 
 #include "Globals.h"
-#include <LittleFS.h>
-#include <HTTPClient.h>
 
 class DownloadHandler
 {
