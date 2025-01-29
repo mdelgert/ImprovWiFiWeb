@@ -23,9 +23,8 @@ struct Settings {
     bool apiToken = API_TOKEN;
     bool cors = CORS;
     bool webHandler = WEBHANDLER;
-    bool wifiScan = WIFI_SCAN;
+    bool wifiScan = true;
     bool mqttEnabled = false;
-    //String timezone = DEFAULT_TIMEZONE;
     String timezone;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;
