@@ -121,3 +121,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-29-01
 **Description:**  
 - After web folder cleanup
+
+### Tag: v1.0.35
+**Date:** 2025-29-01
+**Description:**  
+- Enable default wifi scan on boot
