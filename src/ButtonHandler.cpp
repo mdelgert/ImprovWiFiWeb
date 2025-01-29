@@ -51,7 +51,10 @@ void ButtonHandler::handleLongPress()
     GfxHandler::printMessage("Erasing device!");
     LedHandler::setColorByName("red");
     ConfigManager::clear();
-    LittleFS.format();
+    
+    //Don't use this, it will erase the whole filesystem and can't use webserver to reconfigure
+    //Only enable for development testing etc....
+    //LittleFS.format();
 
     if (myTimer.isReady()) // Adding delay was rebooting before clearing preferences
     {

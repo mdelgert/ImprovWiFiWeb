@@ -23,7 +23,7 @@ void RemoteDebugHandler::init()
     Serial.begin(115200);
     //#######################################################################################################################
     // This is noisy on serial port and will interfere with ImprovWiFi serial messages if enabled be careful enabling it!!!!!!!!!!!!!!!!!!!
-    //Debug.setSerialEnabled(true);   // Enable sending to serial debug as well (may want to disable it for release)
+    Debug.setSerialEnabled(true);   // Enable sending to serial debug as well (may want to disable it for release)
     //#######################################################################################################################
     //Debug.setResetCmdEnabled(true); // Enable the reset command
     //Debug.showTime(true);           // Show time in debug messages
