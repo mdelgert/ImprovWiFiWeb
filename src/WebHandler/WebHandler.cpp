@@ -112,7 +112,7 @@ void WebHandler::sendSuccessResponse(AsyncWebServerRequest *request, const char 
 
 void WebHandler::init()
 {
-    if (!settings.WebHandler) return;
+    if (!settings.webHandler) return;
 
     // Appears to block Improv WiFi setup if enabled
     // Todo test and remove if not needed

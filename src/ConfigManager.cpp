@@ -37,8 +37,8 @@ void ConfigManager::load() {
     settings.defaulTimeout = preferences.getInt("defaulTimeout", settings.defaulTimeout);
     settings.apiToken = preferences.getBool("apiToken", settings.apiToken);
     settings.cors = preferences.getBool("cors", settings.cors);
-    settings.WebHandler = preferences.getBool("webHandler", settings.WebHandler);
-    settings.WifiScan = preferences.getBool("wifiScan", settings.WifiScan);
+    settings.webHandler = preferences.getBool("webHandler", settings.webHandler);
+    settings.wifiScan = preferences.getBool("wifiScan", settings.wifiScan);
     settings.timezone = preferences.getString("timezone", settings.timezone);
     settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
     settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
@@ -71,8 +71,8 @@ void ConfigManager::save() {
     preferences.putInt("defaulTimeout", settings.defaulTimeout);
     preferences.putBool("apiToken", settings.apiToken);
     preferences.putBool("cors", settings.cors);
-    preferences.putBool("webHandler", settings.WebHandler);
-    preferences.putBool("wifiScan", settings.WifiScan);
+    preferences.putBool("webHandler", settings.webHandler);
+    preferences.putBool("wifiScan", settings.wifiScan);
     //preferences.putString("timezone", settings.timezone);
     preferences.putUInt("bootCount", settings.bootCount);
     preferences.putULong("bootTime", settings.bootTime);

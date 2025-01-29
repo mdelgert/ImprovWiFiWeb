@@ -22,8 +22,8 @@ struct Settings {
     int defaulTimeout = DEFAULT_TIMEOUT;
     bool apiToken = API_TOKEN;
     bool cors = CORS;
-    bool WebHandler = WEBHANDLER;
-    bool WifiScan = WIFI_SCAN;
+    bool webHandler = WEBHANDLER;
+    bool wifiScan = WIFI_SCAN;
     String timezone = DEFAULT_TIMEZONE;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;

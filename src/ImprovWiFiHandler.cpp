@@ -20,7 +20,7 @@ void ImprovWiFiHandler::loop()
 
 void ImprovWiFiHandler::init()
 {
-    //scanAndSaveNetworks();
+    scanAndSaveNetworks();
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
 
@@ -83,7 +83,7 @@ void ImprovWiFiHandler::onImprovWiFiConnectedCb(const char *ssid, const char *pa
 
 void ImprovWiFiHandler::scanAndSaveNetworks()
 {
-    if (settings.WifiScan == false)
+    if (settings.wifiScan == false)
     {
         debugI("Wi-Fi scan disabled");
         return;
