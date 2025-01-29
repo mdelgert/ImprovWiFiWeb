@@ -3,7 +3,7 @@
 #include "TimeHandler.h"
 
 // Default timezone
-static String currentTimezone = "Etc/Zulu";  // Use a mutable String instead of const char*
+static String currentTimezone = "America/Phoenix";
 //static String currentTimezone = "America/New_York";
 
 // NTP servers
