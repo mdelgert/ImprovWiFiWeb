@@ -2,7 +2,7 @@
 cd ..
 #pio run
 #esptool.py erase_flash
-rm -rf data/www/node_modules
+#rm -rf data/www/node_modules
 pio run --target buildfs
 pio run --target uploadfs
 pio run --target upload
