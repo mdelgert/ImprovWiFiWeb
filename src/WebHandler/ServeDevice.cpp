@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include "WebHandler.h"
 #include "TimeHandler.h"
+#include "TimeZones.h"
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
@@ -33,8 +34,9 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
 
         doc["firmwareVersion"]   = SOFTWARE_VERSION;
         doc["deviceName"]   = settings.deviceName;
-        //doc["timezone"]    = settings.timezone;
-        doc["timezone"]    = TimeHandler::getDefaultRegion();
+
+        doc["timezoneSettings"]    = settings.timezone;
+        doc["timezoneTimehandler"]    = TimeHandler::getDefaultRegion();
 
         //Need to cleanup when clock was not set caused reboot loop
         doc["bootCount"]    = settings.bootCount;
@@ -171,6 +173,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
 }
 
+/*
 void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
 {
     server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -198,6 +201,24 @@ void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
         }
 
         WebHandler::sendSuccessResponse(request, "GET /device/timezones", &doc); });
+}
+*/
+
+void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
+{
+    server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request) {
+        JsonDocument doc;  // Use DynamicJsonDocument
+        JsonArray array = doc.to<JsonArray>();
+
+        for (size_t i = 0; i < tz_db_tzs_size; i++) {  // Use indexed loop
+            const tz_db_pair_t &tz = tz_db_tzs[i];  // Access each timezone
+            JsonObject obj = array.add<JsonObject>(); // Use add<JsonObject>()
+            obj["name"] = tz.name;
+            obj["posix_str"] = tz.posix_str;
+        }
+
+        WebHandler::sendSuccessResponse(request, "GET /device/timezones", &doc);
+    });
 }
 
 /*

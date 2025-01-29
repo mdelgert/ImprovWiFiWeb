@@ -39,7 +39,7 @@ void ConfigManager::load() {
     settings.cors = preferences.getBool("cors", settings.cors);
     settings.WebHandler = preferences.getBool("webHandler", settings.WebHandler);
     settings.WifiScan = preferences.getBool("wifiScan", settings.WifiScan);
-    //settings.timezone = preferences.getString("timezone", settings.timezone);
+    settings.timezone = preferences.getString("timezone", settings.timezone);
     settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
     settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
     

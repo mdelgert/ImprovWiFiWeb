@@ -2,8 +2,8 @@
 
 #define WIFI_NETWORKS_FILE "/data/networks.json"
 #define BUTTONS_FILE "/data/buttons.json"
-#define TIMEZONES_FILE "/data/timezones.json"
 #define EMQX_CERT_FILE "/data/mqtt.crt"
+//#define TIMEZONES_FILE "/data/timezones.json"
 
 // Custom USB descriptors
 #define CUSTOM_PRODUCT_NAME "USB KeyboardMouse"
