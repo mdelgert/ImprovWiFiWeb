@@ -16,6 +16,7 @@
 #define SECURE_API_KEY "password"
 #define SECURE_OTA_PASSWORD "password"
 
+/*
 // SSL certificate for MQTT broker digiCert Global Root G2, used by EMQX Public Broker: broker.emqx.io
 static const char ca_cert[] PROGMEM = R"EOF(
 -----BEGIN CERTIFICATE-----
@@ -41,3 +42,4 @@ YSEY1QSteDwsOoBrp+uvFRTp2InBuThs4pFsiv9kuXclVzDAGySj4dzp30d8tbQk
 CAUw7C29C79Fv1C5qfPrmAESrciIxpg0X40KPMbp1ZWVbd4=
 -----END CERTIFICATE-----
 )EOF";
+*/
