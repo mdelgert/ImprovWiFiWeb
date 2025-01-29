@@ -126,3 +126,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-29-01
 **Description:**  
 - Enable default wifi scan on boot
+
+### Tag: v1.0.36
+**Date:** 2025-29-01
+**Description:**  
+- Add default timezone and disable erase littlefs
