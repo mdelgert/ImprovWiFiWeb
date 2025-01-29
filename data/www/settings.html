@@ -25,7 +25,11 @@
           <option value="" selected>-- Select Wi-Fi Network --</option>
         </select>
         <input type="text" id="wifi_network" placeholder="Or enter manually">
-      </div>           
+      </div>
+      <div class="form-group checkbox-wrapper">
+        <input type="checkbox" id="wifi_scan">
+        <label for="wifi_scan">Wi-Fi Boot Scan</label>
+      </div>
       <div class="form-group">
         <label for="wifi_password">Wi-Fi Password</label>
         <input type="password" id="wifi_password" value="">
@@ -34,9 +38,16 @@
         <label for="device_name">Device Name</label>
         <input type="text" id="device_name" value="">
       </div>
+      <div class="form-group">
+        <label for="time_zone">Timezone</label>
+        <select id="time_zone_dropdown">
+          <option value="" selected>-- Select Timezone --</option>
+        </select>
+        <input type="text" id="time_zone" placeholder="Or enter manually">
+      </div> 
       <div class="form-group checkbox-wrapper">
-        <input type="checkbox" id="mqtt_ssl">
-        <label for="mqtt_ssl">Enable MQTT</label>
+        <input type="checkbox" id="mqtt_enabled">
+        <label for="mqtt_enabled">Enable MQTT</label>
       </div>
       <div class="form-group">
         <label for="mqtt_server">MQTT Server</label>

@@ -24,6 +24,7 @@ struct Settings {
     bool cors = CORS;
     bool webHandler = WEBHANDLER;
     bool wifiScan = WIFI_SCAN;
+    bool mqttEnabled = false;
     String timezone = DEFAULT_TIMEZONE;
     uint64_t bootCount = 0;
     uint64_t bootTime = 0;

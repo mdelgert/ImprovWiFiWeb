@@ -13,6 +13,8 @@ async function loadSettings() {
 
     // Populate form fields
     document.getElementById("device_name").value = data.device_name || "";
+    document.getElementById("time_zone").value = data.time_zone || "";
+    document.getElementById("wifi_scan").checked = data.wifi_scan || false;
     document.getElementById("wifi_network").value = data.wifi_ssid || "";
     document.getElementById("wifi_password").value = data.wifi_password || "";
     document.getElementById("mqtt_server").value = data.mqtt_server || "";
@@ -34,10 +36,11 @@ async function loadSettings() {
 // Save settings to the server
 async function saveSettings() {
   const deviceName = document.getElementById("device_name").value.trim();
+  const timeZone = document.getElementById("time_zone").value.trim();
   const wifiSsid = document.getElementById("wifi_network").value.trim();
+  const wifiScan = document.getElementById("wifi_scan").checked;
   const wifiPassword = document.getElementById("wifi_password").value.trim();
   const mqttServer = document.getElementById("mqtt_server").value.trim();
-  //const mqttPort = document.getElementById("mqtt_port");
   const mqttPort = parseInt(document.getElementById("mqtt_port").value.trim(), 10);
   const mqttUsername = document.getElementById("mqtt_username").value.trim();
   const mqttPassword = document.getElementById("mqtt_password").value.trim();
@@ -57,7 +60,9 @@ async function saveSettings() {
     console.log("Saving settings to /settings/set...");
     const body = {
       device_name: deviceName,
+      time_zone: timeZone,
       wifi_ssid: wifiSsid,
+      wifi_scan: wifiScan,
       wifi_password: wifiPassword,
       mqtt_server: mqttServer,
       mqtt_port: mqttPort,
@@ -122,6 +127,85 @@ function syncWifiSelection() {
   });
 }
 
+async function loadTimezones() {
+  try {
+    console.log("Fetching available timezones from /device/timezones...");
+    const response = await httpGet("/device/timezones");
+
+    // Extract timezone data
+    const timezones = response.data || {};
+    const dropdown = document.getElementById("time_zone_dropdown");
+
+    // Clear existing options
+    dropdown.innerHTML = '<option value="" selected>-- Select Timezone --</option>';
+
+    // Populate dropdown with available timezones
+    Object.entries(timezones).forEach(([timezone, offset]) => {
+      const option = document.createElement("option");
+      option.value = timezone;
+      option.textContent = `${timezone} (UTC Offset: ${offset})`;
+      dropdown.appendChild(option);
+    });
+
+    console.log("Timezones loaded successfully:", timezones);
+  } catch (error) {
+    console.error("Error loading timezones:", error);
+    showMessage("Failed to load timezones.", "error");
+  }
+}
+
+// Sync dropdown selection with the input field
+function syncTimezoneSelection() {
+  const dropdown = document.getElementById("time_zone_dropdown");
+  const manualInput = document.getElementById("time_zone");
+
+  if (!dropdown || !manualInput) {
+    console.error("Timezone dropdown or input field not found!");
+    return;
+  }
+
+  dropdown.addEventListener("change", () => {
+    console.log(`Dropdown selected: ${dropdown.value}`);
+    manualInput.value = dropdown.value; // Sync input with dropdown selection
+  });
+
+  manualInput.addEventListener("input", () => {
+    if (manualInput.value) {
+      console.log(`Manual input: ${manualInput.value}`);
+      dropdown.value = ""; // Clear dropdown selection when typing manually
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load existing settings on page load
+  console.log("Page loaded. Initializing settings load...");
+  loadSettings();
+  loadWifiNetworks();
+  syncWifiSelection();
+  loadTimezones();
+  syncTimezoneSelection();
+
+  const form = document.querySelector(".settings-form");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();  // Stop default form submission
+    });
+  }
+
+  // Then attach your button click
+  const saveButton = document.querySelector(".settings-form button");
+  if (saveButton) {
+    saveButton.addEventListener("click", saveSettings);
+    console.log("Save button event listener attached.");
+  } else {
+    console.error("Save button not found.");
+  }
+
+  // ... rest of your setup ...
+});
+
 /*
 // Attach event listeners
 document.addEventListener("DOMContentLoaded", () => {
@@ -143,30 +227,3 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 */
-
-document.addEventListener("DOMContentLoaded", () => {
-
-  // Load existing settings on page load
-  console.log("Page loaded. Initializing settings load...");
-  loadSettings();
-  loadWifiNetworks();
-  syncWifiSelection();
-
-  const form = document.querySelector(".settings-form");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();  // Stop default form submission
-    });
-  }
-
-  // Then attach your button click
-  const saveButton = document.querySelector(".settings-form button");
-  if (saveButton) {
-    saveButton.addEventListener("click", saveSettings);
-    console.log("Save button event listener attached.");
-  } else {
-    console.error("Save button not found.");
-  }
-
-  // ... rest of your setup ...
-});

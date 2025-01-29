@@ -1,5 +1,4 @@
-#@baseUrl = http://demo.local
-@baseUrl = http://192.168.4.1
+@baseUrl = http://demo1.local
 @token = test
 
 ### Get settings

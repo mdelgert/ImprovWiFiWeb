@@ -16,6 +16,11 @@ static NonBlockingTimer mqttTimer(60000);
 
 void MqttHandler::init()
 {
+    if(!settings.mqttEnabled) {
+        debugI("MqttHandler: MQTT is disabled in settings.");
+        return;
+    }
+
     // Use the appropriate client based on SSL settings
     if (settings.mqttSsl)
     {
@@ -64,6 +69,8 @@ void MqttHandler::init()
 
 void MqttHandler::loop()
 {
+    if(!settings.mqttEnabled) return;
+    
     // If not connected, attempt to reconnect
     if (!mqttClient.connected())
     {

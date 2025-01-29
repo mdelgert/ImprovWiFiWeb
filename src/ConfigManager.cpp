@@ -39,6 +39,7 @@ void ConfigManager::load() {
     settings.cors = preferences.getBool("cors", settings.cors);
     settings.webHandler = preferences.getBool("webHandler", settings.webHandler);
     settings.wifiScan = preferences.getBool("wifiScan", settings.wifiScan);
+    settings.mqttEnabled = preferences.getBool("mqttEnabled", settings.mqttEnabled);
     settings.timezone = preferences.getString("timezone", settings.timezone);
     settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
     settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
@@ -73,7 +74,8 @@ void ConfigManager::save() {
     preferences.putBool("cors", settings.cors);
     preferences.putBool("webHandler", settings.webHandler);
     preferences.putBool("wifiScan", settings.wifiScan);
-    //preferences.putString("timezone", settings.timezone);
+    preferences.putBool("mqttEnabled", settings.mqttEnabled);
+    preferences.putString("timezone", settings.timezone);
     preferences.putUInt("bootCount", settings.bootCount);
     preferences.putULong("bootTime", settings.bootTime);
     

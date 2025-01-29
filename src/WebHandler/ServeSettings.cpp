@@ -16,13 +16,14 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
         
         debugV("Received GET request on /settings/get");
 
-        // Prepare JSON response with global configuration values
         JsonDocument doc;
 
-        // Get settings from memory
         doc["device_name"] = settings.deviceName;
+        doc["time_zone"] = settings.timezone;
         doc["wifi_ssid"] = settings.wifiSSID;
+        doc["wifi_scan"] = settings.wifiScan;
         doc["wifi_password"] = settings.wifiPassword;
+        doc["mqtt_enabled"] = settings.mqttEnabled;
         doc["mqtt_server"] = settings.mqttServer;
         doc["mqtt_port"] = settings.mqttPort;
         doc["mqtt_username"] = settings.mqttUsername;
@@ -41,10 +42,8 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         
         debugV("Received POST request on /settings/set");
 
-        // Print the request body for debugging
         WebHandler::printRequestBody(request, data, len);
 
-        // Parse JSON payload
         JsonDocument doc;
         DeserializationError error = deserializeJson(doc, data, len);
 
@@ -54,10 +53,12 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
             return;
         }
 
-        // Update settings in memory using JSON data or keep existing values
         settings.deviceName = doc["device_name"] | settings.deviceName;
+        settings.timezone = doc["time_zone"] | settings.timezone;
         settings.wifiSSID = doc["wifi_ssid"] | settings.wifiSSID;
+        settings.wifiScan = doc["wifi_scan"] | settings.wifiScan;
         settings.wifiPassword = doc["wifi_password"] | settings.wifiPassword;
+        settings.mqttEnabled = doc["mqtt_enabled"] | settings.mqttEnabled;
         settings.mqttServer = doc["mqtt_server"] | settings.mqttServer;
         settings.mqttPort = doc["mqtt_port"] | settings.mqttPort;
         settings.mqttUsername = doc["mqtt_username"] | settings.mqttUsername;
@@ -76,7 +77,7 @@ void ServeSettings::handleSetSettings(AsyncWebServer &server)
         // if (delayTimer.isReady())
         // {
         //     ESP.restart();
-        // } 
+        // }
     });
 }
 
