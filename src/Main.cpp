@@ -40,7 +40,7 @@ void setup()
   SystemMonitor::init();
   DownloadHandler::init();
   AesHandler::init();
-  TimeHandler::init();
+  TimeHandler::init(settings.timezone);
   JiggleHandler::init();
   //GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);

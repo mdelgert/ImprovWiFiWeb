@@ -17,8 +17,8 @@ private:
     
 public:
     static bool getTimeSyncStatus();
-    static const char* getDefaultRegion();
-    static void init();
+    static const char* getCurrentTimezone();
+    static void init(String timezone);
     static void loop();
     static void syncTime();
     static long getLinuxTime();
@@ -36,8 +36,8 @@ class TimeHandler
 { 
 public:
     static bool getTimeSyncStatus() { return false; }
-    static const char* getDefaultRegion() { return ""; }
-    static void init() {}
+    static const char* getCurrentTimezone() { return ""; }
+    static void init(String timezone) {}
     static void loop() {}
     static void syncTime() {}
     static long getLinuxTime() { return 0; }

@@ -35,8 +35,10 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         doc["firmwareVersion"]   = SOFTWARE_VERSION;
         doc["deviceName"]   = settings.deviceName;
 
-        doc["timezoneSettings"]    = settings.timezone;
-        doc["timezoneTimehandler"]    = TimeHandler::getDefaultRegion();
+        // doc["timezoneSettings"]    = settings.timezone;
+        // doc["timezoneTimehandler"]    = TimeHandler::getCurrentTimezone();
+
+        doc["timezone"]    = settings.timezone;
 
         //Need to cleanup when clock was not set caused reboot loop
         doc["bootCount"]    = settings.bootCount;

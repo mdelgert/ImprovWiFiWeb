@@ -2,14 +2,11 @@
 
 #include "TimeHandler.h"
 
-// Default region hardcoded
-//const char *defaultRegion = "Etc/Zulu";
-const char *defaultRegion = "America/New_York";
+// Default timezone
+static String currentTimezone = "Etc/Zulu";  // Use a mutable String instead of const char*
+//static String currentTimezone = "America/New_York";
 
-// NTP servers the public rate limit (without an API key) is 5 requests in a rolling 30 second window;
-// the rate limit with an API key is 50 requests in a rolling 30 second window. A query interval of
-// 10 minutes or longer is generally acceptable for both services.
-
+// NTP servers
 static const char *ntpServer1 = "pool.ntp.org";
 static const char *ntpServer2 = "time.nist.gov";
 
@@ -19,27 +16,37 @@ static int daylightOffset_sec = 0;
 
 // Flag to indicate if time has been synchronized
 static bool isTimeSynced = false;
-//static NonBlockingTimer timeDelay(1000);
 
+// Get time synchronization status
 bool TimeHandler::getTimeSyncStatus()
 {
     return isTimeSynced;
 }
 
-const char *TimeHandler::getDefaultRegion()
+// Get the currently stored timezone
+const char *TimeHandler::getCurrentTimezone()
 {
-    return defaultRegion;
+    return currentTimezone.c_str();  // Return pointer to String's internal buffer
 }
 
-void TimeHandler::init()
+// Initialize time handling with a specific timezone
+void TimeHandler::init(String timezone)
 {
-    debugI("TimeHandler initialized using timezone: %s", defaultRegion);
+    if (timezone.isEmpty())
+    {
+        debugE("TimeHandler: Invalid timezone provided! Using default: %s", currentTimezone.c_str());
+    }
+    else
+    {
+        debugI("TimeHandler: Using timezone: %s", timezone.c_str());
+        currentTimezone = timezone;  // Correctly store the string
+    }
 
-    // Get POSIX string for the default region
-    const char *posix_str = tz_db_get_posix_str(defaultRegion);
+    // Get POSIX string for the selected timezone
+    const char *posix_str = tz_db_get_posix_str(currentTimezone.c_str());
     if (!posix_str)
     {
-        debugE("TimeHandler: Failed to find POSIX string for region %s", defaultRegion);
+        debugE("TimeHandler: Failed to find POSIX string for timezone %s", currentTimezone.c_str());
         return;
     }
     debugI("TimeHandler: Found POSIX string: %s", posix_str);
@@ -52,7 +59,7 @@ void TimeHandler::init()
     }
     debugI("TimeHandler: Parsed offsets - gmtOffset_sec: %ld, daylightOffset_sec: %d", gmtOffset_sec, daylightOffset_sec);
 
-    // Configure time
+    // Configure time using NTP servers
     configTime(gmtOffset_sec, daylightOffset_sec, ntpServer1, ntpServer2);
     syncTime();
 }
