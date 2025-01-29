@@ -6,6 +6,11 @@ GET {{baseUrl}}/device/info
 Authorization: Bearer {{token}}
 ###
 
+### Timezones
+GET {{baseUrl}}/device/timezones
+Authorization: Bearer {{token}}
+###
+
 ### Scan networks
 GET {{baseUrl}}/device/wifi/networks
 Authorization: Bearer {{token}}

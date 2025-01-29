@@ -4,7 +4,7 @@
 #include "Globals.h"
 #include "WebHandler.h"
 #include "TimeHandler.h"
-#include "TimeZones.h"
+#include "Timezones.h"
 #include <WiFi.h>
 #include <ArduinoJson.h>
 #include <ArduinoOTA.h>
@@ -173,7 +173,6 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
         WebHandler::sendSuccessResponse(request, "GET /device/wifi/networks", &doc); });
 }
 
-/*
 void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
 {
     server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request){
@@ -202,8 +201,8 @@ void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
 
         WebHandler::sendSuccessResponse(request, "GET /device/timezones", &doc); });
 }
-*/
 
+/*
 void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
 {
     server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -220,6 +219,7 @@ void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
         WebHandler::sendSuccessResponse(request, "GET /device/timezones", &doc);
     });
 }
+*/
 
 /*
 // Tar not functioning at this time zipping files on frontend

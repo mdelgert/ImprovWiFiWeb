@@ -20,7 +20,7 @@ void ImprovWiFiHandler::loop()
 
 void ImprovWiFiHandler::init()
 {
-    scanAndSaveNetworks();
+    //scanAndSaveNetworks();
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
 
