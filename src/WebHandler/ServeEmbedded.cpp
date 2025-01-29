@@ -14,8 +14,7 @@ void ServeEmbedded::registerEndpoints(AsyncWebServer &server)
 
 void ServeEmbedded::serveEmbeddedFile(AsyncWebServer &server, const char *path, const uint8_t *start, const uint8_t *end, const char *contentType)
 {
-    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest *request)
-              {
+    server.on(path, HTTP_GET, [path, start, end, contentType](AsyncWebServerRequest *request){
         size_t fileSize = end - start;
         AsyncWebServerResponse* response = request->beginResponse_P(200, contentType, start, fileSize);
         response->addHeader("Content-Encoding", "identity");
