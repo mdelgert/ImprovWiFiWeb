@@ -131,3 +131,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-29-01
 **Description:**  
 - Add default timezone and disable erase littlefs
+
+### Tag: v1.0.37
+**Date:** 2025-29-01
+**Description:**  
+- Cleanup images and tft support
