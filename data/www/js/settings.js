@@ -17,6 +17,7 @@ async function loadSettings() {
     document.getElementById("wifi_scan").checked = data.wifi_scan || false;
     document.getElementById("wifi_network").value = data.wifi_ssid || "";
     document.getElementById("wifi_password").value = data.wifi_password || "";
+    document.getElementById("mqtt_enabled").checked = data.mqtt_enabled || false;
     document.getElementById("mqtt_server").value = data.mqtt_server || "";
     document.getElementById("mqtt_port").value = data.mqtt_port || "";
     document.getElementById("mqtt_username").value = data.mqtt_username || "";
@@ -40,6 +41,7 @@ async function saveSettings() {
   const wifiSsid = document.getElementById("wifi_network").value.trim();
   const wifiScan = document.getElementById("wifi_scan").checked;
   const wifiPassword = document.getElementById("wifi_password").value.trim();
+  const mqttEnabled = document.getElementById("mqtt_enabled").checked;
   const mqttServer = document.getElementById("mqtt_server").value.trim();
   const mqttPort = parseInt(document.getElementById("mqtt_port").value.trim(), 10);
   const mqttUsername = document.getElementById("mqtt_username").value.trim();
@@ -64,6 +66,7 @@ async function saveSettings() {
       wifi_ssid: wifiSsid,
       wifi_scan: wifiScan,
       wifi_password: wifiPassword,
+      mqtt_enabled: mqttEnabled,
       mqtt_server: mqttServer,
       mqtt_port: mqttPort,
       mqtt_username: mqttUsername,
