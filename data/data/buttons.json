@@ -45,7 +45,15 @@
       "name": "LOCK IMAGE",
       "category": "General",
       "action": "Command",
-      "command": "tft lock",
+      "command": "tft draw lock,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 3,
+      "name": "UNLOCK IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw unlock,45,5,60,60",
       "notes": ""
     },
     {

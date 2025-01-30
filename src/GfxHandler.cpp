@@ -2,8 +2,8 @@
 
 #include "TimeHandler.h"
 #include "GfxHandler.h"
-#include "GfxImageLock.h"
-#include "GfxImageLockWhite.h"
+#include "GfxImageLockOpen.h"
+#include "GfxImageLockClosed.h"
 
 // Initialize the static member
 LGFX_LiLyGo_TDongleS3 GfxHandler::tft;
@@ -105,8 +105,7 @@ void GfxHandler::drawImage(int x, int y, int width, int height, const char *data
 
 void GfxHandler::registerCommands()
 {
-    CommandHandler::registerCommand("tft", [](const String &command)
-                                    {
+    CommandHandler::registerCommand("tft", [](const String &command){
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
@@ -118,56 +117,6 @@ void GfxHandler::registerCommands()
             bool state = args.equalsIgnoreCase("true");
             toggleClock(state);
         }
-
-        else if (cmd == "lock") {
-            tft.fillScreen(TFT_BLACK); // Clear the screen
-            drawImage(15, 8, 128, 64, gfx_image_lock);
-        }
-
-        /*
-        else if (cmd == "draw")
-        {
-            args.trim(); // Remove any leading/trailing spaces
-
-            // Find commas safely
-            int firstComma = args.indexOf(',');
-            int secondComma = args.indexOf(',', firstComma + 1);
-            int thirdComma = args.indexOf(',', secondComma + 1);
-            int fourthComma = args.indexOf(',', thirdComma + 1); // Might be -1
-
-            // Ensure at least three commas exist (x, y, width, height)
-            if (firstComma == -1 || secondComma == -1 || thirdComma == -1) {
-                debugI("Error: Invalid arguments for draw command.");
-                debugI("Received args:%s", args.c_str());
-                return;
-            }
-
-            // Extract numerical arguments safely
-            int x = args.substring(0, firstComma).toInt();
-            int y = args.substring(firstComma + 1, secondComma).toInt();
-            int width = args.substring(secondComma + 1, thirdComma).toInt();
-
-            // Handle height extraction correctly
-            int height;
-            if (fourthComma != -1) {
-                height = args.substring(thirdComma + 1, fourthComma).toInt(); // Normal case
-            } else {
-                height = args.substring(thirdComma + 1).toInt(); // Extract last value properly
-            }
-
-            // Validate width and height
-            if (width <= 0 || height <= 0) {
-                debugI("Error: Invalid width or height.");
-                return;
-            }
-
-            debugI("Drawing image at (%d, %d), Size: (%d, %d)\n", x, y, width, height);
-
-            // Call drawImage with the predefined static image
-            tft.fillScreen(TFT_BLACK); // Clear the screen
-            drawImage(x, y, width, height, gfx_image_lock_white);
-        }
-        */
 
         else if (cmd == "draw"){
             args.trim(); // Remove any leading/trailing spaces
@@ -202,12 +151,11 @@ void GfxHandler::registerCommands()
 
             tft.fillScreen(TFT_BLACK); // Clear the screen
 
-            // Hardcoded if-statement for gfx_image_lock_white & gfx_image_lock_black
             if (imageName == "lock") {
-                drawImage(x, y, width, height, gfx_image_lock_white);
+                drawImage(x, y, width, height, gfx_image_lock_closed);
             } 
             else if (imageName == "unlock") {
-                //drawImage(x, y, width, height, gfx_image_lock_black);
+                drawImage(x, y, width, height, gfx_image_lock_open);
             } 
             else {
                 debugI("Error: Unknown image name: %s", imageName.c_str());
@@ -226,8 +174,8 @@ void GfxHandler::registerCommands()
 
 #endif // USE_GFX_HANDLER
 
-// Transparency background color
-// uint16_t bgColor = lcd.color565(128, 128, 128); //Grey background
-// uint16_t bgColor = lcd.color565(0, 0, 0); //Black background
-// drawImageWithTransparency(10, 10, width, height, header_data, bgColor);
-// drawImage(10, 10, width, height, header_data);
+//tft clock true
+//tft clock false
+//tft draw lock,45,5,60,60
+//tft draw unlock,45,5,60,60
+//tft print test
