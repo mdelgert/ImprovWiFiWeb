@@ -10,6 +10,46 @@
     },
     {
       "id": 2,
+      "name": "LOCK IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw lock,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 3,
+      "name": "UNLOCK IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw unlock,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 4,
+      "name": "SETTINGS IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw settings,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 5,
+      "name": "WIFI ON IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw wifion,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 6,
+      "name": "WIFI OFF IMAGE",
+      "category": "General",
+      "action": "Command",
+      "command": "tft draw wifioff,45,5,60,60",
+      "notes": ""
+    },
+    {
+      "id": 7,
       "name": "LED OFF",
       "category": "General",
       "action": "Command",
@@ -38,22 +78,6 @@
       "category": "General",
       "action": "Command",
       "command": "jiggle false",
-      "notes": ""
-    },
-    {
-      "id": 1738019468785,
-      "name": "LOCK IMAGE",
-      "category": "General",
-      "action": "Command",
-      "command": "tft draw lock,45,5,60,60",
-      "notes": ""
-    },
-    {
-      "id": 3,
-      "name": "UNLOCK IMAGE",
-      "category": "General",
-      "action": "Command",
-      "command": "tft draw unlock,45,5,60,60",
       "notes": ""
     },
     {

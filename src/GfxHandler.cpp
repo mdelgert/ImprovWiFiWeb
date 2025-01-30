@@ -2,8 +2,11 @@
 
 #include "TimeHandler.h"
 #include "GfxHandler.h"
-#include "GfxImageLockOpen.h"
-#include "GfxImageLockClosed.h"
+#include "ImageLockOpen.h"
+#include "ImageLockClosed.h"
+#include "ImageSettings.h"
+#include "ImageWifi.h"
+#include "ImageWifiOff.h"
 
 // Initialize the static member
 LGFX_LiLyGo_TDongleS3 GfxHandler::tft;
@@ -152,11 +155,20 @@ void GfxHandler::registerCommands()
             tft.fillScreen(TFT_BLACK); // Clear the screen
 
             if (imageName == "lock") {
-                drawImage(x, y, width, height, gfx_image_lock_closed);
+                drawImage(x, y, width, height, image_lock_closed);
             } 
             else if (imageName == "unlock") {
-                drawImage(x, y, width, height, gfx_image_lock_open);
-            } 
+                drawImage(x, y, width, height, image_lock_open);
+            }
+            else if (imageName == "settings") {
+                drawImage(x, y, width, height, image_settings);
+            }
+            else if (imageName == "wifion") {
+                drawImage(x, y, width, height, image_wifi);
+            }
+            else if (imageName == "wifioff") {
+                drawImage(x, y, width, height, image_wifi_off);
+            }
             else {
                 debugI("Error: Unknown image name: %s", imageName.c_str());
                 return;
@@ -174,8 +186,11 @@ void GfxHandler::registerCommands()
 
 #endif // USE_GFX_HANDLER
 
+//tft print test
 //tft clock true
 //tft clock false
 //tft draw lock,45,5,60,60
 //tft draw unlock,45,5,60,60
-//tft print test
+//tft draw settings,45,5,60,60
+//tft draw wifion,45,5,60,60
+//tft draw wifioff,45,5,60,60

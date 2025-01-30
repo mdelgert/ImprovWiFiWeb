@@ -1,11 +1,9 @@
-/*  GIMP header image file format (RGB): GfxImageLockOpen.h  
-Source: https://tabler.io/icons
-static unsigned int width = 60;
-static unsigned int height = 60;
+/*  
+GIMP header image file format (RGB): https://tabler.io/icons width = 60; height = 60;
 Need to change Gimp exports to const to avoid compile warnings.
 */
 
-static const char *gfx_image_lock_open =
+static const char *image_lock_open =
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 	"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
