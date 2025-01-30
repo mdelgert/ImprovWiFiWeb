@@ -1,8 +1,9 @@
 #ifdef ENABLE_GFX_HANDLER // Compile this file only if the feature flag is enabled
 
-#include "GfxHandler.h"
-#include "GfxLockImage.h"
 #include "TimeHandler.h"
+#include "GfxHandler.h"
+#include "GfxImageLock.h"
+#include "GfxImageLockWhite.h"
 
 // Initialize the static member
 LGFX_LiLyGo_TDongleS3 GfxHandler::tft;
@@ -53,7 +54,8 @@ void GfxHandler::toggleClock(bool state)
 {
     showClock = state;
 
-    if(!state){
+    if (!state)
+    {
         tft.fillScreen(TFT_BLACK); // Clear the screen
     }
 }
@@ -111,27 +113,73 @@ void GfxHandler::registerCommands()
         if (cmd == "print") {
             printMessage(args.c_str());
         }
+
         else if (cmd == "clock") {
             bool state = args.equalsIgnoreCase("true");
             toggleClock(state);
         }
-        else if (cmd == "demo") {
-            //Transparency background color
-            //uint16_t bgColor = lcd.color565(128, 128, 128); //Grey background
-            //uint16_t bgColor = lcd.color565(0, 0, 0); //Black background
-            //drawImageWithTransparency(10, 10, width, height, header_data, bgColor);
-            //drawImage(10, 10, width, height, header_data);
+
+        else if (cmd == "lock") {
             tft.fillScreen(TFT_BLACK); // Clear the screen
-            drawImage(15, 8, width, height, header_data);
-        } 
+            drawImage(15, 8, 128, 64, gfx_image_lock);
+        }
+
+        else if (cmd == "draw")
+        {
+            args.trim(); // Remove any leading/trailing spaces
+
+            // Find commas safely
+            int firstComma = args.indexOf(',');
+            int secondComma = args.indexOf(',', firstComma + 1);
+            int thirdComma = args.indexOf(',', secondComma + 1);
+            int fourthComma = args.indexOf(',', thirdComma + 1); // Might be -1
+
+            // Ensure at least three commas exist (x, y, width, height)
+            if (firstComma == -1 || secondComma == -1 || thirdComma == -1) {
+                debugI("Error: Invalid arguments for draw command.");
+                debugI("Received args:%s", args.c_str());
+                return;
+            }
+
+            // Extract numerical arguments safely
+            int x = args.substring(0, firstComma).toInt();
+            int y = args.substring(firstComma + 1, secondComma).toInt();
+            int width = args.substring(secondComma + 1, thirdComma).toInt();
+
+            // Handle height extraction correctly
+            int height;
+            if (fourthComma != -1) {
+                height = args.substring(thirdComma + 1, fourthComma).toInt(); // Normal case
+            } else {
+                height = args.substring(thirdComma + 1).toInt(); // Extract last value properly
+            }
+
+            // Validate width and height
+            if (width <= 0 || height <= 0) {
+                debugI("Error: Invalid width or height.");
+                return;
+            }
+
+            debugI("Drawing image at (%d, %d), Size: (%d, %d)\n", x, y, width, height);
+
+            // Call drawImage with the predefined static image
+            tft.fillScreen(TFT_BLACK); // Clear the screen
+            drawImage(x, y, width, height, gfx_image_lock_white);
+        }
+
         else {
             debugW("Unknown tft subcommand: %s", cmd.c_str());
         } }, "Handles tft commands. Usage: led <subcommand> [args]\n"
                                          "  Subcommands:\n"
                                          "  print <print> - Print a message to TFT screen\n"
                                          "  clock <true|false> - Show or hide current time on tft screen\n"
-                                         "  demo - Show demo lock image on tft screen"
-        );
+                                         "  demo - Show demo lock image on tft screen");
 }
 
 #endif // USE_GFX_HANDLER
+
+// Transparency background color
+// uint16_t bgColor = lcd.color565(128, 128, 128); //Grey background
+// uint16_t bgColor = lcd.color565(0, 0, 0); //Black background
+// drawImageWithTransparency(10, 10, width, height, header_data, bgColor);
+// drawImage(10, 10, width, height, header_data);

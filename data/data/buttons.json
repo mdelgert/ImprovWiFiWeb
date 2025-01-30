@@ -45,7 +45,7 @@
       "name": "LOCK IMAGE",
       "category": "General",
       "action": "Command",
-      "command": "tft demo",
+      "command": "tft lock",
       "notes": ""
     },
     {

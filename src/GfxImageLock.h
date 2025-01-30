@@ -1,20 +1,11 @@
 /*  GIMP header image file format (RGB): C:\Source\PassTxt\Icons\lock.h  */
 
-static unsigned int width = 128;
-static unsigned int height = 64;
+//static unsigned int width = 128;
+//static unsigned int height = 64;
 
-/*  Call this macro repeatedly.  After each use, the pixel data can be extracted  */
-
-#define HEADER_PIXEL(data,pixel) {\
-pixel[0] = (((data[0] - 33) << 2) | ((data[1] - 33) >> 4)); \
-pixel[1] = ((((data[1] - 33) & 0xF) << 4) | ((data[2] - 33) >> 2)); \
-pixel[2] = ((((data[2] - 33) & 0x3) << 6) | ((data[3] - 33))); \
-data += 4; \
-}
-
-// Pay attention to const char *data, or compiler will throw warnings.
 // Gimp exports the image data as a const need to change to avoid warnings.
-static const char *header_data =
+
+static const char *gfx_image_lock =
 	"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\""
 	"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\""
 	"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\"!1%\""
