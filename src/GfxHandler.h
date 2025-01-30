@@ -31,12 +31,12 @@ private:
     static void toggleClock(bool state);
     static LGFX_LiLyGo_TDongleS3 tft;
     static void registerCommands();
-    static void drawImage(int x, int y, int width, int height, const char *data);
     
 public:
     static void init();
     static void loop();
     static void printMessage(const String &message);
+    static void drawImage(int x, int y, int width, int height, const char *data);
 };
 
 #else
@@ -48,6 +48,7 @@ public:
     static void init() {}
     static void loop() {}
     static void printMessage(const String &message) {}
+    static void drawImage(int x, int y, int width, int height, const char *data) {}
 };
 
 #endif // ENABLE_GFX_HANDLER

@@ -124,6 +124,7 @@ void GfxHandler::registerCommands()
             drawImage(15, 8, 128, 64, gfx_image_lock);
         }
 
+        /*
         else if (cmd == "draw")
         {
             args.trim(); // Remove any leading/trailing spaces
@@ -165,6 +166,53 @@ void GfxHandler::registerCommands()
             // Call drawImage with the predefined static image
             tft.fillScreen(TFT_BLACK); // Clear the screen
             drawImage(x, y, width, height, gfx_image_lock_white);
+        }
+        */
+
+        else if (cmd == "draw"){
+            args.trim(); // Remove any leading/trailing spaces
+
+            // Find commas safely
+            int firstComma = args.indexOf(',');
+            int secondComma = args.indexOf(',', firstComma + 1);
+            int thirdComma = args.indexOf(',', secondComma + 1);
+            int fourthComma = args.indexOf(',', thirdComma + 1); // Might be -1
+
+            // Ensure at least three commas exist (imageName, x, y, width, height)
+            if (firstComma == -1 || secondComma == -1 || thirdComma == -1) {
+                debugI("Error: Invalid arguments for draw command.");
+                debugI("Received args: %s", args.c_str());
+                return;
+            }
+
+            // Extract image name and numerical arguments
+            String imageName = args.substring(0, firstComma);
+            int x = args.substring(firstComma + 1, secondComma).toInt();
+            int y = args.substring(secondComma + 1, thirdComma).toInt();
+            int width = args.substring(thirdComma + 1, fourthComma != -1 ? fourthComma : args.length()).toInt();
+            int height = (fourthComma != -1) ? args.substring(fourthComma + 1).toInt() : width; // Default height = width if not provided
+
+            // Validate width and height
+            if (width <= 0 || height <= 0) {
+                debugI("Error: Invalid width or height.");
+                return;
+            }
+
+            debugI("Drawing image: %s at (%d, %d), Size: (%d, %d)", imageName.c_str(), x, y, width, height);
+
+            tft.fillScreen(TFT_BLACK); // Clear the screen
+
+            // Hardcoded if-statement for gfx_image_lock_white & gfx_image_lock_black
+            if (imageName == "lock") {
+                drawImage(x, y, width, height, gfx_image_lock_white);
+            } 
+            else if (imageName == "unlock") {
+                //drawImage(x, y, width, height, gfx_image_lock_black);
+            } 
+            else {
+                debugI("Error: Unknown image name: %s", imageName.c_str());
+                return;
+            }
         }
 
         else {
