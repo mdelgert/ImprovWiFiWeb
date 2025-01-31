@@ -121,15 +121,13 @@ void WebHandler::init()
     ServeFiles::registerEndpoints(server);
     ServeCommand::registerEndpoints(server);
     ServeButtons::registerEndpoints(server);
-    
-    //ServeAuth::registerEndpoints(server);
+    ServeAuth::registerEndpoints(server);
 
     //ServeEmbedded::registerEndpoints(server);
     //server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
     //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
     //server.serveStatic("/www", LittleFS, "/www").setDefaultFile("index.html");
-
-    server.serveStatic("/secure/secure.html", LittleFS, "/secure/secure.html").setAuthentication("admin", "pass");
+    //server.serveStatic("/secure/secure.html", LittleFS, "/secure/secure.html").setAuthentication("admin", "pass");
     //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html").setAuthentication("admin", "pass");
     server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
 
