@@ -127,12 +127,15 @@ void WebHandler::init()
     //server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
     //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
     //server.serveStatic("/www", LittleFS, "/www").setDefaultFile("index.html");
-    server.serveStatic("/secure/secure.html", LittleFS, "/secure/secure.html").setAuthentication("admin", "pass");
-    server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
+    //server.serveStatic("/secure/secure.html", LittleFS, "/secure/secure.html").setAuthentication("admin", "pass");
+
     //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html").setAuthentication("admin", "pass");
-    
+    server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
+
     serveNotFound();
+    
     server.begin();
+    
     debugI("WebHandler initialized");
 }
 

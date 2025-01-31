@@ -3,11 +3,41 @@
 #include "ServeAuth.h"
 #include "Globals.h"
 #include "WebHandler.h"
-#include <ArduinoJson.h>
+#include <vector>
+#include <LittleFS.h>
+
+// Store active session tokens in memory
+std::vector<String> activeSessions;
+
+// Generate a secure random session token
+String generateRandomToken()
+{
+    String token = "";
+    for (int i = 0; i < 32; i++)
+    { // 32-character token
+        char c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"[random(62)];
+        token += c;
+    }
+    return token;
+}
+
+String getContentType(String filename) {
+    if (filename.endsWith(".html")) return "text/html";
+    else if (filename.endsWith(".css")) return "text/css";
+    else if (filename.endsWith(".js")) return "application/javascript";
+    else if (filename.endsWith(".png")) return "image/png";
+    else if (filename.endsWith(".jpg")) return "image/jpeg";
+    else if (filename.endsWith(".gif")) return "image/gif";
+    else if (filename.endsWith(".ico")) return "image/x-icon";
+    else if (filename.endsWith(".svg")) return "image/svg+xml";
+    return "text/plain";
+}
 
 void ServeAuth::registerEndpoints(AsyncWebServer &server)
 {
     handleLoginRequest(server);
+    handleLogoutRequest(server);
+    handleSecureRequest(server);
 }
 
 void ServeAuth::handleLoginRequest(AsyncWebServer &server)
@@ -33,7 +63,8 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
         debugV("Attempting login: username=%s", username);
 
         if (strcmp(username, "admin") == 0 && strcmp(password, "pass") == 0) {
-            String sessionToken = "example_session_12345";
+            String sessionToken = generateRandomToken();
+            activeSessions.push_back(sessionToken);  // Store valid session
 
             JsonDocument response;
             response["status"] = "success";
@@ -46,8 +77,85 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
             AsyncWebServerResponse *res = request->beginResponse(200, "application/json", jsonResponse);
             res->addHeader("Set-Cookie", "session=" + sessionToken + "; Path=/; HttpOnly;");
             request->send(res);
+
+            debugV("Generated session token: %s", sessionToken.c_str());
         } else {
             request->send(401, "application/json", R"({"status": "error", "message": "Invalid credentials"})");
+        } });
+}
+
+void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
+{
+    server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
+              {
+        if (!request->hasHeader("Cookie")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "No session found"})");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "Invalid session"})");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);
+
+        // Remove session from activeSessions
+        activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
+
+        request->send(200, "application/json", R"({"status": "success", "message": "Logged out"})"); });
+}
+
+void ServeAuth::handleSecureRequest(AsyncWebServer &server)
+{
+    server.on("/secure/secure.html", HTTP_ANY, [](AsyncWebServerRequest *request) {
+        String url = request->url();
+
+        debugI("Received request: %s", url.c_str());
+        
+        // Check for authentication
+        if (!request->hasHeader("Cookie")) {
+            debugI("No cookie header found, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            debugI("No session found in cookie, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);  // Extract session token
+
+        // Check if sessionToken exists in activeSessions
+        bool validSession = false;
+        for (const String &token : activeSessions) {
+            if (sessionToken == token) {
+                validSession = true;
+                break;
+            }
+        }
+
+        if (!validSession) {
+            debugI("Invalid session token, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        // Serve file if user is authenticated
+        if (LittleFS.exists(url)) {
+            debugI("Serving file: %s", url.c_str());
+            //request->send(LittleFS, url, getContentType(url));
+            request->send(LittleFS, "/secure/secure.html", "text/html");
+        } else {
+            request->send(404, "text/plain", "File Not Found");
         }
     });
 }

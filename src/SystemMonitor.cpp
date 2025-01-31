@@ -79,7 +79,7 @@ void SystemMonitor::systemMonitorTask(void *parameter)
 // Define individual handlers for each interval
 void SystemMonitor::handleSecondCheck()
 {
-  debugV("SystemMonitor: Running second-specific task.");
+  //debugV("SystemMonitor: Running second-specific task.");
   settings.upTime++;
   CronHandler::executeJobs();
   TimeHandler::loop();
@@ -92,23 +92,23 @@ void SystemMonitor::handleSecondCheck()
     settings.bootTime = time(nullptr);
     ConfigManager::save();
     bootUpdated = true; // Mark as updated
-    debugV("Boot count and boot time updated.");
+    //debugV("Boot count and boot time updated.");
   }
 }
 
 void SystemMonitor::handleMinuteCheck()
 {
-  debugV("SystemMonitor: Running minute-specific task.");
+  //debugV("SystemMonitor: Running minute-specific task.");
 }
 
 void SystemMonitor::handleFiveMinuteCheck()
 {
-  debugV("SystemMonitor: Running five-minute-specific task.");
+  //debugV("SystemMonitor: Running five-minute-specific task.");
 }
 
 void SystemMonitor::handleTenMinuteCheck()
 {
-  debugV("SystemMonitor: Running ten-minute-specific task.");
+  //debugV("SystemMonitor: Running ten-minute-specific task.");
   TimeHandler::syncTime();
 }
 

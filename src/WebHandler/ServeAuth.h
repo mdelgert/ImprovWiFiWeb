@@ -12,6 +12,8 @@ public:
 
 private:
     static void handleLoginRequest(AsyncWebServer &server);
+    static void handleLogoutRequest(AsyncWebServer &server);
+    static void handleSecureRequest(AsyncWebServer &server);
 };
 
 #endif // ENABLE_WEB_HANDLER
