@@ -4,10 +4,12 @@
 #include "Globals.h"
 #include "ServeDevice.h"
 #include "ServeSettings.h"
-#include "ServeEmbedded.h"
 #include "ServeFiles.h"
 #include "ServeCommand.h"
 #include "ServeButtons.h"
+#include "ServeAuth.h"
+//#include "ServeEmbedded.h"
+#include <LittleFS.h>
 
 //NonBlockingTimer WebHandler::myTimer(60000);
 AsyncWebServer WebHandler::server(80);
@@ -114,23 +116,21 @@ void WebHandler::init()
 {
     if (!settings.webHandler) return;
 
-    // Appears to block Improv WiFi setup if enabled
-    // Todo test and remove if not needed
-    // while (WiFi.status() != WL_CONNECTED)
-    // {
-    //     if (myTimer.isReady())
-    //     {
-    //         debugI("WebHandler waiting for WiFi...");
-    //         //break; // Don't break, just wait
-    //     }
-    // }
-
-    ServeEmbedded::registerEndpoints(server);
     ServeDevice::registerEndpoints(server);
     ServeSettings::registerEndpoints(server);
     ServeFiles::registerEndpoints(server);
     ServeCommand::registerEndpoints(server);
     ServeButtons::registerEndpoints(server);
+    ServeAuth::registerEndpoints(server);
+
+    //ServeEmbedded::registerEndpoints(server);
+    //server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
+    //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
+    //server.serveStatic("/www", LittleFS, "/www").setDefaultFile("index.html");
+    server.serveStatic("/secure/secure.html", LittleFS, "/secure/secure.html").setAuthentication("admin", "pass");
+    server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html");
+    //server.serveStatic("/", LittleFS, "/www").setDefaultFile("index.html").setAuthentication("admin", "pass");
+    
     serveNotFound();
     server.begin();
     debugI("WebHandler initialized");
