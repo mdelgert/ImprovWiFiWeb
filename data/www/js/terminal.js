@@ -1,8 +1,7 @@
 //terminal.js
 console.log('terminal.js loaded');
 
-//const WS_URL = "ws://demo.local:8232";
-import { WS_URL } from './global.js';
+import {WS_URL} from './config.js';
 
 console.log(`WebSocket URL: ${WS_URL}`);
 

@@ -1,7 +1,10 @@
-// buttoneditor.js
+//buttoneditor.js
 console.log('buttoneditor.js loaded');
 
-const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+import {BASE_URL} from './config.js';
+
+//const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
+const endPoint = BASE_URL;
 
 let items = [];
 let editingItemId = null;

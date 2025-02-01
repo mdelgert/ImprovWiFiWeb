@@ -1,7 +1,7 @@
 //settings.js
 console.log("settings.js loaded");
 
-import { httpGet, httpPost, showMessage } from "./global.js";
+import {httpGet, httpPost, showMessage} from "./global.js";
 
 // Load settings from the server
 async function loadSettings() {

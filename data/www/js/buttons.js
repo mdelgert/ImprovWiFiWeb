@@ -1,11 +1,10 @@
-// buttons.js
+//buttons.js
 console.log('buttons.js loaded');
 
 import { BASE_URL, httpGet, showMessage } from './global.js';
 
-const endPoint = BASE_URL;
-
 //const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+const endPoint = BASE_URL;
 
     // Fetch and Render Buttons
     async function loadButtons() {

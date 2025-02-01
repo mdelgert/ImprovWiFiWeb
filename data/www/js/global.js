@@ -1,19 +1,7 @@
+//global.js
 console.log("global.js loaded");
 
-// Centralized device configuration
-const DEV_DEVICE = "demo1.local"; // Change this to the desired development device, e.g., "192.168.4.1"
-
-// Determine Base URL and WebSocket URL based on environment
-const BASE_URL = window.location.hostname === "localhost" 
-    ? `http://${DEV_DEVICE}` 
-    : "";
-
-const WS_URL = `ws://${window.location.hostname === "localhost" 
-    ? DEV_DEVICE 
-    : window.location.hostname}:8232`;
-
-console.log(`BASE_URL: ${BASE_URL}`);
-console.log(`WS_URL: ${WS_URL}`);
+import {BASE_URL} from './config.js';
 
 // Centralized function for HTTP GET requests
 async function httpGet(endpoint) {
@@ -112,4 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Export variables and functions for reuse
-export { WS_URL, BASE_URL, httpGet, httpPost, showMessage };
+export {httpGet, httpPost, showMessage};

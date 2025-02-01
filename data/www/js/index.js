@@ -1,7 +1,7 @@
-// index.js
+//index.js
 console.log('index.js loaded');
 
-import { BASE_URL, httpGet, showMessage } from './global.js';
+import {httpGet, showMessage} from './global.js';
 
 // Function to reboot the device
 async function rebootDevice() {
