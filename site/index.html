@@ -68,7 +68,7 @@
 
     // Make sure this matches tools/manifests.py
     function populateDropdown(releases) {
-      const limitedReleases = releases.slice(0, 5); // Limit to the last 3 releases
+      const limitedReleases = releases.slice(0, 10); // Limit to the last 3 releases
       limitedReleases.forEach((release) => {
         const tagName = release.tag_name;
         const manifestPath = `firmware/${tagName}.json`;

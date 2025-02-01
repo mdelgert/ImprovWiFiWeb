@@ -784,3 +784,213 @@ void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
 ✔ **Supports logout to remove active sessions**  
 
 🚀 **Now your authentication is more secure!** Let me know if you need any refinements! 🔥
+
+Your session management design is currently storing active session tokens **only in memory** (`std::vector<String> activeSessions`). This means that sessions are only valid on the device where they were created. 
+
+### 🔍 **Why Does This Happen?**
+1. **Sessions are not persisted**  
+   - Your `activeSessions` list exists only in RAM, meaning it gets cleared when the ESP32 restarts.
+   - Each login only adds tokens to that list **on that ESP32 instance**.
+   - If you log in on **Computer A**, the ESP32 only knows about that session.
+   - Logging in on **Computer B** creates a separate session in memory, but it does not share it with Computer A.
+   - When you return to **Computer A**, its session token is not recognized, requiring a new login.
+
+2. **Session tokens are not stored across logins**  
+   - Since `activeSessions` is an in-memory vector, tokens are lost when the ESP32 restarts.
+   - Every restart results in **all users being logged out**.
+
+---
+
+### ✅ **Solution: Persist Session Tokens in LittleFS**
+Instead of storing active sessions only in memory, you can **save them to LittleFS (flash storage) and reload them on startup**.
+
+#### ✨ **Steps to Implement:**
+1. Save session tokens in a **file** in LittleFS (`/sessions.json`).
+2. **On startup**, load stored session tokens into `activeSessions`.
+3. **On login**, save new session tokens to both memory and file.
+4. **On logout**, remove the session token from memory and update the file.
+
+---
+
+### 🔧 **Modified Code: Persist Sessions in LittleFS**
+#### 📌 **1. Save & Load Session Tokens from File**
+Add these helper functions:
+
+```cpp
+#include <ArduinoJson.h>
+#include <LittleFS.h>
+
+#define SESSION_FILE "/sessions.json"
+
+// Load sessions from LittleFS at startup
+void loadSessions() {
+    if (!LittleFS.begin()) {
+        debugE("Failed to mount LittleFS");
+        return;
+    }
+    
+    if (!LittleFS.exists(SESSION_FILE)) {
+        debugV("No session file found, creating empty session list");
+        return;
+    }
+
+    File file = LittleFS.open(SESSION_FILE, "r");
+    if (!file) {
+        debugE("Failed to open session file");
+        return;
+    }
+
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, file);
+    if (error) {
+        debugE("Failed to parse session file: %s", error.c_str());
+        file.close();
+        return;
+    }
+
+    activeSessions.clear();
+    for (JsonVariant session : doc.as<JsonArray>()) {
+        activeSessions.push_back(session.as<String>());
+    }
+
+    file.close();
+    debugV("Loaded %d active sessions", activeSessions.size());
+}
+
+// Save current sessions to LittleFS
+void saveSessions() {
+    File file = LittleFS.open(SESSION_FILE, "w");
+    if (!file) {
+        debugE("Failed to open session file for writing");
+        return;
+    }
+
+    JsonDocument doc;
+    JsonArray array = doc.to<JsonArray>();
+    for (const String &token : activeSessions) {
+        array.add(token);
+    }
+
+    serializeJson(doc, file);
+    file.close();
+    debugV("Saved %d active sessions", activeSessions.size());
+}
+```
+
+---
+
+#### 📌 **2. Modify `handleLoginRequest` to Store Sessions Persistently**
+Update `handleLoginRequest` to save session tokens to the file:
+
+```cpp
+void ServeAuth::handleLoginRequest(AsyncWebServer &server)
+{
+    server.on("/auth/login", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+              {
+        debugV("Received POST request on /auth/login");
+
+        WebHandler::printRequestBody(request, data, len);
+
+        JsonDocument doc;
+        DeserializationError error = deserializeJson(doc, data, len);
+
+        if (error) {
+            debugE("JSON deserialization failed: %s", error.c_str());
+            request->send(400, "application/json", R"({"status": "error", "message": "Invalid JSON payload"})");
+            return;
+        }
+
+        const char* username = doc["username"] | "";
+        const char* password = doc["password"] | "";
+
+        debugV("Attempting login: username=%s", username);
+
+        if (strcmp(username, "admin") == 0 && strcmp(password, "pass") == 0) {
+            String sessionToken = generateRandomToken();
+            activeSessions.push_back(sessionToken);  // Store valid session
+            saveSessions(); // Save to LittleFS
+
+            JsonDocument response;
+            response["status"] = "success";
+            response["message"] = "Login successful";
+            response["data"]["token"] = sessionToken;
+
+            String jsonResponse;
+            serializeJson(response, jsonResponse);
+
+            AsyncWebServerResponse *res = request->beginResponse(200, "application/json", jsonResponse);
+            res->addHeader("Set-Cookie", "session=" + sessionToken + "; Path=/; HttpOnly;");
+            request->send(res);
+
+            debugV("Generated session token: %s", sessionToken.c_str());
+        } else {
+            request->send(401, "application/json", R"({"status": "error", "message": "Invalid credentials"})");
+        } });
+}
+```
+
+---
+
+#### 📌 **3. Modify `handleLogoutRequest` to Remove Sessions Persistently**
+Update `handleLogoutRequest` to remove session tokens from storage:
+
+```cpp
+void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
+{
+    server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
+              {
+        if (!request->hasHeader("Cookie")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "No session found"})");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "Invalid session"})");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);
+
+        // Remove session from activeSessions
+        activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
+        saveSessions(); // Persist changes
+
+        // Create response and set an expired cookie
+        AsyncWebServerResponse *res = request->beginResponse(200, "application/json", R"({"status": "success", "message": "Logged out"})");
+        res->addHeader("Set-Cookie", "session=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT;");
+        request->send(res);
+    });
+}
+```
+
+---
+
+#### 📌 **4. Load Sessions at Startup**
+Call `loadSessions();` when the ESP32 starts:
+
+```cpp
+void setup()
+{
+    Serial.begin(115200);
+    LittleFS.begin();  // Initialize LittleFS
+
+    loadSessions(); // Load stored session tokens
+
+    AsyncWebServer server(80);
+    ServeAuth::registerEndpoints(server);
+    server.begin();
+}
+```
+
+---
+
+### ✅ **Expected Behavior After Fix**
+- When you **log in from any device**, the session token is saved to **LittleFS**.
+- The **ESP32 now remembers sessions** across reboots and across multiple devices.
+- When a user logs out, the session token is removed from both **memory and storage**.
+- If the ESP32 reboots, **existing sessions remain valid**.
+
+This should now **persist sessions across multiple computers**. Let me know if you need any improvements! 🚀

@@ -6,7 +6,7 @@ import shutil
 import argparse
 
 # Constants (You can adjust these for your project)
-LIMIT_RELEASES = 5  # Set to 0 for no limit (process all releases)
+LIMIT_RELEASES = 10  # Set to 0 for no limit (process all releases)
 GITHUB_API_URL = "https://api.github.com/repos/mdelgert/ImprovWiFiWeb/releases"
 MANIFEST_TEMPLATE = {
     # "home_assistant_domain": "esphome",

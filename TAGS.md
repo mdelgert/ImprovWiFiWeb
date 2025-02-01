@@ -136,3 +136,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-29-01
 **Description:**  
 - Cleanup images and tft support
+
+### Tag: v1.0.38
+**Date:** 2025-31-01
+**Description:**  
+- Add test login page
