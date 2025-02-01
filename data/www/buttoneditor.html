@@ -4,16 +4,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buttons</title>
-  <script type="module" src="/js/buttoneditor.js"></script>
+  <title>Button Editor</title>
+  <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="/css/buttoneditor.css" />
+  <script type="module" src="/js/global.js" defer></script>
+  <script type="module" src="/js/buttoneditor.js"></script>
   <style></style>
 </head>
 <body>
+  <div id="navbar-container"></div>
+  <main>
   <div class="container">
-    <h1>Button Editor</h1>
+    <!-- <h1>Button Editor</h1> -->
     <div id="filterContainer">
-      <label id="categoryFilterLabel" for="categoryFilter">Filter by Category:</label>
+      <label id="categoryFilterLabel" for="categoryFilter">Category:</label>
       <select id="categoryFilter">
         <option value="all">All</option>
       </select>
@@ -51,6 +55,8 @@
       </div>
     </div>
   </div>
+  <div id="footer-container"></div>
+  </main>
   <!-- 
   <script type="module">
     import { BASE_URL } from './js/config.js';
