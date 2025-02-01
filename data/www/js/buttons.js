@@ -1,31 +1,41 @@
-const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
+//buttons.js
 
-let items = [];
-let editingItemId = null;
+//import "./global.js";
+import {BASE_URL} from './config.js';
 
-const fetchButtons = async () => {
+const endPoint = BASE_URL;
+
+let allButtons = []; // Store all buttons globally
+
+// Fetch and Render Buttons
+export async function fetchButtons() {
   try {
     const response = await fetch(`${endPoint}/buttons`);
-    if (response.ok) {
-      const data = await response.json();
-      items = data.buttons || [];
-      populateCategoryFilter(items);
-      renderList();
-    } else {
-      console.error("Failed to fetch buttons");
+    if (!response.ok) throw new Error("Failed to fetch buttons");
+    const data = await response.json();
+    allButtons = data.buttons; // Store data globally
+    populateCategoryDropdown(allButtons);
+    renderButtons(allButtons);
+  } catch (error) {
+    console.error("Error fetching buttons:", error);
+    const buttonContainer = document.getElementById("buttonContainer");
+    if (buttonContainer) {
+      buttonContainer.innerHTML = "<p>Error loading buttons.</p>";
     }
-  } catch (err) {
-    console.error("Error fetching buttons:", err);
   }
-};
+}
 
-// Populate the category filter dropdown
-function populateCategoryFilter(buttons) {
+// Populate Dropdown with Unique Categories
+function populateCategoryDropdown(buttons) {
   const categorySet = new Set(buttons.map(button => button.category));
   const categoryFilter = document.getElementById("categoryFilter");
 
+  if (!categoryFilter) return;
+
+  // Clear existing options except "All"
   categoryFilter.innerHTML = '<option value="all">All</option>';
 
+  // Add categories dynamically
   categorySet.forEach(category => {
     const option = document.createElement("option");
     option.value = category;
@@ -33,102 +43,50 @@ function populateCategoryFilter(buttons) {
     categoryFilter.appendChild(option);
   });
 
+  // Attach event listener for filtering
   categoryFilter.addEventListener("change", () => {
     const selectedCategory = categoryFilter.value;
-    const filteredButtons = selectedCategory === "all" ? items : items.filter(button => button.category === selectedCategory);
-    renderList(filteredButtons);
+    const filteredButtons = selectedCategory === "all" ? allButtons : allButtons.filter(button => button.category === selectedCategory);
+    renderButtons(filteredButtons);
   });
 }
 
-// Update renderList function to accept filtered items
-function renderList(filteredItems = items) {
-  const itemList = document.getElementById("itemList");
-  itemList.innerHTML = "";
+// Render Buttons
+function renderButtons(buttons) {
+  const container = document.getElementById("buttonContainer");
+  if (!container) {
+    console.error("Error: #buttonContainer not found in the DOM.");
+    return;
+  }
+  container.innerHTML = ""; // Clear previous content
 
-  filteredItems.forEach((item) => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <span>${item.name}</span>
-      <div class="actions">
-        <button onclick="sendCommand('${encodeURIComponent(item.command)}')">Run</button>
-        <button onclick="openModal(${item.id})">Edit</button>
-        <button onclick="deleteItem(${item.id})">Delete</button>
-      </div>`;
-    itemList.appendChild(li);
+  buttons.forEach(button => {
+    const btn = document.createElement("button");
+    btn.className = "button tooltip";
+    btn.textContent = button.name;
+
+    // Apply inline styles only if provided
+    if (button.style?.color) btn.style.color = button.style.color;
+    if (button.style?.fontSize) btn.style.fontSize = button.style.fontSize;
+    if (button.style?.backgroundColor) {
+      btn.style.setProperty("--dynamic-bg-color", button.style.backgroundColor);
+    }
+    if (button.style?.borderWidth && button.style?.borderColor) {
+      btn.style.border = `${button.style.borderWidth} solid ${button.style.borderColor}`;
+    }
+    if (button.style?.borderRadius) btn.style.borderRadius = button.style.borderRadius;
+    if (button.style?.padding) btn.style.padding = button.style.padding;
+    if (button.style?.width) btn.style.width = button.style.width;
+
+    // Attach click event to send the command
+    btn.onclick = () => sendCommand(button.command);
+
+    container.appendChild(btn);
   });
 }
 
-function openModal(id) {
-  editingItemId = id;
-  const item = items.find((i) => i.id === id);
-  document.getElementById("editName").value = item.name;
-  document.getElementById("editCategory").value = item.category;
-  document.getElementById("editAction").value = item.action;
-  document.getElementById("editCommand").value = item.command;
-  document.getElementById("editNotes").value = item.notes || "";
-  document.getElementById("modalTitle").textContent = "Edit Button";
-  document.getElementById("editModal").style.display = "flex";
-}
-
-function openModalForAdd() {
-  editingItemId = null;
-  document.getElementById("editName").value = "";
-  document.getElementById("editCategory").value = "General";
-  document.getElementById("editAction").value = "Command";
-  document.getElementById("editCommand").value = "";
-  document.getElementById("editNotes").value = "";
-  document.getElementById("modalTitle").textContent = "Add New Button";
-  document.getElementById("editModal").style.display = "flex";
-}
-
-function closeModal() {
-  document.getElementById("editModal").style.display = "none";
-}
-
-async function saveChanges() {
-  const name = document.getElementById("editName").value;
-  const category = document.getElementById("editCategory").value;
-  const action = document.getElementById("editAction").value;
-  const command = document.getElementById("editCommand").value;
-  const notes = document.getElementById("editNotes").value;
-  if (!name || !command) return;
-
-  const button = { id: editingItemId || Date.now(), name, category, action, command, notes };
-
-  try {
-    const response = await fetch(`${endPoint}/buttons`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ buttons: [button] }),
-    });
-
-    if (response.ok) {
-      await fetchButtons();
-      closeModal();
-    } else {
-      console.error("Failed to save button");
-    }
-  } catch (err) {
-    console.error("Error saving button:", err);
-  }
-}
-
-async function deleteItem(id) {
-  try {
-    const response = await fetch(`${endPoint}/buttons?id=${encodeURIComponent(id)}`, { method: "DELETE" });
-    if (response.ok) {
-      await fetchButtons();
-    } else {
-      console.error("Failed to delete button");
-    }
-  } catch (err) {
-    console.error("Error deleting button:", err);
-  }
-}
-
-async function sendCommand(command) {
-  const decodedCommand = decodeURIComponent(command);
-
+// Send Command to Server
+export async function sendCommand(command) {
   if (navigator.vibrate) {
     navigator.vibrate(50);
   }
@@ -136,14 +94,15 @@ async function sendCommand(command) {
   try {
     const response = await fetch(`${endPoint}/command/set`, {
       method: "POST",
-      headers: { "Content-Type": "text/plain" },
-      body: decodedCommand,
+      headers: {
+        "Content-Type": "text/plain",
+      },
+      body: command,
     });
 
     if (response.ok) {
-      console.log(`Command sent successfully: ${decodedCommand}`);
+      console.log(`Command sent: ${command}`);
     } else {
-      console.error(`Failed to send command. Status: ${response.status}`);
       alert("Failed to send command");
     }
   } catch (error) {
@@ -152,13 +111,7 @@ async function sendCommand(command) {
   }
 }
 
-// Expose functions globally so HTML `onclick` attributes work
-window.openModalForAdd = openModalForAdd;
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.saveChanges = saveChanges;
-window.deleteItem = deleteItem;
-window.sendCommand = sendCommand;
-
-// Initialize buttons on page load
-fetchButtons();
+// Ensure `fetchButtons` runs **after the DOM is loaded**
+document.addEventListener("DOMContentLoaded", () => {
+  fetchButtons();
+});
