@@ -141,3 +141,8 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Date:** 2025-31-01
 **Description:**  
 - Add test login page
+
+### Tag: v1.0.39
+**Date:** 2025-31-01
+**Description:**  
+- Remove timezones dropdown fix reboots
