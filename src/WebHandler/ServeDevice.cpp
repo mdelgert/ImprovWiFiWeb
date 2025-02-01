@@ -177,7 +177,7 @@ void ServeDevice::handleDeviceWifiNetworks(AsyncWebServer &server)
 
 void ServeDevice::handleDeviceTimezones(AsyncWebServer &server)
 {
-    server.on("/device/timezones", HTTP_GET, [](AsyncWebServerRequest *request){
+    server.on("/data/timezones", HTTP_GET, [](AsyncWebServerRequest *request){
         if (!LittleFS.begin(true)) {
             debugE("Failed to mount LittleFS");
             WebHandler::sendErrorResponse(request, 500, "Failed to mount filesystem");

@@ -133,7 +133,7 @@ function syncWifiSelection() {
 async function loadTimezones() {
   try {
     console.log("Fetching available timezones from /device/timezones...");
-    const response = await httpGet("/device/timezones");
+    const response = await httpGet("/data/timezones");
 
     // Extract timezone data
     const timezones = response.data || {};
@@ -187,8 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
   loadSettings();
   loadWifiNetworks();
   syncWifiSelection();
-  loadTimezones();
-  syncTimezoneSelection();
+
+  // Appears to crash device too large of a JSON file removing dropdown for now
+  //loadTimezones();
+  //syncTimezoneSelection();
 
   const form = document.querySelector(".settings-form");
   if (form) {
