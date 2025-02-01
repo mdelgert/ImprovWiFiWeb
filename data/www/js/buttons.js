@@ -1,7 +1,7 @@
 //buttons.js
 console.log('buttons.js loaded');
 
-import { BASE_URL, httpGet, showMessage } from './global.js';
+import { BASE_URL, httpGet, showMessage } from './config.js';
 
 //const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
 const endPoint = BASE_URL;
