@@ -1,10 +1,7 @@
 //files.js
 console.log("files.js loaded");
 
-import {BASE_URL} from './config.js';
-
-//const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
-const endPoint = BASE_URL;
+const endPoint = window.location.hostname === "localhost" ? `http://demo1.local` : "";
 
 let fontSize = '18px';
 let currentPath = "/";
