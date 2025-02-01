@@ -84,6 +84,7 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
         } });
 }
 
+/*
 void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
 {
     server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
@@ -107,6 +108,36 @@ void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
         activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
 
         request->send(200, "application/json", R"({"status": "success", "message": "Logged out"})"); });
+}
+*/
+
+void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
+{
+    server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
+              {
+        if (!request->hasHeader("Cookie")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "No session found"})");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "Invalid session"})");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);
+
+        // Remove session from activeSessions
+        activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
+
+        // Create response and set an expired cookie
+        AsyncWebServerResponse *res = request->beginResponse(200, "application/json", R"({"status": "success", "message": "Logged out"})");
+        res->addHeader("Set-Cookie", "session=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT;");
+        request->send(res);
+    });
 }
 
 void ServeAuth::handleSecureRequest(AsyncWebServer &server)
