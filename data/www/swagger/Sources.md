@@ -6,4 +6,4 @@ https://www.jsdelivr.com/?docs=gh
 
 https://cdn.jsdelivr.net/gh/mdelgert/ImprovWiFiWeb@main/site/css/modern.common.css
 https://cdn.jsdelivr.net/gh/mdelgert/ImprovWiFiWeb@main/site/css/modern.dark.css
-
+https://cdn.jsdelivr.net/gh/mdelgert/ImprovWiFiWeb@main/site/timezones.json
