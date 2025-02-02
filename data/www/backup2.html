@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <meta charset="UTF-8">
   <title>Backup &amp; Restore (Dark Theme)</title>
@@ -16,13 +15,10 @@
       margin: 0;
       padding: 20px;
     }
-
-    h1,
-    h2 {
+    h1, h2 {
       color: #eee;
       margin-bottom: 0.5rem;
     }
-
     button {
       background-color: #444;
       color: #ccc;
@@ -33,16 +29,13 @@
       margin: 0.5rem 0;
       border-radius: 4px;
     }
-
     button:hover {
       background-color: #555;
     }
-
     .container {
       max-width: 700px;
       margin: 0 auto;
     }
-
     .log {
       background: #333;
       color: #ccc;
@@ -55,17 +48,14 @@
       font-size: 0.9rem;
       white-space: pre;
     }
-
     a {
       color: #9cf;
     }
 
     /* ----- Styled file input ----- */
     input[type="file"] {
-      display: none;
-      /* Hide the default file input */
+      display: none; /* Hide the default file input */
     }
-
     label.file-label {
       display: inline-block;
       background-color: #444;
@@ -77,7 +67,6 @@
       margin: 0.5rem 0;
       border-radius: 4px;
     }
-
     label.file-label:hover {
       background-color: #555;
     }
@@ -92,12 +81,10 @@
     }
   </style>
 </head>
-
 <body>
   <div class="container">
     <h1>Backup &amp; Restore</h1>
-    <p>This page can both download all files from your device into a single ZIP, and restore them from a ZIP you select.
-    </p>
+    <p>This page can both download all files from your device into a single ZIP, and restore them from a ZIP you select.</p>
 
     <!-- BACKUP SECTION -->
     <h2>Backup</h2>
@@ -111,7 +98,7 @@
     <span id="chosenFileName"></span>
     <input type="file" id="restoreZipInput" accept=".zip" onchange="onZipSelected(event)" />
 
-    <br />
+    <br/>
     <button onclick="restoreFromZip()">Restore Selected ZIP</button>
 
     <!-- LOG OUTPUT -->
@@ -211,7 +198,6 @@
       }
     }
 
-    // Known bug does not appear to restore empty files need to check and test backend code
     // ===========================
     // RESTORE: Upload ZIP Files
     // ===========================
@@ -239,7 +225,8 @@
         const fileNames = Object.keys(zip.files);
         log(`ZIP contains ${fileNames.length} entries:`);
 
-        // 3. Upload each file with a delay and retry mechanism
+        // 3. For each entry in the ZIP, upload to device
+        // We'll assume each entry is a regular file (no directories).
         for (const name of fileNames) {
           log(`Extracting & uploading: ${name}`);
 
@@ -249,60 +236,27 @@
             continue;
           }
 
-          // Read file as ArrayBuffer
+          // readAsArrayBuffer
           const fileData = await entry.async("arrayBuffer");
 
-          // Determine file size
-          const fileSize = fileData.byteLength || 0;
-          log(` -> File size: ${fileSize} bytes`);
+          // We might want to store it with a leading slash in the device
+          const devicePath = "/" + name; // i.e. "/www/index.html"
 
-          // **Handle empty files: Skip or send minimal payload**
-          if (fileSize === 0) {
-            log(` -> Skipping ${name} (empty file)`);
-            continue;
-          }
-
-          // Store with a leading slash
-          const devicePath = "/" + name; // e.g., "/scripts/tft1.txt"
-          const encodedPath = encodeURIComponent(devicePath).replace(/%2F/g, "/");
+          const encodedPath = encodeURIComponent(devicePath);
           const uploadUrl = `${endPoint}/file?filename=${encodedPath}`;
 
-          // Retry logic for failed uploads (max 3 attempts)
-          let attempts = 0;
-          let success = false;
+          // 4. Upload to device
+          // Adjust method or endpoint if needed by your firmware
+          const res = await fetch(uploadUrl, {
+            method: "POST", 
+            body: fileData
+          });
 
-          while (attempts < 3 && !success) {
-            attempts++;
-            log(` -> Attempt ${attempts}: Uploading ${devicePath}`);
-
-            try {
-              const res = await fetch(uploadUrl, {
-                method: "POST",
-                body: fileData
-              });
-
-              if (!res.ok) {
-                log(` -> Upload failed (HTTP ${res.status}) for ${devicePath}`);
-              } else {
-                log(` -> Upload success for ${devicePath}`);
-                success = true;
-              }
-            } catch (error) {
-              log(` -> Upload error: ${error.message}`);
-            }
-
-            // Wait 100ms before retrying
-            if (!success) {
-              await new Promise(resolve => setTimeout(resolve, 100));
-            }
+          if (!res.ok) {
+            log(` -> Upload failed (HTTP ${res.status}) for ${devicePath}`);
+          } else {
+            log(` -> Upload success for ${devicePath}`);
           }
-
-          if (!success) {
-            log(` -> Skipping ${devicePath} after 3 failed attempts.`);
-          }
-
-          // Add a small delay to avoid overwhelming the server
-          await new Promise(resolve => setTimeout(resolve, 100));
         }
 
         log("Restore completed.");

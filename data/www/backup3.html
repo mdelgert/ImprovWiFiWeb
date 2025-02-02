@@ -211,7 +211,6 @@
       }
     }
 
-    // Known bug does not appear to restore empty files need to check and test backend code
     // ===========================
     // RESTORE: Upload ZIP Files
     // ===========================
@@ -252,15 +251,8 @@
           // Read file as ArrayBuffer
           const fileData = await entry.async("arrayBuffer");
 
-          // Determine file size
-          const fileSize = fileData.byteLength || 0;
-          log(` -> File size: ${fileSize} bytes`);
-
-          // **Handle empty files: Skip or send minimal payload**
-          if (fileSize === 0) {
-            log(` -> Skipping ${name} (empty file)`);
-            continue;
-          }
+          // Log file size
+          log(` -> File size: ${entry._data.uncompressedSize} bytes`);
 
           // Store with a leading slash
           const devicePath = "/" + name; // e.g., "/scripts/tft1.txt"
@@ -310,7 +302,9 @@
         log("Error (Restore): " + error.message);
         console.error(error);
       }
+
     }
   </script>
 </body>
+
 </html>
