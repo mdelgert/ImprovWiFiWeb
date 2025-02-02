@@ -7,8 +7,7 @@ export default defineConfig(({ mode }) => ({
       input: {
         main: 'index.html',
         about: 'about.html',
-        blueserial: 'blueserial.html',
-        timezones: 'timezones.json'
+        blueserial: 'blueserial.html'
       },
     },
   },
