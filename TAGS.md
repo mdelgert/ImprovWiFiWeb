@@ -150,4 +150,4 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 ### Tag: v1.0.40
 **Date:** 2025-01-02
 **Description:**  
-- HTML cleanup
+- HTML cleanup add swagger support
