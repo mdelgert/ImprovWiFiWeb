@@ -44,7 +44,8 @@ void setup()
   JiggleHandler::init();
   //GfxHandler::printMessage(SOFTWARE_VERSION);
   LedHandler::setDefaultBrightness(100);
-  LedHandler::setColorByName("purple");
+  //LedHandler::setColorByName("purple");
+  LedHandler::setColorByName("green");
 }
 
 void loop()

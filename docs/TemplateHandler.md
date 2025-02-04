@@ -1,15 +1,12 @@
-I would like to implement and centralize LittleFsHandler for my esp32-s3 microcontroller project using library LittleFS.h
+I would like to implement DuckyScript my esp32-s3 microcontroller project.
 
-I have multiple handlers in my code that access LittleFS but I want to centralize the logic including the opening and closing
-of files. Earlier this week you suggested something like this please provide a complete design.
+I have multiple handlers in my code that already handle keys and mouse. 
 
-Please include commands for all file operations including formating deleteing all files.
+I just need this code to read a script file path using LittleFS and follow standard DuckyScript.
 
-If possible please provide commands to recursivly delete a folder and all sub folders.
-
-Also a command to create a file and send some text to it and or append text.
-
-Please provide all valuable features a good application should have.
+void DeviceHandler::processKey(const String &keyName, bool press) // Convert Arduino String to std::string for map lookup
+void DeviceHandler::sendKeys1(const String &text) // Send a string
+void DeviceHandler::sendMouseMovement(int x, int y)
 
 All of my code uses the following pattern. Can you provide example following same pattern as below?
 

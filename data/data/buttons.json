@@ -1,6 +1,22 @@
 {
   "buttons": [
     {
+      "id": 1738044328667,
+      "name": "LOCK WINDOWS",
+      "category": "General",
+      "action": "Command",
+      "command": "script file /scripts/lockwindows.txt",
+      "notes": ""
+    },
+    {
+      "id": 1738688979201,
+      "name": "CALC",
+      "category": "General",
+      "action": "Command",
+      "command": "script file /scripts/calc.txt",
+      "notes": ""
+    },
+    {
       "id": 1,
       "name": "TFT HELLO",
       "category": "General",
@@ -110,14 +126,6 @@
       "category": "General",
       "action": "Command",
       "command": "tft clock false",
-      "notes": ""
-    },
-    {
-      "id": 1738044328667,
-      "name": "LOCK WINDOWS",
-      "category": "General",
-      "action": "Command",
-      "command": "script file /scripts/lockwindows.txt",
       "notes": ""
     }
   ]
