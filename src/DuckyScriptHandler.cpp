@@ -2,7 +2,6 @@
 
 #include "DuckyScriptHandler.h"
 #include "DeviceHandler.h"
-#include "Globals.h"
 #include "LittleFS.h"
 #include "KeyMappings.h"
 
@@ -50,13 +49,32 @@ void DuckyScriptHandler::processLine(const String &line)
     {
         DeviceHandler::sendKeys1(args);
     }
+    else if (CommandHandler::equalsIgnoreCase(cmd, "DOWN"))
+    {
+        uint8_t keyCode = getKeyCode(args.c_str());
+        if (keyCode != 0)
+        {
+            DeviceHandler::processKey(args, true); // Press key
+            return;
+        }
+    }
+    else if (CommandHandler::equalsIgnoreCase(cmd, "UP"))
+    {
+        uint8_t keyCode = getKeyCode(args.c_str());
+        if (keyCode != 0)
+        {
+            DeviceHandler::processKey(args, false); // Release key
+            return;
+        }
+    }
     else
     {
         uint8_t keyCode = getKeyCode(cmd.c_str());
         if (keyCode != 0)
         {
-            DeviceHandler::processKey(cmd, true); //press key
-            //DeviceHandler::processKey(cmd, false); //release key
+            DeviceHandler::processKey(cmd, true); // Press key
+            delay(10); // Small delay to simulate key press
+            DeviceHandler::processKey(cmd, false); // Release key
             return;
         }
 
