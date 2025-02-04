@@ -13,7 +13,6 @@ private:
 
 public:
     static void init();
-    static void loop();
 };
 
 #else
@@ -22,7 +21,6 @@ class DuckyScriptHandler
 {
 public:
     static void init() {} // No-op
-    static void loop() {} // No-op
 };
 
 #endif // ENABLE_DUCKYSCRIPT_HANDLER

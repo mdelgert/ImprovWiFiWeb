@@ -6,22 +6,10 @@
 #include "LittleFS.h"
 #include "KeyMappings.h"
 
-static NonBlockingTimer scriptTimer(5000);
-static String scriptFilePath = "/default.ducky"; // Default script file
-
 void DuckyScriptHandler::init()
 {
     registerCommands();
     debugI("DuckyScriptHandler initialized");
-}
-
-void DuckyScriptHandler::loop()
-{
-    if (scriptTimer.isReady())
-    {
-        debugI("Executing DuckyScript from: %s", scriptFilePath.c_str());
-        executeScript(scriptFilePath);
-    }
 }
 
 void DuckyScriptHandler::executeScript(const String &filePath)
@@ -33,11 +21,13 @@ void DuckyScriptHandler::executeScript(const String &filePath)
         return;
     }
 
+    debugI("Executing DuckyScript from: %s", filePath.c_str());
+
     while (file.available())
     {
         String line = file.readStringUntil('\n');
         line.trim();
-        if (!line.isEmpty() && !line.startsWith("//"))
+        if (!line.isEmpty() && !line.startsWith("//")) // Ignore empty lines and comments
         {
             processLine(line);
         }
@@ -54,8 +44,7 @@ void DuckyScriptHandler::processLine(const String &line)
 
     if (CommandHandler::equalsIgnoreCase(cmd, "DELAY"))
     {
-        int delayMs = args.toInt();
-        delay(delayMs);
+        delay(args.toInt());
     }
     else if (CommandHandler::equalsIgnoreCase(cmd, "STRING"))
     {
@@ -63,12 +52,11 @@ void DuckyScriptHandler::processLine(const String &line)
     }
     else
     {
-        // Handle raw keys via KeyMappings
         uint8_t keyCode = getKeyCode(cmd.c_str());
         if (keyCode != 0)
         {
-            DeviceHandler::processKey(cmd, true);
-            DeviceHandler::processKey(cmd, false);
+            DeviceHandler::processKey(cmd, true); //press key
+            //DeviceHandler::processKey(cmd, false); //release key
             return;
         }
 
@@ -90,17 +78,16 @@ void DuckyScriptHandler::registerCommands()
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (CommandHandler::equalsIgnoreCase(cmd, "RUN")) {
-            debugI("Executing DuckyScript from: %s", scriptFilePath.c_str());
-            executeScript(scriptFilePath);
-        } 
-        else if (CommandHandler::equalsIgnoreCase(cmd, "SETFILE")) {
-            scriptFilePath = args;
-            debugI("DuckyScript file set to: %s", scriptFilePath.c_str());
+        if (CommandHandler::equalsIgnoreCase(cmd, "FILE")) {
+            if (args.isEmpty()) {
+                debugE("Missing file path for DUCKY FILE command.");
+                return;
+            }
+            executeScript(args);
         } 
         else {
             debugW("Unknown DUCKY subcommand: %s", cmd.c_str());
-        } }, "Usage: DUCKY <RUN|SETFILE <file_path>>");
+        } }, "Usage: DUCKY FILE <file_path>");
 }
 
 #endif // ENABLE_DUCKYSCRIPT_HANDLER
