@@ -13,7 +13,7 @@
       "name": "CALC",
       "category": "General",
       "action": "Command",
-      "command": "script file /scripts/calc.txt",
+      "command": "DUCKY FILE /scripts/calc.txt",
       "notes": ""
     },
     {

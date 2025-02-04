@@ -19,12 +19,14 @@
 #include "JiggleHandler.h"
 #include "ImprovWiFiHandler.h"
 #include "LittleFsHandler.h"
+#include "DuckyScriptHandler.h"
 
 void setup()
 {
   RemoteDebugHandler::init();
   LittleFsHandler::init();
   ScriptHandler::init();
+  DuckyScriptHandler::init();
   ConfigManager::init();
   BluetoothHandler::init();
   GfxHandler::init();
