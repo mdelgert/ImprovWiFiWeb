@@ -47,7 +47,8 @@ void DuckyScriptHandler::processLine(const String &line)
     }
     else if (CommandHandler::equalsIgnoreCase(cmd, "STRING"))
     {
-        DeviceHandler::sendKeys1(args);
+        //DeviceHandler::sendKeys1(args);
+        DeviceHandler::sendKeys2(args);
     }
     else if (CommandHandler::equalsIgnoreCase(cmd, "DOWN"))
     {
@@ -73,7 +74,7 @@ void DuckyScriptHandler::processLine(const String &line)
         if (keyCode != 0)
         {
             DeviceHandler::processKey(cmd, true); // Press key
-            delay(10); // Small delay to simulate key press
+            delay(100); // Small delay to simulate key press
             DeviceHandler::processKey(cmd, false); // Release key
             return;
         }
