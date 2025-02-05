@@ -113,7 +113,7 @@ void DeviceHandler::sendKeys2(const String &text)
 void DeviceHandler::processKey(const String &keyName, bool press) {
     // Convert Arduino String to std::string for map lookup
     std::string key = keyName.c_str();
-
+    
     // Check if the key exists in the map
     auto it = keyMap.find(key);
     if (it != keyMap.end()) {

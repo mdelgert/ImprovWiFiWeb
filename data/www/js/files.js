@@ -364,7 +364,8 @@ async function runFile() {
             headers: {
                 'Content-Type': 'text/plain',
             },
-            body: `script file ${filename}`, // Raw text body
+            //body: `script file ${filename}`,
+            body: `ducky file ${filename}`,
         });
 
         const data = await response.json();

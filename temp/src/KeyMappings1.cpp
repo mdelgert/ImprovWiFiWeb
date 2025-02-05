@@ -37,7 +37,6 @@ const std::map<std::string, uint8_t> keyMap = {
     {"PERIOD", HID_KEY_PERIOD},
     {"SLASH", HID_KEY_SLASH},
     {"CAPSLOCK", HID_KEY_CAPS_LOCK},
-    
     {"F1", HID_KEY_F1}, {"F2", HID_KEY_F2}, {"F3", HID_KEY_F3},
     {"F4", HID_KEY_F4}, {"F5", HID_KEY_F5}, {"F6", HID_KEY_F6},
     {"F7", HID_KEY_F7}, {"F8", HID_KEY_F8}, {"F9", HID_KEY_F9},
