@@ -19,8 +19,7 @@ public:
     static void setKeyPressDelay(int delay);
     static void loop();
     static void init();
-    static void sendKeys1(const String& text);
-    static void sendKeys2(const String& text);
+    static void sendKeys(const String& text);
     static void tapKey(const String& key);
     static void processKey(const String& keyName, bool press);
 };
@@ -35,8 +34,7 @@ public: // No-op implementation of DeviceHandler
     static int keyPressDelay;
     static void loop() {} // No-op
     static void init() {} // No-op
-    static void sendKeys1(const String& text) {} // No-op
-    static void sendKeys2(const String& text) {} // No-op
+    static void sendKeys(const String& text) {} // No-op
     static void tapKey(const String& key) {} // No-op
     static void processKey(const String& keyName, bool press) {} // No-op
 };

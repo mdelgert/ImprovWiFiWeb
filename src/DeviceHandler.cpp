@@ -41,73 +41,17 @@ void DeviceHandler::sendMouseMovement(int x, int y)
     debugI("Mouse moved: x=%d, y=%d", x, y);
 }
 
-// RTOS task for sendKeys
-void sendKeysTask(void *parameter)
+void DeviceHandler::sendKeys(const String &text)
 {
-    String *text = static_cast<String *>(parameter);
-    USBHIDKeyboard &keyboard = DeviceHandler::getKeyboard();
-
-    for (size_t i = 0; i < text->length(); i++)
-    {
-        keyboard.write((*text)[i]);
-        // vTaskDelay(pdMS_TO_TICKS(20));
-        vTaskDelay(pdMS_TO_TICKS(DeviceHandler::keyPressDelay)); // Use configurable delay
-    }
-    keyboard.write('\n');
-    debugI("Keys sent: %s", text->c_str());
-
-    delete text;
-    sendKeysTaskHandle = nullptr;
-    vTaskDelete(nullptr);
-}
-
-void DeviceHandler::sendKeys1(const String &text)
-{
-    // Check if a task is already running
-    if (sendKeysTaskHandle != nullptr)
-    {
-        debugW("sendKeys2 task is already running");
-        return;
-    }
-
-    // Allocate memory for the text to be sent
-    String *textCopy = new String(text);
-
-    // Create a FreeRTOS task for non-blocking key sending
-    BaseType_t result = xTaskCreate(
-        sendKeysTask,         // Task function
-        "sendKeysTask",       // Name of the task
-        2048,                 // Stack size in words
-        textCopy,             // Parameter to pass to the task
-        1,                    // Priority of the task
-        &sendKeysTaskHandle); // Task handle
-
-    if (result == pdPASS)
-    {
-        debugI("Non-blocking sendKeys2 task started");
-    }
-    else
-    {
-        debugE("Failed to create sendKeys2 task");
-        delete textCopy; // Clean up if task creation fails
-    }
-}
-
-void DeviceHandler::sendKeys2(const String &text)
-{
+    // Note: Both work with a delay between each key press. Does not work without a blocking delay.
     // Send the keys one by one with a delay
     for (size_t i = 0; i < text.length(); i++)
     {
-        // keyboard.print(text[i]);
         keyboard.write(text[i]);
-        // delay(20);
         delay(keyPressDelay); // Use the configurable delay
     }
     keyboard.write('\n'); // Optional newline
     debugI("Keys sent: %s", text.c_str());
-    // Note: Both work with a delay between each key press. Does not work without a blocking delay added RTOS task above is better.
-    // Also tested with non-blocking timmer it does not resolve the issue. Only RTOS task works for non-blocking key sending.
-    // Keeping the blocking approach for now, until further testing is complete with RTOS task.
 }
 
 void DeviceHandler::processKey(const String &keyName, bool press) {
@@ -154,34 +98,23 @@ void DeviceHandler::registerCommands()
                     debugW("Invalid arguments for HID mouse. Expected format: x,y");
                 }
             }
-
-            else if (cmd == "keys1") {
-                sendKeys1(args);
+            else if (cmd == "keys") {
+                sendKeys(args);
             }
-
-            else if (cmd == "keys2") {
-                sendKeys2(args);
-            }
-
             else if (cmd == "winlock") {
-                // Example: Windows Key + L
                 keyboard.pressRaw(HID_KEY_GUI_LEFT);  // Press Windows key
                 keyboard.pressRaw(HID_KEY_L);         // Press 'L'
                 delay(500);
                 keyboard.releaseAll();               // Release all keys
             }
-
             else if (cmd == "tapkey") {
-                // Example: hid tapKey <key>
                 if (!args.isEmpty()) {
                     DeviceHandler::tapKey(args);  // Tap the specified key
                 } else {
                     debugW("No key provided for tapKey command.");
                 }
             }
-
             else if (cmd == "processkey") {
-                // Example: hid processKey <key> <press/release>
                 int spaceIndex = args.indexOf(' ');
                 if (spaceIndex > 0) {
                     String key = args.substring(0, spaceIndex);
@@ -198,7 +131,6 @@ void DeviceHandler::registerCommands()
                     debugW("Invalid arguments for processKey. Expected format: <key> <press/release>.");
                 }
             }
-
             else if (cmd == "delay") {
                 int delay = args.toInt();
                 if (delay > 0) {
@@ -208,7 +140,6 @@ void DeviceHandler::registerCommands()
                     debugW("Invalid delay value. Expected a positive integer.");
                 }
             }
-
             else {
                 debugW("Unknown HID subcommand: %s", cmd.c_str());
             } },
@@ -216,8 +147,7 @@ void DeviceHandler::registerCommands()
             "Handles HID commands. Usage: hid <subcommand> [args]\n"
             "  Subcommands:\n"
             "  mouse x,y - Move mouse by x and y\n"
-            "  keys1 <keys1> - Send keys1\n"
-            "  keys2 <keys2> - Send keys2\n"
+            "  keys <keys> - Send keys\n"
             "  winlock - Locks Windows\n"
             "  tapKey <key> - Tap a single key\n"
             "  processKey <key> <press/release> - Press or release a key\n"

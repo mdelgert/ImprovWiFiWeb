@@ -107,7 +107,7 @@ void DuckyScriptHandler::processLine(const String &line)
         if (!args.isEmpty()) 
         {
             debugI("Sending STRING: %s", args.c_str());
-            DeviceHandler::sendKeys2(args);
+            DeviceHandler::sendKeys(args);
         } 
         else 
         {
