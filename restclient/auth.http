@@ -6,7 +6,7 @@ Content-Type: application/json
 
 {
     "username": "admin",
-    "password": "adminpass"
+    "password": "pass"
 }
 
 ### Test Login - Wrong Credentials
