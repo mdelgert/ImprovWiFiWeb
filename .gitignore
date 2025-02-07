@@ -25,3 +25,4 @@ site/public/firmware/*.json
 
 # Ignore secure files
 Secure.h
+secure.js
