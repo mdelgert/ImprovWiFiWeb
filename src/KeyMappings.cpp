@@ -14,6 +14,16 @@ const std::map<std::string, uint8_t> keyMap = {
     {"V", HID_KEY_V}, {"W", HID_KEY_W}, {"X", HID_KEY_X},
     {"Y", HID_KEY_Y}, {"Z", HID_KEY_Z},
 
+    {"a", HID_KEY_A}, {"b", HID_KEY_B}, {"c", HID_KEY_C},
+    {"d", HID_KEY_D}, {"e", HID_KEY_E}, {"f", HID_KEY_F},
+    {"g", HID_KEY_G}, {"h", HID_KEY_H}, {"i", HID_KEY_I},
+    {"j", HID_KEY_J}, {"k", HID_KEY_K}, {"l", HID_KEY_L},
+    {"m", HID_KEY_M}, {"n", HID_KEY_N}, {"o", HID_KEY_O},
+    {"p", HID_KEY_P}, {"q", HID_KEY_Q}, {"r", HID_KEY_R},
+    {"s", HID_KEY_S}, {"t", HID_KEY_T}, {"u", HID_KEY_U},
+    {"v", HID_KEY_V}, {"w", HID_KEY_W}, {"x", HID_KEY_X},
+    {"y", HID_KEY_Y}, {"z", HID_KEY_Z},
+
     {"1", HID_KEY_1}, {"2", HID_KEY_2}, {"3", HID_KEY_3},
     {"4", HID_KEY_4}, {"5", HID_KEY_5}, {"6", HID_KEY_6},
     {"7", HID_KEY_7}, {"8", HID_KEY_8}, {"9", HID_KEY_9},
