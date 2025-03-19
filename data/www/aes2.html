@@ -29,61 +29,7 @@
   </div>
 
   <script>
-
-  function encrypt() {
-      const textToEncrypt = document.getElementById('textToEncrypt').value;
-      const encryptionKey = document.getElementById('encryptionKey').value;
-      if (!textToEncrypt || !encryptionKey) {
-          alert("Please enter both text and a key.");
-          return;
-      }
-
-      // Derive a 32-byte key using SHA-256
-      const key = CryptoJS.SHA256(encryptionKey);
-
-      // Generate a random IV (16 bytes for AES-256 CBC)
-      const iv = CryptoJS.lib.WordArray.random(16);
-
-      // Encrypt using AES-CBC with Pkcs7 padding
-      const encrypted = CryptoJS.AES.encrypt(textToEncrypt, key, {
-          iv: iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-      });
-
-      // Prepend IV to ciphertext and Base64 encode
-      const encryptedBase64 = CryptoJS.enc.Base64.stringify(iv.concat(encrypted.ciphertext));
-
-      document.getElementById('encryptedOutput').value = encryptedBase64;
-  }
-
-  function decrypt() {
-      const encryptedBase64 = document.getElementById('encryptedOutput').value;
-      const encryptionKey = document.getElementById('encryptionKey').value;
-      if (!encryptedBase64 || !encryptionKey) {
-          alert("Please enter both encrypted text and the encryption key.");
-          return;
-      }
-
-      // Derive a 32-byte key using SHA-256
-      const key = CryptoJS.SHA256(encryptionKey);
-
-      // Decode Base64 and extract IV (first 16 bytes) and ciphertext
-      const encryptedRaw = CryptoJS.enc.Base64.parse(encryptedBase64);
-      const iv = CryptoJS.lib.WordArray.create(encryptedRaw.words.slice(0, 4)); // First 16 bytes
-      const ciphertext = CryptoJS.lib.WordArray.create(encryptedRaw.words.slice(4)); // Remaining bytes
-
-      // Decrypt using AES-CBC
-      const decrypted = CryptoJS.AES.decrypt({ ciphertext: ciphertext }, key, {
-          iv: iv,
-          mode: CryptoJS.mode.CBC,
-          padding: CryptoJS.pad.Pkcs7
-      });
-
-      document.getElementById('decryptedOutput').value = decrypted.toString(CryptoJS.enc.Utf8);
-  }
-
-    /* // Encrypt function using CryptoJS
+    // Encrypt function using CryptoJS
     function encrypt() {
       const textToEncrypt = document.getElementById('textToEncrypt').value;
       const encryptionKey = document.getElementById('encryptionKey').value;
@@ -111,7 +57,6 @@
         alert("Decryption failed: " + error.message);
       }
     }
-    */
   </script>
 </body>
 </html>
