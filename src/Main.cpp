@@ -16,6 +16,7 @@
 #include "SystemMonitor.h"
 #include "DownloadHandler.h"
 #include "AesHandler.h"
+#include "CryptoHandler.h"
 #include "JiggleHandler.h"
 #include "ImprovWiFiHandler.h"
 #include "LittleFsHandler.h"
@@ -42,6 +43,7 @@ void setup()
   SystemMonitor::init();
   DownloadHandler::init();
   AesHandler::init();
+  CryptoHandler::init();
   TimeHandler::init(settings.timezone);
   JiggleHandler::init();
   //GfxHandler::printMessage(SOFTWARE_VERSION);
