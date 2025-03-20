@@ -112,7 +112,7 @@ void CryptoHandler::init()
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
-        if (CommandHandler::equalsIgnoreCase(cmd, "ENCRYPT")) {
+        if (CommandHandler::equalsIgnoreCase(cmd, "ENC")) {
             int spaceIndex = args.indexOf(' ');
             if (spaceIndex > 0) {
                 String key = args.substring(0, spaceIndex);
@@ -120,9 +120,9 @@ void CryptoHandler::init()
                 String encrypted = encryptAES(text, key);
                 debugI("Encrypted: %s", encrypted.c_str());
             } else {
-                debugW("Usage: CRYPTO ENCRYPT <key> <text>");
+                debugW("Usage: CRYPTO ENC <key> <text>");
             }
-        } else if (CommandHandler::equalsIgnoreCase(cmd, "DECRYPT")) {
+        } else if (CommandHandler::equalsIgnoreCase(cmd, "DEC")) {
             int spaceIndex = args.indexOf(' ');
             if (spaceIndex > 0) {
                 String key = args.substring(0, spaceIndex);
@@ -130,14 +130,14 @@ void CryptoHandler::init()
                 String decrypted = decryptAES(text, key);
                 debugI("Decrypted: %s", decrypted.c_str());
             } else {
-                debugW("Usage: CRYPTO DECRYPT <key> <ciphertext>");
+                debugW("Usage: CRYPTO DEC <key> <ciphertext>");
             }
         } else {
             debugW("Unknown CRYPTO subcommand: %s", cmd.c_str());
         } }, "Handles CRYPTO commands. Usage: CRYPTO <subcommand> <args>\n"
              "  Subcommands:\n"
-             "  encrypt <key> <text> - Encrypts a string\n"
-             "  decrypt <key> <ciphertext> - Decrypts a string");
+             "  enc <key> <text> - Encrypts a string\n"
+             "  dec <key> <ciphertext> - Decrypts a string");
     
     debugI("CryptoHandler initialized");
 }

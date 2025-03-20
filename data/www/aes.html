@@ -11,16 +11,21 @@
 <body>
   <div class="container">
     <h2>AES Encryption</h2>
-    <label for="textToEncrypt">Encrypt/Decrypt:</label>
+    
+    <label for="textToEncrypt">Text to encrypt:</label>
     <input type="text" id="textToEncrypt" placeholder="Enter text to encrypt" />
+    
     <label for="encryptionKey">Encryption Key (Password):</label>
     <input type="text" id="encryptionKey" placeholder="Enter key for encryption" />
+    
     <button onclick="encrypt()">Encrypt</button>
     <button onclick="decrypt()">Decrypt</button>
-    <h3>Encrypted Text:</h3>
-    <textarea id="encryptedOutput" rows="4" readonly></textarea>
+    
+    <h3>Encrypted Text (Base64):</h3>
+    <textarea id="encryptedOutput" rows="4"></textarea>
+    
     <h3>Decrypted Text:</h3>
-    <textarea id="decryptedOutput" rows="4" readonly></textarea>
+    <textarea id="decryptedOutput" rows="4"></textarea>
   </div>
 
   <script>
