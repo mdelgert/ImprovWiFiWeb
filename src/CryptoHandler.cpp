@@ -11,8 +11,7 @@
 #define AES_BLOCK_SIZE 16 // Block size for AES CBC mode
 
 // Derive a 32-byte key from a password using SHA-256
-void deriveKey(const String &password, uint8_t *keyOut)
-{
+void deriveKey(const String &password, uint8_t *keyOut) {
     mbedtls_md_context_t ctx;
     mbedtls_md_init(&ctx);
     mbedtls_md_setup(&ctx, mbedtls_md_info_from_type(MBEDTLS_MD_SHA256), 0);
@@ -21,22 +20,21 @@ void deriveKey(const String &password, uint8_t *keyOut)
     mbedtls_md_finish(&ctx, keyOut);
     mbedtls_md_free(&ctx);
 }
-
-String CryptoHandler::encryptAES(const String &plainText, const String &password)
-{
+String CryptoHandler::encryptAES(const String &plainText, const String &password) {
     uint8_t aesKey[AES_KEY_SIZE];
-    deriveKey(password, aesKey); // Hash the password to get the 32-byte key
+    deriveKey(password, aesKey);
 
     uint8_t iv[AES_BLOCK_SIZE];
-    esp_fill_random(iv, AES_BLOCK_SIZE); // Generate a random IV
+    esp_fill_random(iv, AES_BLOCK_SIZE);
+    uint8_t iv_copy[AES_BLOCK_SIZE]; // Preserve original IV
+    memcpy(iv_copy, iv, AES_BLOCK_SIZE);
 
     size_t inputLen = plainText.length();
     size_t paddedLen = ((inputLen / AES_BLOCK_SIZE) + 1) * AES_BLOCK_SIZE;
     uint8_t *input = (uint8_t *)calloc(paddedLen, 1);
     memcpy(input, plainText.c_str(), inputLen);
 
-    // Apply Pkcs7 padding
-    uint8_t padVal = AES_BLOCK_SIZE - (inputLen % AES_BLOCK_SIZE);
+    uint8_t padVal = paddedLen - inputLen;
     for (size_t i = inputLen; i < paddedLen; i++) {
         input[i] = padVal;
     }
@@ -45,70 +43,142 @@ String CryptoHandler::encryptAES(const String &plainText, const String &password
 
     mbedtls_aes_context aes;
     mbedtls_aes_init(&aes);
-    mbedtls_aes_setkey_enc(&aes, aesKey, AES_KEY_SIZE * 8);
-    mbedtls_aes_crypt_cbc(&aes, MBEDTLS_AES_ENCRYPT, paddedLen, iv, input, output);
+    int ret = mbedtls_aes_setkey_enc(&aes, aesKey, AES_KEY_SIZE * 8);
+    if (ret != 0) {
+        debugE("Key setup failed: %d", ret);
+        free(input);
+        free(output);
+        mbedtls_aes_free(&aes);
+        return "";
+    }
+    ret = mbedtls_aes_crypt_cbc(&aes, MBEDTLS_AES_ENCRYPT, paddedLen, iv, input, output);
+    if (ret != 0) {
+        debugE("Encryption failed: %d", ret);
+        free(input);
+        free(output);
+        mbedtls_aes_free(&aes);
+        return "";
+    }
     mbedtls_aes_free(&aes);
 
-    // Prepend IV to ciphertext
-    uint8_t finalOutput[AES_BLOCK_SIZE + paddedLen];
-    memcpy(finalOutput, iv, AES_BLOCK_SIZE);
+    // Log raw encrypted output
+    char rawHex[33];
+    for (int i = 0; i < paddedLen; i++) {
+        sprintf(rawHex + i * 2, "%02x", output[i]);
+    }
+    debugI("Raw encrypted: %s", rawHex);
+
+    size_t finalLen = AES_BLOCK_SIZE + paddedLen;
+    uint8_t *finalOutput = (uint8_t *)malloc(finalLen);
+    memcpy(finalOutput, iv_copy, AES_BLOCK_SIZE); // Use original IV
     memcpy(finalOutput + AES_BLOCK_SIZE, output, paddedLen);
 
-    // Base64 encode
-    size_t base64Len;
-    uint8_t base64Output[128];
-    mbedtls_base64_encode(base64Output, sizeof(base64Output), &base64Len, finalOutput, sizeof(finalOutput));
+    size_t base64Len = 0;
+    size_t maxBase64Len = ((finalLen + 2) / 3) * 4 + 1;
+    uint8_t *base64Output = (uint8_t *)malloc(maxBase64Len);
+    ret = mbedtls_base64_encode(base64Output, maxBase64Len, &base64Len, finalOutput, finalLen);
+    if (ret != 0) {
+        debugE("Base64 encode failed: %d", ret);
+        free(input);
+        free(output);
+        free(finalOutput);
+        free(base64Output);
+        return "";
+    }
+
+    String result = String((char *)base64Output);
 
     free(input);
     free(output);
+    free(finalOutput);
+    free(base64Output);
 
-    return String((char *)base64Output);
+    return result;
 }
 
-String CryptoHandler::decryptAES(const String &cipherText, const String &password)
-{
+String CryptoHandler::decryptAES(const String &cipherText, const String &password) {
     uint8_t aesKey[AES_KEY_SIZE];
-    deriveKey(password, aesKey); // Hash the password to get the 32-byte key
+    deriveKey(password, aesKey);
 
-    uint8_t decoded[128];
-    size_t decodedLen;
-    mbedtls_base64_decode(decoded, sizeof(decoded), &decodedLen, (const uint8_t *)cipherText.c_str(), cipherText.length());
-
-    if (decodedLen < AES_BLOCK_SIZE)
-    {
-        debugE("Invalid ciphertext");
+    size_t decodedLen = 0;
+    size_t maxDecodedLen = ((cipherText.length() + 3) / 4) * 3;
+    uint8_t *decoded = (uint8_t *)malloc(maxDecodedLen);
+    int ret = mbedtls_base64_decode(decoded, maxDecodedLen, &decodedLen, (const uint8_t *)cipherText.c_str(), cipherText.length());
+    if (ret != 0 || decodedLen < AES_BLOCK_SIZE) {
+        debugE("Base64 decode failed: %d, len: %d", ret, decodedLen);
+        free(decoded);
         return "";
     }
 
     uint8_t iv[AES_BLOCK_SIZE];
-    memcpy(iv, decoded, AES_BLOCK_SIZE); // Extract IV from first 16 bytes
-    uint8_t *ciphertext = decoded + AES_BLOCK_SIZE;
+    memcpy(iv, decoded, AES_BLOCK_SIZE);
     size_t cipherLen = decodedLen - AES_BLOCK_SIZE;
+    uint8_t *ciphertext = decoded + AES_BLOCK_SIZE;
 
-    uint8_t *output = (uint8_t *)calloc(cipherLen, 1);
+    if (cipherLen % AES_BLOCK_SIZE != 0) {
+        debugE("Invalid ciphertext length: %d", cipherLen);
+        free(decoded);
+        return "";
+    }
+
+    uint8_t *output = (uint8_t *)malloc(cipherLen);
 
     mbedtls_aes_context aes;
     mbedtls_aes_init(&aes);
-    mbedtls_aes_setkey_dec(&aes, aesKey, AES_KEY_SIZE * 8);
-    mbedtls_aes_crypt_cbc(&aes, MBEDTLS_AES_DECRYPT, cipherLen, iv, ciphertext, output);
+    ret = mbedtls_aes_setkey_dec(&aes, aesKey, AES_KEY_SIZE * 8);
+    if (ret != 0) {
+        debugE("Key setup failed: %d", ret);
+        free(output);
+        free(decoded);
+        return "";
+    }
+    uint8_t iv_copy[AES_BLOCK_SIZE]; // Copy IV to avoid modification
+    memcpy(iv_copy, iv, AES_BLOCK_SIZE);
+    ret = mbedtls_aes_crypt_cbc(&aes, MBEDTLS_AES_DECRYPT, cipherLen, iv_copy, ciphertext, output);
+    if (ret != 0) {
+        debugE("Decryption failed: %d", ret);
+        free(output);
+        free(decoded);
+        return "";
+    }
     mbedtls_aes_free(&aes);
 
-    // Remove Pkcs7 padding
+    // Log raw decrypted output
+    char rawHex[33];
+    for (int i = 0; i < cipherLen; i++) {
+        sprintf(rawHex + i * 2, "%02x", output[i]);
+    }
+    debugI("Raw decrypted: %s", rawHex);
+
     uint8_t padVal = output[cipherLen - 1];
-    if (padVal > 0 && padVal <= AES_BLOCK_SIZE)
-    {
-        cipherLen -= padVal;
+    size_t unpaddedLen = cipherLen;
+    if (padVal > 0 && padVal <= AES_BLOCK_SIZE) {
+        bool validPadding = true;
+        for (size_t i = cipherLen - padVal; i < cipherLen; i++) {
+            if (output[i] != padVal) {
+                validPadding = false;
+                break;
+            }
+        }
+        if (validPadding) {
+            unpaddedLen = cipherLen - padVal;
+        } else {
+            debugE("Invalid PKCS7 padding");
+        }
+    } else {
+        debugE("Invalid padding value: %d", padVal);
     }
 
-    String decryptedText = String((char *)output).substring(0, cipherLen);
+    String decryptedText((char *)output, unpaddedLen);
     free(output);
+    free(decoded);
+
+    debugI("Decrypted length: %d, text: %s", unpaddedLen, decryptedText.c_str());
     return decryptedText;
 }
 
-void CryptoHandler::init()
-{
-        CommandHandler::registerCommand("CRYPTO", [](const String &command)
-                                    {
+void CryptoHandler::init() {
+    CommandHandler::registerCommand("CRYPTO", [](const String &command) {
         String cmd, args;
         CommandHandler::parseCommand(command, cmd, args);
 
@@ -134,11 +204,12 @@ void CryptoHandler::init()
             }
         } else {
             debugW("Unknown CRYPTO subcommand: %s", cmd.c_str());
-        } }, "Handles CRYPTO commands. Usage: CRYPTO <subcommand> <args>\n"
-             "  Subcommands:\n"
-             "  enc <key> <text> - Encrypts a string\n"
-             "  dec <key> <ciphertext> - Decrypts a string");
-    
+        }
+    }, "Handles CRYPTO commands. Usage: CRYPTO <subcommand> <args>\n"
+       "  Subcommands:\n"
+       "  enc <key> <text> - Encrypts a string\n"
+       "  dec <key> <ciphertext> - Decrypts a string");
+
     debugI("CryptoHandler initialized");
 }
 
