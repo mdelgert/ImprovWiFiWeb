@@ -29,13 +29,11 @@ void setup()
   ScriptHandler::init();
   DuckyScriptHandler::init();
   ConfigManager::init();
-  BluetoothHandler::init();
   GfxHandler::init();
   ImprovWiFiHandler::init();
   WebHandler::init();
   LedHandler::init();
   ButtonHandler::init();
-  MqttHandler::init();
   OTAHandler::init();
   CommandHandler::init();
   DeviceHandler::init();
@@ -46,24 +44,27 @@ void setup()
   CryptoHandler::init();
   TimeHandler::init(settings.timezone);
   JiggleHandler::init();
+  BluetoothHandler::init();
+  MqttHandler::init();
   //GfxHandler::printMessage(SOFTWARE_VERSION);
-  LedHandler::setDefaultBrightness(100);
+  LedHandler::setDefaultBrightness(50);
   //LedHandler::setColorByName("purple");
-  LedHandler::setColorByName("green");
+  //LedHandler::setColorByName("green");
+  LedHandler::setColorByName("black"); //off
 }
 
 void loop()
 {
   RemoteDebugHandler::loop();
   ScriptHandler::loop();
-  BluetoothHandler::loop();
   GfxHandler::loop();
   ImprovWiFiHandler::loop();
   WebHandler::loop();
   ButtonHandler::loop();
-  MqttHandler::loop();
   OTAHandler::loop();
   DeviceHandler::loop();
   CronHandler::loop();
   JiggleHandler::loop();
+  BluetoothHandler::loop();
+  MqttHandler::loop();
 }

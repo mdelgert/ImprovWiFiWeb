@@ -21,50 +21,10 @@ void MqttHandler::init()
     //     return;
     // }
 
-    // Use the appropriate client based on SSL settings
-    if (settings.mqttSsl)
-    {
-        debugI("MqttHandler: Using secure WiFi client.");
-
-        // Mount LittleFS (if not already mounted)
-        if (!LittleFS.begin())
-        {
-            debugE("MqttHandler: Failed to initialize LittleFS.");
-            return;
-        }
-
-        // Open the certificate file
-        File certFile = LittleFS.open(EMQX_CERT_FILE, "r");
-        if (!certFile)
-        {
-            debugE("MqttHandler: Failed to open certificate file: %s", EMQX_CERT_FILE);
-            return;
-        }
-
-        // Read the certificate content
-        String certContent = certFile.readString();
-        certFile.close();
-
-        wiFiClientSecure.setCACert(certContent.c_str());
-        // wiFiClientSecure.setCACert(ca_cert);
-        mqttClient.setClient(wiFiClientSecure);
-    }
-    else
-    {
-        debugI("MqttHandler: Using non-secure WiFi client.");
-        mqttClient.setClient(wiFiClient);
-    }
-
-    // Point the MQTT client to the broker from settings
-    mqttClient.setServer(settings.mqttServer.c_str(), settings.mqttPort);
-
-    // Set the incoming message callback
-    mqttClient.setCallback(MqttHandler::mqttCallback);
+    registerCommands();
 
     // Attempt initial connection
     connectToMqtt();
-
-    registerCommands();
 }
 
 void MqttHandler::loop()
@@ -102,23 +62,73 @@ void MqttHandler::publish(const char *topic, const char *message)
 
 void MqttHandler::connectToMqtt()
 {
+    // Use the appropriate client based on SSL settings
+    if (settings.mqttSsl)
+    {
+        debugI("MqttHandler: Using secure WiFi client.");
+
+        // Mount LittleFS (if not already mounted)
+        if (!LittleFS.begin())
+        {
+            debugE("MqttHandler: Failed to initialize LittleFS.");
+            return;
+        }
+
+        // Open the certificate file
+        File certFile = LittleFS.open(EMQX_CERT_FILE, "r");
+        if (!certFile)
+        {
+            debugE("MqttHandler: Failed to open certificate file: %s", EMQX_CERT_FILE);
+            return;
+        }
+
+        // Read the certificate content
+        String certContent = certFile.readString();
+        
+        debugI("MqttHandler: Read %d bytes from certificate file.", certContent.length());
+        debugI("MqttHandler: Certificate content: %s", certContent.c_str());
+
+        // Close the certificate file
+        certFile.close();
+
+        wiFiClientSecure.setCACert(certContent.c_str());
+        // wiFiClientSecure.setCACert(ca_cert);
+        mqttClient.setClient(wiFiClientSecure);
+    }
+    else
+    {
+        debugI("MqttHandler: Using non-secure WiFi client.");
+        mqttClient.setClient(wiFiClient);
+    }
+
+    // Point the MQTT client to the broker from settings
+    mqttClient.setServer(settings.mqttServer.c_str(), settings.mqttPort);
+
+    // Set the incoming message callback
+    mqttClient.setCallback(MqttHandler::mqttCallback);
+
     debugI("MqttHandler: Attempting MQTT connection to %s:%d", settings.mqttServer.c_str(), settings.mqttPort);
 
-    bool isConnected = false;
+    //bool isConnected = false;
 
+    // Attempt to connect to the MQTT broker
     // If username/password are not empty, use them
     if (!settings.mqttUsername.isEmpty() || !settings.mqttPassword.isEmpty())
     {
-        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]", settings.mqttUsername.c_str());
-        isConnected = mqttClient.connect(settings.deviceName.c_str(), settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
+        //debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]", settings.mqttUsername.c_str());
+        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[%s][****]", settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
+        //isConnected = 
+        mqttClient.connect(settings.deviceName.c_str(), settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
     }
     else
     {
         debugI("MqttHandler: Trying MQTT connect WITHOUT credentials");
-        isConnected = mqttClient.connect(settings.deviceName.c_str());
+        //isConnected = 
+        mqttClient.connect(settings.deviceName.c_str());
     }
 
-    if (isConnected)
+    //if (isConnected)
+    if (mqttClient.connected())
     {
         debugI("MqttHandler: Connected as client [%s]", settings.deviceName.c_str());
 
