@@ -15,7 +15,7 @@ void RemoteDebugHandler::loop()
 
 void RemoteDebugHandler::startNetwork()
 {
-    Debug.begin(settings.deviceName);
+    Debug.begin(settings.device.name);
 }
 
 void RemoteDebugHandler::init()

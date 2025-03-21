@@ -33,20 +33,20 @@ void ServeDevice::handleDeviceInfo(AsyncWebServer &server)
         JsonDocument doc;
 
         doc["firmwareVersion"]   = SOFTWARE_VERSION;
-        doc["deviceName"]   = settings.deviceName;
+        doc["deviceName"]   = settings.device.name;
 
         // doc["timezoneSettings"]    = settings.timezone;
         // doc["timezoneTimehandler"]    = TimeHandler::getCurrentTimezone();
 
-        doc["timezone"]    = settings.timezone;
+        doc["timezone"]    = settings.device.timezone;
 
         //Need to cleanup when clock was not set caused reboot loop
-        doc["bootCount"]    = settings.bootCount;
+        doc["bootCount"]    = settings.device.bootCount;
 
-        doc["upTime"]    = settings.upTime;
+        doc["upTime"]    = settings.device.upTime;
 
         //doc["bootTime"] = settings.bootTime;
-        time_t bootTime = settings.bootTime; // Previously saved timestamp
+        time_t bootTime = settings.device.bootTime; // Previously saved timestamp
         String formattedBootTime = TimeHandler::formatDateTime("%I:%M:%S %p %m-%d-%Y", bootTime);
         
         doc["bootTime"] = formattedBootTime;

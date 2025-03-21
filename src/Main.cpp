@@ -42,7 +42,7 @@ void setup()
   DownloadHandler::init();
   AesHandler::init();
   CryptoHandler::init();
-  TimeHandler::init(settings.timezone);
+  TimeHandler::init(settings.device.timezone);
   JiggleHandler::init();
   BluetoothHandler::init();
   MqttHandler::init();

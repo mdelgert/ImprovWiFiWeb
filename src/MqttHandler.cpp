@@ -63,7 +63,7 @@ void MqttHandler::publish(const char *topic, const char *message)
 void MqttHandler::connectToMqtt()
 {
     // Use the appropriate client based on SSL settings
-    if (settings.mqttSsl)
+    if (settings.mqtt.ssl)
     {
         debugI("MqttHandler: Using secure WiFi client.");
 
@@ -102,45 +102,45 @@ void MqttHandler::connectToMqtt()
     }
 
     // Point the MQTT client to the broker from settings
-    mqttClient.setServer(settings.mqttServer.c_str(), settings.mqttPort);
+    mqttClient.setServer(settings.mqtt.server.c_str(), settings.mqtt.port);
 
     // Set the incoming message callback
     mqttClient.setCallback(MqttHandler::mqttCallback);
 
-    debugI("MqttHandler: Attempting MQTT connection to %s:%d", settings.mqttServer.c_str(), settings.mqttPort);
+    debugI("MqttHandler: Attempting MQTT connection to %s:%d", settings.mqtt.server.c_str(), settings.mqtt.port);
 
     //bool isConnected = false;
 
     // Attempt to connect to the MQTT broker
     // If username/password are not empty, use them
-    if (!settings.mqttUsername.isEmpty() || !settings.mqttPassword.isEmpty())
+    if (!settings.mqtt.username.isEmpty() || !settings.mqtt.password.isEmpty())
     {
-        //debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]", settings.mqttUsername.c_str());
-        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[%s][****]", settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
+        //debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[****]", settings.mqtt.username.c_str());
+        debugI("MqttHandler: Trying MQTT connect with user/pass: [%s]/[%s][****]", settings.mqtt.username.c_str(), settings.mqtt.password.c_str());
         //isConnected = 
-        mqttClient.connect(settings.deviceName.c_str(), settings.mqttUsername.c_str(), settings.mqttPassword.c_str());
+        mqttClient.connect(settings.device.name.c_str(), settings.mqtt.username.c_str(), settings.mqtt.password.c_str());
     }
     else
     {
         debugI("MqttHandler: Trying MQTT connect WITHOUT credentials");
         //isConnected = 
-        mqttClient.connect(settings.deviceName.c_str());
+        mqttClient.connect(settings.device.name.c_str());
     }
 
     //if (isConnected)
     if (mqttClient.connected())
     {
-        debugI("MqttHandler: Connected as client [%s]", settings.deviceName.c_str());
+        debugI("MqttHandler: Connected as client [%s]", settings.device.name.c_str());
 
         // Subscribe to the topic from settings
-        mqttClient.subscribe(settings.mqttSubTopic.c_str());
-        debugI("MqttHandler: Subscribed to [%s]", settings.mqttSubTopic.c_str());
+        mqttClient.subscribe(settings.mqtt.subTopic.c_str());
+        debugI("MqttHandler: Subscribed to [%s]", settings.mqtt.subTopic.c_str());
 
         // Optionally publish a "hello" message
         // publish(settings.mqttPubTopic.c_str(), "Hello from ESP32-S3!");
 
-        String helloMessage = "Device: " + settings.deviceName + " connected.";
-        publish(settings.mqttPubTopic.c_str(), helloMessage.c_str());
+        String helloMessage = "Device: " + settings.device.name + " connected.";
+        publish(settings.mqtt.pubTopic.c_str(), helloMessage.c_str());
     }
     else
     {
@@ -159,10 +159,10 @@ void MqttHandler::mqttCallback(char *topic, byte *payload, unsigned int length)
     debugI("MqttHandler: Received on [%s]: %s", topic, message.c_str());
 
     // If incoming message is on the subscribed topic, echo it out
-    if (String(topic) == settings.mqttSubTopic)
+    if (String(topic) == settings.mqtt.subTopic)
     {
         debugD("MqttHandler: Echoing message to publish topic");
-        publish(settings.mqttPubTopic.c_str(), message.c_str());
+        publish(settings.mqtt.pubTopic.c_str(), message.c_str());
         // Debug.wsOnReceive(message.c_str());
         CommandHandler::handleCommand(message);
     }
@@ -176,7 +176,7 @@ void MqttHandler::registerCommands()
         CommandHandler::parseCommand(command, cmd, args);
 
         if (CommandHandler::equalsIgnoreCase(cmd, "MSG")) {
-            MqttHandler::publish(settings.mqttPubTopic.c_str(), args.c_str());
+            MqttHandler::publish(settings.mqtt.pubTopic.c_str(), args.c_str());
         }
         else if (CommandHandler::equalsIgnoreCase(cmd, "TOPIC")) {
             int delimiterPos = args.indexOf(' ');

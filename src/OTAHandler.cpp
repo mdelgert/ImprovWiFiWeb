@@ -8,10 +8,10 @@ static NonBlockingTimer setupDelay(1000);
 
 void OTAHandler::setupOTA()
 {
-    ArduinoOTA.setPassword(settings.otaPassword.c_str());
+    ArduinoOTA.setPassword(settings.security.otaPassword.c_str());
 
     //Without this dns resolution will fail
-    ArduinoOTA.setHostname(settings.deviceName.c_str());
+    ArduinoOTA.setHostname(settings.device.name.c_str());
 
     ArduinoOTA.onStart([]() {
         String type = ArduinoOTA.getCommand() == U_FLASH ? "sketch" : "filesystem";

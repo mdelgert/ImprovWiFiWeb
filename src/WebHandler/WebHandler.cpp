@@ -42,11 +42,11 @@ void WebHandler::printRequestBody(AsyncWebServerRequest *request, uint8_t *data,
 
 bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
 {
-    if (!settings.apiToken) return true;
+    if (!settings.security.apiToken) return true;
     if (request->hasHeader("Authorization"))
     {
         AsyncWebHeader *header = request->getHeader("Authorization");
-        if (String(header->value()) == String("Bearer ") + settings.apiKey)
+        if (String(header->value()) == String("Bearer ") + settings.security.apiKey)
         {
             return true;
         }
@@ -57,7 +57,7 @@ bool WebHandler::isTokenValid(AsyncWebServerRequest *request)
 
 void WebHandler::addCorsHeaders(AsyncWebServerResponse *response)
 {
-    if (settings.cors) return;
+    if (settings.features.cors) return;
     response->addHeader("Access-Control-Allow-Origin", "*"); // Allow any origin
     response->addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS"); // Allow all standard HTTP methods
     response->addHeader("Access-Control-Allow-Headers", "*"); // Allow any headers the client may send
@@ -114,7 +114,7 @@ void WebHandler::sendSuccessResponse(AsyncWebServerRequest *request, const char 
 
 void WebHandler::init()
 {
-    if (!settings.webHandler) return;
+    if (!settings.features.webHandler) return;
 
     ServeDevice::registerEndpoints(server);
     ServeSettings::registerEndpoints(server);

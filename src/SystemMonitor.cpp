@@ -80,7 +80,7 @@ void SystemMonitor::systemMonitorTask(void *parameter)
 void SystemMonitor::handleSecondCheck()
 {
   //debugV("SystemMonitor: Running second-specific task.");
-  settings.upTime++;
+  settings.device.upTime++;
   CronHandler::executeJobs();
   TimeHandler::loop();
 
@@ -88,8 +88,8 @@ void SystemMonitor::handleSecondCheck()
   static bool bootUpdated = false; // Tracks if the update has been performed
   if (!bootUpdated && TimeHandler::getTimeSyncStatus())
   {
-    settings.bootCount++;
-    settings.bootTime = time(nullptr);
+    settings.device.bootCount++;
+    settings.device.bootTime = time(nullptr);
     ConfigManager::save();
     bootUpdated = true; // Mark as updated
     //debugV("Boot count and boot time updated.");

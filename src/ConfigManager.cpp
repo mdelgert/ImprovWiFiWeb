@@ -21,32 +21,40 @@ void ConfigManager::load() {
         return;
     }
 
-    settings.deviceName = preferences.getString("deviceName", settings.deviceName);
-    settings.wifiSSID = preferences.getString("wifiSSID", settings.wifiSSID);
-    settings.wifiPassword = preferences.getString("wifiPassword", settings.wifiPassword);
-    settings.mqttServer = preferences.getString("mqttServer", settings.mqttServer);
-    settings.mqttPort = preferences.getInt("mqttPort", settings.mqttPort);
-    settings.mqttUsername = preferences.getString("mqttUsername", settings.mqttUsername);
-    settings.mqttPassword = preferences.getString("mqttPassword", settings.mqttPassword);
-    settings.mqttSsl = preferences.getBool("mqttSsl", settings.mqttSsl);
-    settings.mqttSubTopic = preferences.getString("mqttSubTopic", settings.mqttSubTopic);
-    settings.mqttPubTopic = preferences.getString("mqttPubTopic", settings.mqttPubTopic);
-    settings.apiKey = preferences.getString("apiKey", settings.apiKey);
-    settings.otaPassword = preferences.getString("otaPassword", settings.otaPassword);
-    settings.setupMode = preferences.getBool("setupMode", settings.setupMode);
-    settings.defaulTimeout = preferences.getInt("defaulTimeout", settings.defaulTimeout);
-    settings.apiToken = preferences.getBool("apiToken", settings.apiToken);
-    settings.cors = preferences.getBool("cors", settings.cors);
-    settings.webHandler = preferences.getBool("webHandler", settings.webHandler);
-    settings.wifiScan = preferences.getBool("wifiScan", settings.wifiScan);
-    settings.mqttEnabled = preferences.getBool("mqttEnabled", settings.mqttEnabled);
-    settings.timezone = preferences.getString("timezone", settings.timezone);
-    settings.bootCount = preferences.getUInt("bootCount", settings.bootCount);
-    settings.bootTime = preferences.getULong("bootTime", settings.bootTime);
-    
-    preferences.end();
+    // Device
+    settings.device.name         = preferences.getString("deviceName", settings.device.name);
+    settings.device.timezone     = preferences.getString("timezone", settings.device.timezone);
+    settings.device.setupMode    = preferences.getBool("setupMode", settings.device.setupMode);
+    settings.device.defaultTimeout = preferences.getInt("defaultTimeout", settings.device.defaultTimeout);
+    settings.device.bootCount    = preferences.getULong("bootCount", settings.device.bootCount);
+    settings.device.bootTime     = preferences.getULong("bootTime", settings.device.bootTime);
 
-    debugI("ConfigManager load() namespace: %s", ns);
+    // WiFi
+    settings.wifi.ssid           = preferences.getString("wifiSSID", settings.wifi.ssid);
+    settings.wifi.password       = preferences.getString("wifiPassword", settings.wifi.password);
+    settings.wifi.scan           = preferences.getBool("wifiScan", settings.wifi.scan);
+
+    // MQTT
+    settings.mqtt.enabled        = preferences.getBool("mqttEnabled", settings.mqtt.enabled);
+    settings.mqtt.server         = preferences.getString("mqttServer", settings.mqtt.server);
+    settings.mqtt.port           = preferences.getInt("mqttPort", settings.mqtt.port);
+    settings.mqtt.ssl            = preferences.getBool("mqttSsl", settings.mqtt.ssl);
+    settings.mqtt.username       = preferences.getString("mqttUsername", settings.mqtt.username);
+    settings.mqtt.password       = preferences.getString("mqttPassword", settings.mqtt.password);
+    settings.mqtt.subTopic       = preferences.getString("mqttSubTopic", settings.mqtt.subTopic);
+    settings.mqtt.pubTopic       = preferences.getString("mqttPubTopic", settings.mqtt.pubTopic);
+
+    // Security
+    settings.security.apiKey     = preferences.getString("apiKey", settings.security.apiKey);
+    settings.security.apiToken   = preferences.getBool("apiToken", settings.security.apiToken);
+    settings.security.otaPassword = preferences.getString("otaPassword", settings.security.otaPassword);
+
+    // Features
+    settings.features.cors       = preferences.getBool("cors", settings.features.cors);
+    settings.features.webHandler = preferences.getBool("webHandler", settings.features.webHandler);
+
+    preferences.end();
+    debugI("ConfigManager loaded settings from namespace: %s", ns);
 }
 
 // Save settings to preferences
@@ -56,32 +64,40 @@ void ConfigManager::save() {
         return;
     }
 
-    preferences.putString("deviceName", settings.deviceName);
-    preferences.putString("wifiSSID", settings.wifiSSID);
-    preferences.putString("wifiPassword", settings.wifiPassword);
-    preferences.putString("mqttServer", settings.mqttServer);
-    preferences.putInt("mqttPort", settings.mqttPort);
-    preferences.putString("mqttUsername", settings.mqttUsername);
-    preferences.putString("mqttPassword", settings.mqttPassword);
-    preferences.putBool("mqttSsl", settings.mqttSsl);
-    preferences.putString("mqttSubTopic", settings.mqttSubTopic);
-    preferences.putString("mqttPubTopic", settings.mqttPubTopic);
-    preferences.putString("apiKey", settings.apiKey);
-    preferences.putString("otaPassword", settings.otaPassword);
-    preferences.putBool("setupMode", settings.setupMode);
-    preferences.putInt("defaulTimeout", settings.defaulTimeout);
-    preferences.putBool("apiToken", settings.apiToken);
-    preferences.putBool("cors", settings.cors);
-    preferences.putBool("webHandler", settings.webHandler);
-    preferences.putBool("wifiScan", settings.wifiScan);
-    preferences.putBool("mqttEnabled", settings.mqttEnabled);
-    preferences.putString("timezone", settings.timezone);
-    preferences.putUInt("bootCount", settings.bootCount);
-    preferences.putULong("bootTime", settings.bootTime);
-    
-    preferences.end();
+    // Device
+    preferences.putString("deviceName", settings.device.name);
+    preferences.putString("timezone", settings.device.timezone);
+    preferences.putBool("setupMode", settings.device.setupMode);
+    preferences.putInt("defaultTimeout", settings.device.defaultTimeout);
+    preferences.putULong("bootCount", settings.device.bootCount);
+    preferences.putULong("bootTime", settings.device.bootTime);
 
-    debugI("ConfigManager save() namespace: %s", ns);
+    // WiFi
+    preferences.putString("wifiSSID", settings.wifi.ssid);
+    preferences.putString("wifiPassword", settings.wifi.password);
+    preferences.putBool("wifiScan", settings.wifi.scan);
+
+    // MQTT
+    preferences.putBool("mqttEnabled", settings.mqtt.enabled);
+    preferences.putString("mqttServer", settings.mqtt.server);
+    preferences.putInt("mqttPort", settings.mqtt.port);
+    preferences.putBool("mqttSsl", settings.mqtt.ssl);
+    preferences.putString("mqttUsername", settings.mqtt.username);
+    preferences.putString("mqttPassword", settings.mqtt.password);
+    preferences.putString("mqttSubTopic", settings.mqtt.subTopic);
+    preferences.putString("mqttPubTopic", settings.mqtt.pubTopic);
+
+    // Security
+    preferences.putString("apiKey", settings.security.apiKey);
+    preferences.putBool("apiToken", settings.security.apiToken);
+    preferences.putString("otaPassword", settings.security.otaPassword);
+
+    // Features
+    preferences.putBool("cors", settings.features.cors);
+    preferences.putBool("webHandler", settings.features.webHandler);
+
+    preferences.end();
+    debugI("ConfigManager saved settings to namespace: %s", ns);
 }
 
 // Clear all preferences
@@ -94,8 +110,6 @@ void ConfigManager::clear() {
     preferences.clear();
     preferences.end();
 
-    // Reset settings to defaults
-    settings = Settings();
-
-    debugI("ConfigManager clear() namespace: %s", ns);
+    settings = Settings(); // reset to defaults
+    debugI("ConfigManager cleared preferences in namespace: %s", ns);
 }
