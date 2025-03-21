@@ -4,21 +4,26 @@ using System.Text;
 
 class Program
 {
-    private const int AesKeySize = 32; // 256 bits
-    private const int AesBlockSize = 16; // 128 bits
+    private const int AesKeySize = 32;
+    private const int AesBlockSize = 16;
 
     static void Main(string[] args)
     {
-        if (args.Length < 3)
+if (args.Length < 3)
         {
-            Console.WriteLine("Usage: dotnet run <enc|dec> <text> <password>");
-            //Console.WriteLine("Usage: crypto <enc|dec> <text> <password>");
+            Console.WriteLine("Usage: dotnet run <enc|dec> <password> <text>");
+            Console.WriteLine("Examples:");
+            Console.WriteLine("  dotnet run enc \"mypassword\" \"Hello World\"");
+            //Console.WriteLine("  dotnet run dec \"mypassword\" \"<encryptedtext>\"");
+            Console.WriteLine("  dotnet run dec \"mypassword\" \"FDNGl0K7cGFQQF6AmN/67PWq3Iouxd1bKPrLcmNFyTE=\"");
             return;
         }
 
         string command = args[0].ToLower();
-        string text = args[1];
-        string password = args[2];
+        string password = args[1];
+        string text = args[2];
+
+        //Console.WriteLine($"Command: {command}, Password: '{password}', Text: '{text}'");
 
         try
         {
@@ -34,7 +39,7 @@ class Program
             }
             else
             {
-                Console.WriteLine("Invalid command. Use 'encrypt' or 'decrypt'.");
+                Console.WriteLine("Invalid command. Use 'enc' or 'dec'.");
             }
         }
         catch (Exception ex)
@@ -45,13 +50,9 @@ class Program
 
     static string Encrypt(string plainText, string password)
     {
-        // Derive 32-byte key using SHA-256
         byte[] key = ComputeSha256Hash(password);
-
-        // Generate random 16-byte IV
         byte[] iv = GenerateRandomBytes(AesBlockSize);
 
-        // Encrypt using AES-CBC with PKCS7 padding
         byte[] cipherText;
         using (Aes aes = Aes.Create())
         {
@@ -65,38 +66,32 @@ class Program
             using (ICryptoTransform encryptor = aes.CreateEncryptor())
             {
                 byte[] plainBytes = Encoding.UTF8.GetBytes(plainText);
+                //Console.WriteLine($"Plain bytes: {BitConverter.ToString(plainBytes)}");
                 cipherText = encryptor.TransformFinalBlock(plainBytes, 0, plainBytes.Length);
             }
         }
 
-        // Prepend IV to ciphertext
         byte[] finalOutput = new byte[AesBlockSize + cipherText.Length];
         Array.Copy(iv, 0, finalOutput, 0, AesBlockSize);
         Array.Copy(cipherText, 0, finalOutput, AesBlockSize, cipherText.Length);
 
-        // Base64 encode
         return Convert.ToBase64String(finalOutput);
     }
 
     static string Decrypt(string encryptedBase64, string password)
     {
-        // Derive 32-byte key using SHA-256
         byte[] key = ComputeSha256Hash(password);
-
-        // Decode Base64
         byte[] encryptedBytes = Convert.FromBase64String(encryptedBase64);
         if (encryptedBytes.Length < AesBlockSize)
         {
             throw new ArgumentException("Invalid encrypted data: too short.");
         }
 
-        // Extract IV (first 16 bytes) and ciphertext
         byte[] iv = new byte[AesBlockSize];
         byte[] cipherText = new byte[encryptedBytes.Length - AesBlockSize];
         Array.Copy(encryptedBytes, 0, iv, 0, AesBlockSize);
         Array.Copy(encryptedBytes, AesBlockSize, cipherText, 0, cipherText.Length);
 
-        // Decrypt using AES-CBC with PKCS7 padding
         byte[] plainBytes;
         using (Aes aes = Aes.Create())
         {
