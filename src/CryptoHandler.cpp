@@ -66,7 +66,7 @@ String CryptoHandler::encryptAES(const String &plainText, const String &password
     for (int i = 0; i < paddedLen; i++) {
         sprintf(rawHex + i * 2, "%02x", output[i]);
     }
-    debugI("Raw encrypted: %s", rawHex);
+    debugV("Raw encrypted: %s", rawHex);
 
     size_t finalLen = AES_BLOCK_SIZE + paddedLen;
     uint8_t *finalOutput = (uint8_t *)malloc(finalLen);
@@ -148,7 +148,7 @@ String CryptoHandler::decryptAES(const String &cipherText, const String &passwor
     for (int i = 0; i < cipherLen; i++) {
         sprintf(rawHex + i * 2, "%02x", output[i]);
     }
-    debugI("Raw decrypted: %s", rawHex);
+    debugV("Raw decrypted: %s", rawHex);
 
     uint8_t padVal = output[cipherLen - 1];
     size_t unpaddedLen = cipherLen;
@@ -173,7 +173,7 @@ String CryptoHandler::decryptAES(const String &cipherText, const String &passwor
     free(output);
     free(decoded);
 
-    debugI("Decrypted length: %d, text: %s", unpaddedLen, decryptedText.c_str());
+    debugV("Decrypted length: %d, text: %s", unpaddedLen, decryptedText.c_str());
     return decryptedText;
 }
 
