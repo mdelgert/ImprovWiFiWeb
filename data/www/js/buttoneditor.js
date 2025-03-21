@@ -69,7 +69,9 @@ function openModal(id) {
   document.getElementById("editName").value = item.name;
   document.getElementById("editCategory").value = item.category;
   document.getElementById("editAction").value = item.action;
-  document.getElementById("editCommand").value = item.command;
+  document.getElementById("editCommand").value = item.command || "";
+  document.getElementById("editUserName").value = item.userName || "";
+  document.getElementById("editPassword").value = item.password || "";
   document.getElementById("editNotes").value = item.notes || "";
   document.getElementById("modalTitle").textContent = "Edit Button";
   document.getElementById("editModal").style.display = "flex";
@@ -81,6 +83,8 @@ function openModalForAdd() {
   document.getElementById("editCategory").value = "General";
   document.getElementById("editAction").value = "Command";
   document.getElementById("editCommand").value = "";
+  document.getElementById("editUserName").value = "";
+  document.getElementById("editPassword").value = "";
   document.getElementById("editNotes").value = "";
   document.getElementById("modalTitle").textContent = "Add New Button";
   document.getElementById("editModal").style.display = "flex";
@@ -95,10 +99,21 @@ async function saveChanges() {
   const category = document.getElementById("editCategory").value;
   const action = document.getElementById("editAction").value;
   const command = document.getElementById("editCommand").value;
+  const userName = document.getElementById("editUserName").value;
+  const password = document.getElementById("editPassword").value;
   const notes = document.getElementById("editNotes").value;
   if (!name || !command) return;
 
-  const button = { id: editingItemId || Date.now(), name, category, action, command, notes };
+  const button = { 
+    id: editingItemId || Date.now(), 
+    name,
+    category, 
+    action,
+    command,
+    userName,
+    password, 
+    notes
+  };
 
   try {
     const response = await fetch(`${endPoint}/buttons`, {
@@ -106,7 +121,7 @@ async function saveChanges() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ buttons: [button] }),
     });
-
+    
     if (response.ok) {
       await fetchButtons();
       closeModal();
