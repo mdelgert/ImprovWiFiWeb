@@ -1,0 +1,34 @@
+{
+    "device": {
+      "name": "MyDevice",
+      "setupMode": true,
+      "timezone": "UTC",
+      "bootCount": 5,
+      "bootTime": 1700000000,
+      "defaultTimeout": 30
+    },
+    "wifi": {
+      "ssid": "MyNetwork",
+      "password": "wifiPassword",
+      "scan": true
+    },
+    "mqtt": {
+      "enabled": true,
+      "server": "mqtt.example.com",
+      "port": 1883,
+      "ssl": false,
+      "username": "user",
+      "password": "pass",
+      "subTopic": "device/in",
+      "pubTopic": "device/out"
+    },
+    "security": {
+      "apiKey": "abcdef123456",
+      "apiToken": false,
+      "otaPassword": "otapass"
+    },
+    "features": {
+      "cors": true,
+      "webHandler": true
+    }
+}
