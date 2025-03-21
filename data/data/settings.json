@@ -1,11 +1,11 @@
 {
     "device": {
       "name": "MyDevice",
-      "setupMode": true,
-      "timezone": "UTC",
-      "bootCount": 5,
-      "bootTime": 1700000000,
-      "defaultTimeout": 30
+      "setupMode": false,
+      "timezone": "America/New_York",
+      "bootCount": 0,
+      "bootTime": 0,
+      "defaultTimeout": 500
     },
     "wifi": {
       "ssid": "MyNetwork",
@@ -13,7 +13,7 @@
       "scan": true
     },
     "mqtt": {
-      "enabled": true,
+      "enabled": false,
       "server": "mqtt.example.com",
       "port": 1883,
       "ssl": false,
@@ -25,10 +25,10 @@
     "security": {
       "apiKey": "abcdef123456",
       "apiToken": false,
-      "otaPassword": "otapass"
+      "otaPassword": "password"
     },
     "features": {
-      "cors": true,
+      "cors": false,
       "webHandler": true
     }
 }

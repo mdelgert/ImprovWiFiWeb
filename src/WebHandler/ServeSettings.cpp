@@ -1,19 +1,64 @@
 #ifdef ENABLE_WEB_HANDLER
 
 #include "ServeSettings.h"
+#include <LittleFS.h>
+#include "WebHandler.h"
+#include <ArduinoJson.h>
 
 static NonBlockingTimer delayTimer(500);
 
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
-    handleGetSettings(server);
-    handleSetSettings(server);
+    server.on("/settings/get", HTTP_GET, handleGetSettings);
+    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleSetSettings);
+    handleGetSettingsArchieve(server);
+    handleSetSettingsArchieve(server);
 }
 
-void ServeSettings::handleGetSettings(AsyncWebServer &server)
+void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
 {
-    server.on("/settings/get", HTTP_GET, [](AsyncWebServerRequest *request){
-        debugV("Received GET request on /settings/get");
+    // Open the file for reading
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (!file || file.size() == 0) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to read settings.json or file is empty");
+        return;
+    }
+
+    String json = file.readString(); // Read the file content into a string
+    file.close(); // Close the file
+
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
+}
+
+void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /settings/set");
+
+    // Open the file for writing
+    File file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to open settings.json for writing");
+        return;
+    }
+
+    // Write the data to the file
+    if (file.write(data, len) != len) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to write data to settings.json");
+        return;
+    }
+
+    // Close the file
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+}
+
+void ServeSettings::handleGetSettingsArchieve(AsyncWebServer &server)
+{
+    server.on("/settings/archieve/get", HTTP_GET, [](AsyncWebServerRequest *request){
+        debugV("Received GET request on /settings/archieve/get");
 
         JsonDocument doc;
 
@@ -53,11 +98,11 @@ void ServeSettings::handleGetSettings(AsyncWebServer &server)
     });
 }
 
-void ServeSettings::handleSetSettings(AsyncWebServer &server)
+void ServeSettings::handleSetSettingsArchieve(AsyncWebServer &server)
 {
-    server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, nullptr,
+    server.on("/settings/archieve/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, nullptr,
         [](AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total){
-            debugV("Received POST request on /settings/set");
+            debugV("Received POST request on /settings/archieve/set");
 
             WebHandler::printRequestBody(request, data, len);
 

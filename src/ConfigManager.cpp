@@ -1,4 +1,6 @@
 #include "ConfigManager.h"
+#include <LittleFS.h>
+#include <ArduinoJson.h>
 
 // Global settings object
 Settings settings;
@@ -14,8 +16,124 @@ void ConfigManager::init() {
     load();
 }
 
-// Load settings with defaults
+// Load settings from LittleFS
 void ConfigManager::load() {
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (!file || file.size() == 0) {
+        debugE("Failed to open %s or file is empty", SETTINGS_FILE);
+        return;
+    }
+
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, file);
+    file.close();
+
+    if (error) {
+        debugE("Failed to parse JSON: %s", error.c_str());
+        return;
+    }
+
+    // Device
+    if (doc["device"]["name"]) settings.device.name = doc["device"]["name"].as<String>();
+    if (doc["device"]["setupMode"]) settings.device.setupMode = doc["device"]["setupMode"].as<bool>();
+    if (doc["device"]["timezone"]) settings.device.timezone = doc["device"]["timezone"].as<String>();
+    if (doc["device"]["bootCount"]) settings.device.bootCount = doc["device"]["bootCount"].as<uint64_t>();
+    if (doc["device"]["bootTime"]) settings.device.bootTime = doc["device"]["bootTime"].as<uint64_t>();
+    if (doc["device"]["defaultTimeout"]) settings.device.defaultTimeout = doc["device"]["defaultTimeout"].as<int>();
+
+    // WiFi
+    if (doc["wifi"]["ssid"]) settings.wifi.ssid = doc["wifi"]["ssid"].as<String>();
+    if (doc["wifi"]["password"]) settings.wifi.password = doc["wifi"]["password"].as<String>();
+    if (doc["wifi"]["scan"]) settings.wifi.scan = doc["wifi"]["scan"].as<bool>();
+
+    // MQTT
+    if (doc["mqtt"]["enabled"]) settings.mqtt.enabled = doc["mqtt"]["enabled"].as<bool>();
+    if (doc["mqtt"]["server"]) settings.mqtt.server = doc["mqtt"]["server"].as<String>();
+    if (doc["mqtt"]["port"]) settings.mqtt.port = doc["mqtt"]["port"].as<int>();
+    if (doc["mqtt"]["ssl"]) settings.mqtt.ssl = doc["mqtt"]["ssl"].as<bool>();
+    if (doc["mqtt"]["username"]) settings.mqtt.username = doc["mqtt"]["username"].as<String>();
+    if (doc["mqtt"]["password"]) settings.mqtt.password = doc["mqtt"]["password"].as<String>();
+    if (doc["mqtt"]["subTopic"]) settings.mqtt.subTopic = doc["mqtt"]["subTopic"].as<String>();
+    if (doc["mqtt"]["pubTopic"]) settings.mqtt.pubTopic = doc["mqtt"]["pubTopic"].as<String>();
+
+    // Security
+    if (doc["security"]["apiKey"]) settings.security.apiKey = doc["security"]["apiKey"].as<String>();
+    if (doc["security"]["apiToken"]) settings.security.apiToken = doc["security"]["apiToken"].as<bool>();
+    if (doc["security"]["otaPassword"]) settings.security.otaPassword = doc["security"]["otaPassword"].as<String>();
+
+    // Features
+    if (doc["features"]["cors"]) settings.features.cors = doc["features"]["cors"].as<bool>();
+    if (doc["features"]["webHandler"]) settings.features.webHandler = doc["features"]["webHandler"].as<bool>();
+
+    debugI("Settings loaded from %s", SETTINGS_FILE);
+}
+
+// Save settings to LittleFS
+void ConfigManager::save() {
+    JsonDocument doc; // or StaticJsonDocument if you prefer
+
+    // Device
+    doc["device"]["name"] = settings.device.name;
+    doc["device"]["setupMode"] = settings.device.setupMode;
+    doc["device"]["timezone"] = settings.device.timezone;
+    doc["device"]["bootCount"] = settings.device.bootCount;
+    doc["device"]["bootTime"] = settings.device.bootTime;
+    doc["device"]["defaultTimeout"] = settings.device.defaultTimeout;
+
+    // WiFi
+    doc["wifi"]["ssid"] = settings.wifi.ssid;
+    doc["wifi"]["password"] = settings.wifi.password;
+    doc["wifi"]["scan"] = settings.wifi.scan;
+
+    // MQTT
+    doc["mqtt"]["enabled"] = settings.mqtt.enabled;
+    doc["mqtt"]["server"] = settings.mqtt.server;
+    doc["mqtt"]["port"] = settings.mqtt.port;
+    doc["mqtt"]["ssl"] = settings.mqtt.ssl;
+    doc["mqtt"]["username"] = settings.mqtt.username;
+    doc["mqtt"]["password"] = settings.mqtt.password;
+    doc["mqtt"]["subTopic"] = settings.mqtt.subTopic;
+    doc["mqtt"]["pubTopic"] = settings.mqtt.pubTopic;
+
+    // Security
+    doc["security"]["apiKey"] = settings.security.apiKey;
+    doc["security"]["apiToken"] = settings.security.apiToken;
+    doc["security"]["otaPassword"] = settings.security.otaPassword;
+
+    // Features
+    doc["features"]["cors"] = settings.features.cors;
+    doc["features"]["webHandler"] = settings.features.webHandler;
+
+    File file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        debugE("Failed to open %s for writing", SETTINGS_FILE);
+        return;
+    }
+
+    size_t written = serializeJsonPretty(doc, file);
+    file.close();
+
+    if (written == 0) {
+        debugE("Failed to write JSON to %s", SETTINGS_FILE);
+    } else {
+        debugI("Settings saved to %s (%u bytes)", SETTINGS_FILE, (unsigned int)written);
+    }
+}
+
+// Clear all LittleFS
+void ConfigManager::clear() {
+    if (LittleFS.exists(SETTINGS_FILE)) {
+        LittleFS.remove(SETTINGS_FILE);
+        debugI("Settings file %s removed", SETTINGS_FILE);
+    } else {
+        debugW("Settings file %s not found", SETTINGS_FILE);
+    }
+
+    settings = Settings(); // Reset to default-initialized struct
+}
+
+// Load settings from preferences
+void ConfigManager::loadPreferences() {
     if (!preferences.begin(ns, false)) {
         debugE("Failed to open preferences for loading.");
         return;
@@ -58,7 +176,7 @@ void ConfigManager::load() {
 }
 
 // Save settings to preferences
-void ConfigManager::save() {
+void ConfigManager::savePreferences() {
     if (!preferences.begin(ns, false)) {
         debugE("Failed to open preferences for saving.");
         return;
@@ -101,7 +219,7 @@ void ConfigManager::save() {
 }
 
 // Clear all preferences
-void ConfigManager::clear() {
+void ConfigManager::clearPreferences() {
     if (!preferences.begin(ns, false)) {
         debugE("Failed to open preferences for clearing.");
         return;
