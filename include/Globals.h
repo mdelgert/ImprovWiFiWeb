@@ -1,9 +1,13 @@
 #pragma once
 
 #define WIFI_NETWORKS_FILE "/data/networks.json"
-#define BUTTONS_FILE "/data/buttons.json"
+
+//#define BUTTONS_FILE "/data/buttons.json"
+#define BUTTONS_FILE "/data/buttonsSecure.json"
+
 //#define SETTINGS_FILE "/data/settings.json"
 #define SETTINGS_FILE "/data/settingsSecure.json"
+
 #define EMQX_CERT_FILE "/data/mqtt.crt"
 #define TIMEZONES_FILE "/data/timezones.json"
 
