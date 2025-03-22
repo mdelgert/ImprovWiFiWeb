@@ -2,8 +2,8 @@
 console.log("config.js loaded");
 
 // Centralized device configuration
-//const DEV_DEVICE = "demo1.local";
-const DEV_DEVICE = "demo2.local";
+const DEV_DEVICE = "demo1.local";
+//const DEV_DEVICE = "demo2.local";
 
 // Determine Base URL and WebSocket URL based on environment
 const BASE_URL = window.location.hostname === "localhost" 

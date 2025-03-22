@@ -15,7 +15,6 @@ Content-Type: application/json
 {
   "categories": [
     {
-      "id": 8,
       "name": "Test1"
     }
   ]

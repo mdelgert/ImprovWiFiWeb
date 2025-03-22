@@ -88,8 +88,24 @@ void ServeCategories::handlePostCategories(AsyncWebServerRequest *request, uint8
         }
 
         if (!found) {
-            // Add new category
-            existingCategories.add(newCategory);
+            // Generate a new ID
+            int maxId = 0;
+            for (JsonObject existingCategory : existingCategories) {
+                int existingId = existingCategory["id"] | 0;
+                if (existingId > maxId) {
+                    maxId = existingId;
+                }
+            }
+        
+            int newId = maxId + 1;
+        
+            // Assign a new ID if it's missing or 0
+            JsonObject categoryToAdd = newCategory;
+            if (!categoryToAdd.containsKey("id") || categoryToAdd["id"] == 0) {
+                categoryToAdd["id"] = newId;
+            }
+        
+            existingCategories.add(categoryToAdd);
         }
     }
 
@@ -97,14 +113,20 @@ void ServeCategories::handlePostCategories(AsyncWebServerRequest *request, uint8
     file = LittleFS.open(CATEGORIES_FILE, "w");
     if (!file) {
         debugE("Failed to open file for writing: %s", CATEGORIES_FILE);
-        WebHandler::sendErrorResponse(request, 500, "Failed to write buttons2.json");
+        WebHandler::sendErrorResponse(request, 500, "Failed to write categories.json");
         return;
     }
 
     serializeJson(existingDoc, file); // Save updated JSON
     file.close();
 
-    WebHandler::sendSuccessResponse(request, "Categories updated successfully");
+    //WebHandler::sendSuccessResponse(request, "Categories updated successfully");
+    String responseBody;
+    serializeJson(existingDoc, responseBody);
+
+    AsyncWebServerResponse *response = request->beginResponse(200, "application/json", responseBody);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
 }
 
 void ServeCategories::handleDeleteCategory(AsyncWebServerRequest *request)
