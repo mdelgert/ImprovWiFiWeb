@@ -8,6 +8,7 @@
 #include "ServeCommand.h"
 #include "ServeButtons.h"
 #include "ServeAuth.h"
+#include "ServeCategories.h"
 //#include "ServeEmbedded.h"
 #include <LittleFS.h>
 
@@ -121,6 +122,7 @@ void WebHandler::init()
     ServeFiles::registerEndpoints(server);
     ServeCommand::registerEndpoints(server);
     ServeButtons::registerEndpoints(server);
+    ServeCategories::registerEndpoints(server);
     ServeAuth::registerEndpoints(server);
     //ServeEmbedded::registerEndpoints(server);
     //server.serveStatic("/", LittleFS, "/").setDefaultFile("index.html");
