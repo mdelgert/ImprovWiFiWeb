@@ -117,12 +117,16 @@ void ServeCategories::handlePostCategories(AsyncWebServerRequest *request, uint8
         return;
     }
 
-    serializeJson(existingDoc, file); // Save updated JSON
+    //serializeJson(existingDoc, file); // Save updated JSON
+    serializeJsonPretty(existingDoc, file); // ✅ Nicely formatted JSON
+
     file.close();
 
     //WebHandler::sendSuccessResponse(request, "Categories updated successfully");
     String responseBody;
-    serializeJson(existingDoc, responseBody);
+    
+    //serializeJson(existingDoc, responseBody);
+    serializeJsonPretty(existingDoc, responseBody);
 
     AsyncWebServerResponse *response = request->beginResponse(200, "application/json", responseBody);
     WebHandler::addCorsHeaders(response);
@@ -185,7 +189,9 @@ void ServeCategories::handleDeleteCategory(AsyncWebServerRequest *request)
         return;
     }
 
-    serializeJson(doc, file);
+    //serializeJson(doc, file);
+    serializeJsonPretty(doc, file);
+
     file.close();
 
     debugV("Category with ID %s deleted successfully", categoryId.c_str());
