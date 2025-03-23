@@ -3,6 +3,8 @@ console.log("settings.js loaded");
 
 import {httpGet, httpPost, showMessage} from "./global.js";
 
+let wifiScan = false;
+
 // Load settings from the server
 async function loadSettings() {
   try {
@@ -19,6 +21,7 @@ async function loadSettings() {
     document.getElementById("time_zone").value = data.device?.timezone || "";
 
     // Wi-Fi
+    wifiScan = data.wifi?.scan || false; // Use the default value if not set
     document.getElementById("wifi_scan").checked = data.wifi?.scan || false;
     document.getElementById("wifi_network").value = data.wifi?.ssid || "";
     document.getElementById("wifi_password").value = data.wifi?.password || "";
@@ -151,6 +154,42 @@ function syncWifiSelection() {
   });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load existing settings on page load
+  console.log("Page loaded. Initializing settings load...");
+  loadSettings();
+
+  if( wifiScan) {
+    console.log("Wi-Fi scan is enabled. Loading Wi-Fi networks...");
+    loadWifiNetworks();
+    syncWifiSelection();
+  }
+
+  // Appears to crash device too large of a JSON file removing dropdown for now
+  //loadTimezones();
+  //syncTimezoneSelection();
+
+  const form = document.querySelector(".settings-form");
+  if (form) {
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();  // Stop default form submission
+    });
+  }
+
+  // Then attach your button click
+  const saveButton = document.querySelector(".settings-form button");
+  if (saveButton) {
+    saveButton.addEventListener("click", saveSettings);
+    console.log("Save button event listener attached.");
+  } else {
+    console.error("Save button not found.");
+  }
+
+  // ... rest of your setup ...
+});
+
+/*
 async function loadTimezones() {
   try {
     console.log("Fetching available timezones from /device/timezones...");
@@ -201,38 +240,6 @@ function syncTimezoneSelection() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
-  // Load existing settings on page load
-  console.log("Page loaded. Initializing settings load...");
-  loadSettings();
-  loadWifiNetworks();
-  syncWifiSelection();
-
-  // Appears to crash device too large of a JSON file removing dropdown for now
-  //loadTimezones();
-  //syncTimezoneSelection();
-
-  const form = document.querySelector(".settings-form");
-  if (form) {
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();  // Stop default form submission
-    });
-  }
-
-  // Then attach your button click
-  const saveButton = document.querySelector(".settings-form button");
-  if (saveButton) {
-    saveButton.addEventListener("click", saveSettings);
-    console.log("Save button event listener attached.");
-  } else {
-    console.error("Save button not found.");
-  }
-
-  // ... rest of your setup ...
-});
-
-/*
 // Attach event listeners
 document.addEventListener("DOMContentLoaded", () => {
   // Load existing settings on page load
@@ -252,4 +259,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.error("Save button not found.");
   }
 });
+
+
+
 */

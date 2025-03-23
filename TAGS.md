@@ -162,3 +162,4 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Description:**  
 - Add categories
 - Moved from preferences to settings.json
+- Fix disable scan wifi error message
