@@ -5,33 +5,11 @@
 #include "ServeSettings.h"
 #include "Globals.h"
 #include "WebHandler.h"
-//#include "NonBlockingTimer.h"
-
-//static NonBlockingTimer delayTimer(500);
 
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
     server.on("/settings/get", HTTP_GET, handleGetSettings);
     server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleSetSettings);
-    //handleGetSettingsArchieve(server);
-    //handleSetSettingsArchieve(server);
-}
-
-void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
-{
-    // Open the file for reading
-    File file = LittleFS.open(SETTINGS_FILE, "r");
-    if (!file || file.size() == 0) {
-        WebHandler::sendErrorResponse(request, 400, "Failed to read settings.json or file is empty");
-        return;
-    }
-
-    String json = file.readString(); // Read the file content into a string
-    file.close(); // Close the file
-
-    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
-    WebHandler::addCorsHeaders(response);
-    request->send(response);
 }
 
 void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
@@ -72,7 +50,125 @@ void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *d
     WebHandler::sendSuccessResponse(request, "Settings updated successfully");
 }
 
+void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
+{
+    // Open the file for reading
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (!file || file.size() == 0) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to read settings.json or file is empty");
+        return;
+    }
+
+    String json = file.readString(); // Read the file content into a string
+    file.close(); // Close the file
+
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
+}
+
 /*
+//handleGetSettingsArchieve(server);
+//handleSetSettingsArchieve(server);
+
+// This should be in a separate utility file for better organization repeating the same pattern in save buttons
+static void mergeJson(JsonObject dst, JsonObjectConst src) {
+    for (JsonPairConst kv : src) {
+      const char* key = kv.key().c_str();
+  
+      if (kv.value().is<JsonObject>() && dst[key].is<JsonObject>()) {
+        // Recursively merge sub-objects
+        mergeJson(dst[key].as<JsonObject>(), kv.value().as<JsonObjectConst>());
+      } else {
+        // Overwrite primitive or add new field
+        dst[key] = kv.value();
+      }
+    }
+}
+
+void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /settings/set");
+
+    static String requestBody;
+    if (index == 0) {
+        requestBody = ""; // Start new
+    }
+
+    requestBody += String((char*)data).substring(0, len);
+
+    if (index + len != total) return; // Wait until full body is received
+
+    JsonDocument incomingDoc;
+    DeserializationError err = deserializeJson(incomingDoc, requestBody);
+    if (err) {
+        WebHandler::sendErrorResponse(request, 400, "Invalid JSON format");
+        return;
+    }
+
+    // Load existing settings if available
+    JsonDocument existingDoc;
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (file) {
+        deserializeJson(existingDoc, file);
+        file.close();
+    }
+
+    // Merge incoming into existing
+    //mergeJson(existingDoc, incomingDoc);
+    mergeJson(existingDoc.as<JsonObject>(), incomingDoc.as<JsonObjectConst>());
+
+    // Save back as pretty JSON
+    file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        WebHandler::sendErrorResponse(request, 500, "Failed to open settings file for writing");
+        return;
+    }
+
+    serializeJsonPretty(existingDoc, file);
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+}
+
+void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /settings/set");
+
+    // Accumulate incoming data
+    static String requestBody;
+    if (index == 0) {
+        requestBody = ""; // Start fresh
+    }
+    requestBody += String((char*)data).substring(0, len);
+
+    // Wait until the full body is received
+    if (index + len != total) {
+        return;
+    }
+
+    // Parse JSON
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, requestBody);
+
+    if (error) {
+        WebHandler::sendErrorResponse(request, 400, "Invalid JSON format in request");
+        return;
+    }
+
+    // Save it formatted (pretty)
+    File file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to open settings.json for writing");
+        return;
+    }
+
+    serializeJsonPretty(doc, file); // ✅ Pretty format!
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+}
+
 void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     debugV("Received POST request on /settings/set");
