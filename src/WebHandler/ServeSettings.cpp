@@ -12,6 +12,92 @@ void ServeSettings::registerEndpoints(AsyncWebServer &server)
     server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleSetSettings);
 }
 
+void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
+{
+    // Open the file for reading
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (!file || file.size() == 0) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to read settings.json or file is empty");
+        return;
+    }
+
+    String json = file.readString(); // Read the file content into a string
+    file.close(); // Close the file
+
+    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
+    WebHandler::addCorsHeaders(response);
+    request->send(response);
+}
+
+void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /settings/set");
+
+    // Accumulate incoming data
+    static String requestBody;
+    if (index == 0) {
+        requestBody = ""; // Start fresh
+    }
+    requestBody += String((char*)data).substring(0, len);
+
+    // Wait until the full body is received
+    if (index + len != total) {
+        return;
+    }
+
+    // Parse incoming JSON
+    JsonDocument newDoc;
+    DeserializationError error = deserializeJson(newDoc, requestBody);
+    if (error) {
+        WebHandler::sendErrorResponse(request, 400, "Invalid JSON format in request");
+        return;
+    }
+
+    // Read existing settings
+    JsonDocument existingDoc;
+    File file = LittleFS.open(SETTINGS_FILE, "r");
+    if (file) {
+        error = deserializeJson(existingDoc, file);
+        file.close();
+        if (error) {
+            WebHandler::sendErrorResponse(request, 400, "Failed to parse existing settings");
+            return;
+        }
+    } else {
+        // If file doesn't exist, we'll start with an empty document
+        debugV("No existing settings file found, creating new one");
+    }
+
+    // Merge new settings into existing settings
+    // Update top-level objects (device, wifi, mqtt, security)
+    for (JsonPair kv : newDoc.as<JsonObject>()) {
+        const char* section = kv.key().c_str();
+        JsonObject newSection = kv.value().as<JsonObject>();
+        JsonObject existingSection = existingDoc[section] | JsonObject();
+
+        // Update fields within each section
+        for (JsonPair field : newSection) {
+            existingSection[field.key()] = field.value();
+        }
+    }
+
+    // Save merged settings
+    file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to open settings.json for writing");
+        return;
+    }
+
+    serializeJsonPretty(existingDoc, file);
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+}
+
+/*
+//handleGetSettingsArchieve(server);
+//handleSetSettingsArchieve(server);
+
 void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     debugV("Received POST request on /settings/set");
@@ -49,27 +135,6 @@ void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *d
 
     WebHandler::sendSuccessResponse(request, "Settings updated successfully");
 }
-
-void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
-{
-    // Open the file for reading
-    File file = LittleFS.open(SETTINGS_FILE, "r");
-    if (!file || file.size() == 0) {
-        WebHandler::sendErrorResponse(request, 400, "Failed to read settings.json or file is empty");
-        return;
-    }
-
-    String json = file.readString(); // Read the file content into a string
-    file.close(); // Close the file
-
-    AsyncWebServerResponse *response = request->beginResponse(200, "text/plain", json);
-    WebHandler::addCorsHeaders(response);
-    request->send(response);
-}
-
-/*
-//handleGetSettingsArchieve(server);
-//handleSetSettingsArchieve(server);
 
 // This should be in a separate utility file for better organization repeating the same pattern in save buttons
 static void mergeJson(JsonObject dst, JsonObjectConst src) {
