@@ -3,9 +3,13 @@
       "name": "MyDevice",
       "setupMode": false,
       "timezone": "America/New_York",
+      "defaultTimeout": 500,
       "bootCount": 0,
       "bootTime": 0,
-      "defaultTimeout": 500
+      "bootCommand": "led color green",
+      "singlePress" : "led color white",
+      "doublePress" : "led color blue",
+      "longPress" : "led color red"
     },
     "wifi": {
       "ssid": "MyNetwork",

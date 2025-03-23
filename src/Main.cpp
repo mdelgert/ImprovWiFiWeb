@@ -46,11 +46,13 @@ void setup()
   JiggleHandler::init();
   BluetoothHandler::init();
   MqttHandler::init();
+  CommandHandler::handleCommand(settings.device.bootCommand);
+  
   //GfxHandler::printMessage(SOFTWARE_VERSION);
-  LedHandler::setDefaultBrightness(50);
+  //LedHandler::setDefaultBrightness(50);
   //LedHandler::setColorByName("purple");
   //LedHandler::setColorByName("green");
-  LedHandler::setColorByName("black"); //off
+  //LedHandler::setColorByName("black"); //off
 }
 
 void loop()

@@ -13,6 +13,14 @@ struct DeviceSettings {
     uint64_t bootCount;
     uint64_t bootTime;
     uint64_t upTime;
+
+    // Button commands
+    String singlePress;
+    String doublePress;
+    String longPress;
+
+    // Boot command
+    String bootCommand;
 };
 
 // Sub-struct for Wi-Fi

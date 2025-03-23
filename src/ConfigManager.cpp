@@ -40,7 +40,15 @@ void ConfigManager::load() {
     if (doc["device"]["bootCount"]) settings.device.bootCount = doc["device"]["bootCount"].as<uint64_t>();
     if (doc["device"]["bootTime"]) settings.device.bootTime = doc["device"]["bootTime"].as<uint64_t>();
     if (doc["device"]["defaultTimeout"]) settings.device.defaultTimeout = doc["device"]["defaultTimeout"].as<int>();
-
+    
+    // Device button commands
+    if (doc["device"]["singlePress"]) settings.device.singlePress = doc["device"]["singlePress"].as<String>();
+    if (doc["device"]["doublePress"]) settings.device.doublePress = doc["device"]["doublePress"].as<String>();
+    if (doc["device"]["longPress"]) settings.device.longPress = doc["device"]["longPress"].as<String>();
+    
+    // Device boot command
+    if (doc["device"]["bootCommand"]) settings.device.bootCommand = doc["device"]["bootCommand"].as<String>();
+    
     // WiFi
     if (doc["wifi"]["ssid"]) settings.wifi.ssid = doc["wifi"]["ssid"].as<String>();
     if (doc["wifi"]["password"]) settings.wifi.password = doc["wifi"]["password"].as<String>();

@@ -163,3 +163,5 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 - Add categories
 - Moved from preferences to settings.json
 - Fix disable scan wifi error message
+- Add button commands
+- Add boot command
