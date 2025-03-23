@@ -45,6 +45,13 @@ async function loadSettings() {
 
     // Optional: Handle features like cors/webHandler if needed
     // Example: document.getElementById("cors").checked = data.features?.cors || false;
+    
+    // Load Wi-Fi networks if Wi-Fi scan is enabled
+    if( wifiScan) {
+      console.log("Wi-Fi scan is enabled. Loading Wi-Fi networks...");
+      loadWifiNetworks();
+      syncWifiSelection();
+    }
 
   } catch (error) {
     showMessage("Failed to load settings.", "error");
@@ -172,12 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load existing settings on page load
   console.log("Page loaded. Initializing settings load...");
   loadSettings();
-
-  if( wifiScan) {
-    console.log("Wi-Fi scan is enabled. Loading Wi-Fi networks...");
-    loadWifiNetworks();
-    syncWifiSelection();
-  }
+  // loadWifiNetworks();
+  // syncWifiSelection();
 
   // Appears to crash device too large of a JSON file removing dropdown for now
   //loadTimezones();
