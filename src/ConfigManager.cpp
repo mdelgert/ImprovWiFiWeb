@@ -41,6 +41,10 @@ void ConfigManager::load() {
     if (doc["device"]["bootTime"]) settings.device.bootTime = doc["device"]["bootTime"].as<uint64_t>();
     if (doc["device"]["defaultTimeout"]) settings.device.defaultTimeout = doc["device"]["defaultTimeout"].as<int>();
     
+    // Device security
+    if (doc["device"]["userName"]) settings.device.userName = doc["device"]["userName"].as<String>();
+    if (doc["device"]["userPassword"]) settings.device.userPassword = doc["device"]["userPassword"].as<String>();
+
     // Device button commands
     if (doc["device"]["singlePress"]) settings.device.singlePress = doc["device"]["singlePress"].as<String>();
     if (doc["device"]["doublePress"]) settings.device.doublePress = doc["device"]["doublePress"].as<String>();
@@ -88,6 +92,10 @@ void ConfigManager::save() {
     doc["device"]["bootTime"] = settings.device.bootTime;
     doc["device"]["defaultTimeout"] = settings.device.defaultTimeout;
 
+    // Device security
+    doc["device"]["userName"] = settings.device.userName;
+    doc["device"]["userPassword"] = settings.device.userPassword;
+    
     // Device button commands
     doc["device"]["singlePress"] = settings.device.singlePress;
     doc["device"]["doublePress"] = settings.device.doublePress;
@@ -115,7 +123,7 @@ void ConfigManager::save() {
     doc["security"]["apiKey"] = settings.security.apiKey;
     doc["security"]["apiToken"] = settings.security.apiToken;
     doc["security"]["otaPassword"] = settings.security.otaPassword;
-
+    
     // Features
     doc["features"]["cors"] = settings.features.cors;
     doc["features"]["webHandler"] = settings.features.webHandler;
@@ -163,6 +171,10 @@ void ConfigManager::loadPreferences() {
     settings.device.bootCount    = preferences.getULong("bootCount", settings.device.bootCount);
     settings.device.bootTime     = preferences.getULong("bootTime", settings.device.bootTime);
 
+    // Device security
+    settings.device.userName     = preferences.getString("deviceUserName", settings.device.userName);
+    settings.device.userPassword = preferences.getString("deviceUserPassword", settings.device.userPassword);
+
     // WiFi
     settings.wifi.ssid           = preferences.getString("wifiSSID", settings.wifi.ssid);
     settings.wifi.password       = preferences.getString("wifiPassword", settings.wifi.password);
@@ -205,6 +217,10 @@ void ConfigManager::savePreferences() {
     preferences.putInt("defaultTimeout", settings.device.defaultTimeout);
     preferences.putULong("bootCount", settings.device.bootCount);
     preferences.putULong("bootTime", settings.device.bootTime);
+
+    // Device security
+    preferences.putString("deviceUserName", settings.device.userName);
+    preferences.putString("deviceUserPassword", settings.device.userPassword);
 
     // WiFi
     preferences.putString("wifiSSID", settings.wifi.ssid);

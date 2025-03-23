@@ -14,6 +14,10 @@ struct DeviceSettings {
     uint64_t bootTime;
     uint64_t upTime;
 
+    // Device security
+    String userName;
+    String userPassword;
+
     // Button commands
     String singlePress;
     String doublePress;
@@ -36,8 +40,8 @@ struct MqttSettings {
     String server;
     int port;
     bool ssl;
-    String username;
-    String password;
+    String username; //todo fix name to userName for consistency
+    String password; //todo fix name to userPassword for consistency
     String subTopic;
     String pubTopic;
 };

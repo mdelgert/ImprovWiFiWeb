@@ -167,3 +167,4 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 - Add boot command
 - Update buttons json format
 - Fix secure path
+- Add device user/password

@@ -9,7 +9,9 @@
       "bootCommand": "led color green",
       "singlePress" : "led color white",
       "doublePress" : "led color blue",
-      "longPress" : "led color red"
+      "longPress" : "led color red",
+      "userName": "admin",
+      "userPassword": "password"
     },
     "wifi": {
       "ssid": "MyNetwork",

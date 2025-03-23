@@ -61,8 +61,9 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
         const char* password = doc["password"] | "";
         
         debugV("Attempting login: username=%s", username);
-
-        if (strcmp(username, "admin") == 0 && strcmp(password, "pass") == 0) {
+        
+        //if (strcmp(username, "admin") == 0 && strcmp(password, "pass") == 0) {
+        if (strcmp(username, settings.device.userName.c_str()) == 0 && strcmp(password, settings.device.userPassword.c_str()) == 0) {
             String sessionToken = generateRandomToken();
             activeSessions.push_back(sessionToken);  // Store valid session
 

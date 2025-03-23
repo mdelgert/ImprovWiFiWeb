@@ -24,6 +24,10 @@ async function loadSettings() {
     document.getElementById("double_press").value = data.device?.doublePress || "";
     document.getElementById("long_press").value = data.device?.longPress || "";
 
+    // Device security
+    document.getElementById("device_user_name").value = data.device?.userName || "";
+    document.getElementById("device_user_password").value = data.device?.userPassword || "";
+    
     // Wi-Fi
     wifiScan = data.wifi?.scan || false; // Use the default value if not set
     document.getElementById("wifi_scan").checked = data.wifi?.scan || false;
@@ -42,7 +46,7 @@ async function loadSettings() {
 
     // Security
     document.getElementById("api_key").value = data.security?.apiKey || "";
-
+    
     // Optional: Handle features like cors/webHandler if needed
     // Example: document.getElementById("cors").checked = data.features?.cors || false;
     
@@ -62,6 +66,8 @@ async function loadSettings() {
 // Save settings to the server
 async function saveSettings() {
   const deviceName = document.getElementById("device_name").value.trim();
+  const deviceUserName = document.getElementById("device_user_name").value.trim();
+  const deviceUserPassword = document.getElementById("device_user_password").value.trim();
   const bootCommand = document.getElementById("boot_command").value.trim();
   const singlePress = document.getElementById("single_press").value.trim();
   const doublePress = document.getElementById("double_press").value.trim();
@@ -81,7 +87,7 @@ async function saveSettings() {
   const apiKey = document.getElementById("api_key").value.trim();
 
   // Validate required fields
-  if (!deviceName || !wifiSsid || !wifiPassword) {
+  if (!deviceName || !deviceUserName || !deviceUserPassword || !wifiSsid || !wifiPassword) {
     showMessage("Please fill in all mandatory fields.", "error");
     console.error("Validation failed: Missing required fields.");
     return;
@@ -97,7 +103,9 @@ async function saveSettings() {
         bootCommand: bootCommand,
         singlePress: singlePress,
         doublePress: doublePress,
-        longPress: longPress
+        longPress: longPress,
+        userName: deviceUserName,
+        userPassword: deviceUserPassword
       },
       wifi: {
         ssid: wifiSsid,
