@@ -48,6 +48,52 @@ function populateCategoryFilter(buttons) {
 // Update renderList function to accept filtered items
 function renderList(filteredItems = items) {
   const itemList = document.getElementById("itemList");
+  if (!itemList) return console.error("itemList not found");
+  itemList.innerHTML = "";
+
+  filteredItems.forEach((item) => {
+    const li = document.createElement("li");
+    li.style.cursor = "pointer"; // Hand cursor
+    li.style.padding = "8px"; // Optional: Basic padding for spacing
+    //li.style.backgroundColor = "#fff"; // Optional: White background
+    li.innerHTML = `
+      <span>${item.name}</span>
+      <div class="actions" style="display: inline-block; margin-left: 10px;">
+        <button onclick="openModal(${item.id}); event.stopPropagation();">Edit</button>
+        <button onclick="deleteItem(${item.id}); event.stopPropagation();">Delete</button>
+      </div>
+    `;
+
+    // Hover effect for hand cursor and visual feedback
+    li.addEventListener("mouseover", () => {
+      li.style.backgroundColor = "#222222";
+    });
+
+    li.addEventListener("mouseout", () => {
+      li.style.backgroundColor = "#1e1e1e";
+    });
+
+    // Make entire li clickable to open modal, except buttons
+    li.addEventListener("click", (e) => {
+      if (e.target.tagName !== "BUTTON") {
+        openModal(item.id);
+      }
+    });
+
+    // Accessibility: Make li focusable and keyboard-accessible
+    li.setAttribute("tabindex", "0");
+    li.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        openModal(item.id);
+      }
+    });
+    
+    itemList.appendChild(li);
+  });
+}
+
+function renderListOriginal(filteredItems = items) {
+  const itemList = document.getElementById("itemList");
   itemList.innerHTML = "";
 
   filteredItems.forEach((item) => {
@@ -59,6 +105,7 @@ function renderList(filteredItems = items) {
         <button onclick="openModal(${item.id})">Edit</button>
         <button onclick="deleteItem(${item.id})">Delete</button>
       </div>`;
+      
     itemList.appendChild(li);
   });
 }
@@ -134,6 +181,20 @@ async function saveChanges() {
 }
 
 async function deleteItem(id) {
+  if (!confirm("Are you sure you want to delete this item?")) return;
+  try {
+    const response = await fetch(`${endPoint}/buttons?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    if (response.ok) {
+      await fetchButtons();
+    } else {
+      console.error("Failed to delete button");
+    }
+  } catch (err) {
+    console.error("Error deleting button:", err);
+  }
+}
+
+async function deleteItemOriginal(id) {
   try {
     const response = await fetch(`${endPoint}/buttons?id=${encodeURIComponent(id)}`, { method: "DELETE" });
     if (response.ok) {
