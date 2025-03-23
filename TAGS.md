@@ -152,6 +152,11 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 **Description:**  
 - HTML cleanup add swagger support
 
+### Tag: v1.0.41
+**Date:** 2025-01-02
+**Description:**  
+- Mqtt fix
+
 ### Tag: v1.0.42
 **Date:** 2025-03-22
 **Description:**  
