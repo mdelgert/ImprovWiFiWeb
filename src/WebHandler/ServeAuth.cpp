@@ -77,6 +77,7 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
 
             AsyncWebServerResponse *res = request->beginResponse(200, "application/json", jsonResponse);
             res->addHeader("Set-Cookie", "session=" + sessionToken + "; Path=/; HttpOnly;");
+            //res->addHeader("Set-Cookie", "userName=" + settings.device.userName + "; Path=/; HttpOnly;");
             WebHandler::addCorsHeaders(res);
             request->send(res);
 
@@ -139,7 +140,7 @@ void ServeAuth::handleSecureRequest(AsyncWebServer &server)
             request->redirect("/login.html");
             return;
         }
-
+        
         String sessionToken = cookie.substring(8);  // Extract session token
 
         // Check if sessionToken exists in activeSessions
