@@ -59,7 +59,7 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
 
         const char* username = doc["username"] | "";
         const char* password = doc["password"] | "";
-
+        
         debugV("Attempting login: username=%s", username);
 
         if (strcmp(username, "admin") == 0 && strcmp(password, "pass") == 0) {
@@ -76,6 +76,7 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
 
             AsyncWebServerResponse *res = request->beginResponse(200, "application/json", jsonResponse);
             res->addHeader("Set-Cookie", "session=" + sessionToken + "; Path=/; HttpOnly;");
+            WebHandler::addCorsHeaders(res);
             request->send(res);
 
             debugV("Generated session token: %s", sessionToken.c_str());
@@ -109,6 +110,7 @@ void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
         // Create response and set an expired cookie
         AsyncWebServerResponse *res = request->beginResponse(200, "application/json", R"({"status": "success", "message": "Logged out"})");
         res->addHeader("Set-Cookie", "session=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT;");
+        WebHandler::addCorsHeaders(res);
         request->send(res);
     });
 }
