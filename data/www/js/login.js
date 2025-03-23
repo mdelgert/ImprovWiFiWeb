@@ -5,9 +5,6 @@ import {BASE_URL} from './config.js';
 
 const endPoint = BASE_URL;
 
-// Set the endpoint based on the environment
-//const endPoint = window.location.hostname === "localhost" ? "http://demo1.local" : "";
-
 function logout() {
     fetch(`${endPoint}/auth/logout`, {
         method: "POST",
