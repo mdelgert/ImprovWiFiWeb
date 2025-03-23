@@ -165,3 +165,4 @@ git push origin --delete v1.0.X # Delete the tag from the remote
 - Fix disable scan wifi error message
 - Add button commands
 - Add boot command
+- Update buttons json format
