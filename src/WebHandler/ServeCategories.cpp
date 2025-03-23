@@ -87,6 +87,7 @@ void ServeCategories::handlePostCategories(AsyncWebServerRequest *request, uint8
             }
         }
 
+        /*
         if (!found) {
             // Generate a new ID
             int maxId = 0;
@@ -107,6 +108,29 @@ void ServeCategories::handlePostCategories(AsyncWebServerRequest *request, uint8
         
             existingCategories.add(categoryToAdd);
         }
+        */
+
+        if (!found) {
+            // Generate a new ID
+            int maxId = 0;
+            for (JsonObject existingCategory : existingCategories) {
+                int existingId = existingCategory["id"] | 0;
+                if (existingId > maxId) {
+                    maxId = existingId;
+                }
+            }
+            
+            int newId = maxId + 1;
+            
+            // Assign a new ID if it's missing or 0
+            JsonObject categoryToAdd = newCategory;
+            if (categoryToAdd["id"].isNull() || categoryToAdd["id"] == 0) {
+                categoryToAdd["id"] = newId;
+            }
+            
+            existingCategories.add(categoryToAdd);
+        }
+
     }
 
     // Write the updated JSON back to the file
