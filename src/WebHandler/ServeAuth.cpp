@@ -84,33 +84,6 @@ void ServeAuth::handleLoginRequest(AsyncWebServer &server)
         } });
 }
 
-/*
-void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
-{
-    server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
-              {
-        if (!request->hasHeader("Cookie")) {
-            request->send(400, "application/json", R"({"status": "error", "message": "No session found"})");
-            return;
-        }
-
-        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
-        String cookie = cookieHeader->value();
-
-        if (!cookie.startsWith("session=")) {
-            request->send(400, "application/json", R"({"status": "error", "message": "Invalid session"})");
-            return;
-        }
-
-        String sessionToken = cookie.substring(8);
-
-        // Remove session from activeSessions
-        activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
-
-        request->send(200, "application/json", R"({"status": "success", "message": "Logged out"})"); });
-}
-*/
-
 void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
 {
     server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
@@ -140,6 +113,60 @@ void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
     });
 }
 
+void ServeAuth::handleSecureRequest(AsyncWebServer &server)
+{
+    // Use a wildcard to catch all requests under /secure
+    server.on("/secure/*", HTTP_ANY, [](AsyncWebServerRequest *request) {
+        String url = request->url();
+
+        debugI("Received request: %s", url.c_str());
+        
+        // Check for authentication
+        if (!request->hasHeader("Cookie")) {
+            debugI("No cookie header found, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            debugI("No session found in cookie, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);  // Extract session token
+
+        // Check if sessionToken exists in activeSessions
+        bool validSession = false;
+        for (const String &token : activeSessions) {
+            if (sessionToken == token) {
+                validSession = true;
+                break;
+            }
+        }
+
+        if (!validSession) {
+            debugI("Invalid session token, redirecting to /login.html");
+            request->redirect("/login.html");
+            return;
+        }
+
+        // Serve the requested file if it exists under /secure
+        if (LittleFS.exists(url)) {
+            debugI("Serving file: %s", url.c_str());
+            request->send(LittleFS, url, getContentType(url));
+        } else {
+            request->send(404, "text/plain", "File Not Found");
+        }
+    });
+}
+
+#endif // ENABLE_WEB_HANDLER
+
+/*
 void ServeAuth::handleSecureRequest(AsyncWebServer &server)
 {
     server.on("/secure/secure.html", HTTP_ANY, [](AsyncWebServerRequest *request) {
@@ -191,4 +218,28 @@ void ServeAuth::handleSecureRequest(AsyncWebServer &server)
     });
 }
 
-#endif // ENABLE_WEB_HANDLER
+void ServeAuth::handleLogoutRequest(AsyncWebServer &server)
+{
+    server.on("/auth/logout", HTTP_POST, [](AsyncWebServerRequest *request)
+              {
+        if (!request->hasHeader("Cookie")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "No session found"})");
+            return;
+        }
+
+        AsyncWebHeader* cookieHeader = request->getHeader("Cookie");
+        String cookie = cookieHeader->value();
+
+        if (!cookie.startsWith("session=")) {
+            request->send(400, "application/json", R"({"status": "error", "message": "Invalid session"})");
+            return;
+        }
+
+        String sessionToken = cookie.substring(8);
+
+        // Remove session from activeSessions
+        activeSessions.erase(remove(activeSessions.begin(), activeSessions.end(), sessionToken), activeSessions.end());
+
+        request->send(200, "application/json", R"({"status": "success", "message": "Logged out"})"); });
+}
+*/
