@@ -1,18 +1,20 @@
 #ifdef ENABLE_WEB_HANDLER
 
-#include "ServeSettings.h"
 #include <LittleFS.h>
-#include "WebHandler.h"
 #include <ArduinoJson.h>
+#include "ServeSettings.h"
+#include "Globals.h"
+#include "WebHandler.h"
+//#include "NonBlockingTimer.h"
 
-static NonBlockingTimer delayTimer(500);
+//static NonBlockingTimer delayTimer(500);
 
 void ServeSettings::registerEndpoints(AsyncWebServer &server)
 {
     server.on("/settings/get", HTTP_GET, handleGetSettings);
     server.on("/settings/set", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, handleSetSettings);
-    handleGetSettingsArchieve(server);
-    handleSetSettingsArchieve(server);
+    //handleGetSettingsArchieve(server);
+    //handleSetSettingsArchieve(server);
 }
 
 void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
@@ -32,6 +34,45 @@ void ServeSettings::handleGetSettings(AsyncWebServerRequest *request)
     request->send(response);
 }
 
+void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
+{
+    debugV("Received POST request on /settings/set");
+
+    // Accumulate incoming data
+    static String requestBody;
+    if (index == 0) {
+        requestBody = ""; // Start fresh
+    }
+    requestBody += String((char*)data).substring(0, len);
+
+    // Wait until the full body is received
+    if (index + len != total) {
+        return;
+    }
+
+    // Parse JSON
+    JsonDocument doc;
+    DeserializationError error = deserializeJson(doc, requestBody);
+
+    if (error) {
+        WebHandler::sendErrorResponse(request, 400, "Invalid JSON format in request");
+        return;
+    }
+
+    // Save it formatted (pretty)
+    File file = LittleFS.open(SETTINGS_FILE, "w");
+    if (!file) {
+        WebHandler::sendErrorResponse(request, 400, "Failed to open settings.json for writing");
+        return;
+    }
+
+    serializeJsonPretty(doc, file); // ✅ Pretty format!
+    file.close();
+
+    WebHandler::sendSuccessResponse(request, "Settings updated successfully");
+}
+
+/*
 void ServeSettings::handleSetSettings(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total)
 {
     debugV("Received POST request on /settings/set");
@@ -159,5 +200,6 @@ void ServeSettings::handleSetSettingsArchieve(AsyncWebServer &server)
         }
     );
 }
+*/
 
 #endif // ENABLE_WEB_HANDLER
