@@ -88,6 +88,14 @@ void ConfigManager::save() {
     doc["device"]["bootTime"] = settings.device.bootTime;
     doc["device"]["defaultTimeout"] = settings.device.defaultTimeout;
 
+    // Device button commands
+    doc["device"]["singlePress"] = settings.device.singlePress;
+    doc["device"]["doublePress"] = settings.device.doublePress;
+    doc["device"]["longPress"] = settings.device.longPress;
+
+    // Device boot command
+    doc["device"]["bootCommand"] = settings.device.bootCommand;
+    
     // WiFi
     doc["wifi"]["ssid"] = settings.wifi.ssid;
     doc["wifi"]["password"] = settings.wifi.password;
