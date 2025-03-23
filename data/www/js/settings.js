@@ -19,6 +19,10 @@ async function loadSettings() {
     // Device
     document.getElementById("device_name").value = data.device?.name || "";
     document.getElementById("time_zone").value = data.device?.timezone || "";
+    document.getElementById("boot_command").value = data.device?.bootCommand || "";
+    document.getElementById("single_press").value = data.device?.singlePress || "";
+    document.getElementById("double_press").value = data.device?.doublePress || "";
+    document.getElementById("long_press").value = data.device?.longPress || "";
 
     // Wi-Fi
     wifiScan = data.wifi?.scan || false; // Use the default value if not set
@@ -51,6 +55,10 @@ async function loadSettings() {
 // Save settings to the server
 async function saveSettings() {
   const deviceName = document.getElementById("device_name").value.trim();
+  const bootCommand = document.getElementById("boot_command").value.trim();
+  const singlePress = document.getElementById("single_press").value.trim();
+  const doublePress = document.getElementById("double_press").value.trim();
+  const longPress = document.getElementById("long_press").value.trim();
   const timeZone = document.getElementById("time_zone").value.trim();
   const wifiSsid = document.getElementById("wifi_network").value.trim();
   const wifiScan = document.getElementById("wifi_scan").checked;
@@ -78,7 +86,11 @@ async function saveSettings() {
     const body = {
       device: {
         name: deviceName,
-        timezone: timeZone
+        timezone: timeZone,
+        bootCommand: bootCommand,
+        singlePress: singlePress,
+        doublePress: doublePress,
+        longPress: longPress
       },
       wifi: {
         ssid: wifiSsid,
@@ -104,6 +116,7 @@ async function saveSettings() {
 
     await httpPost("/settings/set", body);
     showMessage("Settings saved successfully!", "success");
+    rebootDevice();
   } catch (error) {
     showMessage("Failed to save settings.", "error");
     console.error("Error saving settings:", error);
@@ -188,6 +201,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ... rest of your setup ...
 });
+
+async function rebootDevice() {
+  try {
+    await httpGet('/device/reboot'); // Call the centralized GET function
+    console.log("Device reboot initiated successfully!");
+    showMessage("Device reboot initiated successfully!", "success");
+  } catch (error) {
+    console.error("Failed to reboot the device:", error);
+    showMessage("Failed to reboot the device.", "error");
+  }
+}
 
 /*
 async function loadTimezones() {
